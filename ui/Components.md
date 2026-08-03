@@ -7,9 +7,10 @@
 | `NexoraAppBar` | Top app bar with workspace name and actions. | P0 |
 | `WorkspaceTabs` | Tabbed navigation within a workspace. | P0 |
 | `ChatBubble` | AI and user message bubbles with streaming support. | P0 |
-| `ToolCallCard` | Expandable card showing tool invocation and result. | P0 |
+| `ToolCallCard` | Expandable card showing tool invocation and result — core of the agent activity feed. | P0 |
+| `ActivityCard` | Streamed terminal output, file changes, and progress events rendered inline in chat. | P0 |
 | `TaskCard` | Task status card with progress indicator. | P0 |
-| `TerminalView` | Embedded terminal emulator (xterm.js equivalent). | P0 |
+| `TerminalView` | Terminal emulator — internal only (agent activity / developer mode). Not a primary screen. | P2 |
 | `FileExplorer` | Tree-view file browser for the virtual file system. | P0 |
 | `AgentCard` | Agent status and capabilities display. | P1 |
 | `MemorySearchBar` | Semantic search input for memory recall. | P1 |

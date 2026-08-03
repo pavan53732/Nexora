@@ -16,9 +16,9 @@ It goes beyond chat. AI agents autonomously perform real tasks using files, code
 - An **Android application** — install from APK or app store.
 - An **autonomous AI agent platform** — AI agents that think, plan, and execute.
 - A **multi-agent execution environment** — specialized agents collaborating.
-- A **sandboxed AI runtime** — secure execution isolated from the host.
+- An **agent-first AI workspace** — you talk to agents; they do the work for you.
 - A **project workspace** — manage files, code, and tasks inside the app.
-- A **tool execution platform** — 300-500+ tools across 25+ categories.
+- A **tool execution platform** — 300-500+ tools across 25+ categories, invoked by agents.
 - A **plugin-based AI ecosystem** — extensible through community plugins.
 
 ### What Nexora Is Not
@@ -27,6 +27,8 @@ It goes beyond chat. AI agents autonomously perform real tasks using files, code
 - A custom ROM, Linux distribution, or virtual machine
 - A replacement for Android
 - A simple AI chat application
+- A terminal emulator or developer shell — the embedded terminal is an internal agent tool
+- An infrastructure UI — the sandbox, runtimes, and execution engine are hidden behind the agent
 
 ---
 
@@ -54,10 +56,11 @@ Chats are one artifact within a workspace. This scales much better as the platfo
 ## Key Features
 
 - **Autonomous Agents** — 15 built-in agent types (Planner, Coder, Researcher, Reviewer, etc.)
-- **Sandboxed Execution** — AI never touches the host system directly.
-- **Tool System** — 25+ tool categories, 300-500 individual tools, all plugin-based.
+- **Agent-First Chat** — you give the agent a goal; everything else happens automatically.
+- **Agent-Driven Execution** — agents automatically use the terminal, runtimes (Python/Node), Git, and SQLite inside an isolated sandbox — no infrastructure UI.
+- **Sandboxed Execution** — AI never touches the host system directly (internal by design).
+- **Tool System** — 25+ tool categories, 300-500 individual tools, all agent-invoked and plugin-based.
 - **Multi-Provider AI** — OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom.
-- **Embedded Terminal** — Linux-like shell with Python, Node.js, Git, SQLite.
 - **Memory System** — Session, project, and long-term memory with semantic search.
 - **Plugin Marketplace** — Everything (tools, providers, agents) is installable as a plugin.
 - **Multi-Agent Collaboration** — Agents share memory, workspace, and tasks.

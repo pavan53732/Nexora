@@ -11,11 +11,11 @@ Nexora Android AI Agent Platform
 │
 ├── UI Layer (Android Activities/Fragments/Compose)
 │   ├── Workspace Screen (PRIMARY)
-│   ├── Chat Screen (inside workspace)
+│   ├── Chat Screen (inside workspace) — agent-first interaction surface
+│   ├── Agent Activity Feed (tool calls, terminal output, file changes)
 │   ├── Agent Dashboard
 │   ├── Task Manager
 │   ├── File Manager
-│   ├── Terminal Screen
 │   ├── Memory Browser
 │   ├── Plugin Hub
 │   ├── AI Providers Screen
@@ -78,7 +78,7 @@ Chats are contextual to a workspace, not the application root. This scales becau
 | 6 | **Workspace Explorer** | P0 |
 | 7 | **Files** | P1 |
 | 8 | **Memory** | P1 |
-| 9 | **Terminal** | P0 |
+| 9 | **Agent Activity Feed** (tool calls, terminal output — the terminal itself is internal, ADR-0006) | P0 |
 | 10 | **Plugins** | P1 |
 | 11 | **AI Providers** | P0 |
 | 12 | **Logs** | P1 |
@@ -86,10 +86,18 @@ Chats are contextual to a workspace, not the application root. This scales becau
 | 14 | **Notifications** | P2 |
 | 15 | **Tool Permissions** | P1 |
 
+## Agent-First Interaction
+
+Users interact with AI agents through chat (ADR-0006). The sandbox, embedded terminal,
+runtimes, and execution engine are internal implementation details: the agent invokes
+them automatically in an isolated environment, and the user sees tool calls, terminal
+output, and file changes as activity cards in the conversation. There are no
+user-facing screens for infrastructure.
+
 ## Navigation
 
-- **Bottom nav**: Workspace, Tasks, Terminal, Settings.
-- **Workspace internal tabs**: Agents, Files, Chats, Memory, Terminal, Logs.
+- **Bottom nav**: Workspace, Tasks, Settings. (No infrastructure tabs — the terminal and sandbox are internal; see ADR-0006.)
+- **Workspace internal tabs**: Agents, Files, Chats, Memory, Logs. (Terminal is not a tab; its activity appears in the chat activity feed and in Logs.)
 - **Side drawer**: Plugins, Providers, Notifications.
 
 ## Inter-Module Communication

@@ -136,23 +136,28 @@
 
 | ID | Requirement | Priority | Phase |
 |----|-------------|----------|-------|
-| FR-U001 | Bottom navigation (Workspaces, Tasks, Agents, Tools, Settings) | Must | 0 |
+| FR-U001 | Bottom navigation (Workspace, Tasks, Settings) — no infrastructure tabs | Must | 0 |
 | FR-U002 | Workspace dashboard with agent and task overview | Must | 0 |
 | FR-U003 | Task list with status, priority, and assignment | Must | 2 |
 | FR-U004 | Agent chat with streaming response display | Must | 1 |
-| FR-U005 | Integrated terminal panel | Must | 3 |
+| FR-U005 | Agent activity feed — tool calls, terminal output, and file changes surfaced in chat (replaces the user-facing terminal panel) | Must | 3 |
 | FR-U006 | File explorer for sandbox contents | Must | 3 |
 | FR-U007 | Settings screen (providers, appearance, security) | Must | 0 |
 | FR-U008 | Dynamic theme (light, dark, system) | Must | 0 |
 | FR-U009 | In-app notification system | Should | 3 |
 | FR-U010 | Global search across workspaces, agents, tasks | Should | 4 |
+| FR-U011 | Chat is the single primary interaction surface — goal entry, streaming responses, tool-call cards, permission prompts, and results all live in the conversation | Must | 1 |
 
-## Terminal
+## Terminal (Internal)
+
+> The terminal is an **internal component** (ADR-0006): it is invoked by agents, never
+> opened by the user. There is no user-facing terminal screen or tab; output is surfaced
+> in the chat activity feed and execution logs.
 
 | ID | Requirement | Priority | Phase |
 |----|-------------|----------|-------|
-| FR-TE001 | Execute shell commands within sandbox | Must | 3 |
-| FR-TE002 | Real-time output streaming display | Must | 3 |
-| FR-TE003 | Command history with up/down navigation | Must | 3 |
+| FR-TE001 | Execute shell commands within sandbox, agent-invoked | Must | 3 |
+| FR-TE002 | Stream command output into the agent activity feed in real time | Must | 3 |
+| FR-TE003 | Command history per terminal session (internal, agent-managed) | Must | 3 |
 | FR-TE004 | Tab completion for commands and paths | Should | 4 |
-| FR-TE005 | Multiple concurrent terminal sessions | Should | 5 |
+| FR-TE005 | Multiple concurrent terminal sessions (internal) | Should | 5 |

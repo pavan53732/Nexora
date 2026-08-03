@@ -316,6 +316,11 @@ system package — these are application components to be integrated later.**
 | Integration complexity | Medium | Low (drop-in) | High |
 | **Recommendation** | ⚠ best tech, GPL blocker | ✅ vendor as Apache-2.0 base (mksh/busybox shell via NDK) | only with strong reason |
 
+> **Note (ADR-0006):** the terminal is an **internal, agent-invoked** component — there is
+> no user-facing terminal UI. This removes the interactive-rendering requirement: only
+> the PTY/shell execution core is needed (plus activity-card rendering of captured
+> output), further favoring a small vendored implementation.
+>
 > Licensing review needed before Phase 3 — this is flagged in
 > [requirements/RISKS.md](../requirements/RISKS.md) risk space (RISK-009).
 

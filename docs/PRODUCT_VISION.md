@@ -17,10 +17,25 @@
 - **An Android application** — A native app you install from an APK or app store.
 - **An autonomous AI agent platform** — AI agents that think, plan, and execute on their own.
 - **A multi-agent execution environment** — Multiple specialized agents collaborating on tasks.
-- **A sandboxed AI runtime** — Secure execution environment isolated from the host system.
+- **An agent-first AI workspace** — The user interacts with AI agents; infrastructure stays hidden.
+- **A sandboxed AI runtime** — Internal secure execution environment isolated from the host system; the agent uses it automatically, the user never touches it.
 - **A project workspace** — Manage files, code, and tasks inside the app.
-- **A tool execution platform** — 300-500+ tools across 25+ categories.
+- **A tool execution platform** — 300-500+ tools across 25+ categories, invoked by agents on the user's behalf.
 - **A plugin-based AI ecosystem** — Extensible through plugins and community contributions.
+
+## Interaction Model
+
+Nexora mirrors how modern agent assistants behave:
+
+1. The user types a **goal** in chat.
+2. The **agent** plans and decides which tools to use.
+3. The agent **automatically invokes** the embedded terminal, runtimes (Python, Node), file operations, Git, SQLite, and network tools inside an **isolated sandbox** created on demand.
+4. Results stream back into the **conversation** as an activity feed: tool-call cards, output excerpts, file diffs, and log references.
+5. The user reviews, approves sensitive operations, and steers the agent — never the infrastructure.
+
+The **sandbox, internal terminal, runtimes, and execution engine are internal
+implementation details** (see [ADR-0006](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md)).
+They have no primary user-facing screens.
 
 ## What Nexora Enables
 
@@ -67,11 +82,11 @@ Alternative phrasings:
 | Brand Name | Purpose |
 |------------|--------|
 | **Nexora Workspace** | Primary project workspace environment |
-| **Nexora Sandbox** | Isolated execution environment |
-| **Nexora Runtime** | Core agent execution engine |
-| **Nexora Engine** | Planning and reasoning engine |
+| **Nexora Sandbox** | Isolated execution environment *(internal — agent-invoked)* |
+| **Nexora Runtime** | Core agent execution engine *(internal)* |
+| **Nexora Engine** | Planning and reasoning engine *(internal)* |
 | **Nexora Memory** | Persistent memory and knowledge system |
-| **Nexora Terminal** | Embedded shell terminal |
+| **Nexora Terminal** | Embedded shell terminal *(internal — agent-invoked)* |
 | **Nexora Plugins** | Plugin system and marketplace |
 | **Nexora Hub** | Plugin marketplace and discovery center |
 | **Nexora Agents** | Multi-agent collaboration system |
@@ -105,14 +120,22 @@ The user gives a **goal**. The AI determines what to do, which tools to use, whi
 
 Every conversation is a potential execution. Every message is a potential task. Every tool call is a real action.
 
+### Agent-First Interface
+
+The user interacts with the **AI agent**, not with the infrastructure. Chat is the command
+surface; the terminal, sandbox, and runtimes execute invisibly behind it (ADR-0006).
+Infrastructure is an implementation detail — the user sees goals, results, and progress,
+never plumbing.
+
 ### Design Principles
 
 1. **Plugin-first** — Core is minimal. Everything else is a plugin.
-2. **Sandboxed** — AI never touches the host system directly.
+2. **Sandboxed** — AI never touches the host system directly (internal by design).
 3. **Extensible** — Add capabilities without modifying core.
-4. **Observable** — Every action is logged and traceable.
+4. **Observable** — Every action is logged and traceable (activity feed + execution history).
 5. **Offline-capable** — Core features work without network.
 6. **Android-native** — Designed for mobile, not a ported desktop app.
+7. **Agent-first** — Infrastructure (sandbox, terminal, runtimes, engine) is internal; the agent surfaces results in chat.
 
 ### Workspace-First Architecture
 
@@ -124,11 +147,11 @@ Workspace
     ├── Tasks
     ├── Files
     ├── Memory
-    ├── Terminal
+    ├── Terminal   (internal — agent-invoked)
     ├── Plugins
     ├── Logs
     ├── Settings
-    └── Chats
+    └── Chats      (primary interaction surface)
 ```
 
 ## Comparable Products

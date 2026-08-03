@@ -9,8 +9,8 @@ Material Symbols (Outlined variant) — consistent with Material 3.
 |------|------|-------|
 | Workspace | `folder_open` | Workspace tab |
 | Tasks | `task_alt` | Tasks tab |
-| Terminal | `terminal` | Terminal tab |
 | Settings | `settings` | Settings tab |
+| Terminal | `terminal` | Agent activity — terminal output cards in chat (terminal is internal) |
 | Agent | `smart_toy` | Agent card |
 | File | `description` | File explorer |
 | Memory | `psychology` | Memory tab |

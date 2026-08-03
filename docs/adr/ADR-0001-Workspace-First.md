@@ -3,6 +3,7 @@
 - **Status**: Accepted
 - **Date**: 2026-08-03
 - **Deciders**: Lead Architect
+- **Amended by**: [ADR-0006-Agent-First-Interaction-Model](./ADR-0006-Agent-First-Interaction-Model.md) — the workspace remains the primary entity, but the bottom navigation no longer includes a Terminal tab and the terminal/sandbox are internal.
 
 ## Context
 

@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 4.1.0 |
-| **Status** | Phase 0 — Foundation Complete (Frozen) |
+| **Spec Version** | 4.2.0 |
+| **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v4.1 — Final engineering artifacts: dependency graph, module boundaries, lifecycles, performance budget) |
+| **Last Updated** | 2026-08-03 (v4.2 — Agent-first interaction model (ADR-0006): infrastructure is internal) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -31,6 +31,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 - **One-line**: Nexora is an Android application that transforms your phone into a powerful autonomous AI agent workspace.
 - **Positioning**: Android AI Agent Platform (not an OS, ROM, or VM).
 - **Architecture**: Workspace-first (Workspace > Chat).
+- **Interaction**: Agent-first — users chat with agents; the sandbox, internal terminal, runtimes, and execution engine are internal implementation details (ADR-0006).
 - **Scale**: 15+ modules, 25+ tool categories, 300-500 tools, 10-20 agents.
 - **Phases**: 8 development phases (Foundation through Plugin Marketplace).
 
@@ -57,6 +58,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | ADR-0003 | Autonomous Agent Runtime Loop | [docs/adr/ADR-0003-Agent-Runtime.md](docs/adr/ADR-0003-Agent-Runtime.md) |
 | ADR-0004 | Sandboxed Execution | [docs/adr/ADR-0004-Sandbox.md](docs/adr/ADR-0004-Sandbox.md) |
 | ADR-0005 | Provider Abstraction Layer | [docs/adr/ADR-0005-Provider-Abstraction.md](docs/adr/ADR-0005-Provider-Abstraction.md) |
+| ADR-0006 | Agent-First Interaction Model (Infrastructure Is Internal) | [docs/adr/ADR-0006-Agent-First-Interaction-Model.md](docs/adr/ADR-0006-Agent-First-Interaction-Model.md) |
 
 ### API Documentation
 
@@ -357,7 +359,7 @@ Nexora/
 | Phase | Name | Goal | Key Deliverables |
 |-------|------|------|-----------------|
 | **0** | Foundation | Repo structure, documentation, registries | This repo (119 files: requirements, architecture, models, protocols, standards, state machines, diagrams, security, testing, registries, dependency graph, module boundaries, lifecycles, performance budget) |
-| **1** | Android Foundation | Bootable app, no AI yet | Navigation, theme, settings, workspace manager, interfaces |
+| **1** | Android Foundation | Bootable app, no AI yet | Agent-first chat UI, navigation, theme, settings, workspace manager, interfaces |
 | **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, event bus, checkpoints |
 | **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node |
 | **4** | Tools | Tool interface + foundational tools | 50+ tools across 8 categories |
@@ -375,6 +377,13 @@ Nexora/
 > `UI → Service Interface → Runtime → Implementation`
 >
 > This applies to: ToolManager, ProviderManager, MemoryManager, PluginManager, WorkspaceManager, Sandbox, Scheduler, Logging, Security, AgentRuntime.
+
+> **Locked Interaction Rule — Agent-first: infrastructure is internal (ADR-0006).**
+>
+> Users interact with AI agents through chat. The sandbox, internal terminal, runtimes,
+> and execution engine are internal implementation details, triggered automatically by
+> agents in an isolated environment. They have no primary user-facing screens; results
+> surface in the conversation as an agent activity feed (tool calls, output, file changes).
 
 ---
 

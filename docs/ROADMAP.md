@@ -19,7 +19,8 @@
 **Goal:** Bootable app with navigation, theme, settings, core interfaces. No AI yet.
 
 - Android project scaffold (Kotlin, Gradle, Material 3)
-- Navigation framework (workspace-first)
+- Navigation framework (workspace-first, no infrastructure tabs)
+- Agent-first chat UI (goal entry, streaming responses, activity feed)
 - Theme system (dark mode first, Material You)
 - Settings screen
 - Workspace Manager (create, switch, archive, delete)
@@ -45,10 +46,10 @@ Planner → Executor → Tool Manager → Sandbox → Result
 
 ## Phase 3 — Sandbox
 
-**Goal:** Sandboxed execution environment.
+**Goal:** Sandboxed execution environment *(internal — agent-invoked only, ADR-0006; no user-facing sandbox/terminal UI)*.
 
 - Virtual file system
-- Embedded terminal (Linux-like shell)
+- Embedded terminal (Linux-like shell, internal)
 - Process Manager
 - Runtime Manager (Python, Node.js)
 - Log capture

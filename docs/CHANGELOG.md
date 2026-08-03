@@ -11,6 +11,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 - ENVIRONMENT_SETUP.md — complete Linux development environment documentation: installed software & versions, SDK/Java/Python locations, environment variables, PATH configuration, verification results, Android library compatibility (Step 3), AI provider readiness (Step 4), embedded runtime research (Step 5), issues & resolutions, recommendations.
+- ADR-0006 — Agent-First Interaction Model: the sandbox, internal terminal, runtimes, and execution engine are internal implementation details; users interact with AI agents through chat.
+- FR-U011 — Chat as the single primary interaction surface (goal entry, streaming, tool-call cards, permission prompts, results).
+- FEAT-013 — Agent-First Chat Interaction feature registry entry.
+
+### Changed
+- PROJECT_SPECIFICATION.md → v4.2.0: agent-first interaction quick reference, ADR-0006 index entry, locked interaction rule, Phase 1 deliverable.
+- README.md, docs/PRODUCT_VISION.md — agent-first positioning; infrastructure (sandbox/terminal/runtimes/engine) reframed as internal.
+- docs/ARCHITECTURE.md — Terminal screen replaced by Agent Activity Feed; bottom nav is Workspace, Tasks, Settings; workspace tabs drop Terminal.
+- docs/ROADMAP.md, backlog/MVP.md, backlog/V1.md — terminal/sandbox UI removed from Phase 1/MVP; Phase 3 sandbox marked internal.
+- requirements/FR.md — FR-U001 (3-tab bottom nav), FR-U005 (agent activity feed), Terminal section reframed as internal/agent-invoked.
+- specs/TERMINAL.md — reframed as internal agent-invoked component; no user-facing UI.
+- ui/Navigation.md, ui/Components.md, ui/Icons.md — no terminal tab; ActivityCard component; terminal icon reused for activity cards.
+- docs/DECISION_LOG.md — DL-019 records the decision (amends DL-018).
+- docs/adr/ADR-0001-Workspace-First.md — amendment note referencing ADR-0006.
+- registry/FEATURES.md — FEAT-002/FEAT-003 marked internal; FEAT-013 added.
+- docs/ENVIRONMENT_SETUP.md — terminal research note aligned with ADR-0006.
 
 
 ---
