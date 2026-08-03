@@ -29,6 +29,7 @@
 | NFR-REL-006 | Offline mode | Read-only workspace access | Local data available without network |
 | NFR-REL-007 | Backup/restore | Full workspace export/import | Encrypted archive format |
 | NFR-REL-008 | Data integrity | CRC/checksum verification | On every write to persistent storage |
+| NFR-REL-009 | Android background compliance | Foreground service type declared (API 34+); dataSync 6-hour cap (API 35+) handled via WorkManager handoff or user-initiated jobs; Doze-aware | Per [specs/BACKGROUND_EXECUTION.md](../specs/BACKGROUND_EXECUTION.md) §7 |
 
 ## Security
 

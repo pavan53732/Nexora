@@ -34,3 +34,5 @@
 | FEAT-012 | Multi-Workspace | 1 | Planned |
 | FEAT-013 | Agent-First Chat Interaction (goal entry, streaming, activity feed — primary surface) | 1 | Planned |
 | FEAT-014 | Full Tool Catalog (25 categories, 316 registered tools with stable IDs) | 4 | Planned |
+| FEAT-015 | Scheduled Jobs (one-off delayed + recurring with constraints, WorkManager) | 2 | Planned |
+| FEAT-016 | Rich Background Notifications (running, progress %, completed, failed, approval) | 2 | Planned |

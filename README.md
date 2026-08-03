@@ -143,6 +143,7 @@ Nexora/
 - [Database](specs/DATABASE.md)
 - [AI Providers](specs/AI_PROVIDERS.md)
 - [Workspace](specs/WORKSPACE.md)
+- [Background Execution](specs/BACKGROUND_EXECUTION.md)
 
 ---
 

@@ -107,6 +107,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Database** | [specs/DATABASE.md](specs/DATABASE.md) |
 | **AI Providers** | [specs/AI_PROVIDERS.md](specs/AI_PROVIDERS.md) |
 | **Workspace** | [specs/WORKSPACE.md](specs/WORKSPACE.md) |
+| **Background Execution** | [specs/BACKGROUND_EXECUTION.md](specs/BACKGROUND_EXECUTION.md) |
 
 ### Domain Models
 

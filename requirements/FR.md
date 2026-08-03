@@ -51,6 +51,9 @@
 | FR-T008 | Cancel pending or running task | Must | 2 |
 | FR-T009 | Bulk task operations (cancel, retry, reassign) | Should | 4 |
 | FR-T010 | Task output and artifact storage | Must | 2 |
+| FR-T011 | Scheduled execution — one-off delayed and recurring tasks with constraints (network, unmetered, charging), backed by WorkManager; dedupe of duplicate scheduled jobs | Must | 2 |
+| FR-T012 | Priority queue ordering — queued tasks run in priority order (critical > high > medium > low); higher-priority tasks jump the queue | Must | 2 |
+| FR-T013 | Global background control — user can pause and resume all background execution with one action | Should | 3 |
 
 ## Tool System
 
