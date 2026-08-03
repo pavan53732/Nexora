@@ -9,7 +9,7 @@
 
 | # | Category | Prefix | Tools | Phase |
 |---|----------|--------|-------|-------|
-| 1 | File System | FILE | 22 | 4 |
+| 1 | File System | FILE | 24 | 4 |
 | 2 | Workspace | WS | 12 | 1 |
 | 3 | Code Intelligence | CODE | 18 | Later |
 | 4 | Search | SEAR | 9 | 4 |
@@ -24,7 +24,7 @@
 | 13 | Browser | BRW | 15 | Later |
 | 14 | Network/API | NET | 13 | 4 |
 | 15 | Database | DB | 15 | Later |
-| 16 | Memory | MEM | 11 | 6 |
+| 16 | Memory | MEM | 15 | 6 |
 | 17 | AI | AI | 10 | 5 |
 | 18 | Android Device | DEV | 15 | Later |
 | 19 | Project Management | PM | 10 | Later |
@@ -35,7 +35,7 @@
 | 24 | Multi-Agent | MAG | 10 | 7 |
 | 25 | Workflow | WF | 10 | 6 |
 
-**Total registered tools: 316** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 322** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
 
 ## File System (FILE)
 
@@ -63,6 +63,8 @@
 | TOOL-142 | file_unzip | Extract an archive into the sandbox | 4 | Planned |
 | TOOL-143 | file_watch | Watch a path for changes | 4 | Planned |
 | TOOL-144 | file_symlink | Create or inspect a symbolic link | 4 | Planned |
+| TOOL-381 | file_history | List version history of a file | 4 | Planned |
+| TOOL-382 | file_restore | Restore a file to a previous version | 4 | Planned |
 
 ## Workspace (WS)
 
@@ -324,6 +326,10 @@
 | TOOL-286 | memory_prune | Prune stale or low-relevance entries | 6 | Planned |
 | TOOL-287 | memory_tag | Add or remove tags on memory entries | 6 | Planned |
 | TOOL-288 | memory_stats | Memory usage statistics | 6 | Planned |
+| TOOL-383 | memory_tool_history | Query tool invocation history | 6 | Planned |
+| TOOL-384 | memory_preferences | Get or set learned user preferences | 6 | Planned |
+| TOOL-385 | memory_graph_query | Query the knowledge graph (entities, relationships) | 6 | Planned |
+| TOOL-386 | memory_graph_build | Extract entities and relationships into the knowledge graph | 6 | Planned |
 
 ## AI (AI)
 

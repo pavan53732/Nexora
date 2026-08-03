@@ -107,6 +107,11 @@
 | FR-M008 | Export memory data (JSON, markdown) | Should | 7 |
 | FR-M009 | Memory scope control (session, workspace, global) | Must | 3 |
 | FR-M010 | Persistent memory across app restarts | Must | 2 |
+| FR-M011 | Tool history — every tool invocation recorded (tool, params, result, duration, permission decision, workspace, agent); queryable per workspace/task/tool | Must | 2 |
+| FR-M012 | File history — version history of files modified by agents (snapshot/diff per write, revert to any version, quota-aware retention) | Must | 3 |
+| FR-M013 | User preferences — learned and explicit preferences (coding style, default model, tool choices, patterns); persisted in DataStore, scoped global + per workspace | Should | 4 |
+| FR-M014 | Knowledge graph — extract entities, relationships, and facts from conversations, tool results, and files; store and dedupe (merge by entity identity) | Should | 5 |
+| FR-M015 | Knowledge graph query — query by entity, list relationships, traverse paths, and surface graph results in semantic recall | Should | 5 |
 
 ## Sandbox
 

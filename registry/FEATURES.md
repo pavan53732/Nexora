@@ -36,3 +36,6 @@
 | FEAT-014 | Full Tool Catalog (25 categories, 316 registered tools with stable IDs) | 4 | Planned |
 | FEAT-015 | Scheduled Jobs (one-off delayed + recurring with constraints, WorkManager) | 2 | Planned |
 | FEAT-016 | Rich Background Notifications (running, progress %, completed, failed, approval) | 2 | Planned |
+| FEAT-017 | Knowledge Graph (entity extraction, relationships, traversal, semantic search) | 5 | Planned |
+| FEAT-018 | Tool & File History (tool invocation records, file versioning with revert) | 2 | Planned |
+| FEAT-019 | User Preferences (learned + explicit, global and per-workspace) | 4 | Planned |

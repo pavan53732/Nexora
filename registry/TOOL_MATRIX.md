@@ -37,6 +37,8 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `file_unzip` | File Unzip | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_watch` | File Watch | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_symlink` | File Symlink | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
+| `file_history` | File History | File System | ✓ | — | — | — | — | Low | ✓ | ✓ | — | 4 |
+| `file_restore` | File Restore | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `workspace_create` | Workspace Create | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 1 |
 | `workspace_switch` | Workspace Switch | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 1 |
 | `workspace_list` | Workspace List | Workspace | ✓ | — | — | — | — | Low | ✓ | — | — | 1 |
@@ -223,6 +225,10 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `memory_prune` | Memory Prune | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
 | `memory_tag` | Memory Tag | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
 | `memory_stats` | Memory Stats | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 6 |
+| `memory_tool_history` | Memory Tool History | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 6 |
+| `memory_preferences` | Memory Preferences | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 6 |
+| `memory_graph_query` | Memory Graph Query | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
+| `memory_graph_build` | Memory Graph Build | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
 | `ai_complete` | Ai Complete | AI | ✓ | — | ✓ | — | — | High | ✓ | — | ✓ | 5 |
 | `ai_embed` | Ai Embed | AI | ✓ | — | ✓ | — | — | Medium | ✓ | — | — | 5 |
 | `ai_image_generate` | Ai Image Generate | AI | ✓ | ✓ | — | — | — | Medium | ✓ | — | — | 5 |

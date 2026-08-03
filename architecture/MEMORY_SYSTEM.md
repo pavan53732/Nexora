@@ -30,6 +30,36 @@ Nexora remembers everything. The memory system provides persistent, searchable, 
 | **File History** | Version history of files modified by agents. |
 | **User Preferences** | Learned preferences: coding style, preferred tools, patterns. |
 
+## Memory Backing Stores
+
+| Memory type | Storage | Requirements |
+|-------------|---------|--------------|
+| Session / Project / Long-Term | Room `memory_entry` + vector index | FR-M001–003, FR-M010 |
+| Tool History | Room `tool_record` (append-only) | FR-M011 |
+| File History | Room `file_version` + sandbox `files/.history/` blobs | FR-M012, [specs/FILE_SYSTEM.md](../specs/FILE_SYSTEM.md) |
+| User Preferences | DataStore (global + per-workspace) | FR-M013 |
+| Knowledge Graph | Room `graph_entity` + `graph_edge` | FR-M014–015 |
+| Execution History | Room `execution_event` | FR-M005 |
+
+Protocol operations and payloads: [protocols/Memory-Protocol.md](../protocols/Memory-Protocol.md).
+
+## Knowledge Graph
+
+The Knowledge Graph stores structured **entities**, **relationships**, and **facts**
+extracted from conversations, tool results, and files (FR-M014):
+
+- **Extraction** — `graphExtract(sourceId, content)` runs entity extraction (via the
+  AI provider) on new memories and tool outputs; results are merged by entity identity
+  (dedupe/merge, no duplicate nodes).
+- **Query** — `graphQuery(entityId, depth)` and `graphNeighbors(entityId)` support
+  traversal; `graphSearch(query)` adds embedding-based semantic search over
+  entities/facts (FR-M015).
+- **Scope** — graph is workspace-scoped with a global layer for long-term entities
+  (same isolation rules as other memory).
+- **Storage** — Room `graph_entity` / `graph_edge` tables; indexes on entity name and
+  embedding vector.
+- **Tools** — `memory_graph_query` (TOOL-385), `memory_graph_build` (TOOL-386).
+
 ## Memory Flow
 
 ```
@@ -84,5 +114,9 @@ data class MemoryEntry(
 
 ## Phase Mapping
 
+- **Phase 2**: Execution history, tool history (FR-M005, FR-M011).
+- **Phase 3**: File history (FR-M012).
+- **Phase 4**: Semantic memory, user preferences (FR-M006, FR-M013).
+- **Phase 5**: Knowledge graph (FR-M014–015).
 - **Phase 6**: Session, Project, Long-Term memory. Semantic search. Execution history.
-- **Later**: Knowledge graph. Cloud sync. Advanced embeddings.
+- **Later**: Cloud sync. Advanced embeddings.

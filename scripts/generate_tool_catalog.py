@@ -456,6 +456,21 @@ LEGACY = {
  "system_info": "device_info",
 }
 
+# --------------------------------------------------- extra tools (explicit IDs)
+# Appended with fixed IDs so previously generated TOOL-IDs never shift.
+EXTRA = {
+ "FILE": [
+  ("TOOL-381", "file_history", "List version history of a file"),
+  ("TOOL-382", "file_restore", "Restore a file to a previous version"),
+ ],
+ "MEM": [
+  ("TOOL-383", "memory_tool_history", "Query tool invocation history"),
+  ("TOOL-384", "memory_preferences", "Get or set learned user preferences"),
+  ("TOOL-385", "memory_graph_query", "Query the knowledge graph (entities, relationships)"),
+  ("TOOL-386", "memory_graph_build", "Extract entities and relationships into the knowledge graph"),
+ ],
+}
+
 # ----------------------------------------------------------- capability defaults
 READ_ONLY_WORDS = ("read","list","get","search","status","info","log","history",
                    "stats","inspect","schema","diff","show","view","find","models",
@@ -512,6 +527,8 @@ def build_catalog():
         for name, desc in NEW.get(key, []):
             tools.append((f"TOOL-{nxt:03d}", name, desc, key, phase))
             nxt += 1
+        for tid, name, desc in EXTRA.get(key, []):
+            tools.append((tid, name, desc, key, phase))
     return tools
 
 # ---------------------------------------------------------- render TOOLS.md
