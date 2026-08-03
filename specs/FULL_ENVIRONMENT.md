@@ -171,6 +171,38 @@ Package downloads and installed artifacts count toward workspace quota. Package 
 
 The bundled Debian rootfs contains OSS components with license obligations. Nexora must ship attribution and source-offer information with the APK and provide an in-app OSS licenses view before store distribution.
 
+## 6. W^X Compatibility (`targetSdk=36`)
+
+Nexora uses `targetSdk=36` for Google Play compliance. Android 10+ enforces W^X
+(write-xor-execute) via SELinux and seccomp — no memory page can be both writable
+and executable. This breaks programs that do JIT compilation (e.g., Node.js V8).
+
+Nexora handles this **without lowering `targetSdk`**:
+
+| Technique | What it does | Programs affected |
+|-----------|-------------|-------------------|
+| **proot seccomp-bpf filtering** | Intercepts `mmap`/`mprotect` from guest binaries and remaps pages safely | All guest binaries |
+| **Node.js `--jitless`** | Disables V8 JIT; runs pure interpreter mode | Node.js only |
+| **Pre-patched ELF PT_INTERP** | Dynamic linker path rewritten for proot namespace | All dynamically-linked binaries |
+| **`extractNativeLibs=true`** | Native libs extracted to filesystem before load | Native libraries in APK |
+
+### Guest program compatibility
+
+| Program | W^X Status | Notes |
+|---------|-----------|-------|
+| Python 3 (CPython) | ✅ Works | No JIT by default; pure interpreter |
+| Node.js | ✅ Works | `--jitless` flag set in rootfs `~/.bashrc` |
+| Git | ✅ Works | Standard compiled binary |
+| pip packages | ✅ Mostly works | Avoid packages with native JIT (PyPy, numba) |
+| npm packages | ✅ Mostly works | Avoid packages bundling native JIT compilers |
+| C/C++ compiled tools | ✅ Works | Standard compiled binaries |
+
+### What does NOT work
+- **PyPy** — requires JIT, blocked by W^X
+- **numba** — LLVM JIT compilation blocked
+- **V8 without `--jitless`** — blocked (mitigated by flag)
+- **Self-modifying code** — blocked by design (security feature)
+
 ## 12. Phase Mapping
 
 | Phase | Deliverable |

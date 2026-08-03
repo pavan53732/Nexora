@@ -381,14 +381,28 @@ ABI splitting or per-feature download mitigations exist).
    AGP **9.3.1**, Gradle Wrapper **9.6.1**, Kotlin **2.4.10**, KSP matching Kotlin,
    `compileSdk 36`, `minSdk 34`, `targetSdk 36`, single universal APK (NFR-PORT-002),
    versions centralized in `gradle/libs.versions.toml`.
+4. **W^X Compatibility (`targetSdk=36`)** — Android 10+ enforces W^X (no memory pages
+   both writable and executable). Nexora does **not** lower `targetSdk` to bypass this.
+   Instead, W^X compatibility is achieved through:
+   - **proot with seccomp-bpf filtering** — intercepts `mmap`/`mprotect` syscalls from
+     guest programs and remaps them safely without violating host SELinux policies.
+   - **Pre-patched guest binaries** — Node.js in the bundled rootfs runs with the
+     `--jitless` flag (disables V8 JIT compilation, which requires W^X pages). Standard
+     compiled binaries (Python, Git, C tools, pip packages) execute without issues.
+   - **`android:extractNativeLibs="true"`** — ensures native libraries are extracted to
+     the filesystem before loading, avoiding W^X edge cases with direct APK loading.
+   - **PT_INTERP patching** — ELF binaries in the rootfs are patched to use a compatible
+     dynamic linker path inside the proot namespace (`/lib/ld-linux-aarch64.so.1`).
+   This approach keeps `targetSdk=36` for Google Play compliance while maintaining full
+   Linux userland capability inside the sandbox.
 3. **Repositories** — `google()` + `mavenCentral()` in `settings.gradle.kts`; no other
    repositories required.
-4. **No API keys** — provider keys are implemented in Phase 5 with Android Keystore
+5. **No API keys** — provider keys are implemented in Phase 5 with Android Keystore
    encrypted storage (NFR-SEC-005/010); none are configured now.
-5. **Embedded runtimes** — Phase 3 decision: Chaquopy / app.cash.quickjs / JGit /
+6. **Embedded runtimes** — Phase 3 decision: Chaquopy / app.cash.quickjs / JGit /
    vendored terminal emulator / Room+SQLite / layered sandbox (see §9). Requires a
    licensing review for the terminal component (GPL vs Apache-2.0).
-6. **CI** — GitHub Actions can reuse these exact versions for build/lint/test gates
+7. **CI** — GitHub Actions can reuse these exact versions for build/lint/test gates
    (NFR-MAINT-004).
 
 ---

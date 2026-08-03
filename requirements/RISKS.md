@@ -24,3 +24,4 @@
 | RISK-015 | Rootfs extraction failure on devices with low free storage | Medium | High | Pre-flight storage check; clear user guidance; cleanup incomplete extraction state; support environment reset | Runtime Lead |
 | RISK-016 | proot ptrace blocked by SELinux or device security software | Low | High | Detect denial, report clearly, and document incompatible device classes; evaluate platform-specific mitigations | Security Lead |
 | RISK-017 | Binary/package compatibility gaps remain despite glibc baseline | Low | Medium | Maintain compatibility matrix, test common packages, and document unsupported cases | Platform Lead |
+| RISK-018 | JIT-dependent guest programs (PyPy, numba, unpatched V8) fail under Android W^X with `targetSdk=36` | Low | Medium | Pre-patch rootfs with `--jitless` Node.js; document unsupported runtimes; detect and report clear error messages when JIT is requested | Platform Lead |
