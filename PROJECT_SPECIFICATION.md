@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 4.4.0 |
+| **Spec Version** | 4.5.0 |
 | **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v4.4 — Skills first-class (ADR-0007); complete execution lifecycle spec) |
+| **Last Updated** | 2026-08-03 (v4.5 — Context pipeline + autonomy & stability specs) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -111,6 +111,8 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Workspace** | [specs/WORKSPACE.md](specs/WORKSPACE.md) |
 | **Background Execution** | [specs/BACKGROUND_EXECUTION.md](specs/BACKGROUND_EXECUTION.md) |
 | **Execution Lifecycle** | [specs/EXECUTION_LIFECYCLE.md](specs/EXECUTION_LIFECYCLE.md) |
+| **Context Management** | [specs/CONTEXT_MANAGEMENT.md](specs/CONTEXT_MANAGEMENT.md) |
+| **Autonomy & Stability** | [specs/AUTONOMY_STABILITY.md](specs/AUTONOMY_STABILITY.md) |
 
 ### Domain Models
 

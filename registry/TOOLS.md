@@ -24,19 +24,19 @@
 | 13 | Browser | BRW | 15 | Later |
 | 14 | Network/API | NET | 13 | 4 |
 | 15 | Database | DB | 15 | Later |
-| 16 | Memory | MEM | 15 | 6 |
+| 16 | Memory | MEM | 16 | 6 |
 | 17 | AI | AI | 10 | 5 |
 | 18 | Android Device | DEV | 15 | Later |
 | 19 | Project Management | PM | 10 | Later |
 | 20 | Security | SEC | 17 | Later |
-| 21 | Observability | OBS | 15 | Later |
+| 21 | Observability | OBS | 16 | Later |
 | 22 | Import/Export | IO | 13 | Later |
 | 23 | Plugin | PLG | 10 | 8 |
 | 24 | Multi-Agent | MAG | 10 | 7 |
 | 25 | Workflow | WF | 10 | 6 |
 | 26 | Skills | SKL | 2 | 4 |
 
-**Total registered tools: 331** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 333** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
 
 ## File System (FILE)
 
@@ -336,6 +336,7 @@
 | TOOL-384 | memory_preferences | Get or set learned user preferences | 4 | Planned |
 | TOOL-385 | memory_graph_query | Query the knowledge graph (entities, relationships) | 5 | Planned |
 | TOOL-386 | memory_graph_build | Extract entities and relationships into the knowledge graph | 5 | Planned |
+| TOOL-397 | memory_lessons | Store and retrieve lessons learned from task execution (closed-loop learning) | 4 | Planned |
 
 ## AI (AI)
 
@@ -428,6 +429,7 @@
 | TOOL-347 | obs_search | Search logs and events | Later | Planned |
 | TOOL-348 | obs_sessions | List agent sessions | Later | Planned |
 | TOOL-349 | obs_snapshot | Capture a state snapshot | Later | Planned |
+| TOOL-396 | context_stats | Show per-layer token allocation and context pipeline statistics | 2 | Planned |
 
 ## Import/Export (IO)
 

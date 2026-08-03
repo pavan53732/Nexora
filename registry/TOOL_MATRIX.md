@@ -234,6 +234,7 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `memory_preferences` | Memory Preferences | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
 | `memory_graph_query` | Memory Graph Query | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 5 |
 | `memory_graph_build` | Memory Graph Build | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 5 |
+| `memory_lessons` | Memory Lessons | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 4 |
 | `ai_complete` | Ai Complete | AI | ✓ | — | ✓ | — | — | High | ✓ | — | ✓ | 5 |
 | `ai_embed` | Ai Embed | AI | ✓ | — | ✓ | — | — | Medium | ✓ | — | — | 5 |
 | `ai_image_generate` | Ai Image Generate | AI | ✓ | ✓ | — | — | — | Medium | ✓ | — | — | 5 |
@@ -301,6 +302,7 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `obs_search` | Obs Search | Observability | ✓ | — | — | — | — | Low | ✓ | — | — | Later |
 | `obs_sessions` | Obs Sessions | Observability | ✓ | — | — | — | — | Low | ✓ | — | — | Later |
 | `obs_snapshot` | Obs Snapshot | Observability | ✓ | ✓ | — | — | — | Low | ✓ | — | — | Later |
+| `context_stats` | Context Stats | Observability | ✓ | — | — | — | — | Low | ✓ | — | — | 2 |
 | `io_import_project` | Io Import Project | Import/Export | — | ✓ | ✓ | — | — | Medium | ✓ | — | — | Later |
 | `io_export_project` | Io Export Project | Import/Export | — | ✓ | ✓ | — | — | Medium | ✓ | — | — | Later |
 | `io_import_archive` | Io Import Archive | Import/Export | — | ✓ | ✓ | — | — | Medium | ✓ | — | — | Later |

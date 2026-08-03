@@ -224,3 +224,35 @@
 | FR-WS-003 | Extraction modes — plain text, markdown, structured (JSON), and screenshot modes | Should | 4 |
 | FR-WS-004 | Search provider configuration — configurable search backend (default or user-defined endpoint), per-workspace selection | Should | 4 |
 | FR-WS-005 | Content safety — extracted/downloaded web content enters the sandbox quarantine (FR-S015) before promotion; untrusted content is labeled in agent context (prompt-injection containment) | Must | 4 |
+
+
+## Context Management
+
+> Pipeline defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-CM-001 | Structured state is never compressed — goal, plan, decisions, and acceptance criteria persist exactly in checkpoints | Must | 2 |
+| FR-CM-002 | Token budget allocation — priority-ordered allocation across context layers (state, system, working set, retrieval, summaries); truncation only after summarization and only on the summary layer | Must | 2 |
+| FR-CM-003 | Progressive summarization — rolling summary triggered by budget thresholds, summary-of-summaries, idempotent summary artifacts, fidelity check after each summarization | Must | 3 |
+| FR-CM-004 | Resume reconstruction — context rebuilt from checkpoint + summary + retrieval; raw history is never replayed for context | Must | 2 |
+| FR-CM-005 | Freshness checks — referenced file/task/provider/sandbox state re-validated before each agent-loop iteration; stale context flagged | Must | 2 |
+| FR-CM-006 | Context tagging & trust — every chunk labeled (source, timestamp, trust level, scope); untrusted content isolated in labeled segments | Must | 3 |
+| FR-CM-007 | Milestone memory curation — agent stores structured facts and lessons at step boundaries and task completion, not raw transcripts | Must | 3 |
+| FR-CM-008 | Context observability — per-layer token usage, summarization/truncation/stale events visible via context_stats and execution history | Should | 4 |
+
+## Autonomy & Stability
+
+> Defined in [specs/AUTONOMY_STABILITY.md](../specs/AUTONOMY_STABILITY.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-AS-001 | Plan repair — on step failure: diagnose, then retry / repair / re-plan / re-delegate / escalate (bounded, max 3 cycles); repair decisions recorded in history | Must | 4 |
+| FR-AS-002 | Agent heartbeat & watchdog — heartbeat per loop iteration; hang detection with checkpoint restart (bounded) and escalation | Must | 2 |
+| FR-AS-003 | Budget escalation — token/step/time/cost exhaustion pauses and notifies the user with options; never a silent stop | Must | 2 |
+| FR-AS-004 | Closed-loop learning — reflect, store lesson (memory_lessons), propose skill refinement or new LEARNED skill; lessons retrieved during planning | Should | 4 |
+| FR-AS-005 | Trust growth — per-agent/per-workspace trust score adjusts autonomy mode; success raises it, failures lower it; explicit reset | Should | 4 |
+| FR-AS-006 | Verification gates — step validation criteria are hard gates; executor blocks next step until pass or classified failure; resumed agents re-validate | Must | 2 |
+| FR-AS-007 | Idempotency & exactly-once recovery — tools declare idempotency; replay log; non-idempotent calls reconciled from tool history, never replayed | Must | 2 |
+| FR-AS-008 | Degradation ladder — provider failover → local model → offline mode → read-only; each descent announced and logged | Must | 2 |
+| FR-AS-009 | Fault-injection testing — scripted chaos scenarios (kill mid-task, kill on non-idempotent call, network loss, provider storm, disk-full, OOM, double restart, summarization churn) runnable in CI | Should | 4 |

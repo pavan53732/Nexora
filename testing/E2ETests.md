@@ -14,6 +14,12 @@ E2E tests exercise the complete application on a real device or emulator, valida
 | Create → run workflow | Workflow builder → add 2 agents → connect output→input → run → verify final output | Both agents complete, workflow state = COMPLETED |
 | Agent cancellation | Start long-running agent → tap cancel → verify state | Agent state = CANCELLED, no orphan processes |
 | Kill → resume | Start agent → force-kill app → reopen → verify agent resumes | Agent state = RUNNING, partial results preserved |
+| Kill on non-idempotent call → resume | Start agent mid-`http_post` → force-kill → reopen | No double side-effect; state matches exactly-once execution (FR-AS-007) |
+| Network loss mid-task | Start network-dependent agent → airplane mode → restore | Degradation ladder descends (local/offline/read-only), agent pauses and resumes (FR-AS-008) |
+| Provider outage storm | Mock provider 500s / rate-limit → trigger | Automatic failover to next profile, retry backoff, no crash |
+| Disk-full during write | Fill workspace quota mid-write | Graceful NXR-7xxx error, partial results preserved, snapshot restore available |
+| Double restart | Kill → resume → kill → resume | Context reconstructed from checkpoint each time; no loss (FR-CM-004) |
+| Long-task summarization | Run 200-turn task with small token budget | No context loss; progressive summaries verifiable (FR-CM-003) |
 
 ## Framework Stack
 

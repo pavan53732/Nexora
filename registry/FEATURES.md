@@ -50,3 +50,6 @@
 | FEAT-028 | Complete Execution Lifecycle (objective → planning → selection → validation → verification → report → follow-up) | 2 | Planned |
 | FEAT-029 | Software Engineering Pipeline (build, static analysis, tests, perf/security, auto-fix, final validation) | 4 | Planned |
 | FEAT-030 | Web Search & Extraction (configurable search provider, extraction modes, quarantine-gated content) | 4 | Planned |
+| FEAT-031 | Context Pipeline (structured state, token allocation, progressive summarization, resume reconstruction, freshness, tagging) | 2 | Planned |
+| FEAT-032 | Autonomy Hardening (plan repair, heartbeat/watchdog, budget escalation, closed-loop learning, trust growth, verification gates) | 2 | Planned |
+| FEAT-033 | Stability Hardening (idempotent exactly-once recovery, degradation ladder, fault-injection suite) | 2 | Planned |

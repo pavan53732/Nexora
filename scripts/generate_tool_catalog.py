@@ -470,6 +470,7 @@ EXTRA = {
   ("TOOL-384", "memory_preferences", "Get or set learned user preferences", "4"),
   ("TOOL-385", "memory_graph_query", "Query the knowledge graph (entities, relationships)", "5"),
   ("TOOL-386", "memory_graph_build", "Extract entities and relationships into the knowledge graph", "5"),
+  ("TOOL-397", "memory_lessons", "Store and retrieve lessons learned from task execution (closed-loop learning)", "4"),
  ],
  "WS": [
   ("TOOL-387", "sandbox_info", "Query sandbox state: processes, disk, env, quotas, network rules", "3"),
@@ -485,6 +486,9 @@ EXTRA = {
  "SKL": [
   ("TOOL-394", "skill_list", "List skills in the registry, optionally by domain or agent", "4"),
   ("TOOL-395", "skill_acquire", "Acquire a skill for an agent (built-in, user-defined, or learned)", "4"),
+ ],
+ "OBS": [
+  ("TOOL-396", "context_stats", "Show per-layer token allocation and context pipeline statistics", "2"),
  ],
 }
 
