@@ -1,3 +1,13 @@
+> **Status: CANONICAL** for single-agent autonomous loop behavior.
+> This document owns the per-agent execution loop: reflect → plan → build context →
+> call provider → parse → execute tools → store results → evaluate → checkpoint.
+> It does NOT own multi-agent coordination (see [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md)),
+> workflow graph progression (see [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md)), or
+> system-wide service composition (see [RUNTIME.md](RUNTIME.md)).
+>
+> Depends on: [RUNTIME.md](RUNTIME.md) (service composition), [TOOL_SYSTEM.md](TOOL_SYSTEM.md) (tool execution), [MEMORY_SYSTEM.md](MEMORY_SYSTEM.md) (context/memory).
+> Referenced by: [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md), [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md), [docs/api/Agent-API.md](../docs/api/Agent-API.md).
+
 # Autonomous Agent Runtime — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [RUNTIME.md](RUNTIME.md) | [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md)

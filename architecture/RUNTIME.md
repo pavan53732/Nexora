@@ -13,7 +13,21 @@
 
 ## Overview
 
-The Core Runtime is the brain of Nexora. It orchestrates all agent activity, from receiving a user goal to producing a result. It consists of 17 tightly coordinated modules.
+The Core Runtime is the composition layer of Nexora. It coordinates runtime services
+(agent loop, multi-agent coordinator, workflow engine, tool manager, memory system,
+provider router) and manages their lifecycle, but it does NOT implement the internal
+logic of any subsystem. Service boundaries:
+
+| Service | Owned By | Runtime Role |
+|---------|----------|--------------|
+| Agent loop (plan→execute→reflect) | [AGENT_RUNTIME.md](AGENT_RUNTIME.md) | Runtime starts/stops the loop service |
+| Multi-agent coordination | [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md) | Runtime provides the coordinator service reference |
+| Workflow state progression | [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md) | Runtime invokes workflow engine for graph execution |
+| Tool execution | [TOOL_SYSTEM.md](TOOL_SYSTEM.md) | Runtime routes tool calls through ToolManager |
+| Memory/context | [MEMORY_SYSTEM.md](MEMORY_SYSTEM.md) | Runtime requests memory services |
+| Provider routing | [PROVIDER_SYSTEM.md](PROVIDER_SYSTEM.md) | Runtime holds the provider registry |
+
+It consists of 17 tightly coordinated modules.
 
 ## Module Inventory
 
@@ -21,7 +35,7 @@ The Core Runtime is the brain of Nexora. It orchestrates all agent activity, fro
 --------|---------------|----------------|
 | **Planner** | Decomposes goals into tasks, creates execution plans with dependencies. | `com.nexora.app.runtime.planner` |
 | **Executor** | Executes planned tasks sequentially or in parallel, manages execution state. | `com.nexora.app.runtime.executor` |
-| **Workflow Engine** | Orchestrates multi-step workflows, handles branching, looping, and error recovery. | `com.nexora.app.runtime.workflow` |
+| **Workflow Engine** | Manages workflow graph state and step progression. Delegates step execution to the Executor. | `com.nexora.app.runtime.workflow` |
 | **Tool Manager** | Discovers, registers, and invokes tools. Routes tool calls to the correct handler. | `com.nexora.app.runtime.tools` |
 | **Context Builder** | Assembles context for AI calls: system prompt, conversation history, file contents, memory. | `com.nexora.app.runtime.context` |
 | **Memory Manager** | Reads/writes to all memory stores. Manages recall and relevance scoring. | `com.nexora.app.runtime.memory` |
@@ -31,7 +45,7 @@ The Core Runtime is the brain of Nexora. It orchestrates all agent activity, fro
 | **Event Bus** | Central publish/subscribe system for inter-module communication. | `com.nexora.app.runtime.events` |
 | **Observability** | Collects metrics, traces, and logs for every runtime operation. | `com.nexora.app.runtime.observability` |
 | **Security Manager** | Enforces sandbox boundaries, resource limits, and access controls. | `com.nexora.app.runtime.security` |
-| **Background Runtime** | Manages long-running agent execution in Android foreground services. | `com.nexora.app.runtime.background` |
+| **Background Runtime** | Manages long-running agent execution via Android foreground services. Behavior defined in [specs/BACKGROUND_EXECUTION.md](../specs/BACKGROUND_EXECUTION.md). | `com.nexora.app.runtime.background` |
 | **Resource Manager** | Tracks and limits CPU, memory, disk, and network usage per agent/workspace. | `com.nexora.app.runtime.resources` |
 | **Agent Manager** | Creates, configures, and manages multiple agent instances. | `com.nexora.app.runtime.agents` |
 | **Skill Registry** | Maintains the skill catalog, agent–skill bindings, and skill→tool mappings; supports skill acquisition (ADR-0007). | `com.nexora.app.runtime.skills` |

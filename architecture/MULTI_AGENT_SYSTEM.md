@@ -1,3 +1,12 @@
+> **Status: CANONICAL** for multi-agent coordination and delegation.
+> This document owns agent-to-agent task delegation, parallel sub-agent spawning,
+> result merging, and inter-agent communication protocols. It does NOT own the
+> internal single-agent loop (see [AGENT_RUNTIME.md](AGENT_RUNTIME.md)) or workflow
+> graph progression (see [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md)).
+>
+> Depends on: [AGENT_RUNTIME.md](AGENT_RUNTIME.md) (single-agent loop), [RUNTIME.md](RUNTIME.md) (service composition).
+> Referenced by: [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md), [registry/AGENTS.md](../registry/AGENTS.md).
+
 # Multi-Agent System — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [AGENT_RUNTIME.md](AGENT_RUNTIME.md) | [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md)
@@ -119,11 +128,11 @@ shared memory). An agent may never call another agent; it publishes results and 
 coordinator routes them. This centralizes coordination, prevents coupling, and
 simplifies conflict resolution and audit.
 
-## Agent Orchestrator
+## Multi-Agent Coordinator
 
 The coordinator role is composed from existing runtime modules (Agent Manager +
 Executor + Workflow Engine + EventBus + SA-1..SA-5 contract) — an explicit
-orchestration concern, not a new standalone module (FR-AG-003):
+coordination concern, not a new standalone module (FR-AG-003):
 
 | Responsibility | Owned by |
 |----------------|----------|
@@ -181,7 +190,7 @@ never needs to interrupt for missing basics:
 If genuinely ambiguous, the sub-agent asks **once** via the Evidence & Validation
 Engine (EV), then continues — it never guesses (FR-EV-003).
 
-### SA-3 — Parallel orchestration (FR-MA-003)
+### SA-3 — Parallel coordination (FR-MA-003)
 
 | Rule | Value |
 |------|-------|

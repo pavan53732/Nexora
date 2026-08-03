@@ -1,3 +1,12 @@
+> **Status: CANONICAL** for workflow graph state progression.
+> This document owns workflow definition, step sequencing, branching, looping,
+> and error recovery within a workflow graph. It does NOT own multi-agent
+> delegation (see [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md)) or the
+> single-agent autonomous loop (see [AGENT_RUNTIME.md](AGENT_RUNTIME.md)).
+>
+> Depends on: [AGENT_RUNTIME.md](AGENT_RUNTIME.md) (step execution), [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md) (multi-agent steps).
+> Referenced by: [RUNTIME.md](RUNTIME.md), [docs/api/Runtime-API.md](../docs/api/Runtime-API.md).
+
 # Workflow Engine — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [RUNTIME.md](RUNTIME.md) | [AGENT_RUNTIME.md](AGENT_RUNTIME.md)
@@ -6,7 +15,11 @@
 
 ## Overview
 
-The Workflow Engine orchestrates complex multi-step tasks that go beyond a single agent loop. It handles branching, looping, error recovery, and multi-agent coordination.
+The Workflow Engine manages workflow graph state and progression. It handles step
+sequencing, branching, looping, and error recovery within a workflow. Multi-agent
+workflow steps are delegated to the Multi-Agent Coordinator (see
+[MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md)), not implemented by the Workflow
+Engine itself.
 
 ## Workflow Types
 
@@ -18,7 +31,7 @@ The Workflow Engine orchestrates complex multi-step tasks that go beyond a singl
 | **Looping** | Steps repeated until a condition is met. |
 | **Error Recovery** | Retry with fallback strategies on failure. |
 | **Human-in-the-Loop** | Steps that pause for user approval before continuing. |
-| **Multi-Agent** | Steps delegated to different specialized agents. |
+| **Multi-Agent Step** | Steps delegated to the Multi-Agent Coordinator for parallel agent execution. |
 
 ## Workflow Definition
 
