@@ -5,10 +5,10 @@
 ## States
 
 ```
-PENDING → planning → executing → COMPLETED
+PENDING → PLANNING → EXECUTING → COMPLETED
                       ↘ FAILED
                       ↘ CANCELLED
-                      ↘ BLOCKED → executing (after approval)
+                      ↘ BLOCKED → EXECUTING (after approval)
 ```
 
 ## Checkpointing
