@@ -3,6 +3,7 @@
 - **Status**: Accepted
 - **Date**: 2026-08-03
 - **Deciders**: Lead Architect
+- **Related**: [ADR-0006-Agent-First-Interaction-Model](./ADR-0006-Agent-First-Interaction-Model.md) — user notification happens via chat activity feed, not generic OS notification
 
 ## Context
 
@@ -29,7 +30,7 @@ WHILE goal_is_not_complete:
     7. STORE results in memory
     8. EVALUATE completion
     9. SAVE checkpoint
-    10. NOTIFY user
+    10. STREAM results to conversation activity feed (per ADR-0006; not a generic OS notification — tool output, file diffs, and execution logs surface as activity cards in the chat interface)
 ```
 
 Key properties:
