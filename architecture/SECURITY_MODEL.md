@@ -20,6 +20,7 @@ Nexora enforces strict security boundaries. The AI never touches the host system
 | **Process limits** | Maximum concurrent processes per workspace. |
 | **Plugin permissions** | Plugins declare required permissions at install. User approves. |
 | **Audit logs** | Every action logged with timestamp, agent, tool, parameters, result. |
+| **Provider isolation** | Provider configs, API keys, and request data are isolated per provider; provider code cannot access other providers' credentials or data. |
 
 ## Permission Scopes
 
@@ -81,9 +82,28 @@ class SecureKeyStore(context: Context) {
 }
 ```
 
+## Provider Isolation
+
+Providers are isolated from each other and from workspace data (NFR-SEC-011/012).
+The following guarantees apply to every provider and provider profile:
+
+| Guarantee | Rule |
+|-----------|------|
+| **Credential isolation** | Each provider profile's API key is stored under its own `SecureKeyStore` alias. Only the matching provider client may retrieve its own key reference; no provider code can enumerate or read another provider's keys or profiles. |
+| **Configuration isolation** | Provider configurations are scoped by provider ID and profile ID. `ProviderRegistry` returns a config only to the provider client that owns it. |
+| **Data-flow isolation** | Context assembled for provider A is delivered only to provider A's endpoint. Every request is tagged with the active profile ID; delivery through any other provider is rejected by the router. |
+| **Code isolation** | Provider implementations (Phase 8 plugins, e.g. PLG-018) run in isolated classloaders with no access to app internals, other provider instances, or workspace data — except through the permissioned `ToolContext` surface (same rule as plugin sandboxing, NFR-SEC-009). |
+| **Network confinement** | Provider HTTP clients connect only to their configured `baseUrl` (defaults per PROV-001…009). No arbitrary outbound connections from provider code without an explicit `network:*` grant. TLS 1.3 + certificate pinning (NFR-SEC-004). |
+| **Crash isolation** | A provider failure, timeout, or OOM cannot take down the host app or other providers — bounded retries with backoff and health-based routing (see ProviderLifecycle: Healthy → Degraded → Unhealthy → failover). |
+| **Auditability** | Every provider call is recorded: profile, workspace, agent, model, token usage (observability, FR-P009). |
+
+Design rule (unchanged): the runtime sees only the `AIProvider` interface; all
+provider-specific logic lives in provider plugins
+(see [PROVIDER_SYSTEM.md](PROVIDER_SYSTEM.md) and [specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md)).
+
 ## Phase Mapping
 
 - **Phase 1**: Permission Manager interface, basic permission checks.
 - **Phase 3**: Sandbox isolation enforcement, resource quotas.
-- **Phase 5**: API key encryption, provider-specific security.
-- **Phase 8**: Plugin permission sandboxing.
+- **Phase 5**: API key encryption, provider-specific security, provider isolation enforcement.
+- **Phase 8**: Plugin permission sandboxing, provider plugins.

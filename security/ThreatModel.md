@@ -87,6 +87,8 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-014 | Provider response leaking sensitive user content to logs | Provider System | Medium | Log level gating; prompt/response bodies logged at DEBUG only, stripped in release builds | Mitigated |
 | TM-015 | Workspace files readable by other apps (backup) | Storage | High | `allowBackup=false` in manifest; Android auto-backup exclusion rules | Mitigated |
 | TM-016 | Plugin reads workspace memory of a different workspace | Plugin System | High | Plugin loaded in caller's classloader; no cross-workspace file handles; path validation on every I/O call | Partial |
+| TM-026 | Context intended for provider A is delivered to provider B (data-flow leak) | Provider System | High | Every request tagged with the active profile ID; single routing path through `ProviderRouter`; cross-provider delivery rejected | Partial |
+| TM-027 | Provider plugin reads another provider's API key or configuration | Provider System | Critical | Per-provider `SecureKeyStore` aliases; provider code receives only its own key reference; isolated classloaders | Partial |
 
 ### Denial of Service
 
@@ -106,6 +108,7 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-023 | Plugin requests and receives excessive permissions | Plugin System | High | Least-privilege manifest; user reviews each scope at install; no `REQUEST_INSTALL_PACKAGES` ever granted | Mitigated |
 | TM-024 | Agent exceeds granted permissions via tool chaining | Agent System | High | Permission check on every individual tool call, not just the first; no implicit permission inheritance across chain steps | Mitigated |
 | TM-025 | Malicious provider response injects tool invocations | Provider System | Medium | Provider output is treated as data, not code; tool calls validated against registry before execution | Mitigated |
+| TM-028 | Provider plugin performs arbitrary network calls to exfiltrate data | Provider System | High | Provider HTTP clients confined to their configured `baseUrl`; `network:*` grants enforced by `PermissionManager`; no raw sockets exposed to provider code | Partial |
 
 ---
 
@@ -113,10 +116,10 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 
 | Category | Total | Mitigated | Partial | Open |
 |----------|-------|-----------|---------|------|
-| Spoofing | 4 | 2 | 1 | 0 |
+| Spoofing | 4 | 3 | 1 | 0 |
 | Tampering | 4 | 2 | 1 | 1 |
 | Repudiation | 3 | 2 | 1 | 0 |
-| Information Disclosure | 5 | 4 | 1 | 0 |
+| Information Disclosure | 7 | 4 | 3 | 0 |
 | Denial of Service | 5 | 0 | 5 | 0 |
-| Elevation of Privilege | 4 | 3 | 1 | 0 |
-| **Total** | **25** | **13** | **10** | **1** |
+| Elevation of Privilege | 5 | 3 | 2 | 0 |
+| **Total** | **28** | **14** | **13** | **1** |

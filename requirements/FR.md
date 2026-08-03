@@ -88,6 +88,7 @@
 | FR-P010 | Side-by-side provider comparison | Should | 7 |
 | FR-P011 | Provider profiles — named, switchable configurations (API key, endpoint, model, streaming, params); create, edit, duplicate, delete, switch independently | Must | 1 |
 | FR-P012 | Per-workspace default provider profile — workspace settings bind a profile; agents route through the active profile | Must | 1 |
+| FR-P013 | Provider isolation — provider credentials, configurations, and request data are isolated per provider; no cross-provider access or data flow; provider code cannot read other providers' keys or configs | Must | 5 |
 
 ## Memory System
 

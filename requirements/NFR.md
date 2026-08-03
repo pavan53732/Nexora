@@ -44,6 +44,8 @@
 | NFR-SEC-008 | Output sanitization | Context-aware | Escape outputs based on target context |
 | NFR-SEC-009 | Plugin sandboxing | Classloader isolation | Plugins cannot access host app classes directly |
 | NFR-SEC-010 | Secure storage | Android Keystore + EncryptedSharedPreferences | All sensitive config values encrypted |
+| NFR-SEC-011 | Provider isolation | Credential + data-flow separation per provider | Per-provider key aliases in Android Keystore; requests tagged with active profile; provider plugins in isolated classloaders |
+| NFR-SEC-012 | Provider network confinement | Endpoint allowlist | Provider HTTP clients connect only to their configured baseUrl; TLS 1.3 + certificate pinning |
 
 ## Usability
 
