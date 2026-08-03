@@ -91,3 +91,13 @@ E2E tests exercise the complete application on a real device or emulator, valida
 | Guardrail: fake build success | Agent tries to report build success without running build | Engine blocks; agent must run build or report not-attempted |
 | Guardrail: invented dependency | Agent states a dependency not in any file | Blocked; engine requires evidence or UNKNOWN classification |
 | Important task reviewer pass | High-sensitivity task completes | Result held until Reviewer agent approves; user sees review in activity feed |
+
+## Multi-Agent Sub-Task E2E Journeys
+
+| Journey | Steps | Pass Criteria |
+|---------|-------|---------------|
+| Full autonomous delegation | Coordinator delegates research + coding + testing subtasks | Sub-agents complete end-to-end without check-ins; merged result verified |
+| Parallel execution with file conflict | Two sub-agents touch the same file | Write-lock: one waits; coordinator merges; no lost edits |
+| Incomplete handoff blocked | Coordinator delegates without acceptance criteria | Delegation rejected; coordinator must supply full handoff context |
+| Sub-agent ambiguity resolved once | Sub-agent lacks one fact | Asks once via EV, continues; never guesses |
+| Important subtask reviewer pass | High-sensitivity subtask completes | Held until Reviewer approves before merge |

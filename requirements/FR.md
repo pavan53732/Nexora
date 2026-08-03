@@ -313,3 +313,16 @@
 | FR-EV-004 | Consolidated guardrails — engine enforces the 7 anti-fabrication rules on every response; violations logged and trust-decrementing | Must | 2 |
 | FR-EV-005 | Fact vs recommendation labeling — responses distinguish verified fact / analysis / recommendation / speculation | Should | 2 |
 | FR-EV-006 | Completion validation & reviewer handoff — acceptance criteria, gates, and plan-vs-actual verified before completion; important tasks require a Reviewer agent pass before user-facing completion | Must | 4 |
+
+
+## Multi-Agent Sub-Tasks
+
+> SA-1..SA-5 defined in [architecture/MULTI_AGENT_SYSTEM.md](../architecture/MULTI_AGENT_SYSTEM.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-MA-001 | Sub-agent autonomous completion — delegated subtasks run end-to-end by the sub-agent (spawn → execute → verify → report); interruptions limited to approval gates, budget escalation, and heartbeat failure | Must | 7 |
+| FR-MA-002 | Complete handoff — delegation includes goal, acceptance criteria, constraints, available evidence, required skills/tools, and report format; ambiguity resolved via one EV-gated question, never guessing | Must | 7 |
+| FR-MA-003 | Parallel orchestration — dependency-aware fan-out with a per-workspace concurrency limit; per-file write locks (second writer waits or coordinator merges a copy); sandbox budgets split across sub-agents; results merged in dependency order | Must | 7 |
+| FR-MA-004 | Inherited policies — sub-agents explicitly operate under zero-assumption, grounding (RG), reasoning (RB), verification gates, guardrails, and the Evidence & Validation Engine | Must | 7 |
+| FR-MA-005 | Sub-agent reporting — plan-vs-actual report with verification evidence; important subtasks require the Reviewer pass before merging | Must | 7 |

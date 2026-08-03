@@ -140,3 +140,14 @@ class PermissionManagerTest {
 | `guardrail_noToolClaim_withoutHistory` | Claiming a tool ran without a tool-history record is blocked |
 | `guardrail_buildSuccess_requiresOutput` | "Build succeeded" without build output is blocked |
 | `completionValidation_requiresReviewer` | Important task without reviewer pass cannot reach user-facing completion |
+
+## Multi-Agent Sub-Task Unit Tests (FR-MA-001..005)
+
+| Test | Verifies |
+|------|----------|
+| `subAgent_completesEndToEnd_noCheckins` | Delegated subtask reaches completion without coordinator status prompts |
+| `handoffContext_complete` | Delegation without full context (goal/criteria/evidence) is rejected |
+| `parallelFanout_respectsDependencyGraph` | Independent subtasks run concurrently; dependent ones wait |
+| `fileWriteLock_blocksSecondWriter` | Concurrent writes to the same file wait or route to coordinator-merge |
+| `subAgentReport_planVsActual` | Sub-agent report classifies done/failed/not-attempted with evidence |
+| `subAgent_inheritsEvidenceEngine` | Sub-agent output passes EV classification/gates before merging |

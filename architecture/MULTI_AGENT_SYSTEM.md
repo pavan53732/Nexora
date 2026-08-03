@@ -114,3 +114,73 @@ class AgentRegistry {
 
 - **Phase 7**: All 15 agent types, agent registry, task delegation.
 - **Phase 8**: Community agent plugins.
+
+---
+
+## Sub-Agent Autonomous Completion (SA-1..SA-5)
+
+A delegated subtask runs **end-to-end by the sub-agent** — without mid-task check-ins,
+without assumptions, verified, then reported. The coordinator delegates once and
+collects the result; it does not micro-manage.
+
+### SA-1 — Autonomous completion contract (FR-MA-001)
+
+Once delegated, a sub-agent owns the subtask to completion:
+
+```
+Delegate → Spawn (own sandbox, FR-S018) → Execute (own plan) →
+Verify (EV gates, FR-EL-008/011) → Report (plan-vs-actual, RG-6) → Coordinator merges
+```
+
+Interruptions are **limited to**:
+- High-risk approval gate (PermissionManager `ASK`, FR-S016) — one prompt, then resume
+- Budget exhaustion (FR-AS-003) — escalate with state, never silent stop
+- Heartbeat failure (FR-AS-002) — checkpoint restart, then escalate
+
+No mid-task check-ins for status; progress flows via the activity feed.
+
+### SA-2 — Complete handoff rule (FR-MA-002)
+
+Every delegation carries the **complete handoff context** (FR-A009) so the sub-agent
+never needs to interrupt for missing basics:
+
+| Element | Required |
+|---------|----------|
+| Goal + expected outcome | ✓ |
+| Acceptance criteria (FR-EL-008) | ✓ |
+| Constraints (permissions, budgets, scope) | ✓ |
+| Available evidence (memory, files, prior results) | ✓ |
+| Required skills + tools (FR-EL-004/006) | ✓ |
+| Report-back format | ✓ |
+
+If genuinely ambiguous, the sub-agent asks **once** via the Evidence & Validation
+Engine (EV), then continues — it never guesses (FR-EV-003).
+
+### SA-3 — Parallel orchestration (FR-MA-003)
+
+| Rule | Value |
+|------|-------|
+| Concurrency limit | Max 3 sub-agents per workspace (configurable) |
+| Fan-out | Independent subtasks (no dependency edge) run in parallel lanes (FR-EL-007); dependent tasks wait |
+| **File conflict** | A sub-agent holds a **write-lock per file**; a second writer waits, or the coordinator assigns a copy and merges at the end |
+| Sandbox budgets | Workspace limits split across active sub-agents (FR-S018); each sub-agent isolated |
+| Result merging | Coordinator merges outputs + execution histories in dependency order |
+
+### SA-4 — Inherited rules (FR-MA-004)
+
+Sub-agents operate under the same anti-hallucination + reasoning policies as primary
+agents — explicitly, not by implication: zero-assumption mode (FR-EV-003), grounding
+(RG-1..6), reasoning (RB-1..6), verification gates (FR-AS-006), guardrails
+(FR-EV-004), and the Evidence & Validation Engine on every response.
+
+### SA-5 — Sub-agent reporting (FR-MA-005)
+
+The completion report follows RG-6 plan-vs-actual: done-verified / done-unverified /
+failed / not-attempted, with verification evidence attached. Important subtasks go
+through the Reviewer pass (FR-EV-006) before merging.
+
+## Phase Mapping (sub-agents)
+
+- **Phase 5**: Per-agent sandbox isolation (FR-S018) — the substrate for SA-1.
+- **Phase 7**: SA-1..SA-5 with the 15-agent registry, delegation, parallel
+  orchestration.
