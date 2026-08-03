@@ -77,7 +77,11 @@ Everything is a plugin: tools, providers, agents, and skills. Capabilities exten
 without modifying the core, via a stable, versioned plugin API and (later) a
 marketplace.
 
-- Sources: [ADR-0002](../docs/adr/ADR-0002-Plugin-System.md) · [PLUGIN_SYSTEM](../architecture/PLUGIN_SYSTEM.md) · [FR-PL001–010](../requirements/FR.md)
+**Skills are first-class** (ADR-0007): Agent = WHO performs the work · Skill = WHAT
+expertise is needed · Tool = HOW it is performed. The planner selects skills per task
+and resolves them to agents and tools; agents acquire skills over time.
+
+- Sources: [ADR-0002](../docs/adr/ADR-0002-Plugin-System.md) · [ADR-0007](../docs/adr/ADR-0007-Skills-First-Class.md) · [PLUGIN_SYSTEM](../architecture/PLUGIN_SYSTEM.md) · [registry/SKILLS.md](../registry/SKILLS.md) · [FR-PL001–010](../requirements/FR.md) · [FR-SK001–005](../requirements/FR.md)
 
 ### PP-007 — Background Execution
 

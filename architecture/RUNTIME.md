@@ -27,6 +27,7 @@ The Core Runtime is the brain of Nexora. It orchestrates all agent activity, fro
 | **Background Runtime** | Manages long-running agent execution in Android foreground services. | `com.nexora.app.runtime.background` |
 | **Resource Manager** | Tracks and limits CPU, memory, disk, and network usage per agent/workspace. | `com.nexora.app.runtime.resources` |
 | **Agent Manager** | Creates, configures, and manages multiple agent instances. | `com.nexora.app.runtime.agents` |
+| **Skill Registry** | Maintains the skill catalog, agent–skill bindings, and skill→tool mappings; supports skill acquisition (ADR-0007). | `com.nexora.app.runtime.skills` |
 
 > **Background execution** — task queue, scheduled jobs, resumable execution,
 > notifications, progress updates, checkpoint recovery, and Android platform rules

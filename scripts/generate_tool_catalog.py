@@ -43,6 +43,7 @@ CATS = [
     ("PLG",   "Plugin",            "8"),
     ("MAG",   "Multi-Agent",       "7"),
     ("WF",    "Workflow",          "6"),
+    ("SKL",   "Skills",            "4"),
 ]
 
 # ------------------------------------------------------- existing tools (keep IDs)
@@ -481,6 +482,10 @@ EXTRA = {
   ("TOOL-392", "sandbox_network_rules", "Manage sandbox network egress allow/deny rules", "3"),
   ("TOOL-393", "sandbox_quarantine_review", "Review quarantined files and promote or delete", "3"),
  ],
+ "SKL": [
+  ("TOOL-394", "skill_list", "List skills in the registry, optionally by domain or agent", "4"),
+  ("TOOL-395", "skill_acquire", "Acquire a skill for an agent (built-in, user-defined, or learned)", "4"),
+ ],
 }
 
 # ----------------------------------------------------------- capability defaults
@@ -514,7 +519,7 @@ def caps_for(cat, name):
     perm = {"FILE":"Low","WS":"Low","CODE":"Medium","SEAR":"Low","TERM":"High","GIT":"Medium",
             "PKG":"High","BUILD":"High","TEST":"Medium","DEBUG":"High","FMT":"Low","DOC":"Low",
             "BRW":"High","NET":"High","DB":"Medium","MEM":"Low","AI":"Medium","DEV":"High",
-            "PM":"Low","SEC":"High","OBS":"Low","IO":"Medium","PLG":"High","MAG":"Medium","WF":"Medium"}[cat]
+            "PM":"Low","SEC":"High","OBS":"Low","IO":"Medium","PLG":"High","MAG":"Medium","WF":"Medium","SKL":"Low"}[cat]
     if name in ("file_delete","workspace_delete","git_push","git_pull","terminal_kill",
                 "debug_attach","debug_dump","security_scan","io_import_backup") : perm = "High"
     if name in ("file_write","file_append","file_delete","file_move","file_copy","file_chmod",

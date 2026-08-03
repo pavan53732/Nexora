@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 4.3.0 |
+| **Spec Version** | 4.4.0 |
 | **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v4.3 — Product principles codified (PP-001–015); agent-first interaction model ADR-0006) |
+| **Last Updated** | 2026-08-03 (v4.4 — Skills first-class (ADR-0007); complete execution lifecycle spec) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -61,6 +61,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | ADR-0004 | Sandboxed Execution | [docs/adr/ADR-0004-Sandbox.md](docs/adr/ADR-0004-Sandbox.md) |
 | ADR-0005 | Provider Abstraction Layer | [docs/adr/ADR-0005-Provider-Abstraction.md](docs/adr/ADR-0005-Provider-Abstraction.md) |
 | ADR-0006 | Agent-First Interaction Model (Infrastructure Is Internal) | [docs/adr/ADR-0006-Agent-First-Interaction-Model.md](docs/adr/ADR-0006-Agent-First-Interaction-Model.md) |
+| ADR-0007 | Skills as a First-Class Capability | [docs/adr/ADR-0007-Skills-First-Class.md](docs/adr/ADR-0007-Skills-First-Class.md) |
 
 ### API Documentation
 
@@ -109,6 +110,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **AI Providers** | [specs/AI_PROVIDERS.md](specs/AI_PROVIDERS.md) |
 | **Workspace** | [specs/WORKSPACE.md](specs/WORKSPACE.md) |
 | **Background Execution** | [specs/BACKGROUND_EXECUTION.md](specs/BACKGROUND_EXECUTION.md) |
+| **Execution Lifecycle** | [specs/EXECUTION_LIFECYCLE.md](specs/EXECUTION_LIFECYCLE.md) |
 
 ### Domain Models
 
@@ -125,6 +127,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Workflow** | [models/Workflow.md](models/Workflow.md) |
 | **Session** | [models/Session.md](models/Session.md) |
 | **TerminalSession** | [models/TerminalSession.md](models/TerminalSession.md) |
+| **Skill** | [models/Skill.md](models/Skill.md) |
 | **Permission** | [models/Permission.md](models/Permission.md) |
 
 ### Protocols
@@ -263,6 +266,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Providers** | [registry/PROVIDERS.md](registry/PROVIDERS.md) |
 | **Tool Capability Matrix** | [registry/TOOL_MATRIX.md](registry/TOOL_MATRIX.md) |
 | **Agent Capability Matrix** | [registry/AGENT_MATRIX.md](registry/AGENT_MATRIX.md) |
+| **Skills** | [registry/SKILLS.md](registry/SKILLS.md) |
 
 ### Versioning
 

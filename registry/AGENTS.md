@@ -1,6 +1,7 @@
 # Agent Registry — Nexora
 
 > Stable agent identifiers. See [docs/api/Agent-API.md](../docs/api/Agent-API.md) for the Agent API.
+> Skills (first-class expertise, ADR-0007): see [SKILLS.md](./SKILLS.md). Agents = WHO performs work; skills = WHAT expertise; tools = HOW.
 
 | ID | Agent | Phase | Status |
 |----|-------|-------|--------|

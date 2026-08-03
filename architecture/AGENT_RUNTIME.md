@@ -26,6 +26,11 @@ The Agent Runtime defines how individual AI agents behave autonomously. Each age
 | **Cancellation** | User can cancel any running task. | 2 |
 | **Human approval gates** | Sensitive operations require user confirmation. | 2 |
 | **Automatic tool selection** | AI chooses tools based on task context. | 4 |
+| **Automatic agent selection** | AI assigns the best-suited specialized agent per task. | 7 |
+| **Automatic skill selection** | AI selects required skills (expertise) per task via the SkillRegistry. | 4 |
+| **Per-step validation criteria** | Every step declares pass/fail criteria; validated before proceeding. | 2 |
+| **Objective verification** | Acceptance criteria re-checked before reporting completion. | 2 |
+| **Follow-up identification** | Possible improvements and follow-up tasks listed before completion. | 2 |
 | **Automatic workflow generation** | Complex goals auto-generate multi-step workflows. | 6 |
 | **Context management** | Intelligent context window management with summarization. | 2 |
 | **Token budgeting** | Tracks token usage per request and per session. | 2 |

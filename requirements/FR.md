@@ -180,3 +180,35 @@
 | FR-TE003 | Command history per terminal session (internal, agent-managed) | Must | 3 |
 | FR-TE004 | Tab completion for commands and paths | Should | 4 |
 | FR-TE005 | Multiple concurrent terminal sessions (internal) | Should | 5 |
+
+## Execution Lifecycle
+
+> Full lifecycle defined in [specs/EXECUTION_LIFECYCLE.md](../specs/EXECUTION_LIFECYCLE.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-EL-001 | Goal & outcome analysis — derive objective, expected outcome, and acceptance criteria from the user's goal before execution | Must | 2 |
+| FR-EL-002 | Automatic task & subtask decomposition with dependencies | Must | 2 |
+| FR-EL-003 | Automatic agent selection — assign the best-suited specialized agent per task | Must | 7 |
+| FR-EL-004 | Automatic skill selection — determine required skills per task via the SkillRegistry | Must | 4 |
+| FR-EL-005 | Per-task provider/model selection — choose the best-suited provider profile and model per task | Should | 5 |
+| FR-EL-006 | Dependency & runtime resolution — plugins, packages, runtimes, and env templates resolved and validated before execution | Must | 2 |
+| FR-EL-007 | Execution ordering & parallelism — determine sequential vs parallel execution from the dependency graph | Must | 2 |
+| FR-EL-008 | Per-step validation criteria — every step declares pass/fail criteria; results validated before proceeding | Must | 2 |
+| FR-EL-009 | Error detection & recovery — automatic retries (bounded, backoff), fallbacks, and checkpoints per failure class | Must | 2 |
+| FR-EL-010 | Reflection & self-review after execution | Must | 2 |
+| FR-EL-011 | End-to-end verification — acceptance criteria re-checked; objective confirmed achieved before completion | Must | 2 |
+| FR-EL-012 | Completion reporting — logs, report, execution history, memory storage, and follow-up/improvement identification | Must | 2 |
+| FR-EL-013 | Software-engineering pipeline — build, static analysis, unit/integration/E2E tests, perf & security checks, bounded auto-fix loop, final validation for coding tasks | Must | 4 |
+
+## Skills
+
+> Skills are a first-class concept (WHO=agent, WHAT=skill, HOW=tool) — see [ADR-0007](../docs/adr/ADR-0007-Skills-First-Class.md) and [registry/SKILLS.md](../registry/SKILLS.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-SK-001 | Skill registry — first-class skill catalog (id, name, description, domain, required tools, applicable agents); stable IDs | Must | 4 |
+| FR-SK-002 | Skill acquisition — agents acquire skills (built-in assignment, user-defined, or learned from experience); persisted per agent | Must | 4 |
+| FR-SK-003 | Skill–tool mapping — skills reference tools; many skills may share the same tools; tool refs validated at registration | Must | 4 |
+| FR-SK-004 | Skill-aware planning — the planner selects skills per task and resolves them to agents and tools; executor validates agent possession before dispatch | Must | 4 |
+| FR-SK-005 | Skill discovery & management — list, inspect, and acquire skills via tools (`skill_list`, `skill_acquire`) | Should | 4 |

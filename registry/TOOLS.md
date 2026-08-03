@@ -34,8 +34,9 @@
 | 23 | Plugin | PLG | 10 | 8 |
 | 24 | Multi-Agent | MAG | 10 | 7 |
 | 25 | Workflow | WF | 10 | 6 |
+| 26 | Skills | SKL | 2 | 4 |
 
-**Total registered tools: 329** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 331** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
 
 ## File System (FILE)
 
@@ -490,3 +491,10 @@
 | TOOL-378 | workflow_status | Get workflow execution status | 6 | Planned |
 | TOOL-379 | workflow_templates | List workflow templates | 6 | Planned |
 | TOOL-380 | workflow_validate | Validate a workflow definition | 6 | Planned |
+
+## Skills (SKL)
+
+| ID | Tool | Description | Phase | Status |
+|----|------|-------------|-------|--------|
+| TOOL-394 | skill_list | List skills in the registry, optionally by domain or agent | 4 | Planned |
+| TOOL-395 | skill_acquire | Acquire a skill for an agent (built-in, user-defined, or learned) | 4 | Planned |

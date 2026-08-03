@@ -344,6 +344,8 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `workflow_status` | Workflow Status | Workflow | ✓ | — | — | — | — | Medium | ✓ | — | — | 6 |
 | `workflow_templates` | Workflow Templates | Workflow | ✓ | — | — | — | — | Medium | ✓ | — | — | 6 |
 | `workflow_validate` | Workflow Validate | Workflow | — | ✓ | — | — | — | Medium | ✓ | — | — | 6 |
+| `skill_list` | Skill List | Skills | — | ✓ | — | — | — | Low | ✓ | — | — | 4 |
+| `skill_acquire` | Skill Acquire | Skills | — | ✓ | — | — | — | Low | ✓ | — | — | 4 |
 
 ## Permission Levels
 

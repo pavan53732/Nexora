@@ -74,9 +74,10 @@ data class ToolMetadata(
 | 23 | **Plugin System** | install_plugin, uninstall_plugin, configure_plugin, list_plugins | 8 |
 | 24 | **Multi-Agent** | create_agent, delegate_task, agent_status, agent_list | 7 |
 | 25 | **Workflow** | create_workflow, run_workflow, schedule_workflow | 6 |
+| 26 | **Skills** | skill_list, skill_acquire (skills are first-class expertise units — ADR-0007; these tools manage them) | 4 |
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
-> registry of every tool — **329 tools** with stable `TOOL-###` IDs, descriptions, and
+> registry of every tool — **331 tools** with stable `TOOL-###` IDs, descriptions, and
 > phases across the 25 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.

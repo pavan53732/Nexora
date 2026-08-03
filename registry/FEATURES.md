@@ -46,3 +46,6 @@
 | FEAT-024 | Quarantine & Content Scanning (network downloads gated before promotion) | 3 | Planned |
 | FEAT-025 | Per-Agent Sandbox Isolation (sub-agents in separate sandbox instances) | 5 | Planned |
 | FEAT-026 | Sandbox Templates (pre-baked environment profiles) | 3 | Planned |
+| FEAT-027 | Skills as First-Class Capability (skill registry, agent–skill bindings, skill acquisition) | 4 | Planned |
+| FEAT-028 | Complete Execution Lifecycle (objective → planning → selection → validation → verification → report → follow-up) | 2 | Planned |
+| FEAT-029 | Software Engineering Pipeline (build, static analysis, tests, perf/security, auto-fix, final validation) | 4 | Planned |
