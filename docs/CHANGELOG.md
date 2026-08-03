@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 ### Added
-- (nothing yet)
+- ENVIRONMENT_SETUP.md — complete Linux development environment documentation: installed software & versions, SDK/Java/Python locations, environment variables, PATH configuration, verification results, Android library compatibility (Step 3), AI provider readiness (Step 4), embedded runtime research (Step 5), issues & resolutions, recommendations.
+
 
 ---
 
