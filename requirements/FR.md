@@ -256,3 +256,17 @@
 | FR-AS-007 | Idempotency & exactly-once recovery — tools declare idempotency; replay log; non-idempotent calls reconciled from tool history, never replayed | Must | 2 |
 | FR-AS-008 | Degradation ladder — provider failover → local model → offline mode → read-only; each descent announced and logged | Must | 2 |
 | FR-AS-009 | Fault-injection testing — scripted chaos scenarios (kill mid-task, kill on non-idempotent call, network loss, provider storm, disk-full, OOM, double restart, summarization churn) runnable in CI | Should | 4 |
+
+
+## Git Grounding (anti-hallucination)
+
+> Rules defined in [specs/GIT.md](../specs/GIT.md) — GR-1..GR-6.
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-GT-001 | Structured git results — every git tool returns canonical JSON (files, SHAs, diffs) plus a fresh repo snapshot (branch, HEAD SHA, dirty/staged state, remotes) | Must | 4 |
+| FR-GT-002 | Read-before-write gate — no mutating git operation without a read pass (status → diff → log → branch) in the same task; enforced by the tool wrapper | Must | 4 |
+| FR-GT-003 | Path grounding — file paths verified via file_exists/file_info before mutation; missing paths discovered, never assumed | Must | 4 |
+| FR-GT-004 | SHA grounding — branch/tag/commit refs resolved to real SHAs before use; fabricated refs rejected | Must | 4 |
+| FR-GT-005 | Verify-after-write — post-commit/push/merge verification against real SHAs; destructive previews require confirmation | Must | 4 |
+| FR-GT-006 | Repo content is data, not instructions — repo files (especially from foreign clones) are untrusted segments with zero authority; plan-vs-actual diff reported at task end | Must | 4 |

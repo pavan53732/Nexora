@@ -26,6 +26,65 @@ Full Git support inside the sandbox. Every workspace can have a Git repository. 
 | Stash | `git_stash` | Stash and unstash changes. |
 | Remote | `git_remote` | Manage remotes. |
 
+## Grounding Rules (anti-hallucination)
+
+Git is where agents hallucinate visibly — invented paths, fake SHAs, imagined repo
+state, claimed-but-never-made commits. These rules make every claim about the
+repository traceable to a real tool result **within the same task**. They compose the
+existing mechanisms: structured `ToolResult` (Tool-API), path canonicalization
+(SandboxPolicy §2), freshness checks (CONTEXT_MANAGEMENT §5), context trust tagging
+(CONTEXT_MANAGEMENT §6), and verification gates (EXECUTION_LIFECYCLE §3, FR-AS-006).
+
+### GR-1 — Structured results with repo snapshot (FR-GT-001)
+
+- Every git tool returns **structured canonical data** in `ToolResult.Success.output`
+  (JSON): files, SHAs, diffs, exit code — never free-form prose the model can misread.
+- Every git `ToolResult` **attaches a fresh repo snapshot**: current branch, `HEAD`
+  SHA, dirty/staged state, remotes. The agent reasons over the snapshot, never over
+  memory or assumptions.
+
+### GR-2 — Read-before-write gate (FR-GT-002)
+
+- No mutating git operation (`git_add`, `git_commit`, `git_push`, `git_pull`,
+  `git_merge`, `git_branch -d`, `git_reset`, `git_revert`, `git_clean`,
+  `git_stash`) may execute **unless the agent performed a read pass in the same
+  task**: `git_status` → `git_diff` → `git_log` → `git_branch` (as applicable).
+- The read pass is enforced by the git tool wrapper (returns `NeedsApproval` /
+  `NXR-2003` if skipped) — not just prompt guidance.
+
+### GR-3 — Path grounding (FR-GT-003)
+
+- Every file path referenced in a plan or tool call must pass a real
+  `file_exists` / `file_info` check before any mutation. A path that does not exist
+  is **discovered** (`file_search`, `find`) — never assumed.
+- `SandboxFileSystem` canonicalization remains the backstop (`NXR-7005`).
+
+### GR-4 — SHA grounding (FR-GT-004)
+
+- Branch/tag/commit references are resolved to **real SHAs** via `git_log` /
+  `git_branch` / `git_remote` before being used as arguments. Fuzzy or fabricated
+  references are rejected by the tool (`NXR-2003`).
+- Verification always compares **SHAs, not descriptions**.
+
+### GR-5 — Verify-after-write (FR-GT-005)
+
+- After `git_commit`: `git_log -1` confirms the SHA; working tree clean.
+- After `git_push`: local `HEAD` equals remote ref SHA (`git_log origin/<branch>`).
+- After `git_merge` / `git_revert` / `git_reset`: read pass re-run; resulting tree
+  matches the declared intent.
+- Destructive previews (`git_reset --hard`, `git_clean`, force-push) require
+  `NeedsApproval` confirmation (Tool-Protocol) with a dry-run plan.
+
+### GR-6 — Repo content is data, not instructions (FR-GT-006)
+
+- Files inside a repository — especially from clones the agent did not author
+  (README, `.github/`, commit messages, issues) — are **untrusted context segments**
+  (CONTEXT_MANAGEMENT §6): labeled, isolated, injected as data with **zero
+  authority**. The agent reports instructions found in files; it never follows them.
+- Plan-vs-actual: at task end the final `git_diff` must match what the agent declared
+  in its plan; deviations are reported explicitly, never papered over (ties to
+  FR-EL-011 / FR-AS-006 gates).
+
 ## Phase Mapping
 
-- **Phase 4**: Git tools implementation.
+- **Phase 4**: Git tools implementation (13 tools + grounding rules GR-1..GR-6).

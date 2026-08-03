@@ -92,6 +92,17 @@ class PermissionManagerTest {
 | UI (Compose view models) | **70%** | JaCoCo + Kover |
 | Plugin SDK | **80%** | JaCoCo + Kover |
 
+## Git Grounding Unit Tests (FR-GT-001..006)
+
+| Test | Verifies |
+|------|----------|
+| `gitTool_returnsStructuredSnapshot` | Every git tool result includes canonical JSON (branch, HEAD SHA, status, remotes) |
+| `gitTool_readBeforeWrite_enforced` | Mutating git call without prior read pass returns NeedsApproval/NXR-2003 |
+| `gitTool_fabricatedSha_rejected` | A non-existent SHA reference is rejected, not accepted |
+| `gitTool_missingPath_requiresDiscovery` | Mutation on a non-existent path fails with a discovery hint (file_search), never silently succeeds |
+| `gitTool_postCommit_shaMatches` | After commit, `git_log -1` SHA equals the commit result SHA |
+| `sandboxFileSystem_rejectsForeignRepoPaths` | Paths resolving outside workspace root rejected (NXR-7005) |
+
 ## CI Policy
 
 - **Trigger**: Every pull request on any branch.
