@@ -28,6 +28,7 @@ The Core Runtime is the brain of Nexora. It orchestrates all agent activity, fro
 | **Resource Manager** | Tracks and limits CPU, memory, disk, and network usage per agent/workspace. | `com.nexora.app.runtime.resources` |
 | **Agent Manager** | Creates, configures, and manages multiple agent instances. | `com.nexora.app.runtime.agents` |
 | **Skill Registry** | Maintains the skill catalog, agent–skill bindings, and skill→tool mappings; supports skill acquisition (ADR-0007). | `com.nexora.app.runtime.skills` |
+| **Evidence & Validation Engine** | Owns anti-hallucination mechanics as a runtime policy, not a prompt: evidence collection, source attribution, statement classification (verified/derived/estimated/unknown/user-provided), confidence scoring, assumption detection, plan validation, output verification, self-review, completion validation, audit logging (RG/RB rules, FR-EV). | `com.nexora.app.runtime.evidence` |
 
 > **Background execution** — task queue, scheduled jobs, resumable execution,
 > notifications, progress updates, checkpoint recovery, and Android platform rules

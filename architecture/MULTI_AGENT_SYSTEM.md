@@ -75,6 +75,20 @@ Delegates to Tester Agent -> Writes and runs tests
     |
     v
 Delegates to Reviewer Agent -> Reviews changes
+
+## Mandatory Review Rule (FR-EV-006)
+
+For tasks classified **important** (sensitivity, risk, or cost), the runtime
+**requires a Reviewer agent pass** before the result reaches the user:
+
+```
+Coder Agent → Tester Agent → Reviewer Agent → User
+```
+
+- The Evidence & Validation Engine (CONTEXT_MANAGEMENT §11 EV-6) triggers the review;
+  no user-facing completion until the reviewer approves.
+- The reviewer checks against the task's declared validation criteria (FR-EL-008);
+  findings return to the originating agent as a bounded fix loop (FR-AS-001).
     |
     v
 Results aggregated -> Workflow Coordinator combines results

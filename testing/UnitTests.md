@@ -129,3 +129,14 @@ class PermissionManagerTest {
 | `answerGates_rejectUnsupportedAnswer` | Answer failing grounded/complete/consistent/confident gates is revised, not sent |
 | `reasoningTrace_persisted` | Reasoning trace appears in execution history and counts toward tokens |
 | `reasoningModel_required_failsFast` | reasoning_required task without a REASONING-capable profile fails fast with clear message |
+
+## Evidence & Validation Engine Unit Tests (FR-EV-001..006)
+
+| Test | Verifies |
+|------|----------|
+| `statement_unclassified_blocked` | Significant claim without classification metadata is blocked |
+| `confidence_low_triggersAsk` | LOW-confidence conclusion routes to user confirmation, not auto-proceed |
+| `zeroAssumption_rejectsInventedDetail` | Output inventing missing info (e.g. "probably uses Hilt") is rejected |
+| `guardrail_noToolClaim_withoutHistory` | Claiming a tool ran without a tool-history record is blocked |
+| `guardrail_buildSuccess_requiresOutput` | "Build succeeded" without build output is blocked |
+| `completionValidation_requiresReviewer` | Important task without reviewer pass cannot reach user-facing completion |

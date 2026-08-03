@@ -313,3 +313,90 @@ If a gate fails → revise, do not send. Additionally, meta-cognition:
   recorded per response; reasoning traces in execution history.
 - Trust-growth score (FR-AS-005) adjusts with reasoning quality (gates passed,
   clarifications used, contradictions flagged).
+
+---
+
+## 11. Evidence & Validation Engine (FR-EV-001..006)
+
+Anti-hallucination is a **runtime policy, not a prompt**. The Evidence & Validation
+Engine (`com.nexora.app.runtime.evidence`) is the single module that owns the
+mechanics — it sits between the agent loop and the user, and it enforces the RG/RB
+rules as code, not as instructions.
+
+```
+User → Agent → Planner → Evidence & Validation Engine → Tool Manager → Sandbox/Browser/Files/APIs
+                                                              ↓
+                                           Verified Evidence → LLM Response → User
+```
+
+### EV-1 — Statement classification (FR-EV-001)
+
+Every significant statement in a response is classified **as structured metadata**:
+
+| Class | Meaning | Example |
+|-------|---------|---------|
+| `VERIFIED` | Confirmed by a tool result / context segment in this task | "Found in workspace file." |
+| `DERIVED` | Inferred from evidence (build logs, diffs, tool outputs) | "Inferred from build logs." |
+| `ESTIMATED` | Best-effort judgment with stated basis | "Likely caused by dependency mismatch." |
+| `UNKNOWN` | Cannot be determined from available information | "Cannot determine from available information." |
+| `USER_PROVIDED` | Stated by the user; not independently verified | "Provided by the user." |
+
+Statements ship with a `Statement` record: `(text, classification, source, confidence)`.
+Unclassified significant claims are blocked by the engine (FR-EV-001).
+
+### EV-2 — Structured confidence scores (FR-EV-002)
+
+Every major conclusion carries a confidence score as **data** — `HIGH`, `MEDIUM`,
+`LOW` — not prose. The score drives autonomy decisions:
+
+| Confidence | Autonomy behavior |
+|-----------|-------------------|
+| `HIGH` | Proceed automatically (within autonomy mode) |
+| `MEDIUM` | Proceed but flag the uncertainty to the user |
+| `LOW` | **Ask before proceeding** — request confirmation or gather more evidence first (ties to FR-S016 autonomy modes, FR-AS-003) |
+
+Confidence is computed by the engine from evidence strength + classification, not
+stated by the model alone.
+
+### EV-3 — Zero-assumption mode (FR-EV-003)
+
+When required information is missing, the engine forces the agent to: identify the
+missing information → explain why it is needed → ask for it or gather it via tools →
+continue only when sufficient. The engine rejects outputs that invent missing
+details (e.g. "Your project probably uses Hilt." → must instead state it could not
+be identified from available files).
+
+### EV-4 — Consolidated guardrails (FR-EV-004)
+
+The engine enforces these rules on every response (no exceptions):
+
+1. Do not fabricate files, classes, or APIs.
+2. Do not claim a tool executed unless it actually did (from tool history, FR-M011).
+3. Do not report a build as successful without build results.
+4. Do not report tests passed without test output.
+5. Do not claim code was modified without recording the affected files.
+6. Do not invent repository structure.
+7. Do not invent package names or dependencies.
+
+Violations are logged (`evidence_guardrail_violation`) and decrement the trust score
+(FR-AS-005).
+
+### EV-5 — Fact vs recommendation labeling (FR-EV-005)
+
+Responses distinguish output types: **Verified fact** · **Analysis** · **Recommendation**
+· **Speculation** (explicitly labeled as such). Users always know the basis of each
+statement.
+
+### EV-6 — Completion validation & reviewer handoff (FR-EV-006)
+
+Before reporting completion, the engine verifies: acceptance criteria met (FR-EL-011),
+verification gates passed (FR-AS-006), and report status matches plan-vs-actual
+(RG-6). For tasks classified **important** (by sensitivity, risk, or cost), the
+engine **requires a reviewer agent pass** (AGT-004 Reviewer) before the result
+reaches the user — no user-facing completion until the review is done.
+
+### Auditability
+
+Everything the engine does is written to the audit trail: statement classifications,
+confidence scores, assumption events, guardrail violations, and reviewer handoffs —
+one consistent mechanism for coding, research, and general chat.

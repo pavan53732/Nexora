@@ -299,3 +299,17 @@
 | FR-RN-004 | Reasoning-capable models — REASONING provider capability; per-task routing to reasoning models for thorough tasks; fail-fast if unavailable | Should | 5 |
 | FR-RN-005 | Reasoning visibility — collapsible reasoning trace in the activity feed; stored in execution history; token usage tracked | Must | 2 |
 | FR-RN-006 | Answer-quality gates — grounded, complete, consistent, confident before sending; assumptions stated; premise contradictions flagged; self-consistency for critical outputs | Must | 2 |
+
+
+## Evidence & Validation Engine
+
+> EV-1..EV-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §11.
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-EV-001 | Statement classification — every significant statement carries structured metadata: VERIFIED / DERIVED / ESTIMATED / UNKNOWN / USER_PROVIDED; unclassified significant claims blocked | Must | 2 |
+| FR-EV-002 | Structured confidence — HIGH/MEDIUM/LOW as data; LOW → ask before proceeding (ties to autonomy modes) | Must | 2 |
+| FR-EV-003 | Zero-assumption mode — missing information is identified, explained, and gathered/asked for; outputs inventing missing details rejected | Must | 2 |
+| FR-EV-004 | Consolidated guardrails — engine enforces the 7 anti-fabrication rules on every response; violations logged and trust-decrementing | Must | 2 |
+| FR-EV-005 | Fact vs recommendation labeling — responses distinguish verified fact / analysis / recommendation / speculation | Should | 2 |
+| FR-EV-006 | Completion validation & reviewer handoff — acceptance criteria, gates, and plan-vs-actual verified before completion; important tasks require a Reviewer agent pass before user-facing completion | Must | 4 |
