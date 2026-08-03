@@ -154,3 +154,70 @@ never depends on raw history for recall.
   (FR-CM-006); milestone curation (FR-CM-007).
 - **Phase 4**: Context observability tools (FR-CM-008).
 - **Phase 6**: Retrieval-layer depth (memory + knowledge graph integration).
+
+---
+
+## 9. Response Grounding & Attribution (anti-hallucination in chat & coding)
+
+Complements the Git grounding rules (specs/GIT.md GR-1..GR-6) for **all** agent
+output — chat answers, code claims, and task reports. The principle is the same:
+*every claim is traceable to a tool result or context segment in the same task.*
+
+### RG-1 — Tool-before-claim (FR-GND-001)
+
+A factual claim in any response must come from a **tool call in the same task** —
+`memory_recall`, `search_text`, `file_read`, `code_search`, `search_web`,
+`git_log` — or from a labeled context segment (system, user, trusted). Claims
+resting only on the model's training memory are flagged as unverified, never
+presented as fact.
+
+### RG-2 — Citations & sources (FR-GND-002)
+
+Grounded claims carry a **source reference**:
+
+| Claim type | Source format |
+|------------|---------------|
+| From memory | `[memory:{entryId}]` |
+| From file | `[file:{workspaceId}/{path}:{line}]` |
+| From web | `[web:{url}]` |
+| From tool result | `[tool:{toolId}]` |
+
+If a claim cannot carry a source, it is stated as an opinion or unverified, not fact.
+
+### RG-3 — Uncertainty disclosure (FR-GND-003)
+
+The agent explicitly says **"I don't know"** or marks **low confidence** rather than
+guessing. If a question is outside the available context, the agent offers the
+retrieval action it *could* take (`memory_recall`, `search_web`) instead of
+inventing an answer. Never fabricates files, SHAs, API signatures, or facts.
+
+### RG-4 — Refuse unsupported (FR-GND-004)
+
+Requests that require capabilities the current agent/sandbox cannot provide (missing
+tool, missing permission, offline-only data) produce an explicit refusal with the
+reason and the path to enable it — never a plausible-sounding made-up execution.
+
+### RG-5 — Code-claim grounding (FR-GND-005)
+
+Before claiming anything about the codebase (a symbol exists, an API is deprecated,
+a signature is X, a pattern is used), the agent must verify via the code-intelligence
+tools: `code_search` (TOOL-160), `code_symbols` (TOOL-151), `code_references`
+(TOOL-153), or `file_read` — then cite the file. Code claims are additionally proven
+by the SE pipeline (FR-EL-013: build + tests) before being reported as working.
+
+### RG-6 — Plan-vs-actual honesty (FR-GND-006)
+
+At task completion, the agent's report distinguishes:
+**done & verified** (passed gates, sources cited) · **done & unverified** (flagged) ·
+**attempted & failed** (with error) · **not attempted** (with reason).
+Never reports unverified work as completed (ties to FR-AS-006 verification gates).
+
+### Enforcement & observability
+
+- System prompt enforces RG-1..RG-6 as hard constraints (same layer as untrusted-
+  segment rules, §6).
+- Unit/E2E tests verify the rules (see testing/UnitTests.md Git Grounding section,
+  extended; testing/E2ETests.md grounding journeys).
+- Violations are observable: responses without sources for factual claims are
+  logged (`grounding_missing_source`), and the trust-growth score (FR-AS-005) is
+  decremented.

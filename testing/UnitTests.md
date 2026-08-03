@@ -108,3 +108,13 @@ class PermissionManagerTest {
 - **Trigger**: Every pull request on any branch.
 - **Fail condition**: Coverage drops below module target OR any unit test fails.
 - **Report**: HTML coverage report uploaded as CI artifact.
+
+## Response Grounding Unit Tests (FR-GND-001..006)
+
+| Test | Verifies |
+|------|----------|
+| `response_unsourcedClaim_flagged` | A factual claim without a source is flagged/not asserted as fact |
+| `response_uncertainty_notInvented` | Out-of-context question yields "I don't know" + offered retrieval, never a fabricated answer |
+| `codeClaim_requiresCodeSearch` | A codebase claim triggers/requires code_search/code_symbols before being stated |
+| `completionReport_statesActualStatus` | Report distinguishes done-verified / done-unverified / failed / not-attempted |
+| `refusal_reportsReason` | Unsupported request returns explicit refusal with reason, not a made-up execution |

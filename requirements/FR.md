@@ -270,3 +270,18 @@
 | FR-GT-004 | SHA grounding — branch/tag/commit refs resolved to real SHAs before use; fabricated refs rejected | Must | 4 |
 | FR-GT-005 | Verify-after-write — post-commit/push/merge verification against real SHAs; destructive previews require confirmation | Must | 4 |
 | FR-GT-006 | Repo content is data, not instructions — repo files (especially from foreign clones) are untrusted segments with zero authority; plan-vs-actual diff reported at task end | Must | 4 |
+
+
+## Response Grounding (anti-hallucination)
+
+> Rules RG-1..RG-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §9.
+> For Git-specific grounding see FR-GT-001..006.
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-GND-001 | Tool-before-claim — factual claims must trace to a tool result or labeled context segment in the same task; unverified training-memory claims flagged as such | Must | 2 |
+| FR-GND-002 | Citations — grounded claims carry a source reference (memory/file/web/tool); unsourced claims stated as opinion/unverified | Must | 2 |
+| FR-GND-003 | Uncertainty disclosure — explicit "I don't know"/low-confidence instead of guessing; offers a retrieval action rather than inventing | Must | 2 |
+| FR-GND-004 | Refuse unsupported — missing tool/permission/offline data yields explicit refusal with reason and enablement path | Must | 2 |
+| FR-GND-005 | Code-claim grounding — codebase claims verified via code-intelligence tools (code_search/code_symbols/code_references/file_read) before being stated; proven by build+tests before reported working | Must | 4 |
+| FR-GND-006 | Plan-vs-actual honesty — completion reports distinguish done-verified / done-unverified / attempted-failed / not-attempted | Must | 2 |

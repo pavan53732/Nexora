@@ -31,6 +31,8 @@ The Agent Runtime defines how individual AI agents behave autonomously. Each age
 | **Per-step validation criteria** | Every step declares pass/fail criteria; validated before proceeding. | 2 |
 | **Objective verification** | Acceptance criteria re-checked before reporting completion. | 2 |
 | **Follow-up identification** | Possible improvements and follow-up tasks listed before completion. | 2 |
+| **Grounded responses** | Claims trace to tool results or context segments; citations and uncertainty disclosure (RG-1..RG-6, FR-GND). | 2 |
+| **Code-claim verification** | Codebase claims verified via code-intelligence tools before being stated (RG-5). | 4 |
 | **Automatic workflow generation** | Complex goals auto-generate multi-step workflows. | 6 |
 | **Context management** | Intelligent context window management with summarization. | 2 |
 | **Token budgeting** | Tracks token usage per request and per session. | 2 |
