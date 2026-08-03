@@ -1,6 +1,11 @@
 # Domain Model: Task
 
-> Canonical domain model. See [architecture/RUNTIME.md](../architecture/RUNTIME.md).
+> **Status: DERIVED.** This document defines the persisted shape of a Task. The
+> `TaskStatus` enum below MUST exactly match the canonical state set defined in
+> [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). Do not add,
+> remove, or rename states here without updating the canonical state machine first.
+>
+> See also [architecture/RUNTIME.md](../architecture/RUNTIME.md).
 
 ```kotlin
 package com.nexora.app.runtime.models
@@ -24,8 +29,12 @@ data class Task(
     val updatedAt: Instant
 )
 
+/**
+ * Canonical source: state-machines/TaskLifecycle.md.
+ * Do not redefine this enum's members anywhere else in the codebase or docs.
+ */
 enum class TaskStatus {
-    PENDING, PLANNING, EXECUTING, BLOCKED,
-    COMPLETED, FAILED, CANCELLED
+    DRAFT, PENDING, QUEUED, RUNNING, BLOCKED,
+    WAITING_APPROVAL, COMPLETED, FAILED, CANCELLED, RETRY_PENDING
 }
 ```

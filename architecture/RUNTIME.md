@@ -45,7 +45,7 @@ data class Task(
     val agentId: String,
     val parentTaskId: String?,
     val description: String,
-    val status: TaskStatus,  // PENDING, PLANNING, EXECUTING, BLOCKED, COMPLETED, FAILED, CANCELLED
+    val status: TaskStatus,  // Canonical states defined in state-machines/TaskLifecycle.md — see models/Task.md
     val plan: ExecutionPlan?,
     val createdAt: Instant,
     val updatedAt: Instant

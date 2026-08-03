@@ -1,5 +1,13 @@
 # Task Lifecycle State Machine
 
+> **Status: CANONICAL.** This document is the single authoritative source for Task
+> states and transitions across Nexora. Every other document (domain model, runtime,
+> API, SDK, protocol, lifecycle narrative, diagrams, tests) MUST reference the
+> `TaskStatus` enum defined here and MUST NOT redefine, rename, or subset it.
+>
+> Depends on: none (root of the Task-state hierarchy).
+> Referenced by: [../models/Task.md](../models/Task.md), [../architecture/RUNTIME.md](../architecture/RUNTIME.md), [../docs/LIFECYCLES.md](../docs/LIFECYCLES.md), [../specs/EXECUTION_LIFECYCLE.md](../specs/EXECUTION_LIFECYCLE.md), [../docs/api/Runtime-API.md](../docs/api/Runtime-API.md).
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 A **Task** is the fundamental unit of work assigned to an agent in Nexora. The Task Lifecycle tracks each task from initial authoring through execution to final resolution, supporting blocking on dependencies, human approval gates, and retry semantics for transient failures.

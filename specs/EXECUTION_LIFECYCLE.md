@@ -14,6 +14,8 @@ resources, validation criteria, error recovery, verification, and follow-up.
 
 This spec defines that complete lifecycle and the software-engineering pipeline.
 
+> **Status: SUPPORTING.** Task state names referenced in this document (e.g. `RetryPending`, `WaitingApproval`) are defined canonically in [../state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). This document describes lifecycle *behavior and pipeline resolution*, not state ownership.
+
 ## 1. The Complete Execution Lifecycle
 
 Given a user goal, Nexora automatically determines:
