@@ -118,3 +118,14 @@ class PermissionManagerTest {
 | `codeClaim_requiresCodeSearch` | A codebase claim triggers/requires code_search/code_symbols before being stated |
 | `completionReport_statesActualStatus` | Report distinguishes done-verified / done-unverified / failed / not-attempted |
 | `refusal_reportsReason` | Unsupported request returns explicit refusal with reason, not a made-up execution |
+
+## Reasoning Unit Tests (FR-RN-001..006)
+
+| Test | Verifies |
+|------|----------|
+| `deliberationGate_classifiesAmbiguity` | Ambiguous request routes to clarify-first, never answer-now |
+| `reasoningPipeline_retrievesBeforeReasoning` | Reasoning pass triggers retrieval tools before the provider call |
+| `effortLevel_configuresPipeline` | fast/balanced/thorough select different pipeline depths and models |
+| `answerGates_rejectUnsupportedAnswer` | Answer failing grounded/complete/consistent/confident gates is revised, not sent |
+| `reasoningTrace_persisted` | Reasoning trace appears in execution history and counts toward tokens |
+| `reasoningModel_required_failsFast` | reasoning_required task without a REASONING-capable profile fails fast with clear message |

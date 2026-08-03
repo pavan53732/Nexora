@@ -20,7 +20,7 @@ data class Model(
     val id: String,
     val name: String,
     val providerId: String,
-    val capabilities: Set<ProviderCapability>,
+    val capabilities: Set<ProviderCapability>,  // incl. REASONING for reasoning-capable models
     val contextWindow: Int,
     val inputPricePer1k: Double?,
     val outputPricePer1k: Double?

@@ -285,3 +285,17 @@
 | FR-GND-004 | Refuse unsupported — missing tool/permission/offline data yields explicit refusal with reason and enablement path | Must | 2 |
 | FR-GND-005 | Code-claim grounding — codebase claims verified via code-intelligence tools (code_search/code_symbols/code_references/file_read) before being stated; proven by build+tests before reported working | Must | 4 |
 | FR-GND-006 | Plan-vs-actual honesty — completion reports distinguish done-verified / done-unverified / attempted-failed / not-attempted | Must | 2 |
+
+
+## Reasoning (think before answering)
+
+> RB-1..RB-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §10.
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-RN-001 | Deliberation gate — classify each message as answer-now / reasoning-pass / clarify-first; never guess on ambiguity (clarify instead) | Must | 2 |
+| FR-RN-002 | Reasoning pipeline — understand, clarify, retrieve evidence first, reason over evidence, draft, verify, answer with citations + confidence | Must | 2 |
+| FR-RN-003 | Deliberation effort levels — fast / balanced / thorough, configurable per workspace, agent, and task; effort proportional to stakes | Must | 2 |
+| FR-RN-004 | Reasoning-capable models — REASONING provider capability; per-task routing to reasoning models for thorough tasks; fail-fast if unavailable | Should | 5 |
+| FR-RN-005 | Reasoning visibility — collapsible reasoning trace in the activity feed; stored in execution history; token usage tracked | Must | 2 |
+| FR-RN-006 | Answer-quality gates — grounded, complete, consistent, confident before sending; assumptions stated; premise contradictions flagged; self-consistency for critical outputs | Must | 2 |

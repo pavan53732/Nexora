@@ -221,3 +221,95 @@ Never reports unverified work as completed (ties to FR-AS-006 verification gates
 - Violations are observable: responses without sources for factual claims are
   logged (`grounding_missing_source`), and the trust-growth score (FR-AS-005) is
   decremented.
+
+---
+
+## 10. Reasoning Before Answering (FR-RN-001..006)
+
+Grounding (RG-1..RG-6) prevents *fabrication*; reasoning prevents *superficial*
+answers. The agent deliberately thinks **before** answering, in proportion to the
+question's complexity and stakes.
+
+### RB-1 — Deliberation gate (FR-RN-001)
+
+For every user message, the agent first classifies how much deliberation is needed
+before producing the response:
+
+| Classification | Behavior |
+|----------------|----------|
+| **Answer now** | Simple, fully grounded request (e.g. "summarize this file") — respond directly, still under RG rules |
+| **Reasoning pass** | Complex, uncertain, multi-step, or risky — enter the reasoning pipeline (§10.2) |
+| **Clarify first** | Genuinely ambiguous or underspecified — ask a clarifying question instead of guessing (ties to RG-3) |
+
+The gate is a runtime decision (planner/context builder), not just prompt guidance.
+
+### RB-2 — The reasoning pipeline (FR-RN-002)
+
+```
+Understand  → restate the question; identify assumptions and ambiguity
+Clarify     → ask if genuinely ambiguous (never guess)
+Retrieve    → gather evidence FIRST (memory / files / web / code tools)
+Reason      → multi-step internal reasoning over the evidence
+Draft       → structure the answer (claim → evidence → conclusion)
+Verify      → self-check: every claim grounded (RG), contradictions caught
+Answer      → with citations + confidence level
+```
+
+Reasoning happens *over evidence already in context* (retrieval first — the pipeline
+never reasons from memory alone).
+
+### RB-3 — Deliberation effort levels (FR-RN-003)
+
+| Level | Use for | Behavior |
+|-------|---------|----------|
+| `fast` | simple chat, greetings, confirmations | direct answer, minimal reasoning |
+| `balanced` (default) | most tasks | standard reasoning pipeline |
+| `thorough` | complex/costly/risky tasks | deeper reasoning, multiple verification passes, optionally reasoning-capable model |
+
+- Level is configurable per workspace, per agent, and per task (FR-RN-003).
+- Effort is proportional to stakes — thinking is not uniformly expensive.
+
+### RB-4 — Reasoning-capable models (FR-RN-004)
+
+- `ProviderCapability.REASONING` added to the capability enum (PROVIDER_SYSTEM.md);
+  providers that support multi-step reasoning (e.g. OpenAI o-series, Claude
+  thinking, Gemini thinking, DeepSeek-R1) declare it.
+- Task routing (FR-EL-005) and skill `preferredModelFamilies = ["reasoning"]`
+  (models/Skill.md) select reasoning-capable models for `thorough` tasks; `fast`
+  tasks use fast models. Provider-agnostic: works through any provider that
+  declares the capability.
+- A task tagged `reasoning_required` fails fast with a clear message if the active
+  profile lacks REASONING (RG-4 refusal path) instead of silently answering
+  without deliberation.
+
+### RB-5 — Reasoning visibility (FR-RN-005)
+
+- The reasoning trace is shown in the activity feed as a **collapsible card**
+  ("reasoned N steps → expand"): the user sees *why*, progressive disclosure keeps
+  the chat clean.
+- Reasoning traces are stored in execution history (auditable, FR-M005) and count
+  toward token usage (FR-P009) transparently.
+
+### RB-6 — Answer-quality gates & meta-cognition (FR-RN-006)
+
+Before sending, the answer must pass:
+
+| Gate | Check |
+|------|-------|
+| Grounded | every factual claim has a source (RG-2) |
+| Complete | answers the actual question asked (restated in RB-2) |
+| Consistent | no self-contradiction; checked against prior statements in the session |
+| Confident | confidence level stated for uncertain claims (RG-3) |
+
+If a gate fails → revise, do not send. Additionally, meta-cognition:
+- State assumptions explicitly when answering with partial information.
+- Flag contradictions in the user's premise rather than silently agreeing.
+- For critical outputs, self-consistency: generate 2 reasoning paths, emit the
+  most consistent (used only for `thorough`/critical tasks, FR-RN-006).
+
+### Enforcement & observability
+
+- Same enforcement layer as §9: system-prompt hard constraints; `reasoning_effort`
+  recorded per response; reasoning traces in execution history.
+- Trust-growth score (FR-AS-005) adjusts with reasoning quality (gates passed,
+  clarifications used, contradictions flagged).

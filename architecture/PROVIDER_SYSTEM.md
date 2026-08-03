@@ -42,7 +42,8 @@ enum class ProviderCapability {
     TOOL_CALLING,
     VISION,
     EMBEDDINGS,
-    FUNCTION_CALLING
+    FUNCTION_CALLING,
+    REASONING   // multi-step internal reasoning (e.g. o-series, Claude thinking, Gemini thinking, DeepSeek-R1)
 }
 ```
 

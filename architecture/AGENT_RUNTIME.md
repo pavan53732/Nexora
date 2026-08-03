@@ -33,6 +33,9 @@ The Agent Runtime defines how individual AI agents behave autonomously. Each age
 | **Follow-up identification** | Possible improvements and follow-up tasks listed before completion. | 2 |
 | **Grounded responses** | Claims trace to tool results or context segments; citations and uncertainty disclosure (RG-1..RG-6, FR-GND). | 2 |
 | **Code-claim verification** | Codebase claims verified via code-intelligence tools before being stated (RG-5). | 4 |
+| **Deliberate-then-answer** | Classification gate (answer now / reasoning pass / clarify first) with effort levels fast/balanced/thorough (RB-1..RB-3). | 2 |
+| **Reasoning-capable routing** | Per-task selection of REASONING-capable models (RB-4, FR-EL-005); reasoning traces in the activity feed (RB-5). | 5 |
+| **Answer-quality gates** | Grounded/complete/consistent/confident checks before sending; self-consistency for critical answers (RB-6). | 2 |
 | **Automatic workflow generation** | Complex goals auto-generate multi-step workflows. | 6 |
 | **Context management** | Intelligent context window management with summarization. | 2 |
 | **Token budgeting** | Tracks token usage per request and per session. | 2 |

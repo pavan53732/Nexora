@@ -15,7 +15,7 @@ Detailed specification for each AI provider integration. All providers implement
 - **Covers**: OpenAI, DeepSeek, Together AI, Fireworks, and any OpenAI-API-compatible endpoint.
 - **Base URL**: Configurable (default: `https://api.openai.com/v1`)
 - **Auth**: Bearer token (API key).
-- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings.
+- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings, Reasoning (e.g. o-series).
 - **Models**: User-configurable. Default: `gpt-4o`.
 - **Protocol**: REST API with JSON. Streaming via Server-Sent Events.
 

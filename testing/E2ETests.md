@@ -71,3 +71,13 @@ E2E tests exercise the complete application on a real device or emulator, valida
 | Out-of-context chat | Ask about a topic with no tools/context | Agent states uncertainty + offers search/memory action; no fabricated answer |
 | Unsupported capability | Ask agent to do something its tools/permissions can't | Explicit refusal with reason and enablement path |
 | Plan-vs-actual mismatch | Agent plans "create A, modify B" but only did A | Report states B not-attempted with reason; never claims B completed |
+
+## Reasoning E2E Journeys (think before answering)
+
+| Journey | Steps | Pass Criteria |
+|---------|-------|---------------|
+| Ambiguous goal clarifies first | "Fix the bug" (no specifics) | Agent asks 1-2 clarifying questions before acting; never guesses scope |
+| Complex task reasons visibly | Ask a complex multi-part question | Agent shows collapsible reasoning card; answer cites sources for each part; gates passed |
+| Thorough task uses reasoning model | High-stakes task with thorough effort | Task routes to a REASONING-capable profile (or fails fast with explanation); trace recorded |
+| Contradictory premise flagged | User asks with a false premise | Agent flags the contradiction instead of silently agreeing |
+| Fast task stays fast | Simple confirm/query | No unnecessary reasoning trace; direct grounded answer |
