@@ -49,3 +49,4 @@
 | FEAT-027 | Skills as First-Class Capability (skill registry, agent–skill bindings, skill acquisition) | 4 | Planned |
 | FEAT-028 | Complete Execution Lifecycle (objective → planning → selection → validation → verification → report → follow-up) | 2 | Planned |
 | FEAT-029 | Software Engineering Pipeline (build, static analysis, tests, perf/security, auto-fix, final validation) | 4 | Planned |
+| FEAT-030 | Web Search & Extraction (configurable search provider, extraction modes, quarantine-gated content) | 4 | Planned |

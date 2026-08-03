@@ -212,3 +212,15 @@
 | FR-SK-003 | Skill–tool mapping — skills reference tools; many skills may share the same tools; tool refs validated at registration | Must | 4 |
 | FR-SK-004 | Skill-aware planning — the planner selects skills per task and resolves them to agents and tools; executor validates agent possession before dispatch | Must | 4 |
 | FR-SK-005 | Skill discovery & management — list, inspect, and acquire skills via tools (`skill_list`, `skill_acquire`) | Should | 4 |
+
+## Web Search & Extraction
+
+> Tools: `search_web` (TOOL-171), `browser_extract` (TOOL-247) and the browser toolset (TOOL-2xx) — see [registry/TOOLS.md](../registry/TOOLS.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-WS-001 | Web search — search the web via a configured search provider; return ranked results (title, URL, snippet) | Must | 4 |
+| FR-WS-002 | Web page extraction — extract text, structured content, and metadata from a page | Must | 4 |
+| FR-WS-003 | Extraction modes — plain text, markdown, structured (JSON), and screenshot modes | Should | 4 |
+| FR-WS-004 | Search provider configuration — configurable search backend (default or user-defined endpoint), per-workspace selection | Should | 4 |
+| FR-WS-005 | Content safety — extracted/downloaded web content enters the sandbox quarantine (FR-S015) before promotion; untrusted content is labeled in agent context (prompt-injection containment) | Must | 4 |
