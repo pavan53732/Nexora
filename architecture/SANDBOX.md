@@ -31,7 +31,7 @@ The Sandbox is Nexora's isolated execution environment. The AI never directly ex
 
 ## Full Environment
 
-The sandbox uses a single bundled Full Environment based on a Debian-slim rootfs packaged inside the APK. See [specs/ENVIRONMENT_TIERS.md](../specs/ENVIRONMENT_TIERS.md) for the full specification.
+The sandbox uses a single bundled Full Environment based on a Debian-slim rootfs packaged inside the APK. See [specs/FULL_ENVIRONMENT.md](../specs/FULL_ENVIRONMENT.md) for the full specification.
 
 | Environment | Description | Default |
 |---|---|---|

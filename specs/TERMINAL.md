@@ -25,7 +25,7 @@ feature).
 
 ## Supported Operations
 
-Operations run inside Nexora's bundled [Full Environment](../specs/ENVIRONMENT_TIERS.md).
+Operations run inside Nexora's bundled [Full Environment](../specs/FULL_ENVIRONMENT.md).
 
 | Category | Commands |
 |---|---|

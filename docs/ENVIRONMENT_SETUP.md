@@ -492,7 +492,7 @@ Rootfs builds should run in a pinned, reproducible CI environment, produce check
 
 ## C.8 Related Files
 
-- [specs/ENVIRONMENT_TIERS.md](../specs/ENVIRONMENT_TIERS.md)
+- [specs/FULL_ENVIRONMENT.md](../specs/FULL_ENVIRONMENT.md)
 - [architecture/SANDBOX.md](../architecture/SANDBOX.md)
 - [requirements/FR.md](../requirements/FR.md)
 - [requirements/RISKS.md](../requirements/RISKS.md)
