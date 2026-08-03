@@ -66,7 +66,7 @@
 | FR-TL005 | Configurable tool execution timeout | Must | 1 |
 | FR-TL006 | Cache tool results with TTL | Should | 4 |
 | FR-TL007 | Chain tool outputs as inputs to next tool | Must | 1 |
-| FR-TL008 | Support 25+ tool categories (file, web, code, etc.) | Must | 3 |
+| FR-TL008 | Support 26 tool categories (file, web, code, skills, etc.) | Must | 3 |
 | FR-TL009 | Plugin-provided tools with dynamic registration | Must | 6 |
 | FR-TL010 | Tool versioning with backward compatibility | Should | 6 |
 | FR-TL011 | Tool health check and status reporting | Should | 4 |

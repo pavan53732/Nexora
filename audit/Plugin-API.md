@@ -1,6 +1,6 @@
 # Plugin API — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md)
+> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/PLUGIN_SYSTEM.md](../../architecture/PLUGIN_SYSTEM.md)
 
 ---
 

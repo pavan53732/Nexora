@@ -26,19 +26,19 @@ Shared             shared/
 
 | Module | ✓ May depend on | ❌ Must not depend on |
 |--------|-----------------|----------------------|
-| `ui/` | `application`, `services`, `runtime`, `agents`, `shared` | `tools`, `sandbox`, `providers`, `memory`, `plugins`, `workflows`, `storage`, `security` |
-| `application/` | `services`, `runtime`, `shared` | `ui`, `tools`, `sandbox`, `providers`, `memory`, `plugins`, `workflows`, `storage`, `security` |
-| `services/` | `runtime`, `shared` | `ui`, `application`, `tools`, `sandbox`, `providers`, `memory`, `plugins`, `workflows`, `storage`, `security` |
-| `runtime/` | `agents`, `tools`, `providers`, `memory`, `workflows`, `sandbox`, `storage`, `shared` | `ui`, `application`, `services`, `plugins`, `security` |
-| `agents/` | `memory`, `shared` | `ui`, `application`, `services`, `runtime`, `tools`, `sandbox`, `providers`, `plugins`, `workflows`, `storage`, `security` |
-| `workflows/` | `tools`, `shared` | `ui`, `application`, `services`, `runtime`, `agents`, `sandbox`, `providers`, `memory`, `plugins`, `storage`, `security` |
-| `tools/` | `sandbox`, `storage`, `security`, `shared` | `ui`, `application`, `services`, `runtime`, `agents`, `providers`, `memory`, `plugins`, `workflows` |
-| `providers/` | `memory`, `shared` | `ui`, `application`, `services`, `runtime`, `agents`, `tools`, `sandbox`, `plugins`, `workflows`, `storage`, `security` |
-| `memory/` | `storage`, `shared` | `ui`, `application`, `services`, `runtime`, `agents`, `tools`, `sandbox`, `providers`, `plugins`, `workflows`, `security` |
-| `plugins/` | `tools`, `shared` | `ui`, `application`, `services`, `runtime`, `agents`, `sandbox`, `providers`, `memory`, `workflows`, `storage`, `security` |
-| `sandbox/` | `security`, `shared` | `ui`, `application`, `services`, `runtime`, `agents`, `tools`, `providers`, `memory`, `plugins`, `workflows`, `storage` |
+| `ui/` | `application`, `shared` | `sandbox`, `tools`, `providers`, `memory`, `agents`, `plugins`, `workflows`, `storage`, `services`, `security`, `runtime` |
+| `application/` | All modules | None (top-level orchestrator) |
+| `runtime/` | `tools`, `providers`, `memory`, `agents`, `workflows`, `storage`, `security`, `shared` | `ui`, `application`, `sandbox`, `services` |
+| `tools/` | `sandbox`, `storage`, `security`, `shared` | `ui`, `application`, `runtime`, `providers`, `memory`, `agents`, `plugins`, `workflows`, `services` |
+| `sandbox/` | `storage`, `security`, `shared` | `ui`, `application`, `runtime`, `tools`, `providers`, `memory`, `agents`, `plugins`, `workflows`, `services` |
+| `providers/` | `storage`, `security`, `shared` | `ui`, `application`, `runtime`, `tools`, `sandbox`, `memory`, `agents`, `plugins`, `workflows`, `services` |
+| `memory/` | `storage`, `security`, `shared` | `ui`, `application`, `runtime`, `tools`, `sandbox`, `providers`, `agents`, `plugins`, `workflows`, `services` |
+| `agents/` | `shared` | `ui`, `application`, `runtime`, `tools`, `sandbox`, `providers`, `memory`, `plugins`, `workflows`, `services`, `storage` |
+| `plugins/` | `tools`, `storage`, `security`, `shared` | `ui`, `application`, `runtime`, `sandbox`, `providers`, `memory`, `agents`, `workflows`, `services` |
+| `workflows/` | `shared` | `ui`, `application`, `runtime`, `tools`, `sandbox`, `providers`, `memory`, `agents`, `plugins`, `services`, `storage` |
 | `storage/` | `shared` | All other modules |
-| `security/` | `shared` | All other modules |
+| `services/` | `runtime`, `storage`, `security`, `shared` | `ui`, `application`, `tools`, `sandbox`, `providers`, `memory`, `agents`, `plugins`, `workflows` |
+| `security/` | `storage`, `shared` | `ui`, `application`, `runtime`, `tools`, `sandbox`, `providers`, `memory`, `agents`, `plugins`, `workflows`, `services` |
 | `shared/` | *(none — leaf module)* | All other modules |
 
 ## Forbidden Dependencies
@@ -47,7 +47,7 @@ These are the most critical violations to watch for in code review:
 
 | Violation | Why it's forbidden |
 |-----------|-------------------|
-| `ui/ → sandbox/` | UI must go through `runtime/` or `services/` interface | |
+| `ui/ → sandbox/` | UI talks only to `application/` + `shared/` interfaces (MODULE_BOUNDARIES); sandbox is infrastructure | |
 | `ui/ → providers/` | UI must go through `runtime/`; provider selection is a runtime concern | |
 | `plugins/ → ui/` | Plugins never touch UI; they expose tools only | |
 | `providers/ → Android UI` | Providers are pure Kotlin with zero Compose/View dependencies | |

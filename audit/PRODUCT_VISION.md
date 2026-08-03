@@ -95,7 +95,7 @@ Alternative phrasings:
 
 | Component | Estimated Count |
 |-----------|----------------|
-| Core Platform Modules | 15+ |
+| Core Platform Modules | 17+ |
 | Tool Categories | 26 |
 | Individual Tool Functions | 300-500 |
 | Built-in Agent Types | 10-20 |

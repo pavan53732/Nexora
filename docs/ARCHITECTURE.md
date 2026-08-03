@@ -22,7 +22,7 @@ Nexora Android AI Agent Platform
 │   ├── Logs Screen
 │   └── Settings Screen
 │
-├── Core Runtime (Kotlin)
+├── Core Runtime (Kotlin)  # simplified — full 17 modules in architecture/RUNTIME.md
 │   ├── Planner
 │   ├── Executor
 │   ├── Workflow Engine

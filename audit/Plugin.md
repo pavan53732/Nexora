@@ -11,7 +11,8 @@ data class Plugin(
     val version: String,
     val description: String,
     val status: PluginStatus,
-    val permissions: List<PermissionScope>,
+    val requiredPermissions: List<PermissionScope>,
+    val minAppVersion: String,
     val dependencies: List<String>,
     val installedAt: Instant,
     val lastActiveAt: Instant

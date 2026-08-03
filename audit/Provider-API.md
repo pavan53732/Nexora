@@ -1,6 +1,6 @@
 # Provider API — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md)
+> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/PROVIDER_SYSTEM.md](../../architecture/PROVIDER_SYSTEM.md)
 
 ---
 

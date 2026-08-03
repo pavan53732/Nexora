@@ -20,7 +20,7 @@ A skill is **expertise** (WHAT), distinct from agents (WHO) and tools (HOW).
 | SKL-006 | Git Workflow | Devops | Git Agent | git_* | 4 | Built-in |
 | SKL-007 | Git Conflict Resolution | Devops | Git Agent, Coder | git_diff, git_merge, git_status, file_* | 4 | Built-in |
 | SKL-008 | API Design | Web | Coder | file_*, code_review, http_* | 4 | Built-in |
-| SKL-009 | SQL / Database Design | Data | Database Agent | sqlite_*, db_* | 4 | Built-in |
+| SKL-009 | SQL / Database Design | Data | Database Agent | sqlite_* | 4 | Built-in |
 | SKL-010 | Python Scripting | Data | Coder | terminal_run, pip_install, file_* | 4 | Built-in |
 | SKL-011 | Node.js Development | Web | Coder | terminal_run, npm_install, file_* | 4 | Built-in |
 | SKL-012 | Web Research | Research | Researcher | browser_*, search_*, http_* | 4 | Built-in |

@@ -1,6 +1,6 @@
 # Runtime API — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/RUNTIME.md](../architecture/RUNTIME.md)
+> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/RUNTIME.md](../../architecture/RUNTIME.md)
 
 ---
 

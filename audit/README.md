@@ -79,7 +79,7 @@ Chats are one artifact within a workspace. This scales much better as the platfo
 | 4 | Tools (generic interface + tools) | Upcoming |
 | 5 | AI Providers (9 providers) | Upcoming |
 | 6 | Memory (persistent memory) | Upcoming |
-| 7 | Autonomous Agents (15 types) | Upcoming |
+| 7 | Autonomous Agents (16 types) | Upcoming |
 | 8 | Plugin Marketplace | Upcoming |
 
 See [docs/ROADMAP.md](docs/ROADMAP.md) for the full roadmap.
@@ -93,7 +93,7 @@ Nexora/
 ├── .github/          # GitHub Actions, issue templates
 ├── docs/             # Product documentation
 ├── architecture/     # Architecture deep dives (10 documents)
-├── specs/            # Component specifications (7 documents)
+├── specs/            # Component specifications (11 documents)
 ├── android/          # Android application source
 ├── runtime/          # Core runtime implementation
 ├── plugins/          # Plugin implementations
