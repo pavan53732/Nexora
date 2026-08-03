@@ -45,7 +45,7 @@ data class ToolMetadata(
 )
 ```
 
-## Tool Categories (25)
+## Tool Categories (26)
 
 | # | Category | Example Tools | Phase |
 |---|----------|--------------|-------|
@@ -78,7 +78,7 @@ data class ToolMetadata(
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
 > registry of every tool — **333 tools** with stable `TOOL-###` IDs, descriptions, and
-> phases across the 25 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
+> phases across the 26 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.
 

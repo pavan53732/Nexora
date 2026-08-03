@@ -6,7 +6,7 @@
 
 ## Overview
 
-The Core Runtime is the brain of Nexora. It orchestrates all agent activity, from receiving a user goal to producing a result. It consists of 15 tightly coordinated modules.
+The Core Runtime is the brain of Nexora. It orchestrates all agent activity, from receiving a user goal to producing a result. It consists of 17 tightly coordinated modules.
 
 ## Module Inventory
 

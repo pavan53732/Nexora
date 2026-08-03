@@ -13,6 +13,8 @@ Architecture Decision Records (ADRs) document major architectural decisions, the
 | [ADR-0003](ADR-0003-Agent-Runtime.md) | Autonomous Agent Runtime Loop | Accepted | 2026-08-03 |
 | [ADR-0004](ADR-0004-Sandbox.md) | Sandboxed Execution | Accepted | 2026-08-03 |
 | [ADR-0005](ADR-0005-Provider-Abstraction.md) | Provider Abstraction Layer | Accepted | 2026-08-03 |
+| [ADR-0006](ADR-0006-Agent-First-Interaction-Model.md) | Agent-First Interaction Model (Infrastructure Is Internal) | Accepted | 2026-08-03 |
+| [ADR-0007](ADR-0007-Skills-First-Class.md) | Skills as a First-Class Capability | Accepted | 2026-08-03 |
 
 ## ADR Template
 

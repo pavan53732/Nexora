@@ -145,6 +145,7 @@ Nexora/
 - [AI Providers](specs/AI_PROVIDERS.md)
 - [Workspace](specs/WORKSPACE.md)
 - [Background Execution](specs/BACKGROUND_EXECUTION.md)
+- [Execution Lifecycle](specs/EXECUTION_LIFECYCLE.md)
 - [Context Management](specs/CONTEXT_MANAGEMENT.md)
 - [Autonomy & Stability](specs/AUTONOMY_STABILITY.md)
 
