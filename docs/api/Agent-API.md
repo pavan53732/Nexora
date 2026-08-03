@@ -1,6 +1,6 @@
 # Agent API — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md)
+> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../../architecture/AGENT_RUNTIME.md](../../architecture/AGENT_RUNTIME.md)
 
 ---
 
@@ -28,8 +28,17 @@ interface Agent {
 enum class AgentType {
     PLANNER, RESEARCHER, CODER, REVIEWER, TESTER, DEBUGGER,
     DOCUMENTATION_WRITER, REFACTORING, DEPLOYMENT, SECURITY_AUDITOR,
-    BROWSER, DATABASE, FILE_MANAGER, GIT, WORKFLOW_COORDINATOR
+    BROWSER, DATABASE, FILE_MANAGER, GIT, WORKFLOW_COORDINATOR,
+    ARCHITECT, CUSTOM  // ARCHITECT = AGT-016; CUSTOM = user-defined agents (not a built-in type)
 }
+
+data class AgentContext(
+    val workspaceId: String,
+    val agentId: String,
+    val memoryManager: MemoryManager,
+    val eventBus: EventBus,
+    val sessionId: String? = null
+)
 
 data class AgentTask(
     val id: String,
