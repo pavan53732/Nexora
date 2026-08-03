@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 4.0.0 |
-| **Status** | Phase 0 — Foundation Complete |
+| **Spec Version** | 4.1.0 |
+| **Status** | Phase 0 — Foundation Complete (Frozen) |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v4.0 — Engineering foundation: requirements, state machines, security, testing, matrices) |
+| **Last Updated** | 2026-08-03 (v4.1 — Final engineering artifacts: dependency graph, module boundaries, lifecycles, performance budget) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -173,6 +173,25 @@ This is the **master index** for the Nexora project. All detailed content lives 
 |----------|------|
 | **Engineering Decision Log** | [docs/DECISION_LOG.md](docs/DECISION_LOG.md) |
 
+### Dependency Graph & Module Boundaries
+
+| Document | Path |
+|----------|------|
+| **Dependency Graph** | [docs/DEPENDENCY_GRAPH.md](docs/DEPENDENCY_GRAPH.md) |
+| **Module Boundaries** | [docs/MODULE_BOUNDARIES.md](docs/MODULE_BOUNDARIES.md) |
+
+### Lifecycles
+
+| Document | Path |
+|----------|------|
+| **Entity Lifecycles** | [docs/LIFECYCLES.md](docs/LIFECYCLES.md) |
+
+### Performance Budget
+
+| Document | Path |
+|----------|------|
+| **Performance Budget** | [docs/PERFORMANCE_BUDGET.md](docs/PERFORMANCE_BUDGET.md) |
+
 ### State Machines
 
 | Lifecycle | Path |
@@ -259,6 +278,10 @@ Nexora/
 │   ├── ROADMAP.md
 │   ├── CHANGELOG.md
 │   ├── DECISION_LOG.md    # Engineering decision log (DL-001+)
+│   ├── DEPENDENCY_GRAPH.md # Module dependency graph + forbidden deps
+│   ├── MODULE_BOUNDARIES.md # Per-module API surface and dep rules
+│   ├── LIFECYCLES.md        # Entity lifecycle flows (7 entities)
+│   ├── PERFORMANCE_BUDGET.md # 27 measurable performance targets
 │   ├── adr/               # Architecture Decision Records (5 ADRs)
 │   │   ├── ADR-0001-Workspace-First.md
 │   │   ├── ADR-0002-Plugin-System.md
@@ -333,7 +356,7 @@ Nexora/
 
 | Phase | Name | Goal | Key Deliverables |
 |-------|------|------|-----------------|
-| **0** | Foundation | Repo structure, documentation, registries | This repo (110+ files: requirements, architecture, models, protocols, standards, state machines, diagrams, security, testing, registries) |
+| **0** | Foundation | Repo structure, documentation, registries | This repo (119 files: requirements, architecture, models, protocols, standards, state machines, diagrams, security, testing, registries, dependency graph, module boundaries, lifecycles, performance budget) |
 | **1** | Android Foundation | Bootable app, no AI yet | Navigation, theme, settings, workspace manager, interfaces |
 | **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, event bus, checkpoints |
 | **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node |
@@ -345,4 +368,14 @@ Nexora/
 
 ---
 
-*This document is the authoritative index for the Nexora project. All implementation decisions must align with the linked specifications.*
+## Locked Architectural Rule
+
+> **Everything is a service behind an interface. UI never talks directly to implementations.**
+>
+> `UI → Service Interface → Runtime → Implementation`
+>
+> This applies to: ToolManager, ProviderManager, MemoryManager, PluginManager, WorkspaceManager, Sandbox, Scheduler, Logging, Security, AgentRuntime.
+
+---
+
+*Documentation frozen at v4.1.0. Updates only when driven by implementation. This document is the authoritative index — all implementation decisions must align with the linked specifications.*

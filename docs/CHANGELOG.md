@@ -14,6 +14,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.3.0] — 2026-08-03
+
+### Added
+
+#### Engineering Architecture (docs/)
+- DEPENDENCY_GRAPH.md — Module dependency hierarchy, 14-module allowed/forbidden matrix, Hilt binding rule.
+- MODULE_BOUNDARIES.md — Per-module responsibilities, public API surfaces, allowed/forbidden dependencies.
+- LIFECYCLES.md — Complete lifecycle flows for 7 entities (Workspace, Agent, Tool, Plugin, Provider, Runtime, Background Execution).
+- PERFORMANCE_BUDGET.md — 27 measurable performance targets with warning/critical thresholds and CI enforcement.
+
+#### Project Specification
+- PROJECT_SPECIFICATION.md → v4.1.0 (frozen), locked architectural rule added.
+
+---
+
 ## [0.2.0] — 2026-08-03
 
 ### Added
@@ -115,6 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - SECURITY.md — Security policy and vulnerability reporting.
 - PROJECT_SPECIFICATION.md — Master index (v2.0.0, rewritten as document index).
 
-[Unreleased]: https://github.com/pavan53732/Nexora/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/pavan53732/Nexora/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/pavan53732/Nexora/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/pavan53732/Nexora/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/pavan53732/Nexora/releases/tag/v0.1.0
