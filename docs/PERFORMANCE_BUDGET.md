@@ -87,23 +87,21 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 
 | Metric | Target | Maximum | Measurement |
 |---|---:|---:|---|
-| Tier 2 rootfs extraction (first launch) | < 5 s | < 10 s | Pixel 6, warm device |
-| Tier 2 warm start | < 500 ms | < 1 s | Already extracted |
-| Tier 2 memory overhead | < 100 MB | < 150 MB | proot and rootfs processes |
-| Tier 2 disk footprint (base + overlay) | < 250 MB | < 400 MB | Per workspace |
+| Full Environment rootfs extraction (first launch) | < 5 s | < 10 s | Pixel 6, warm device |
+| Full Environment warm start | < 500 ms | < 1 s | Already extracted |
+| Full Environment memory overhead | < 100 MB | < 150 MB | proot and rootfs processes |
+| Full Environment disk footprint (base + overlay) | < 250 MB | < 400 MB | Per workspace |
 | `apt install` response time | < 3 s | < 5 s | Cached package list |
 | `pip install numpy` | < 15 s | < 30 s | ARM64 wheel, cached download |
 | `npm install express` | < 10 s | < 20 s | Cached registry |
-| Tier 1 → Tier 2 promotion | < 10 s | < 15 s | Extraction and verification |
+| Environment reset to ready | < 10 s | < 15 s | Wipe and re-verify |
 
 ### APK Size Impact
 
 | Variant | Size |
 |---|---:|
-| Base app (Tier 0 only) | ~8 MB |
-| + Tier 2 ARM64 rootfs | ~75 MB |
-| + Tier 2 x86_64 rootfs | ~95 MB |
-| + Tier 1 Alpine | +5 MB |
-| **Recommended ARM64 + x86_64 AAB** | **~80 MB download, ~200 MB installed** |
+| Base app with bundled Full Environment | ~75 MB |
+| + x86_64 rootfs asset | ~95 MB |
+| **Recommended AAB delivery** | **~80 MB download, architecture-specific delivery** |
 
-Mitigation: Android App Bundle delivery splits by architecture so the Play Store serves only the required ABI.
+Mitigation: Android App Bundle delivery should split by architecture so users receive only the required ABI assets.

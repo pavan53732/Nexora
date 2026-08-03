@@ -1,4 +1,4 @@
-# Environment Tiers Specification — Nexora
+# Full Environment Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/SANDBOX.md](../architecture/SANDBOX.md) | [../docs/ENVIRONMENT_SETUP.md](../docs/ENVIRONMENT_SETUP.md)
 
@@ -6,91 +6,33 @@
 
 ## 1. Overview
 
-Nexora's sandbox provides three environment tiers, each offering increasing capability and fidelity to a standard Linux userland. The **Full Environment (Tier 2)** is the default and primary target — a complete Debian-slim rootfs bundled in the APK, providing glibc compatibility, `apt` package management, and full binary wheel support for pip/npm.
+Nexora uses a single sandbox environment model: a bundled **Full Environment** based on a Debian-slim rootfs packaged inside the APK. This is the primary and only supported execution environment for autonomous agents, providing glibc compatibility, `apt` package management, and broad compatibility with Python and Node ecosystems.
 
-| Tier | Name | Size | C Library | Package Manager | Bundled | Default |
-|------|------|------|-----------|---------------|---------|---------|
-| 0 | Embedded Shell | ~2 MB | N/A | N/A | Yes | No |
-| 1 | Micro Environment | ~5 MB | musl | `apk` (Alpine) | Optional | No |
-| 2 | **Full Environment** | **~50–70 MB** | **glibc** | **`apt` (Debian)** | **Yes** | **Yes** |
+| Environment | Size | C Library | Package Manager | Bundled in APK | Default |
+|---|---|---|---|---|---|
+| **Full Environment** | **~50–70 MB compressed** | **glibc** | **`apt` (Debian)** | **Yes** | **Yes** |
 
-## 2. Tier 0 — Embedded Shell
+## 2. Purpose
 
-### 2.1 Purpose
+The Full Environment enables a real Linux userland inside Nexora so agents can execute standard commands, install packages, run native tooling, and use Python/npm workflows with high compatibility.
 
-Zero-latency command execution for simple file operations. No Linux userland — pure Kotlin/Java implementations of common shell commands.
+### Why this is the only supported model
 
-### 2.2 Available Commands
+- Agents are far more reliable when the environment matches standard Linux expectations.
+- glibc compatibility improves success rates for common pip binary wheels and native toolchains.
+- Bundling the rootfs inside the APK avoids a separate installation step and keeps core capabilities available offline after app install.
+- A single environment reduces architectural complexity, documentation drift, QA surface area, and support burden.
 
-- Navigation: `ls`, `cd`, `pwd`, `tree`
-- File ops: `cat`, `head`, `tail`, `touch`, `mkdir`, `rm`, `cp`, `mv`, `chmod`
-- Search: `grep`, `find` (basic)
-- Archive: `zip`, `unzip`, `tar` (limited formats)
-- Environment: `export`, `env`, `echo`, `which`
-- Git: `git` (pure Java implementation via JGit)
-
-### 2.3 Limitations
-
-- No native binary execution
-- No `apt`, `pip`, `npm` (package managers unavailable)
-- No compilation toolchain
-- Python/Node runtimes not available
-
-### 2.4 When Used
-
-- Workspace initialization before Tier 2 extraction
-- Fallback when Tier 2 is corrupted or reset
-- Ultra-low-memory mode on devices with < 3GB RAM
-
-## 3. Tier 1 — Micro Environment (Alpine/musl)
-
-### 3.1 Purpose
-
-Optional lightweight Linux userland for size-constrained deployments where APK bloat must be minimized.
-
-### 3.2 Specifications
-
-- **Base**: Alpine Linux rootfs (minirootfs)
-- **Size**: ~5 MB compressed, ~15 MB extracted
-- **C library**: musl libc
-- **Package manager**: `apk`
-- **Shell**: BusyBox ash
-
-### 3.3 Limitations (Critical)
-
-| Issue | Impact | Mitigation |
-|-------|--------|------------|
-| musl/glibc incompatibility | pip/npm binary wheels often fail to install or run | Source compilation required; slower; needs build tools in sandbox |
-| Limited package repository | Many packages unavailable in Alpine repos | Tier 1 explicitly marked as limited; agent warned |
-| BusyBox GPL-2.0 | License risk if bundled in APK | Bundled as separate asset with license attribution; not linked into app code |
-| Agent training mismatch | Agents trained on `apt`/`dpkg`; `apk` is niche | Auto-detect and inject `apk` cheat-sheet into agent context |
-
-### 3.4 When Used
-
-- User explicitly selects "Minimal Install" during onboarding
-- Device storage critically low (< 500 MB free)
-- Enterprise policy mandates minimal APK footprint
-
-### 3.5 Bundling Model
-
-Tier 1 is **optional** — included as a secondary asset in the APK but not extracted by default. User choice during first launch determines which tier is activated.
-
-## 4. Tier 2 — Full Environment (Debian-slim/glibc) ⭐ DEFAULT
-
-### 4.1 Purpose
-
-Complete Linux userland enabling true agent autonomy: arbitrary package installation, binary execution, compilation, and full compatibility with the Python/Node ecosystem.
-
-### 4.2 Specifications
+## 3. Specifications
 
 - **Base**: Debian 12 (Bookworm) slim variant
 - **Size**: ~50–70 MB compressed (xz), ~180–220 MB extracted
 - **C library**: glibc 2.36+
-- **Package manager**: `apt` (Advanced Package Tool)
+- **Package manager**: `apt`, `apt-get`, `dpkg`
 - **Shell**: `bash` (default), `dash` (minimal)
-- **Pre-installed**: `python3`, `python3-pip`, `nodejs`, `npm`, `git`, `curl`, `wget`, `ca-certificates`, `build-essential` (meta)
+- **Pre-installed**: `python3`, `python3-pip`, `python3-venv`, `nodejs`, `npm`, `git`, `curl`, `wget`, `ca-certificates`, `build-essential` (meta)
 
-### 4.3 Bundling Architecture
+## 4. Bundling Architecture
 
 ```text
 APK assets/
@@ -105,51 +47,53 @@ APK assets/
     └── debian-slim-LICENSE
 ```
 
-### 4.4 Extraction Lifecycle
+The rootfs is bundled as an APK asset rather than downloaded after installation. On first run, Nexora selects the matching architecture asset, verifies it, and extracts it into app-private storage.
+
+## 5. Extraction Lifecycle
 
 | Phase | Action | Storage Location |
-|-------|--------|----------------|
-| **First Launch** | Detect architecture → select correct tar.xz → stream-extract to app-private storage | `/data/data/com.nexora.app/rootfs/` |
-| **Verification** | SHA-256 checksum of extracted tree vs manifest; re-extract on mismatch | — |
-| **Mount** | proot binds `/` to extracted rootfs, workspace files into `/workspace` | Runtime only |
-| **Execution** | All shell commands run inside proot namespace | — |
-| **Cache** | Extracted rootfs persists across app restarts | App-private storage |
-| **Reset** | User can "Reset Environment" — wipe rootfs, re-extract from APK assets | — |
-| **Update** | New APK version contains updated rootfs; diff-extract only changed files | — |
+|---|---|---|
+| First Launch | Detect architecture, select the correct tar.xz, stream-extract to app-private storage | `/data/data/com.nexora.app/rootfs/` |
+| Verification | Validate checksums and signatures from the bundled manifest | — |
+| Mount | proot binds `/` to extracted rootfs and workspace files into `/workspace` | Runtime only |
+| Execution | Shell commands run inside the proot namespace | — |
+| Cache | Extracted rootfs persists across restarts | App-private storage |
+| Reset | User can wipe and re-extract the environment from bundled APK assets | — |
+| Update | New APK version ships an updated rootfs asset | — |
 
-### 4.5 proot Execution Model
+## 6. proot Execution Model
 
 ```text
 Android Kernel (unmodified)
 └── Nexora App Process (UID: app_123)
     └── proot (static binary, no root required)
         └── Debian-slim rootfs
-            ├── /usr/bin/python3  → workspace Python scripts
-            ├── /usr/bin/apt      → package installation
-            ├── /usr/bin/node     → Node.js runtime
-            └── /workspace        → bind-mount to VFS (read-write)
+            ├── /usr/bin/python3
+            ├── /usr/bin/apt
+            ├── /usr/bin/node
+            └── /workspace
 ```
 
-**Key properties:**
+### Key properties
 
-- **No root required**: proot uses `ptrace` for syscall interception and path rewriting
-- **No kernel modules**: Pure userspace; works on supported Android versions
-- **Bind mounts**: Workspace VFS exposed as `/workspace` inside rootfs
-- **Network**: Inherits Android network namespace; egress proxy still applies (FR-S014)
+- No root required.
+- No kernel modules required.
+- Workspace files are bind-mounted into `/workspace`.
+- Network policy and egress controls still apply at the app level.
 
-### 4.6 glibc Binary Wheel Compatibility
+## 7. Compatibility
 
-| Ecosystem | Tier 2 Support | Tier 1 (Alpine) Status |
-|---|---|---|
-| **PyPI (pip)** | ✅ Binary wheels install directly (`manylinux` tags match glibc) | ❌ Often fails; requires `--no-binary` or compilation |
-| **npm** | ✅ Native modules compile against glibc; prebuilt binaries work | ⚠️ Mixed; some packages assume glibc |
-| **Cargo (Rust)** | ✅ Standard target `aarch64-unknown-linux-gnu` | ⚠️ Needs `musl` target or cross-compile |
-| **Go** | ✅ Standard Linux builds work | ✅ Static binaries work; cgo may fail |
-| **Conda** | ✅ Miniforge works (Linux ARM64) | ❌ Not supported on musl |
+| Ecosystem | Support |
+|---|---|
+| **PyPI (pip)** | Binary-wheel-friendly glibc environment for common Linux ARM64/x86_64 packages |
+| **npm** | Native modules and standard Node workflows supported through Debian userland |
+| **Cargo (Rust)** | Standard Linux GNU targets are feasible inside the environment |
+| **Go** | Standard Linux builds supported |
+| **System packages** | `apt`/`dpkg` available for Debian packages |
 
-### 4.7 Workspace Integration
+## 8. Workspace Integration
 
-Each workspace mounts the **same read-only rootfs** with a **private writable overlay** for per-workspace state:
+Each workspace mounts the same read-only base rootfs with a private writable overlay for workspace-specific state.
 
 ```text
 /data/data/com.nexora.app/
@@ -165,25 +109,11 @@ Each workspace mounts the **same read-only rootfs** with a **private writable ov
 │       └── env/
 ```
 
-**Overlay mechanism**: proot's root and bind options create a union view. Writes go to the overlay; reads fall through to the shared base. This keeps the base rootfs pristine while allowing per-workspace customization.
+Writes go to the workspace overlay; reads fall through to the shared base. This keeps the bundled base immutable while allowing per-workspace customization.
 
-### 4.8 Package Installation Flow
+## 9. Package and Runtime Flows
 
-```text
-Agent: apt install ffmpeg jq
-↓
-Sandbox: proot apt update && proot apt install -y ffmpeg jq
-↓
-Overlay: Packages installed to workspace overlay
-↓
-VFS: Changes reflected in workspace files
-↓
-Persistence: Overlay preserved across sessions and app restarts
-```
-
-**Quota enforcement**: apt downloads and installed packages count toward workspace disk quota. Apt cache is auto-pruned after install where safe.
-
-### 4.9 Python Environment
+### Python
 
 ```bash
 python3 --version
@@ -193,7 +123,7 @@ source /workspace/.venv/bin/activate
 pip install numpy pandas requests
 ```
 
-### 4.10 Node Environment
+### Node.js
 
 ```bash
 node --version
@@ -203,93 +133,55 @@ npm init -y
 npm install express lodash
 ```
 
-## 5. Environment Selection & Auto-Promotion
+### apt
 
-### 5.1 User Selection (Onboarding)
-
-```text
-Welcome to Nexora
-├── [Recommended] Full Environment (~70 MB)
-│   └── Debian Linux with apt, pip, npm — maximum capability
-├── [Minimal] Micro Environment (~5 MB)
-│   └── Alpine Linux with apk — limited packages, smaller size
-└── [Advanced] Embedded Shell Only (~2 MB)
-    └── Basic commands, no package manager — expert use
+```bash
+apt update
+apt install -y jq ffmpeg
 ```
 
-Default selection: Full Environment (Tier 2).
+Package downloads and installed artifacts count toward workspace quota. Package cache management should minimize retained archive size where possible.
 
-### 5.2 Auto-Promotion (Agent-Driven)
+## 10. Performance Characteristics
 
-| Trigger | Action | User Notification |
-|---|---|---|
-| Agent runs `apt` in Tier 0/1 | Prompt user to enable Full Environment | One-tap enable; extraction begins |
-| `pip install` fails with a manylinux compatibility error in Tier 1 | Suggest Tier 2 with explanation | Non-blocking |
-| `npm install` requires native compilation in Tier 1 | Detect missing headers; suggest Tier 2 | Contextual hint in activity feed |
-
-### 5.3 Runtime Tier Switching
-
-```kotlin
-enum class EnvironmentTier { EMBEDDED, MICRO, FULL }
-
-class WorkspaceSandbox {
-    var currentTier: EnvironmentTier = EnvironmentTier.FULL
-}
-```
-
-## 6. Performance Characteristics
-
-| Metric | Tier 0 | Tier 1 | Tier 2 |
-|---|---:|---:|---:|
-| Cold start | < 50 ms | 2–5 s | 3–8 s |
-| Warm start | < 50 ms | < 100 ms | < 200 ms |
-| Memory overhead | 5 MB | 20 MB | 80 MB |
-| Disk footprint (per workspace) | 10 MB | 25 MB | 50 MB + overlay |
-| Package install speed | N/A | Slow | Fast |
-| `pip install numpy` | N/A | 3–5 minutes | 10–20 seconds |
-
-## 7. Security Model
-
-### 7.1 Rootfs Integrity
-
-- SHA-256 checksums for every file in `manifest.json`
-- Signature verification with Nexora release key
-- Re-extraction triggered on checksum mismatch
-- Base rootfs is read-only; only overlay is writable
-
-### 7.2 proot Isolation
-
-- proot runs as app UID with no privilege escalation
-- ptrace scope is limited to child processes
-- Android seccomp-bpf still applies
-- Network egress is filtered by the in-app proxy (FR-S014)
-
-### 7.3 GPL Compliance (Bundled Model)
-
-Since Tier 2 and Tier 1 contain GPL components bundled in the APK:
-
-| Requirement | Implementation |
+| Metric | Target |
 |---|---|
-| Source code offer | `licenses/` directory contains license/source-offer information |
-| License attribution | In-app Open Source Licenses screen lists all components |
-| No linking | Rootfs is a data asset, not linked into app code |
-| Modification rights | Users can extract and modify the rootfs; modifications void support |
+| First extraction | 3–8 seconds |
+| Warm start | < 200 ms |
+| Memory overhead | ~80 MB |
+| Disk footprint | 50 MB + overlay per workspace |
+| `pip install numpy` | 10–20 seconds under favorable network/cache conditions |
 
-Legal review is required before Google Play submission.
+## 11. Security Model
 
-## 8. Phase Mapping
+### Rootfs Integrity
+
+- SHA-256 checksums for bundled assets in `manifest.json`
+- Signature verification with Nexora release key
+- Re-extraction on integrity mismatch
+- Read-only base rootfs with writable overlay only
+
+### Isolation
+
+- proot runs as the app UID without privilege escalation
+- Android platform restrictions still apply
+- Egress filtering and policy enforcement remain active
+
+### License Compliance
+
+The bundled Debian rootfs contains OSS components with license obligations. Nexora must ship attribution and source-offer information with the APK and provide an in-app OSS licenses view before store distribution.
+
+## 12. Phase Mapping
 
 | Phase | Deliverable |
 |---|---|
-| Phase 1 | Tier 0 interface contracts and basic command implementations |
-| Phase 2 | Tier 2 rootfs build pipeline and proot integration design |
-| Phase 3 | Tier 2 extraction, verification, proot execution, apt/pip/npm integration |
-| Phase 4 | Tier 1 optional Alpine environment and onboarding selection UI |
-| Phase 5 | Environment templates |
-| Phase 6 | Cross-architecture support |
+| Phase 2 | Full Environment design, rootfs build pipeline, manifest format |
+| Phase 3 | Full Environment implementation: extraction, verification, proot execution, apt/pip/npm integration |
+| Phase 5 | Environment templates on top of the Full Environment |
+| Phase 6 | Cross-architecture support and advanced update mechanics |
 | Phase 8 | Template marketplace |
 
-## 9. Related Specifications
+## 13. Related Specifications
 
 - [architecture/SANDBOX.md](../architecture/SANDBOX.md)
 - [specs/TERMINAL.md](TERMINAL.md)

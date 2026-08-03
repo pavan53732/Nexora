@@ -25,30 +25,17 @@ feature).
 
 ## Supported Operations
 
-Operations available depend on the active [Environment Tier](../specs/ENVIRONMENT_TIERS.md).
-
-### Tier 0 — Embedded Shell (Always Available)
-
-| Category | Commands |
-|---|---|
-| **Navigation** | `ls`, `cd`, `pwd`, `tree` |
-| **File Ops** | `cat`, `head`, `tail`, `touch`, `mkdir`, `rm`, `cp`, `mv`, `chmod` |
-| **Search** | `grep`, `find` (basic) |
-| **Archive** | `zip`, `unzip`, `tar` |
-| **Environment** | `export`, `env`, `echo`, `which` |
-| **Git** | `git` (JGit implementation) |
-
-### Tier 2 — Full Environment (Default, Debian-slim)
-
-All Tier 0 commands plus full Linux userland:
+Operations run inside Nexora's bundled [Full Environment](../specs/ENVIRONMENT_TIERS.md).
 
 | Category | Commands |
 |---|---|
 | **Shell** | `bash`, `sh`, `dash` |
+| **Navigation** | `ls`, `cd`, `pwd`, `tree` |
+| **File Ops** | `cat`, `head`, `tail`, `touch`, `mkdir`, `rm`, `cp`, `mv`, `chmod` |
 | **System** | `ps`, `kill`, `top`, `htop`, `df`, `du`, `free` |
 | **Search** | `grep`, `find`, `rg`, `fd`, `ag` |
 | **Network** | `curl`, `wget`, `ping`, `netstat`, `ss` |
-| **Process** | `ps`, `kill`, `jobs`, `fg`, `bg`, `&`, `nohup` |
+| **Process** | `ps`, `kill`, `jobs`, `fg`, `bg`, `nohup` |
 | **Git** | Full native `git` |
 | **Python** | `python3`, `python3.11`, `pip`, `pip3`, `venv` |
 | **Node** | `node`, `npm`, `npx`, `corepack` |
@@ -56,18 +43,6 @@ All Tier 0 commands plus full Linux userland:
 | **Package** | `apt`, `apt-get`, `dpkg` |
 | **Database** | `sqlite3`, `psql` (client) |
 | **Media** | `ffmpeg`, `ffprobe` (if installed via apt) |
-
-### Tier 1 — Micro Environment (Optional, Alpine)
-
-All Tier 0 commands plus Alpine userland:
-
-| Category | Commands |
-|---|---|
-| **Shell** | `ash` (BusyBox) |
-| **Package** | `apk` |
-| **System** | BusyBox variants (`ps`, `top`, `df`) |
-
-**Limitations**: musl libc; binary wheels often fail; limited package repository. See [ENVIRONMENT_TIERS.md §3](../specs/ENVIRONMENT_TIERS.md).
 
 ## Terminal Features
 
@@ -82,35 +57,21 @@ All Tier 0 commands plus Alpine userland:
 - **Phase 3**: Full terminal implementation with shell, history, sessions — internal, agent-invoked; activity feed integration.
 - **Phase 8**: Optional developer mode exposing terminal views to advanced users.
 
-## Environment Tier Awareness
+## Environment Integration
 
 ### Command Routing
 
 ```kotlin
-fun execute(command: String, tier: EnvironmentTier): ExecutionResult {
-    return when (tier) {
-        EMBEDDED -> embeddedShell.execute(command)
-        MICRO -> proot.execute(command, alpineRootfs, overlay)
-        FULL -> proot.execute(command, debianRootfs, overlay)
-    }
+fun execute(command: String): ExecutionResult {
+    return proot.execute(command, debianRootfs, overlay)
 }
 ```
-
-### Auto-Promotion
-
-| Scenario | Behavior |
-|---|---|
-| `apt install` in Tier 0/1 | Error: "Full Environment required. Enable?" → user tap → extract Tier 2 |
-| `pip install numpy` in Tier 1 | Detect `manylinux` incompatibility → suggest Tier 2 with explanation |
-| `npm install` with native dependencies in Tier 1 | Detect missing headers → suggest Tier 2 |
-
-Promotion is non-blocking: the agent receives an error with context and can retry after the user enables the higher tier.
 
 ### Session Environment
 
 ```bash
 export NEXORA_WORKSPACE_ID="ws-uuid"
-export NEXORA_TIER="full"
+export NEXORA_ENVIRONMENT="full"
 export NEXORA_APP_VERSION="1.2.3"
 export HOME="/workspace/home"
 export PATH="/usr/local/bin:/usr/bin:/bin:/workspace/.local/bin"

@@ -19,7 +19,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 
 ---
 
-## 2. Tier 1 — Core Depth (Phase 3, ships with the sandbox)
+## 2. legacy optional environment — Core Depth (Phase 3, ships with the sandbox)
 
 ### 2.1 Sandbox Telemetry — agents observe themselves (FR-S011)
 - **What:** Tools for the agent to query its own environment: running processes, disk
@@ -87,7 +87,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 
 ---
 
-## 3. Tier 2 — Autonomy Depth (Phases 4–6)
+## 3. Full Environment — Autonomy Depth (Phases 4–6)
 
 ### 3.1 Adaptive Approval / Autonomy Modes (FR-S016)
 - **What:** Three user-selectable autonomy levels:
@@ -174,33 +174,32 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 
 ## 6. Phase Mapping
 
-- **Phase 3 (Tier 1):** FR-S011/012/014/015 + FR-S013 interfaces; telemetry, egress
+- **Phase 3 (legacy optional environment):** FR-S011/012/014/015 + FR-S013 interfaces; telemetry, egress
   proxy, quarantine, lifecycle tools; encryption design.
-- **Phase 4 (Tier 2 start):** FR-S013 full snapshots; FR-S016 autonomy modes;
+- **Phase 4 (Full Environment start):** FR-S013 full snapshots; FR-S016 autonomy modes;
   FR-S017 encryption; prompt-injection containment; watchdog/self-healing.
-- **Phase 5 (Tier 2 finish):** FR-S018 per-agent sandboxes; checkpoint integrity.
+- **Phase 5 (Full Environment finish):** FR-S018 per-agent sandboxes; checkpoint integrity.
 - **Phase 7–8 (Tier 3):** WASM micro-sandboxes, isolatedProcess, template
   marketplace, offline autonomy, export governance.
 
 
-### 2.7 Bundled Rootfs & Environment Tiers (FR-S019…S028)
+### 2.7 Bundled Rootfs & Full Environment (FR-S019…S028)
 
-- **What:** Three-tier environment system: Tier 0 (embedded shell), Tier 1 (Alpine/musl, optional), Tier 2 (Debian-slim/glibc, default). Tier 2 is a Linux userland bundled in APK assets, extracted on first launch, and executed via proot.
-- **Why:** A real glibc environment improves compatibility with standard pip/npm binary wheels, apt-based workflows, and common agent-generated commands.
-- **How:** Rootfs is stored as `assets/rootfs/debian-slim-{arch}.tar.xz`, stream-extracted, SHA-256 verified against `manifest.json`, and exposed through a read-only base plus per-workspace writable overlay.
-- **Enforcement:** Storage quotas include overlays; rootfs reset is audited; integrity checks run on startup; extraction failure falls back to Tier 0.
+- **What:** Nexora uses a single bundled Full Environment based on Debian-slim with glibc and `apt`, extracted from APK assets and executed via proot.
+- **Why:** A single real Linux environment improves reliability for agent execution, standard command behavior, and Python/Node package compatibility.
+- **How:** Rootfs is stored as `assets/rootfs/debian-slim-{arch}.tar.xz`, stream-extracted to app-private storage, verified against `manifest.json`, and exposed through a read-only base plus per-workspace writable overlay.
+- **Enforcement:** Storage quotas include overlays; environment reset is audited; integrity checks run on startup; unsupported devices are surfaced clearly.
 
-## 3.5 Tier 2+ Advanced Environment Capabilities
+## 3.5 Full Environment Advanced Capabilities
 
 | Capability | Description | Phase |
 |---|---|---:|
-| **Environment templates** | Pre-configured rootfs overlays for data science, Node web development, Rust, and similar workloads | 5 |
+| **Environment templates** | Pre-configured overlays for data science, web development, and similar workloads | 5 |
 | **Cross-architecture emulation** | QEMU user-mode for selected foreign-architecture binaries | 6 |
 | **Rootfs delta updates** | Incremental updates to the base rootfs | 6 |
 | **Custom rootfs builds** | User-built rootfs using the Nexora manifest format | 7 |
 
-
-| 17 | Environment tier selection | 3 | Core | FR-S019 | — |
+| 17 | Bundled Full Environment per workspace | 3 | Core | FR-S019 | — |
 | 18 | Bundled Debian-slim rootfs | 3 | Core | FR-S020 | — |
 | 19 | proot execution | 3 | Core | FR-S021 | — |
 | 20 | glibc binary wheel support | 3 | Core | FR-S022 | — |
@@ -208,5 +207,4 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 | 22 | Rootfs cache management | 4 | Core | FR-S024 | — |
 | 23 | Environment templates | 5 | Advanced | FR-S025 | — |
 | 24 | Cross-architecture support | 5 | Advanced | FR-S026 | — |
-| 25 | Auto-tier-promotion | 3 | Core | FR-S027 | — |
-| 26 | Offline package cache | 4 | Advanced | FR-S028 | — |
+| 25 | Offline package cache | 4 | Advanced | FR-S028 | — |

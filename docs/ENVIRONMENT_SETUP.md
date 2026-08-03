@@ -403,7 +403,7 @@ ABI splitting or per-feature download mitigations exist).
 
 ## C.1 Overview
 
-This guide describes how to build the Tier 2 (Full Environment) Debian-slim rootfs bundled in the Nexora APK.
+This guide describes how to build the bundled Full Environment Debian-slim rootfs packaged in the Nexora APK.
 
 ## C.2 Prerequisites
 

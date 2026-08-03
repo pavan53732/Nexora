@@ -29,17 +29,15 @@ The Sandbox is Nexora's isolated execution environment. The AI never directly ex
 | **Process Isolation** | Each execution runs in an isolated process. | 3 |
 | **Log Capture** | All sandbox activity logged and accessible. | 3 |
 
-## Environment Tiers
+## Full Environment
 
-The sandbox supports three environment tiers providing increasing Linux userland fidelity. See [specs/ENVIRONMENT_TIERS.md](../specs/ENVIRONMENT_TIERS.md) for the full specification.
+The sandbox uses a single bundled Full Environment based on a Debian-slim rootfs packaged inside the APK. See [specs/ENVIRONMENT_TIERS.md](../specs/ENVIRONMENT_TIERS.md) for the full specification.
 
-| Tier | Name | Description | Default |
-|---|---|---|---|
-| **0** | Embedded Shell | Pure Kotlin/Java implementations of common commands; no Linux userland | No |
-| **1** | Micro Environment | Alpine Linux rootfs (~5 MB) with musl/apk; limited package compatibility | No |
-| **2** | **Full Environment** | **Debian-slim rootfs (~50–70 MB) with glibc/apt; full pip/npm binary-wheel support** | **Yes** |
+| Environment | Description | Default |
+|---|---|---|
+| **Full Environment** | **Debian-slim rootfs (~50–70 MB compressed) with glibc, apt, and broad Python/npm compatibility** | **Yes** |
 
-### Tier 2 Architecture (Full Environment)
+### Full Environment Architecture
 
 ```text
 ┌─────────────────────────────────────────┐
@@ -63,9 +61,9 @@ The sandbox supports three environment tiers providing increasing Linux userland
 └─────────────────────────────────────────┘
 ```
 
-**Bundled rootfs**: The Debian-slim rootfs is compressed (`tar.xz`) in APK `assets/rootfs/`. On first launch it is stream-extracted to app-private storage. The base rootfs is read-only; per-workspace overlays provide write isolation.
+**Bundled rootfs**: The Debian-slim rootfs is compressed (`tar.xz`) in APK `assets/rootfs/` and extracted to app-private storage on first launch. The base rootfs is read-only and workspace overlays provide write isolation.
 
-**proot execution**: Tier 2 commands execute through proot with a rootfs and workspace bind mount, without requiring root privileges.
+**proot execution**: Commands execute through proot with a rootfs and workspace bind mount, without requiring root privileges.
 
 ## Storage Layout
 
@@ -98,7 +96,7 @@ The sandbox supports three environment tiers providing increasing Linux userland
 ```
 
 
-### Rootfs Storage (Tier 2)
+### Rootfs Storage (Full Environment)
 
 ```text
 /data/data/com.nexora.app/
