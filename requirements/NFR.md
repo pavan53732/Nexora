@@ -99,3 +99,16 @@
 |----|-------------|--------|-------|
 | NFR-PORT-001 | Gradle build | Reproducible on any dev machine | Gradle wrapper, no local paths |
 | NFR-PORT-002 | APK output | Single universal APK | No split APKs for MVP; consider App Bundle later |
+
+
+## Environment & Rootfs Reliability
+
+| ID | Requirement | Target | Measurement |
+|---|---|---:|---|
+| NFR-ENV-001 | Rootfs extraction succeeds on devices with ≥ 2 GB free storage | 99.5% | Firebase Crashlytics |
+| NFR-ENV-002 | Rootfs SHA-256 integrity verification completes within two seconds | < 2 s | Pixel 6 benchmark |
+| NFR-ENV-003 | Tier 2 supports `manylinux_2_28+` pip binary wheels | 100% | Top-100 PyPI package matrix |
+| NFR-ENV-004 | proot execution overhead versus native shell | < 20% | `time` benchmark |
+| NFR-ENV-005 | Rootfs reset to clean state | < 3 s | Wipe overlay without re-extraction |
+| NFR-ENV-006 | Offline package installation from cache after seven days offline | 100% | Integration test |
+| NFR-ENV-007 | Environment tier switch preserves workspace files | 100% | VFS bind-mount test |

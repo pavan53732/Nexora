@@ -167,6 +167,17 @@
 | FR-U010 | Global search across workspaces, agents, tasks | Should | 4 |
 | FR-U011 | Chat is the single primary interaction surface — goal entry, streaming responses, tool-call cards, permission prompts, and results all live in the conversation | Must | 1 |
 
+| FR-S019 | Environment tier selection per workspace (embedded / micro / full) | Must | 3 |
+| FR-S020 | Bundled Debian-slim rootfs in APK assets with integrity verification (SHA-256 + signature) | Must | 3 |
+| FR-S021 | proot-based userland execution inside sandbox without root privileges | Must | 3 |
+| FR-S022 | glibc-compatible runtime for pip/npm binary wheels | Must | 3 |
+| FR-S023 | Per-workspace rootfs overlay — writable layer on read-only base | Must | 3 |
+| FR-S024 | Rootfs cache management (LRU eviction, size quotas, reset to clean) | Should | 4 |
+| FR-S025 | Environment template marketplace (pre-configured rootfs recipes: data science, web dev, mobile) | Should | 5 |
+| FR-S026 | Cross-architecture rootfs support (ARM64 primary, x86_64 emulator via QEMU user-mode) | Should | 5 |
+| FR-S027 | Auto-tier-promotion — detect command tier mismatch and prompt user to enable higher tier | Should | 3 |
+| FR-S028 | Offline package cache — apt packages cached per workspace for offline reinstall | Could | 4 |
+
 ## Terminal (Internal)
 
 > The terminal is an **internal component** (ADR-0006): it is invoked by agents, never

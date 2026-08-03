@@ -181,3 +181,32 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 - **Phase 5 (Tier 2 finish):** FR-S018 per-agent sandboxes; checkpoint integrity.
 - **Phase 7–8 (Tier 3):** WASM micro-sandboxes, isolatedProcess, template
   marketplace, offline autonomy, export governance.
+
+
+### 2.7 Bundled Rootfs & Environment Tiers (FR-S019…S028)
+
+- **What:** Three-tier environment system: Tier 0 (embedded shell), Tier 1 (Alpine/musl, optional), Tier 2 (Debian-slim/glibc, default). Tier 2 is a Linux userland bundled in APK assets, extracted on first launch, and executed via proot.
+- **Why:** A real glibc environment improves compatibility with standard pip/npm binary wheels, apt-based workflows, and common agent-generated commands.
+- **How:** Rootfs is stored as `assets/rootfs/debian-slim-{arch}.tar.xz`, stream-extracted, SHA-256 verified against `manifest.json`, and exposed through a read-only base plus per-workspace writable overlay.
+- **Enforcement:** Storage quotas include overlays; rootfs reset is audited; integrity checks run on startup; extraction failure falls back to Tier 0.
+
+## 3.5 Tier 2+ Advanced Environment Capabilities
+
+| Capability | Description | Phase |
+|---|---|---:|
+| **Environment templates** | Pre-configured rootfs overlays for data science, Node web development, Rust, and similar workloads | 5 |
+| **Cross-architecture emulation** | QEMU user-mode for selected foreign-architecture binaries | 6 |
+| **Rootfs delta updates** | Incremental updates to the base rootfs | 6 |
+| **Custom rootfs builds** | User-built rootfs using the Nexora manifest format | 7 |
+
+
+| 17 | Environment tier selection | 3 | Core | FR-S019 | — |
+| 18 | Bundled Debian-slim rootfs | 3 | Core | FR-S020 | — |
+| 19 | proot execution | 3 | Core | FR-S021 | — |
+| 20 | glibc binary wheel support | 3 | Core | FR-S022 | — |
+| 21 | Rootfs overlay | 3 | Core | FR-S023 | — |
+| 22 | Rootfs cache management | 4 | Core | FR-S024 | — |
+| 23 | Environment templates | 5 | Advanced | FR-S025 | — |
+| 24 | Cross-architecture support | 5 | Advanced | FR-S026 | — |
+| 25 | Auto-tier-promotion | 3 | Core | FR-S027 | — |
+| 26 | Offline package cache | 4 | Advanced | FR-S028 | — |

@@ -395,3 +395,104 @@ ABI splitting or per-feature download mitigations exist).
 
 *Environment fully verified 2026-08-03. Next step: Phase 1 — Android project scaffold
 (bootable app, navigation, theme, settings, core interfaces — no AI).*
+
+
+---
+
+# Appendix C: Building the Debian-slim Rootfs for Nexora
+
+## C.1 Overview
+
+This guide describes how to build the Tier 2 (Full Environment) Debian-slim rootfs bundled in the Nexora APK.
+
+## C.2 Prerequisites
+
+- Docker or Podman
+- `debootstrap` (or a container image that provides it)
+- `xz` for compression
+- Android NDK for cross-compiling proot when needed
+
+## C.3 Build Steps
+
+### Step 1: Create the Base Filesystem
+
+```bash
+docker run --rm --privileged -v "$(pwd)/build:/build" debian:bookworm-slim bash -c '
+  apt-get update && apt-get install -y debootstrap xz-utils
+  debootstrap --variant=minbase --arch=arm64 bookworm /build/rootfs http://deb.debian.org/debian
+  chroot /build/rootfs bash -c "
+    apt-get install -y --no-install-recommends \
+      python3 python3-pip python3-venv nodejs npm git curl wget ca-certificates \
+      build-essential bash dash coreutils grep sed gawk procps psmisc
+    apt-get clean
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+  "
+  tar -cJf /build/debian-slim-arm64.tar.xz -C /build/rootfs .
+'
+```
+
+### Step 2: Generate the Manifest
+
+The manifest must include the rootfs version, architecture, and SHA-256 checksums for all packaged files. Generate it as part of the reproducible build rather than hand-editing it.
+
+### Step 3: Sign the Manifest
+
+```bash
+gpg --detach-sign --armor -o manifest.json.asc manifest.json
+```
+
+### Step 4: Integrate into the APK
+
+```text
+app/src/main/assets/
+├── rootfs/
+│   ├── debian-slim-arm64.tar.xz
+│   ├── manifest.json
+│   └── manifest.json.asc
+└── proot/
+    ├── proot-arm64
+    └── proot-x86_64
+```
+
+## C.4 proot Compilation (Android)
+
+```bash
+git clone https://github.com/termux/proot.git
+cd proot
+export CC="$NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android24-clang"
+make V=1 -C src proot
+```
+
+Use a vetted release artifact or reproducible source build; do not download opaque binaries into the repository.
+
+## C.5 Testing
+
+```bash
+mkdir -p /tmp/nexora-test
+tar -xJf debian-slim-arm64.tar.xz -C /tmp/nexora-test
+./proot-arm64 -R /tmp/nexora-test /bin/bash -c "python3 -c 'import sys; print(sys.version)'"
+./proot-arm64 -R /tmp/nexora-test /bin/bash -c "node -e 'console.log(process.version)'"
+```
+
+## C.6 Size Optimization
+
+| Technique | Expected effect |
+|---|---|
+| `--variant=minbase` debootstrap | Smaller base than standard Debian |
+| Remove docs and manpages | Reduces extracted size |
+| Strip debug symbols | Reduces binary footprint |
+| Clean apt lists and caches | Reduces packaged size |
+| xz compression with a reproducible setting | Reduces APK asset size |
+
+Target: less than 70 MB compressed for the base plus Python, Node.js, and build tooling.
+
+## C.7 CI/CD Pipeline
+
+Rootfs builds should run in a pinned, reproducible CI environment, produce checksums and signatures, and publish artifacts only through the release process. Do not commit generated rootfs archives or signing keys to the source repository.
+
+## C.8 Related Files
+
+- [specs/ENVIRONMENT_TIERS.md](../specs/ENVIRONMENT_TIERS.md)
+- [architecture/SANDBOX.md](../architecture/SANDBOX.md)
+- [requirements/FR.md](../requirements/FR.md)
+- [requirements/RISKS.md](../requirements/RISKS.md)

@@ -81,3 +81,29 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 2. **Benchmark suite** — The full benchmark catalog is defined in [`testing/PerformanceTests.md`](../testing/PerformanceTests.md).
 3. **Merge gate** — Any regression exceeding **20 %** from the baseline blocks merge to the release branch. The author must either fix the regression or provide a documented exception with a remediation plan.
 4. **Release gate** — Any metric at or above its **Critical** threshold blocks the release entirely. No exceptions without sign-off from the tech lead.
+
+
+## Rootfs & Environment Performance Budget
+
+| Metric | Target | Maximum | Measurement |
+|---|---:|---:|---|
+| Tier 2 rootfs extraction (first launch) | < 5 s | < 10 s | Pixel 6, warm device |
+| Tier 2 warm start | < 500 ms | < 1 s | Already extracted |
+| Tier 2 memory overhead | < 100 MB | < 150 MB | proot and rootfs processes |
+| Tier 2 disk footprint (base + overlay) | < 250 MB | < 400 MB | Per workspace |
+| `apt install` response time | < 3 s | < 5 s | Cached package list |
+| `pip install numpy` | < 15 s | < 30 s | ARM64 wheel, cached download |
+| `npm install express` | < 10 s | < 20 s | Cached registry |
+| Tier 1 → Tier 2 promotion | < 10 s | < 15 s | Extraction and verification |
+
+### APK Size Impact
+
+| Variant | Size |
+|---|---:|
+| Base app (Tier 0 only) | ~8 MB |
+| + Tier 2 ARM64 rootfs | ~75 MB |
+| + Tier 2 x86_64 rootfs | ~95 MB |
+| + Tier 1 Alpine | +5 MB |
+| **Recommended ARM64 + x86_64 AAB** | **~80 MB download, ~200 MB installed** |
+
+Mitigation: Android App Bundle delivery splits by architecture so the Play Store serves only the required ABI.
