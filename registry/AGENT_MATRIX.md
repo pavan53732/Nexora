@@ -1,8 +1,8 @@
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
-
 # Nexora Agent Capability Matrix
 
-Authoritative reference mapping each agent type to its permitted capabilities. The orchestrator enforces these constraints at dispatch time. Agents may only invoke tools and actions marked with ✓.
+> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [AGENTS.md](./AGENTS.md)
+>
+Authoritative reference mapping **every agent type** (see [AGENTS.md](./AGENTS.md)) to its permitted capabilities. The orchestrator enforces these constraints at dispatch time. Agents may only invoke tools and actions marked with ✓. Generated from the agent catalog; keep in sync with `registry/AGENTS.md`.
 
 ## Legend
 
@@ -15,21 +15,21 @@ Authoritative reference mapping each agent type to its permitted capabilities. T
 
 | Agent ID | Agent Name | Plan | Execute | Review | Code | Browser | Memory | Terminal | Multi-Agent | Delegate | Background | Streaming | Phase |
 |----------|------------|------|---------|--------|------|---------|--------|----------|-------------|----------|------------|-----------|-------|
-| AGT-001 | General Assistant | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 1 |
-| AGT-002 | Code Developer | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | ✓ | ✓ | 1 |
-| AGT-003 | Research Analyst | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | — | ✓ | ✓ | 1 |
-| AGT-004 | Data Analyst | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | — | — | — | ✓ | ✓ | 2 |
-| AGT-005 | Creative Writer | ✓ | ✓ | ✓ | — | — | ✓ | — | — | — | — | ✓ | 1 |
-| AGT-006 | Debug Expert | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | ✓ | — | 1 |
-| AGT-007 | DevOps Engineer | ✓ | ✓ | ✓ | ✓ | — | — | ✓ | — | — | ✓ | ✓ | 2 |
-| AGT-008 | QA Tester | ✓ | ✓ | ✓ | ✓ | ✓ | — | ✓ | — | — | — | ✓ | 2 |
-| AGT-009 | Security Auditor | ✓ | ✓ | ✓ | — | ✓ | — | ✓ | — | — | ✓ | — | 2 |
-| AGT-010 | Technical Writer | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | — | — | ✓ | 1 |
-| AGT-011 | Project Manager | ✓ | — | ✓ | — | — | ✓ | — | — | ✓ | — | ✓ | 2 |
-| AGT-012 | System Administrator | ✓ | ✓ | ✓ | — | — | — | ✓ | — | — | ✓ | — | 2 |
-| AGT-013 | Workflow Orchestrator | ✓ | — | ✓ | — | — | ✓ | — | ✓ | ✓ | — | ✓ | 2 |
-| AGT-014 | Learning Assistant | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | — | — | ✓ | 3 |
-| AGT-015 | Personal Assistant | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | 3 |
+| AGT-001 | Planner | ✓ | — | ✓ | — | — | ✓ | — | — | ✓ | — | ✓ | 7 |
+| AGT-002 | Researcher | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | — | ✓ | ✓ | 7 |
+| AGT-003 | Coder | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | ✓ | ✓ | 7 |
+| AGT-004 | Reviewer | — | ✓ | ✓ | ✓ | — | ✓ | — | — | — | — | ✓ | 7 |
+| AGT-005 | Tester | — | ✓ | ✓ | ✓ | — | — | ✓ | — | — | ✓ | ✓ | 7 |
+| AGT-006 | Debugger | ✓ | ✓ | ✓ | ✓ | — | ✓ | ✓ | — | — | ✓ | — | 7 |
+| AGT-007 | Documentation Writer | — | ✓ | ✓ | — | — | ✓ | — | — | — | — | ✓ | 7 |
+| AGT-008 | Refactoring Agent | ✓ | ✓ | ✓ | ✓ | — | ✓ | — | — | — | — | — | 7 |
+| AGT-009 | Deployment Agent | ✓ | ✓ | ✓ | — | — | — | ✓ | — | — | ✓ | ✓ | 7 |
+| AGT-010 | Security Auditor | ✓ | ✓ | ✓ | — | — | — | ✓ | — | — | ✓ | — | 7 |
+| AGT-011 | Browser Agent | — | ✓ | ✓ | — | ✓ | ✓ | — | — | — | — | ✓ | 7 |
+| AGT-012 | Database Agent | ✓ | ✓ | ✓ | — | — | ✓ | — | — | — | — | ✓ | 7 |
+| AGT-013 | File Manager | — | ✓ | ✓ | — | — | ✓ | — | — | — | — | — | 7 |
+| AGT-014 | Git Agent | ✓ | ✓ | ✓ | — | — | ✓ | ✓ | — | — | ✓ | — | 7 |
+| AGT-015 | Workflow Coordinator | ✓ | — | ✓ | — | — | ✓ | — | ✓ | ✓ | — | ✓ | 7 |
 
 ## Capability Definitions
 
@@ -49,10 +49,9 @@ Authoritative reference mapping each agent type to its permitted capabilities. T
 
 ## Phase Rollout
 
-- **Phase 1** — General-purpose agents for code, research, writing, and debugging.
-- **Phase 2** — Specialized agents for operations, QA, security, project management, and orchestration.
-- **Phase 3** — Learning and full-capability personal assistants with unrestricted tool access.
+- **Phase 7** — All 15 agent types, agent registry, task delegation (see [AGENTS.md](./AGENTS.md)).
+- **Phase 8** — Community agent plugins.
 
 ## Execution Depth
 
-Agents have a configurable `maxExecutionDepth` (default 10) that limits nested tool calls per turn. AGT-015 (Personal Assistant) defaults to depth 5 for safety. Orchestrator agents (AGT-011, AGT-013) enforce depth 3 on delegated children.
+Agents have a configurable `maxExecutionDepth` (default 10) that limits nested tool calls per turn. Orchestrator agents (AGT-015) enforce depth 3 on delegated children.

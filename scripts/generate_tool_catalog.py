@@ -573,6 +573,75 @@ def parse_existing_matrix():
             rows[m.group(1)] = m.groups()[1:]
     return rows
 
+# ------------------------------------------------- agent capability matrix
+# (id, name, Plan, Execute, Review, Code, Browser, Memory, Terminal, MultiAgent, Delegate, Background, Streaming, Phase)
+AGENTS = [
+ ("AGT-001", "Planner",              "✓","—","✓","—","—","✓","—","—","✓","—","✓",7),
+ ("AGT-002", "Researcher",           "✓","✓","✓","—","✓","✓","—","—","—","✓","✓",7),
+ ("AGT-003", "Coder",                "✓","✓","✓","✓","—","✓","✓","—","—","✓","✓",7),
+ ("AGT-004", "Reviewer",             "—","✓","✓","✓","—","✓","—","—","—","—","✓",7),
+ ("AGT-005", "Tester",               "—","✓","✓","✓","—","—","✓","—","—","✓","✓",7),
+ ("AGT-006", "Debugger",             "✓","✓","✓","✓","—","✓","✓","—","—","✓","—",7),
+ ("AGT-007", "Documentation Writer", "—","✓","✓","—","—","✓","—","—","—","—","✓",7),
+ ("AGT-008", "Refactoring Agent",    "✓","✓","✓","✓","—","✓","—","—","—","—","—",7),
+ ("AGT-009", "Deployment Agent",     "✓","✓","✓","—","—","—","✓","—","—","✓","✓",7),
+ ("AGT-010", "Security Auditor",     "✓","✓","✓","—","—","—","✓","—","—","✓","—",7),
+ ("AGT-011", "Browser Agent",        "—","✓","✓","—","✓","✓","—","—","—","—","✓",7),
+ ("AGT-012", "Database Agent",       "✓","✓","✓","—","—","✓","—","—","—","—","✓",7),
+ ("AGT-013", "File Manager",         "—","✓","✓","—","—","✓","—","—","—","—","—",7),
+ ("AGT-014", "Git Agent",            "✓","✓","✓","—","—","✓","✓","—","—","✓","—",7),
+ ("AGT-015", "Workflow Coordinator", "✓","—","✓","—","—","✓","—","✓","✓","—","✓",7),
+]
+
+def render_agent_matrix():
+    lines = []
+    lines.append("# Nexora Agent Capability Matrix")
+    lines.append("")
+    lines.append("> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [AGENTS.md](./AGENTS.md)")
+    lines.append(">")
+    lines.append("Authoritative reference mapping **every agent type** (see [AGENTS.md](./AGENTS.md)) to its permitted capabilities. The orchestrator enforces these constraints at dispatch time. Agents may only invoke tools and actions marked with ✓. Generated from the agent catalog; keep in sync with `registry/AGENTS.md`.")
+    lines.append("")
+    lines.append("## Legend")
+    lines.append("")
+    lines.append("| Symbol | Meaning |")
+    lines.append("|--------|---------|")
+    lines.append("| ✓ | Supported |")
+    lines.append("| — | Not supported |")
+    lines.append("")
+    lines.append("## Matrix")
+    lines.append("")
+    lines.append("| Agent ID | Agent Name | Plan | Execute | Review | Code | Browser | Memory | Terminal | Multi-Agent | Delegate | Background | Streaming | Phase |")
+    lines.append("|----------|------------|------|---------|--------|------|---------|--------|----------|-------------|----------|------------|-----------|-------|")
+    for a in AGENTS:
+        lines.append("| " + " | ".join(str(x) for x in a) + " |")
+    lines.append("")
+    lines.append("## Capability Definitions")
+    lines.append("")
+    lines.append("| Capability | Description |")
+    lines.append("|------------|-------------|")
+    lines.append("| **Plan** | Create and modify execution plans, break down tasks |")
+    lines.append("| **Execute** | Directly invoke tools to perform actions on the system |")
+    lines.append("| **Review** | Inspect results, validate output, self-correct |")
+    lines.append("| **Code** | Read, write, and execute code (file + terminal tools) |")
+    lines.append("| **Browser** | Control the headless browser for web interaction |")
+    lines.append("| **Memory** | Store, retrieve, and manage persistent memory entries |")
+    lines.append("| **Terminal** | Execute shell commands directly |")
+    lines.append("| **Multi-Agent** | Spawn and coordinate child agents |")
+    lines.append("| **Delegate** | Assign subtasks to other agent types |")
+    lines.append("| **Background** | Run long-lived tasks without blocking the UI thread |")
+    lines.append("| **Streaming** | Emit incremental results via token or event streams |")
+    lines.append("")
+    lines.append("## Phase Rollout")
+    lines.append("")
+    lines.append("- **Phase 7** — All 15 agent types, agent registry, task delegation (see [AGENTS.md](./AGENTS.md)).")
+    lines.append("- **Phase 8** — Community agent plugins.")
+    lines.append("")
+    lines.append("## Execution Depth")
+    lines.append("")
+    lines.append("Agents have a configurable `maxExecutionDepth` (default 10) that limits nested tool calls per turn. Orchestrator agents (AGT-015) enforce depth 3 on delegated children.")
+    lines.append("")
+    return "\n".join(lines)
+
 def render_matrix(tools):
     legacy = parse_existing_matrix()
     lines = []
@@ -622,6 +691,8 @@ def main():
     tools = build_catalog()
     CATALOG.write_text(render_catalog(tools))
     MATRIX.write_text(render_matrix(tools))
+    AGENT_MATRIX = ROOT / "registry" / "AGENT_MATRIX.md"
+    AGENT_MATRIX.write_text(render_agent_matrix())
     by = {}
     for t in tools: by[t[3]] = by.get(t[3], 0) + 1
     print(f"Total tools: {len(tools)}")
@@ -629,6 +700,7 @@ def main():
         print(f"  {key:6s} {label:22s} {by.get(key,0)}")
     print("Wrote:", CATALOG)
     print("Wrote:", MATRIX)
+    print("Wrote:", AGENT_MATRIX)
 
 if __name__ == "__main__":
     main()
