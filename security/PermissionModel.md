@@ -1,5 +1,16 @@
 # Permission Model — Nexora
 
+> **Status: CANONICAL** for user approval semantics and permission grants.
+> This document owns how users approve or deny agent actions, permission
+> scopes, the ASK/ALLOW/DENY/REVOKE flow, and the permission audit trail.
+> It does NOT own security architecture (see
+> [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md)),
+> sandbox containment (sandbox rules in SandboxPolicy.md) (see [SandboxPolicy.md](SandboxPolicy.md)), or runtime
+> enforcement implementation (see [../architecture/SANDBOX.md](../architecture/SANDBOX.md)).
+>
+> Depends on: [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md).
+> Referenced by: [../architecture/SANDBOX.md](../architecture/SANDBOX.md), [../docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md).
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 ---

@@ -1,5 +1,16 @@
 # Sandbox Security Policy — Nexora
 
+> **Status: CANONICAL** for sandbox containment, egress, isolation, and resource rules.
+> This document owns the sandbox security policy: process isolation, filesystem
+> restrictions, network egress rules, resource quotas, and quarantine behavior.
+> It does NOT own the sandbox subsystem design (see
+> [../architecture/SANDBOX.md](../architecture/SANDBOX.md)), security architecture
+> (see [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md)),
+> or permission semantics (see [PermissionModel.md](PermissionModel.md)).
+>
+> Depends on: [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md), [PermissionModel.md](PermissionModel.md).
+> Referenced by: [../architecture/SANDBOX.md](../architecture/SANDBOX.md), [../specs/FULL_ENVIRONMENT.md](../specs/FULL_ENVIRONMENT.md).
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 ---

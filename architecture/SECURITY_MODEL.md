@@ -1,5 +1,15 @@
 # Security Model — Nexora
 
+> **Status: CANONICAL** for security architecture and threat model ownership.
+> This document owns the overall security posture, threat model, defense strategy,
+> and security principles. It does NOT own permission semantics (see
+> [security/PermissionModel.md](../security/PermissionModel.md)), sandbox
+> containment rules (see [security/SandboxPolicy.md](../security/SandboxPolicy.md)),
+> or sandbox subsystem design (see [SANDBOX.md](SANDBOX.md)).
+>
+> Depends on: [security/ThreatModel.md](../security/ThreatModel.md).
+> Referenced by: [security/PermissionModel.md](../security/PermissionModel.md), [security/SandboxPolicy.md](../security/SandboxPolicy.md), [SANDBOX.md](SANDBOX.md).
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 ---

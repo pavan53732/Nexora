@@ -1,6 +1,17 @@
 # Sandbox Architecture — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [RUNTIME.md](RUNTIME.md) | [TOOL_SYSTEM.md](TOOL_SYSTEM.md) | [SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md) (autonomy roadmap: FR-S011…S018, FR-S013 snapshots, FR-S016 autonomy modes)
+> **Status: CANONICAL** for sandbox subsystem design and runtime integration.
+> This document owns how the sandbox is structured, how proot executes guest
+> binaries, how the VFS is layered, and how the sandbox integrates with the
+> runtime. It does NOT own sandbox security policy (see
+> [../security/SandboxPolicy.md](../security/SandboxPolicy.md)), permission
+> semantics (see [../security/PermissionModel.md](../security/PermissionModel.md)),
+> or security architecture (see [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md)).
+>
+> Depends on: [../security/SandboxPolicy.md](../security/SandboxPolicy.md), [../specs/FULL_ENVIRONMENT.md](../specs/FULL_ENVIRONMENT.md).
+> Referenced by: [RUNTIME.md](RUNTIME.md), [specs/TERMINAL.md](../specs/TERMINAL.md).
+
+> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 ---
 
@@ -61,7 +72,7 @@ The sandbox uses a single bundled Full Environment based on a Debian-slim rootfs
 └─────────────────────────────────────────┘
 ```
 
-**Bundled rootfs**: The Debian-slim rootfs is compressed (`tar.xz`) in APK `assets/rootfs/` and extracted to app-private storage on first launch. The base rootfs is read-only and workspace overlays provide write isolation.
+**Bundled rootfs**: The Debian-slim rootfs is compressed (`tar.xz`) in APK `assets/rootfs/` and extracted to app-private storage on first launch. The base rootfs is read-only and workspace overlays provide write isolation (security policy in SandboxPolicy.md).
 
 **proot execution**: Commands execute through proot with a rootfs and workspace bind mount, without requiring root privileges.
 
