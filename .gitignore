@@ -1,0 +1,47 @@
+# === Nexora — Android AI Agent Platform ===
+# Git ignore rules
+
+# === Build outputs ===
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# === Gradle ===
+.gradle/
+build/
+*/build/
+local.properties
+
+# === IDE files ===
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+
+# === Signing / secrets ===
+*.jks
+*.keystore
+*.pem
+*.key
+.env
+.env.*
+
+# === Logs ===
+*.log
+
+# === Temporary files ===
+tmp/
+temp/
+
+# === Tool results (CI artifacts) ===
+/home/z/my-project/tool-results/
