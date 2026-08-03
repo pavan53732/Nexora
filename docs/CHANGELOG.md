@@ -14,10 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - ADR-0006 — Agent-First Interaction Model: the sandbox, internal terminal, runtimes, and execution engine are internal implementation details; users interact with AI agents through chat.
 - FR-U011 — Chat as the single primary interaction surface (goal entry, streaming, tool-call cards, permission prompts, results).
 - FEAT-013 — Agent-First Chat Interaction feature registry entry.
+- PRODUCT_PRINCIPLES.md — 15 codified product principles (PP-001–015): autonomous agents, provider-agnostic, tool-based execution, persistent memory, agent-driven execution, plugin/skill system, background execution, multi-agent orchestration, dashboard & session management, sandboxed execution, checkpoint & resume, observability, token/cost control, offline-capable, onboarding — plus guardrails and a principle→documentation map.
 
 ### Changed
-- PROJECT_SPECIFICATION.md → v4.2.0: agent-first interaction quick reference, ADR-0006 index entry, locked interaction rule, Phase 1 deliverable.
-- README.md, docs/PRODUCT_VISION.md — agent-first positioning; infrastructure (sandbox/terminal/runtimes/engine) reframed as internal.
+- PROJECT_SPECIFICATION.md → v4.3.0: agent-first interaction quick reference, ADR-0006 index entry, locked interaction rule, Phase 1 deliverable, Product Principles index entry (v4.2 → v4.3).
+- README.md, docs/PRODUCT_VISION.md — agent-first positioning (infrastructure reframed as internal) and Product Principles linked from documentation index and vision doc header.
 - docs/ARCHITECTURE.md — Terminal screen replaced by Agent Activity Feed; bottom nav is Workspace, Tasks, Settings; workspace tabs drop Terminal.
 - docs/ROADMAP.md, backlog/MVP.md, backlog/V1.md — terminal/sandbox UI removed from Phase 1/MVP; Phase 3 sandbox marked internal.
 - requirements/FR.md — FR-U001 (3-tab bottom nav), FR-U005 (agent activity feed), Terminal section reframed as internal/agent-invoked.

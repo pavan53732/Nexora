@@ -1,6 +1,6 @@
 # Product Vision — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
+> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [PRODUCT_PRINCIPLES.md](./PRODUCT_PRINCIPLES.md)
 
 ---
 

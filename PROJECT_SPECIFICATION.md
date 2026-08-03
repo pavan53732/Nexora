@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 4.2.0 |
+| **Spec Version** | 4.3.0 |
 | **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v4.2 — Agent-first interaction model (ADR-0006): infrastructure is internal) |
+| **Last Updated** | 2026-08-03 (v4.3 — Product principles codified (PP-001–015); agent-first interaction model ADR-0006) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -32,6 +32,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 - **Positioning**: Android AI Agent Platform (not an OS, ROM, or VM).
 - **Architecture**: Workspace-first (Workspace > Chat).
 - **Interaction**: Agent-first — users chat with agents; the sandbox, internal terminal, runtimes, and execution engine are internal implementation details (ADR-0006).
+- **Principles**: 15 codified product principles (PP-001–015) — autonomous agents, provider-agnostic, tool-based execution, persistent memory, agent-driven execution, plugins, background execution, multi-agent orchestration, dashboards, sandboxing, observability, and more.
 - **Scale**: 15+ modules, 25+ tool categories, 300-500 tools, 10-20 agents.
 - **Phases**: 8 development phases (Foundation through Plugin Marketplace).
 
@@ -44,6 +45,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | Document | Path |
 |----------|------|
 | **Product Vision** | [docs/PRODUCT_VISION.md](docs/PRODUCT_VISION.md) |
+| **Product Principles** | [docs/PRODUCT_PRINCIPLES.md](docs/PRODUCT_PRINCIPLES.md) |
 | **Architecture** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
 | **System Design** | [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) |
 | **Roadmap** | [docs/ROADMAP.md](docs/ROADMAP.md) |
