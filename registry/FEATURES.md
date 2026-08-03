@@ -33,3 +33,4 @@
 | FEAT-011 | Material You | 1 | Planned |
 | FEAT-012 | Multi-Workspace | 1 | Planned |
 | FEAT-013 | Agent-First Chat Interaction (goal entry, streaming, activity feed — primary surface) | 1 | Planned |
+| FEAT-014 | Full Tool Catalog (25 categories, 316 registered tools with stable IDs) | 4 | Planned |
