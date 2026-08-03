@@ -1,6 +1,13 @@
-# Core Runtime — Nexora
+# Core Runtime Architecture — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [AGENT_RUNTIME.md](AGENT_RUNTIME.md) | [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md)
+> **Status: CANONICAL** for system-wide runtime service composition and boundaries.
+> This document owns how runtime services are composed and coordinated. It does NOT
+> own the internal autonomous agent loop (see [AGENT_RUNTIME.md](AGENT_RUNTIME.md)),
+> multi-agent coordination algorithm (see [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md)),
+> or workflow state machine progression (see [WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md)).
+>
+> Depends on: [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md) (task states).
+> Referenced by: AGENT_RUNTIME.md, MULTI_AGENT_SYSTEM.md, WORKFLOW_ENGINE.md.
 
 ---
 

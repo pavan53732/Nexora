@@ -15,5 +15,5 @@ data class ToolCall(
     val timestamp: Instant
 )
 
-enum class ToolCallStatus { PENDING, APPROVED, EXECUTING, COMPLETED, DENIED, ERROR }
+enum class ToolCallStatus { PENDING, APPROVED, executing, COMPLETED, DENIED, ERROR }
 ```

@@ -13,7 +13,7 @@ data class AgentInstance(
     val type: AgentType,        // Planner, Coder, etc.
     val name: String,           // Display name
     val workspaceId: String,    // Which workspace this agent belongs to
-    val status: AgentStatus,    // IDLE, THINKING, EXECUTING, WAITING, ERROR
+    val status: AgentStatus,    // IDLE, THINKING, executing, WAITING, ERROR
     val currentTaskId: String?, // Task being executed
     val createdAt: Instant,
     val lastActiveAt: Instant
@@ -26,5 +26,5 @@ enum class AgentType {
     CUSTOM  // CUSTOM = user-defined agents, NOT a built-in type (16 built-ins: AGT-001..AGT-016)
 }
 
-enum class AgentStatus { IDLE, THINKING, EXECUTING, WAITING, ERROR, CANCELLED }
+enum class AgentStatus { IDLE, THINKING, executing, WAITING, ERROR, CANCELLED }
 ```

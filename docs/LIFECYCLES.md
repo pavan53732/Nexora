@@ -2,7 +2,13 @@
 
 # Entity Lifecycle Flows
 
-This document describes the complete lifecycle flows for every core entity in Nexora. Each section covers creation, initialization, active use, shutdown/teardown, and error recovery as prose narratives — formal state machine definitions live in `state-machines/`. Any state name used below (e.g. `Running`, `Completed`, `Failed`) is descriptive prose, not a formal state enum — the canonical Task state set is defined exclusively in [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md); this document must not be treated as an alternate source of Task states.
+> **Status: SUPPORTING.** This document describes lifecycle flows as prose narratives.
+> Formal state machine definitions live in `state-machines/`. Any state name used below
+> is descriptive prose, not a formal enum. The canonical Task state set is defined
+> exclusively in [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md).
+> This document must not be treated as an alternate source of truth for any state enum.
+
+This document covers creation, initialization, active use, shutdown/teardown, and error recovery narratives for every core entity in Nexora.
 
 ---
 

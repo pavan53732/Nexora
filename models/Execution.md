@@ -21,7 +21,7 @@ data class ExecutionEvent(
 )
 
 enum class EventType {
-    TOOL_CALL, AI_RESPONSE, REFLECTION, PLANNING,
+    TOOL_CALL, AI_RESPONSE, REFLECTION, planning,
     ERROR, PERMISSION_REQUESTED, CHECKPOINT_SAVED
 }
 
