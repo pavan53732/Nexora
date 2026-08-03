@@ -23,7 +23,7 @@ The Core Runtime is the brain of Nexora. It orchestrates all agent activity, fro
 | **Scheduler** | Schedules deferred, recurring, and background tasks. | `com.nexora.app.runtime.scheduler` |
 | **Event Bus** | Central publish/subscribe system for inter-module communication. | `com.nexora.app.runtime.events` |
 | **Observability** | Collects metrics, traces, and logs for every runtime operation. | `com.nexora.app.runtime.observability` |
-| **Security Policies** | Enforces sandbox boundaries, resource limits, and access controls. | `com.nexora.app.runtime.security` |
+| **Security Manager** | Enforces sandbox boundaries, resource limits, and access controls. | `com.nexora.app.runtime.security` |
 | **Background Runtime** | Manages long-running agent execution in Android foreground services. | `com.nexora.app.runtime.background` |
 | **Resource Manager** | Tracks and limits CPU, memory, disk, and network usage per agent/workspace. | `com.nexora.app.runtime.resources` |
 | **Agent Manager** | Creates, configures, and manages multiple agent instances. | `com.nexora.app.runtime.agents` |
