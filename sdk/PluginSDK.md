@@ -2,6 +2,8 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
+> **Testing:** Plugin tests: [testing/UnitTests.md](../testing/UnitTests.md) (Plugin section), [testing/IntegrationTests.md](../testing/IntegrationTests.md) (plugin loading).
+
 ---
 
 ## Overview

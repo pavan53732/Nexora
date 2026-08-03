@@ -2,6 +2,8 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
+> **Testing:** Provider tests: [testing/UnitTests.md](../testing/UnitTests.md) (Provider section), [testing/IntegrationTests.md](../testing/IntegrationTests.md) (mocked provider server).
+
 ---
 
 ## Overview

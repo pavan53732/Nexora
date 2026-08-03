@@ -2,6 +2,8 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
+> **Testing:** Tool tests: [testing/UnitTests.md](../testing/UnitTests.md) (Tool section), [testing/IntegrationTests.md](../testing/IntegrationTests.md) (tool execution in sandbox).
+
 ---
 
 ## Overview

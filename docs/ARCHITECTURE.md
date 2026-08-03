@@ -1,6 +1,6 @@
 # System Architecture — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [architecture/](../architecture/)
+> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [architecture/](../architecture/) | [ADR-0003 Agent Runtime](adr/ADR-0003-Agent-Runtime.md) | [ADR-0006 Agent-First](adr/ADR-0006-Agent-First-Interaction-Model.md)
 
 ---
 
@@ -30,7 +30,7 @@ Nexora Android AI Agent Platform
 │   ├── Token Budget Manager
 │   └── Event Bus
 │
-├── Sandbox Runtime
+├── Sandbox Runtime  # depth roadmap: docs/SANDBOX_DEPTH.md (FR-S011..S018)
 │   ├── Virtual File System
 │   ├── Shell (Linux-like)
 │   ├── Python Runtime
