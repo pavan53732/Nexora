@@ -25,6 +25,23 @@
 | ADR | `ADR-NNNN-Title` | `ADR-0001-Workspace-First` |
 | Workspace ID | UUID | `550e8400-e29b-41d4-a716-446655440000` |
 
+## Documentation File Naming
+
+Per-folder conventions for markdown files (keeps the doc repo navigable):
+
+| Folder | Convention | Examples |
+|--------|-----------|----------|
+| root, docs/, architecture/, specs/, registry/, requirements/, errors/ | UPPER_SNAKE | `RUNTIME.md`, `TOOL_SYSTEM.md`, `FR.md`, `ERROR_CODES.md` |
+| models/, security/, state-machines/, testing/, ui/ | PascalCase | `Agent.md`, `ThreatModel.md`, `TaskLifecycle.md`, `UnitTests.md` |
+| protocols/, docs/api/, diagrams/ | Hyphen-case | `Tool-Protocol.md`, `Agent-API.md`, `Memory-Store-Flow.md` |
+| docs/adr/ | `ADR-NNNN-Title` | `ADR-0007-Skills-First-Class.md` |
+| sdk/ | `XSDK.md` | `AgentSDK.md`, `PluginSDK.md` |
+
+Rules:
+- One document type per folder; a document's folder implies its role.
+- `PROJECT_SPECIFICATION.md` is the master index; every new doc must be added to its index tables.
+- Renaming a file requires updating all inbound links (verified by the repo's link check).
+
 ## Git
 
 - Branches: `feature/short-description`, `bugfix/short-description`, `phase/N`
