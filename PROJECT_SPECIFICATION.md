@@ -88,6 +88,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Core Runtime** | [architecture/RUNTIME.md](architecture/RUNTIME.md) |
 | **Agent Runtime** | [architecture/AGENT_RUNTIME.md](architecture/AGENT_RUNTIME.md) |
 | **Sandbox** | [architecture/SANDBOX.md](architecture/SANDBOX.md) |
+| **Sandbox Depth & Autonomy Roadmap** | [docs/SANDBOX_DEPTH.md](docs/SANDBOX_DEPTH.md) |
 | **Tool System** | [architecture/TOOL_SYSTEM.md](architecture/TOOL_SYSTEM.md) |
 | **Memory System** | [architecture/MEMORY_SYSTEM.md](architecture/MEMORY_SYSTEM.md) |
 | **Workflow Engine** | [architecture/WORKFLOW_ENGINE.md](architecture/WORKFLOW_ENGINE.md) |

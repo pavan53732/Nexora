@@ -51,6 +51,11 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `workspace_stats` | Workspace Stats | Workspace | ✓ | — | — | — | — | Low | ✓ | — | — | 1 |
 | `workspace_duplicate` | Workspace Duplicate | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 1 |
 | `workspace_templates` | Workspace Templates | Workspace | ✓ | — | — | — | — | Low | ✓ | — | — | 1 |
+| `sandbox_info` | Sandbox Info | Workspace | ✓ | — | — | — | — | Low | ✓ | — | — | 3 |
+| `sandbox_reset` | Sandbox Reset | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 3 |
+| `sandbox_snapshot` | Sandbox Snapshot | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 4 |
+| `sandbox_restore` | Sandbox Restore | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 4 |
+| `sandbox_templates` | Sandbox Templates | Workspace | ✓ | — | — | — | — | Low | ✓ | — | — | 3 |
 | `code_index` | Code Index | Code Intelligence | ✓ | ✓ | — | — | — | Medium | ✓ | ✓ | — | Later |
 | `code_symbols` | Code Symbols | Code Intelligence | ✓ | — | — | — | — | Medium | ✓ | ✓ | — | Later |
 | `code_symbol_info` | Code Symbol Info | Code Intelligence | ✓ | — | — | — | — | Medium | ✓ | ✓ | — | Later |
@@ -225,10 +230,10 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `memory_prune` | Memory Prune | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
 | `memory_tag` | Memory Tag | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
 | `memory_stats` | Memory Stats | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 6 |
-| `memory_tool_history` | Memory Tool History | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 6 |
-| `memory_preferences` | Memory Preferences | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 6 |
-| `memory_graph_query` | Memory Graph Query | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
-| `memory_graph_build` | Memory Graph Build | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 6 |
+| `memory_tool_history` | Memory Tool History | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 2 |
+| `memory_preferences` | Memory Preferences | Memory | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `memory_graph_query` | Memory Graph Query | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 5 |
+| `memory_graph_build` | Memory Graph Build | Memory | ✓ | ✓ | — | — | — | Low | ✓ | — | — | 5 |
 | `ai_complete` | Ai Complete | AI | ✓ | — | ✓ | — | — | High | ✓ | — | ✓ | 5 |
 | `ai_embed` | Ai Embed | AI | ✓ | — | ✓ | — | — | Medium | ✓ | — | — | 5 |
 | `ai_image_generate` | Ai Image Generate | AI | ✓ | ✓ | — | — | — | Medium | ✓ | — | — | 5 |
@@ -279,6 +284,8 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `security_revoke` | Security Revoke | Security | — | ✓ | — | — | — | High | ✓ | — | — | Later |
 | `security_vault` | Security Vault | Security | — | ✓ | — | — | — | High | ✓ | — | — | Later |
 | `security_policy_check` | Security Policy Check | Security | — | ✓ | — | — | — | High | ✓ | — | — | Later |
+| `sandbox_network_rules` | Sandbox Network Rules | Security | — | ✓ | — | — | — | High | ✓ | — | — | 3 |
+| `sandbox_quarantine_review` | Sandbox Quarantine Review | Security | ✓ | — | — | — | — | High | ✓ | — | — | 3 |
 | `obs_logs` | Obs Logs | Observability | ✓ | — | — | — | — | Low | ✓ | — | — | Later |
 | `obs_metrics` | Obs Metrics | Observability | ✓ | — | — | — | — | Low | ✓ | — | — | Later |
 | `obs_trace` | Obs Trace | Observability | ✓ | — | — | — | — | Low | ✓ | — | — | Later |

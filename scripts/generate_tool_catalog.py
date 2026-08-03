@@ -457,17 +457,29 @@ LEGACY = {
 }
 
 # --------------------------------------------------- extra tools (explicit IDs)
-# Appended with fixed IDs so previously generated TOOL-IDs never shift.
+# Tuples: (id, name, desc, phase). Appended with fixed IDs so previously
+# generated TOOL-IDs never shift.
 EXTRA = {
  "FILE": [
-  ("TOOL-381", "file_history", "List version history of a file"),
-  ("TOOL-382", "file_restore", "Restore a file to a previous version"),
+  ("TOOL-381", "file_history", "List version history of a file", "4"),
+  ("TOOL-382", "file_restore", "Restore a file to a previous version", "4"),
  ],
  "MEM": [
-  ("TOOL-383", "memory_tool_history", "Query tool invocation history"),
-  ("TOOL-384", "memory_preferences", "Get or set learned user preferences"),
-  ("TOOL-385", "memory_graph_query", "Query the knowledge graph (entities, relationships)"),
-  ("TOOL-386", "memory_graph_build", "Extract entities and relationships into the knowledge graph"),
+  ("TOOL-383", "memory_tool_history", "Query tool invocation history", "2"),
+  ("TOOL-384", "memory_preferences", "Get or set learned user preferences", "4"),
+  ("TOOL-385", "memory_graph_query", "Query the knowledge graph (entities, relationships)", "5"),
+  ("TOOL-386", "memory_graph_build", "Extract entities and relationships into the knowledge graph", "5"),
+ ],
+ "WS": [
+  ("TOOL-387", "sandbox_info", "Query sandbox state: processes, disk, env, quotas, network rules", "3"),
+  ("TOOL-388", "sandbox_reset", "Reset a workspace sandbox to a clean state", "3"),
+  ("TOOL-389", "sandbox_snapshot", "Create a full workspace snapshot", "4"),
+  ("TOOL-390", "sandbox_restore", "Restore a workspace to a previous snapshot", "4"),
+  ("TOOL-391", "sandbox_templates", "List and apply sandbox environment templates", "3"),
+ ],
+ "SEC": [
+  ("TOOL-392", "sandbox_network_rules", "Manage sandbox network egress allow/deny rules", "3"),
+  ("TOOL-393", "sandbox_quarantine_review", "Review quarantined files and promote or delete", "3"),
  ],
 }
 
@@ -527,8 +539,8 @@ def build_catalog():
         for name, desc in NEW.get(key, []):
             tools.append((f"TOOL-{nxt:03d}", name, desc, key, phase))
             nxt += 1
-        for tid, name, desc in EXTRA.get(key, []):
-            tools.append((tid, name, desc, key, phase))
+        for tid, name, desc, *ph in EXTRA.get(key, []):
+            tools.append((tid, name, desc, key, ph[0] if ph else phase))
     return tools
 
 # ---------------------------------------------------------- render TOOLS.md

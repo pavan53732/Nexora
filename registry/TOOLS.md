@@ -10,7 +10,7 @@
 | # | Category | Prefix | Tools | Phase |
 |---|----------|--------|-------|-------|
 | 1 | File System | FILE | 24 | 4 |
-| 2 | Workspace | WS | 12 | 1 |
+| 2 | Workspace | WS | 17 | 1 |
 | 3 | Code Intelligence | CODE | 18 | Later |
 | 4 | Search | SEAR | 9 | 4 |
 | 5 | Terminal | TERM | 11 | 4 |
@@ -28,14 +28,14 @@
 | 17 | AI | AI | 10 | 5 |
 | 18 | Android Device | DEV | 15 | Later |
 | 19 | Project Management | PM | 10 | Later |
-| 20 | Security | SEC | 15 | Later |
+| 20 | Security | SEC | 17 | Later |
 | 21 | Observability | OBS | 15 | Later |
 | 22 | Import/Export | IO | 13 | Later |
 | 23 | Plugin | PLG | 10 | 8 |
 | 24 | Multi-Agent | MAG | 10 | 7 |
 | 25 | Workflow | WF | 10 | 6 |
 
-**Total registered tools: 322** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 329** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
 
 ## File System (FILE)
 
@@ -82,6 +82,11 @@
 | TOOL-147 | workspace_stats | Workspace usage statistics | 1 | Planned |
 | TOOL-148 | workspace_duplicate | Duplicate a workspace | 1 | Planned |
 | TOOL-149 | workspace_templates | List workspace templates | 1 | Planned |
+| TOOL-387 | sandbox_info | Query sandbox state: processes, disk, env, quotas, network rules | 3 | Planned |
+| TOOL-388 | sandbox_reset | Reset a workspace sandbox to a clean state | 3 | Planned |
+| TOOL-389 | sandbox_snapshot | Create a full workspace snapshot | 4 | Planned |
+| TOOL-390 | sandbox_restore | Restore a workspace to a previous snapshot | 4 | Planned |
+| TOOL-391 | sandbox_templates | List and apply sandbox environment templates | 3 | Planned |
 
 ## Code Intelligence (CODE)
 
@@ -326,10 +331,10 @@
 | TOOL-286 | memory_prune | Prune stale or low-relevance entries | 6 | Planned |
 | TOOL-287 | memory_tag | Add or remove tags on memory entries | 6 | Planned |
 | TOOL-288 | memory_stats | Memory usage statistics | 6 | Planned |
-| TOOL-383 | memory_tool_history | Query tool invocation history | 6 | Planned |
-| TOOL-384 | memory_preferences | Get or set learned user preferences | 6 | Planned |
-| TOOL-385 | memory_graph_query | Query the knowledge graph (entities, relationships) | 6 | Planned |
-| TOOL-386 | memory_graph_build | Extract entities and relationships into the knowledge graph | 6 | Planned |
+| TOOL-383 | memory_tool_history | Query tool invocation history | 2 | Planned |
+| TOOL-384 | memory_preferences | Get or set learned user preferences | 4 | Planned |
+| TOOL-385 | memory_graph_query | Query the knowledge graph (entities, relationships) | 5 | Planned |
+| TOOL-386 | memory_graph_build | Extract entities and relationships into the knowledge graph | 5 | Planned |
 
 ## AI (AI)
 
@@ -400,6 +405,8 @@
 | TOOL-332 | security_revoke | Revoke a session or token | Later | Planned |
 | TOOL-333 | security_vault | Store or retrieve a secret in the vault | Later | Planned |
 | TOOL-334 | security_policy_check | Evaluate a policy for an action | Later | Planned |
+| TOOL-392 | sandbox_network_rules | Manage sandbox network egress allow/deny rules | 3 | Planned |
+| TOOL-393 | sandbox_quarantine_review | Review quarantined files and promote or delete | 3 | Planned |
 
 ## Observability (OBS)
 

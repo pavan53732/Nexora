@@ -65,6 +65,13 @@ Documents reviewed (at minimum):
 | openssl | 3.5.6 |
 | ca-certificates | 2025-09-22 |
 | Git LFS (optional) | 3.6.1 |
+| Node.js (runtime, present in dev image) | 20.20.2 |
+| SQLite (runtime, present in dev image) | 3.50.6 |
+
+> **Note:** Node.js 20.20.2 and SQLite 3.50.6 are preinstalled in the development
+> image — useful for testing Phase-3 sandbox runtimes (embedded Node, `sqlite3`
+> tools) before the on-device runtimes (Chaquopy, QuickJS, JGit, sqlite-android)
+> are integrated.
 
 ### Java
 

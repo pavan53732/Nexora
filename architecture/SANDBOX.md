@@ -1,6 +1,6 @@
 # Sandbox Architecture — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [RUNTIME.md](RUNTIME.md) | [TOOL_SYSTEM.md](TOOL_SYSTEM.md)
+> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [RUNTIME.md](RUNTIME.md) | [TOOL_SYSTEM.md](TOOL_SYSTEM.md) | [SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md) (autonomy roadmap: FR-S011…S018, FR-S013 snapshots, FR-S016 autonomy modes)
 
 ---
 

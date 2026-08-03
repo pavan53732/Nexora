@@ -54,6 +54,7 @@ Planner → Executor → Tool Manager → Sandbox → Result
 - Runtime Manager (Python, Node.js)
 - Log capture
 - Resource limits
+- Sandbox depth Tier 1 (see [SANDBOX_DEPTH.md](SANDBOX_DEPTH.md)): telemetry (FR-S011), lifecycle autonomy + templates (FR-S012), egress policy + DLP (FR-S014), quarantine & scanning (FR-S015)
 
 ## Phase 4 — Tools
 

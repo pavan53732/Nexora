@@ -47,6 +47,8 @@
 | NFR-SEC-010 | Secure storage | Android Keystore + EncryptedSharedPreferences | All sensitive config values encrypted |
 | NFR-SEC-011 | Provider isolation | Credential + data-flow separation per provider | Per-provider key aliases in Android Keystore; requests tagged with active profile; provider plugins in isolated classloaders |
 | NFR-SEC-012 | Provider network confinement | Endpoint allowlist | Provider HTTP clients connect only to their configured baseUrl; TLS 1.3 + certificate pinning |
+| NFR-SEC-013 | Egress data-loss prevention | Outbound body inspection | All sandbox egress scanned for secrets/keys; blocked or warned before transmission (per workspace policy) |
+| NFR-REL-010 | Snapshot restore fidelity | 100% state fidelity + integrity | Workspace snapshots hash-verified at restore; tampered snapshots rejected (see [docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md)) |
 
 ## Usability
 
