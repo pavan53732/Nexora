@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - FEAT-013 — Agent-First Chat Interaction feature registry entry.
 - PRODUCT_PRINCIPLES.md — 15 codified product principles (PP-001–015): autonomous agents, provider-agnostic, tool-based execution, persistent memory, agent-driven execution, plugin/skill system, background execution, multi-agent orchestration, dashboard & session management, sandboxed execution, checkpoint & resume, observability, token/cost control, offline-capable, onboarding — plus guardrails and a principle→documentation map.
 - Full tool catalog — registry/TOOLS.md expanded from 69 to **316 tools** across all 25 categories (stable TOOL-IDs, descriptions, phases); registry/TOOL_MATRIX.md regenerated to cover every registered tool (legacy capability values preserved, legacy tool names reconciled, e.g. shell_execute→terminal_run, db_query→sqlite_query); generator script scripts/generate_tool_catalog.py; FEAT-014 added.
+- Plugin registry — registry/PLUGINS.md expanded: per-plugin registration, install source (bundled vs marketplace), user operations ↔ lifecycle mapping (install/enable/disable/update/remove), and PLG-018 AI Providers plugin added.
 
 ### Changed
 - PROJECT_SPECIFICATION.md → v4.3.0: agent-first interaction quick reference, ADR-0006 index entry, locked interaction rule, Phase 1 deliverable, Product Principles index entry (v4.2 → v4.3).
