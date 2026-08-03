@@ -86,6 +86,8 @@
 | FR-P008 | Automatic fallback on provider failure | Should | 3 |
 | FR-P009 | Per-session token usage tracking | Must | 2 |
 | FR-P010 | Side-by-side provider comparison | Should | 7 |
+| FR-P011 | Provider profiles — named, switchable configurations (API key, endpoint, model, streaming, params); create, edit, duplicate, delete, switch independently | Must | 1 |
+| FR-P012 | Per-workspace default provider profile — workspace settings bind a profile; agents route through the active profile | Must | 1 |
 
 ## Memory System
 

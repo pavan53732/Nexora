@@ -103,6 +103,15 @@ data class ProviderConfig(
 )
 ```
 
+## Provider Profiles
+
+Users configure providers through **named profiles** — multiple switchable
+configurations per provider (API key, endpoint, model, streaming, parameters).
+Profiles are independent (create/edit/duplicate/delete/switch), stored with keys in
+`SecureKeyStore`, and one profile is the default per workspace. See
+[specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md) and
+[models/Provider.md](../models/Provider.md).
+
 ## Design Rule
 
 > The runtime must NEVER depend on a specific provider implementation.

@@ -81,7 +81,36 @@ Detailed specification for each AI provider integration. All providers implement
 - **Capabilities**: User-declared.
 - **Protocol**: User selects OpenAI-compatible or Anthropic format.
 
+## Provider Profiles
+
+Users configure providers through **named profiles** — a profile is a complete,
+switchable provider configuration:
+
+| Field | Description |
+|-------|-------------|
+| **Name** | Human-readable profile name (e.g. "OpenAI Work", "Local Fast"). |
+| **Provider type** | One of the 9 supported types (PROV-001…009). |
+| **API key** | Per-profile key, stored encrypted via `SecureKeyStore` (never plaintext, never logged — NFR-SEC-005). |
+| **Endpoint** | Configurable base URL (defaults per provider; required for custom endpoints). |
+| **Model** | Default model for the profile; selectable from the provider model catalog (FR-P006). |
+| **Streaming** | Per-profile streaming toggle (FR-P004); streamed via `Flow<StreamChunk>`. |
+| **Parameters** | Temperature, max tokens, stop sequences, and other provider params. |
+| **Capabilities** | The profile's declared `ProviderCapability` set (chat, streaming, tool calling, vision, embeddings). |
+
+Rules:
+
+- **Unlimited profiles per provider** — e.g. multiple OpenAI profiles with different
+  keys, or a cloud profile and a local profile (Ollama/LM Studio/GGUF) side by side.
+- **Profiles are independent** — create, edit, duplicate, delete, or switch without
+  affecting other profiles.
+- **Per-workspace default** — a workspace's `settings.default_provider` /
+  `settings.default_model` reference a profile; agents route through the workspace's
+  active profile.
+- **A profile maps to a `ProviderConfig`** (see [models/Provider.md](../models/Provider.md))
+  plus a SecureKeyStore key reference.
+
 ## Phase Mapping
 
-- **Phase 5**: All 9 providers implemented.
+- **Phase 1**: Profile model, configuration UI, encrypted key storage.
+- **Phase 5**: All 9 providers implemented; streaming; health checks; profile switching.
 - **Phase 8**: Providers installable as plugins.
