@@ -14,6 +14,63 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ---
 
+## [0.2.0] — 2026-08-03
+
+### Added
+
+#### Requirements Layer (requirements/)
+- FR.md — 95 functional requirements across 10 system areas (FR-W001 through FR-TE005).
+- NFR.md — 40 non-functional requirements with measurable targets (NFR-PERF through NFR-PORT).
+- CONSTRAINTS.md — 13 design and implementation constraints.
+- ASSUMPTIONS.md — 20 project assumptions across 6 categories.
+- DEPENDENCIES.md — 26 external dependencies with versions.
+- RISKS.md — 12-item risk register with probability, impact, and mitigation.
+
+#### State Machines (state-machines/)
+- AgentLifecycle.md — 11-state agent lifecycle with Mermaid diagram.
+- TaskLifecycle.md — 10-state task lifecycle with dependency blocking.
+- WorkflowLifecycle.md — 10-state workflow lifecycle with DAG sub-states.
+- PluginLifecycle.md — 14-state plugin lifecycle from discovery to uninstall.
+- ProviderLifecycle.md — 8-state provider lifecycle with auto-degradation.
+
+#### Security (security/)
+- ThreatModel.md — STRIDE-based threat model with 25 threats (TM-001 through TM-025).
+- PermissionModel.md — Detailed permission model with 14 scopes, hierarchy, and audit trail.
+- SandboxPolicy.md — Sandbox security policy with enforcement and violation response.
+
+#### Error Catalog (errors/)
+- ERROR_CODES.md — 64 error codes across 9 subsystems (NXR-1xxx through NXR-9xxx).
+
+#### Sequence Diagrams (diagrams/)
+- Agent-Execution-Flow.md — Full agent loop sequence diagram.
+- Tool-Execution-Flow.md — Permission-gated tool execution flow.
+- Plugin-Lifecycle-Flow.md — Plugin install/verify/activate flow.
+- Provider-Streaming-Flow.md — SSE streaming with token budget enforcement.
+- Memory-Store-Flow.md — Multi-tier memory store and recall flow.
+
+#### Testing Strategy (testing/)
+- UnitTests.md — Unit testing strategy (JUnit 5, MockK, 85% target).
+- IntegrationTests.md — Module interaction testing strategy.
+- E2ETests.md — End-to-end user journey testing.
+- PerformanceTests.md — Benchmark strategy with baselines.
+- SecurityTests.md — OWASP Mobile Top 10 and penetration test scenarios.
+- RegressionTests.md — Regression and migration testing strategy.
+
+#### Capability Matrices (registry/)
+- TOOL_MATRIX.md — 36-tool capability matrix (read, write, network, Android, etc.).
+- AGENT_MATRIX.md — 15-agent capability matrix (plan, execute, code, browser, etc.).
+
+#### Decision Log (docs/)
+- DECISION_LOG.md — 18 engineering decisions (DL-001 through DL-018).
+
+#### Versioning
+- VERSIONING.md — Semantic versioning strategy for app, docs, schemas, plugins, providers.
+
+#### Project Specification
+- PROJECT_SPECIFICATION.md updated to v4.0.0 with cross-links to all new documents.
+
+---
+
 ## [0.1.0] — 2026-08-03
 
 ### Added
@@ -58,5 +115,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - SECURITY.md — Security policy and vulnerability reporting.
 - PROJECT_SPECIFICATION.md — Master index (v2.0.0, rewritten as document index).
 
-[Unreleased]: https://github.com/pavan53732/Nexora/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/pavan53732/Nexora/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/pavan53732/Nexora/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/pavan53732/Nexora/releases/tag/v0.1.0

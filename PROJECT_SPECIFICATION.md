@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 3.0.0 |
+| **Spec Version** | 4.0.0 |
 | **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v3.0 — Full documentation foundation) |
+| **Last Updated** | 2026-08-03 (v4.0 — Engineering foundation: requirements, state machines, security, testing, matrices) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -156,6 +156,68 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Icons** | [ui/Icons.md](ui/Icons.md) |
 | **Animations** | [ui/Animations.md](ui/Animations.md) |
 
+### Requirements
+
+| Document | Path |
+|----------|------|
+| **Functional Requirements** | [requirements/FR.md](requirements/FR.md) |
+| **Non-Functional Requirements** | [requirements/NFR.md](requirements/NFR.md) |
+| **Constraints** | [requirements/CONSTRAINTS.md](requirements/CONSTRAINTS.md) |
+| **Assumptions** | [requirements/ASSUMPTIONS.md](requirements/ASSUMPTIONS.md) |
+| **Dependencies** | [requirements/DEPENDENCIES.md](requirements/DEPENDENCIES.md) |
+| **Risks** | [requirements/RISKS.md](requirements/RISKS.md) |
+
+### Decision Log
+
+| Document | Path |
+|----------|------|
+| **Engineering Decision Log** | [docs/DECISION_LOG.md](docs/DECISION_LOG.md) |
+
+### State Machines
+
+| Lifecycle | Path |
+|-----------|------|
+| **Agent Lifecycle** | [state-machines/AgentLifecycle.md](state-machines/AgentLifecycle.md) |
+| **Task Lifecycle** | [state-machines/TaskLifecycle.md](state-machines/TaskLifecycle.md) |
+| **Workflow Lifecycle** | [state-machines/WorkflowLifecycle.md](state-machines/WorkflowLifecycle.md) |
+| **Plugin Lifecycle** | [state-machines/PluginLifecycle.md](state-machines/PluginLifecycle.md) |
+| **Provider Lifecycle** | [state-machines/ProviderLifecycle.md](state-machines/ProviderLifecycle.md) |
+
+### Sequence Diagrams
+
+| Flow | Path |
+|------|------|
+| **Agent Execution Flow** | [diagrams/Agent-Execution-Flow.md](diagrams/Agent-Execution-Flow.md) |
+| **Tool Execution Flow** | [diagrams/Tool-Execution-Flow.md](diagrams/Tool-Execution-Flow.md) |
+| **Plugin Lifecycle Flow** | [diagrams/Plugin-Lifecycle-Flow.md](diagrams/Plugin-Lifecycle-Flow.md) |
+| **Provider Streaming Flow** | [diagrams/Provider-Streaming-Flow.md](diagrams/Provider-Streaming-Flow.md) |
+| **Memory Store Flow** | [diagrams/Memory-Store-Flow.md](diagrams/Memory-Store-Flow.md) |
+
+### Security
+
+| Document | Path |
+|----------|------|
+| **Threat Model** | [security/ThreatModel.md](security/ThreatModel.md) |
+| **Permission Model** | [security/PermissionModel.md](security/PermissionModel.md) |
+| **Sandbox Policy** | [security/SandboxPolicy.md](security/SandboxPolicy.md) |
+
+### Error Catalog
+
+| Document | Path |
+|----------|------|
+| **Error Codes** | [errors/ERROR_CODES.md](errors/ERROR_CODES.md) |
+
+### Testing Strategy
+
+| Strategy | Path |
+|----------|------|
+| **Unit Tests** | [testing/UnitTests.md](testing/UnitTests.md) |
+| **Integration Tests** | [testing/IntegrationTests.md](testing/IntegrationTests.md) |
+| **E2E Tests** | [testing/E2ETests.md](testing/E2ETests.md) |
+| **Performance Tests** | [testing/PerformanceTests.md](testing/PerformanceTests.md) |
+| **Security Tests** | [testing/SecurityTests.md](testing/SecurityTests.md) |
+| **Regression Tests** | [testing/RegressionTests.md](testing/RegressionTests.md) |
+
 ### Backlog
 
 | Version | Path |
@@ -174,6 +236,14 @@ This is the **master index** for the Nexora project. All detailed content lives 
 | **Agents** | [registry/AGENTS.md](registry/AGENTS.md) |
 | **Plugins** | [registry/PLUGINS.md](registry/PLUGINS.md) |
 | **Providers** | [registry/PROVIDERS.md](registry/PROVIDERS.md) |
+| **Tool Capability Matrix** | [registry/TOOL_MATRIX.md](registry/TOOL_MATRIX.md) |
+| **Agent Capability Matrix** | [registry/AGENT_MATRIX.md](registry/AGENT_MATRIX.md) |
+
+### Versioning
+
+| Document | Path |
+|----------|------|
+| **Versioning Strategy** | [VERSIONING.md](VERSIONING.md) |
 
 ---
 
@@ -188,36 +258,47 @@ Nexora/
 │   ├── SYSTEM_DESIGN.md
 │   ├── ROADMAP.md
 │   ├── CHANGELOG.md
-│   ├── adr/               # Architecture Decision Records
+│   ├── DECISION_LOG.md    # Engineering decision log (DL-001+)
+│   ├── adr/               # Architecture Decision Records (5 ADRs)
 │   │   ├── ADR-0001-Workspace-First.md
 │   │   ├── ADR-0002-Plugin-System.md
 │   │   ├── ADR-0003-Agent-Runtime.md
 │   │   ├── ADR-0004-Sandbox.md
 │   │   └── ADR-0005-Provider-Abstraction.md
-│   └── api/               # API documentation
+│   └── api/               # API documentation (5 APIs)
 │       ├── Tool-API.md
 │       ├── Plugin-API.md
 │       ├── Agent-API.md
 │       ├── Provider-API.md
 │       └── Runtime-API.md
+├── requirements/           # Requirements layer (FR, NFR, constraints, risks)
+│   ├── FR.md
+│   ├── NFR.md
+│   ├── CONSTRAINTS.md
+│   ├── ASSUMPTIONS.md
+│   ├── DEPENDENCIES.md
+│   └── RISKS.md
 ├── architecture/           # Architecture deep dives (10 docs)
 ├── specs/                  # Component specifications (7 docs)
-├── models/                 # Canonical domain models (13 docs)
+├── models/                 # Canonical domain models (12 docs)
 ├── protocols/              # Communication contracts (6 docs)
 ├── sdk/                    # SDK documentation (4 docs)
-│   ├── ToolSDK.md
-│   ├── PluginSDK.md
-│   ├── ProviderSDK.md
-│   └── AgentSDK.md
 ├── standards/              # Development standards (7 docs)
 ├── ui/                     # UI specifications (7 docs)
+├── state-machines/         # State machine definitions (5 lifecycles)
+├── diagrams/               # Sequence diagrams (Mermaid, 5 flows)
+├── security/               # Security deep dives (threat model, permissions, sandbox)
+├── errors/                 # Error catalog (NXR-1xxx through NXR-9xxx)
+├── testing/                # Testing strategy (6 test types)
 ├── backlog/                # Versioned backlog (MVP, V1, V2, Future)
-├── registry/               # Feature registry with stable IDs
+├── registry/               # Feature registry with stable IDs + matrices
 │   ├── FEATURES.md
 │   ├── TOOLS.md
 │   ├── AGENTS.md
 │   ├── PLUGINS.md
-│   └── PROVIDERS.md
+│   ├── PROVIDERS.md
+│   ├── TOOL_MATRIX.md
+│   └── AGENT_MATRIX.md
 ├── android/                # Android application source (Phase 1)
 ├── core/                   # Core interfaces and abstractions
 ├── runtime/                # Core runtime implementation (Phase 2)
@@ -252,7 +333,7 @@ Nexora/
 
 | Phase | Name | Goal | Key Deliverables |
 |-------|------|------|-----------------|
-| **0** | Foundation | Repo structure, documentation, registries | This repo (75+ docs, 13 models, 6 protocols, 7 standards) |
+| **0** | Foundation | Repo structure, documentation, registries | This repo (110+ files: requirements, architecture, models, protocols, standards, state machines, diagrams, security, testing, registries) |
 | **1** | Android Foundation | Bootable app, no AI yet | Navigation, theme, settings, workspace manager, interfaces |
 | **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, event bus, checkpoints |
 | **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node |
