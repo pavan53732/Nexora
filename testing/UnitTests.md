@@ -151,3 +151,13 @@ class PermissionManagerTest {
 | `fileWriteLock_blocksSecondWriter` | Concurrent writes to the same file wait or route to coordinator-merge |
 | `subAgentReport_planVsActual` | Sub-agent report classifies done/failed/not-attempted with evidence |
 | `subAgent_inheritsEvidenceEngine` | Sub-agent output passes EV classification/gates before merging |
+
+## Agent Orchestration Unit Tests (FR-AG-001..004)
+
+| Test | Verifies |
+|------|----------|
+| `masterAgent_neverImplements` | Coordinator role rejected if it attempts direct tool execution |
+| `noDirectAgentCalls_enforced` | An agent calling another agent directly is blocked; publishes instead |
+| `orchestrator_routesViaEventBus` | Results flow through the orchestration layer, not point-to-point |
+| `docsGate_blocksCompletion` | Documentation-affected task without docs changes cannot report completion |
+| `architectAgent_designsFirst` | Architect sub-agent runs design/validation before implementation tasks |

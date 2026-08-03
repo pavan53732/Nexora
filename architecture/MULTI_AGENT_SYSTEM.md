@@ -26,7 +26,7 @@ Nexora supports multiple collaborating agents within a workspace. Each agent has
 | **Database Agent** | Manages database operations. | 7 |
 | **File Manager** | Handles file operations and organization. | 7 |
 | **Git Agent** | Manages version control workflows. | 7 |
-| **Workflow Coordinator** | Orchestrates multi-agent task delegation. | 7 |
+| **Workflow Coordinator (Master Agent)** | The CEO/project-manager role: understands the goal, breaks it into tasks, spawns sub-agents, assigns work, tracks progress, merges results, resolves conflicts, and decides when work is complete. **Never performs implementation itself** (matrix: Execute = —). | 7 |
 
 ## Agent Interface
 
@@ -45,7 +45,7 @@ interface Agent {
 enum class AgentType {
     PLANNER, RESEARCHER, CODER, REVIEWER, TESTER, DEBUGGER,
     DOCUMENTATION_WRITER, REFACTORING, DEPLOYMENT, SECURITY_AUDITOR,
-    BROWSER, DATABASE, FILE_MANAGER, GIT, WORKFLOW_COORDINATOR, CUSTOM
+    BROWSER, DATABASE, FILE_MANAGER, GIT, WORKFLOW_COORDINATOR, ARCHITECT, CUSTOM  // COORDINATOR = Master Agent (never implements)
 }
 ```
 
@@ -110,9 +110,33 @@ class AgentRegistry {
 }
 ```
 
+## Communication Rule (FR-AG-002)
+
+**Sub-agents never communicate directly with each other.** All inter-agent
+communication flows through the orchestration layer (EventBus + coordinator +
+shared memory). An agent may never call another agent; it publishes results and the
+coordinator routes them. This centralizes coordination, prevents coupling, and
+simplifies conflict resolution and audit.
+
+## Agent Orchestrator
+
+The coordinator role is composed from existing runtime modules (Agent Manager +
+Executor + Workflow Engine + EventBus + SA-1..SA-5 contract) — an explicit
+orchestration concern, not a new standalone module (FR-AG-003):
+
+| Responsibility | Owned by |
+|----------------|----------|
+| Spawning specialized sub-agents | AgentManager |
+| Scheduling parallel work + dependencies | Executor + WorkflowEngine (FR-EL-007) |
+| Coordinating shared memory | MemoryManager + EventBus |
+| Tracking progress | Observability (TaskProgress) |
+| Collecting/merging outputs, detecting conflicts | Coordinator agent (SA-3) |
+| Dispatching validation/testing | Evidence & Validation Engine (EV-6) |
+| Deciding goal achievement | Master Agent + EVE completion policy |
+
 ## Phase Mapping
 
-- **Phase 7**: All 15 agent types, agent registry, task delegation.
+- **Phase 7**: All 16 agent types, agent registry, task delegation, Master Agent role.
 - **Phase 8**: Community agent plugins.
 
 ---

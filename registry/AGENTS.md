@@ -20,3 +20,4 @@
 | AGT-013 | File Manager | 7 | Planned |
 | AGT-014 | Git Agent | 7 | Planned |
 | AGT-015 | Workflow Coordinator | 7 | Planned |
+| AGT-016 | Architect | 7 | Planned |

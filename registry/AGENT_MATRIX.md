@@ -30,6 +30,7 @@ Authoritative reference mapping **every agent type** (see [AGENTS.md](./AGENTS.m
 | AGT-013 | File Manager | — | ✓ | ✓ | — | — | ✓ | — | — | — | — | — | 7 |
 | AGT-014 | Git Agent | ✓ | ✓ | ✓ | — | — | ✓ | ✓ | — | — | ✓ | — | 7 |
 | AGT-015 | Workflow Coordinator | ✓ | — | ✓ | — | — | ✓ | — | ✓ | ✓ | — | ✓ | 7 |
+| AGT-016 | Architect | ✓ | — | ✓ | ✓ | — | ✓ | — | — | ✓ | — | ✓ | 7 |
 
 ## Capability Definitions
 

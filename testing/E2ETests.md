@@ -101,3 +101,13 @@ E2E tests exercise the complete application on a real device or emulator, valida
 | Incomplete handoff blocked | Coordinator delegates without acceptance criteria | Delegation rejected; coordinator must supply full handoff context |
 | Sub-agent ambiguity resolved once | Sub-agent lacks one fact | Asks once via EV, continues; never guesses |
 | Important subtask reviewer pass | High-sensitivity subtask completes | Held until Reviewer approves before merge |
+
+## Agent Orchestration E2E Journeys
+
+| Journey | Steps | Pass Criteria |
+|---------|-------|---------------|
+| Master Agent full delegation | Goal → coordinator spawns Planner → Architect → Coder → Tester → Reviewer | Master Agent never implements; all sub-agents report; merged result verified |
+| Architect before coding | Complex feature task | Architect designs + validates module boundaries before Coder starts |
+| No direct sub-agent calls | Two sub-agents need to exchange info | They publish/read shared memory via orchestrator; no direct calls observed |
+| Docs gate enforcement | Code change requiring CHANGELOG/README update | Completion blocked until documentation updated |
+| Conflict resolution by master | Two sub-agent outputs conflict | Coordinator detects, resolves (or reassigns), documents decision |

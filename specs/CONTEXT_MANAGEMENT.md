@@ -390,8 +390,9 @@ statement.
 ### EV-6 — Completion validation & reviewer handoff (FR-EV-006)
 
 Before reporting completion, the engine verifies: acceptance criteria met (FR-EL-011),
-verification gates passed (FR-AS-006), and report status matches plan-vs-actual
-(RG-6). For tasks classified **important** (by sensitivity, risk, or cost), the
+verification gates passed (FR-AS-006), report status matches plan-vs-actual (RG-6),
+and — for documentation-affected work — **documentation updated** (CHANGELOG,
+README, ADRs, specs, API docs as applicable; FR-AG-004). For tasks classified **important** (by sensitivity, risk, or cost), the
 engine **requires a reviewer agent pass** (AGT-004 Reviewer) before the result
 reaches the user — no user-facing completion until the review is done.
 

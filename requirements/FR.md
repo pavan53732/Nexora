@@ -326,3 +326,15 @@
 | FR-MA-003 | Parallel orchestration — dependency-aware fan-out with a per-workspace concurrency limit; per-file write locks (second writer waits or coordinator merges a copy); sandbox budgets split across sub-agents; results merged in dependency order | Must | 7 |
 | FR-MA-004 | Inherited policies — sub-agents explicitly operate under zero-assumption, grounding (RG), reasoning (RB), verification gates, guardrails, and the Evidence & Validation Engine | Must | 7 |
 | FR-MA-005 | Sub-agent reporting — plan-vs-actual report with verification evidence; important subtasks require the Reviewer pass before merging | Must | 7 |
+
+
+## Agent Orchestration
+
+> Master Agent / orchestrator defined in [architecture/MULTI_AGENT_SYSTEM.md](../architecture/MULTI_AGENT_SYSTEM.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-AG-001 | Master Agent role — the coordinator (AGT-015) owns goal decomposition, sub-agent spawning, assignment, progress tracking, result merging, conflict resolution, and completion decisions; it never performs implementation itself | Must | 7 |
+| FR-AG-002 | No direct sub-agent communication — all inter-agent communication flows through the orchestration layer (EventBus + coordinator + shared memory); agents publish results, never call other agents | Must | 7 |
+| FR-AG-003 | Agent Orchestrator composition — orchestration is an explicit concern composed from AgentManager + Executor + WorkflowEngine + EventBus + Evidence & Validation Engine | Must | 7 |
+| FR-AG-004 | Documentation completion gate — documentation-affected work requires docs updated (CHANGELOG, README, ADRs, specs, API docs as applicable) before completion is reported | Must | 4 |
