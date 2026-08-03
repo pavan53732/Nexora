@@ -50,7 +50,7 @@ Authoritative reference mapping **every agent type** (see [AGENTS.md](./AGENTS.m
 
 ## Phase Rollout
 
-- **Phase 7** — All 15 agent types, agent registry, task delegation (see [AGENTS.md](./AGENTS.md)).
+- **Phase 7** — All 16 agent types, agent registry, task delegation (see [AGENTS.md](./AGENTS.md)).
 - **Phase 8** — Community agent plugins.
 
 ## Execution Depth

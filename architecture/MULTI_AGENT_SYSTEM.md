@@ -27,6 +27,7 @@ Nexora supports multiple collaborating agents within a workspace. Each agent has
 | **File Manager** | Handles file operations and organization. | 7 |
 | **Git Agent** | Manages version control workflows. | 7 |
 | **Workflow Coordinator (Master Agent)** | The CEO/project-manager role: understands the goal, breaks it into tasks, spawns sub-agents, assigns work, tracks progress, merges results, resolves conflicts, and decides when work is complete. **Never performs implementation itself** (matrix: Execute = —). | 7 |
+| **Architect** | Designs system architecture, validates module boundaries, reviews dependencies, designs APIs and database schemas, reviews scalability. | 7 |
 
 ## Agent Interface
 
@@ -45,7 +46,7 @@ interface Agent {
 enum class AgentType {
     PLANNER, RESEARCHER, CODER, REVIEWER, TESTER, DEBUGGER,
     DOCUMENTATION_WRITER, REFACTORING, DEPLOYMENT, SECURITY_AUDITOR,
-    BROWSER, DATABASE, FILE_MANAGER, GIT, WORKFLOW_COORDINATOR, ARCHITECT, CUSTOM  // COORDINATOR = Master Agent (never implements)
+    BROWSER, DATABASE, FILE_MANAGER, GIT, WORKFLOW_COORDINATOR, ARCHITECT, CUSTOM  // COORDINATOR = Master Agent (never implements); CUSTOM = user-defined agents
 }
 ```
 

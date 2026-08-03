@@ -33,7 +33,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 - **Architecture**: Workspace-first (Workspace > Chat).
 - **Interaction**: Agent-first — users chat with agents; the sandbox, internal terminal, runtimes, and execution engine are internal implementation details (ADR-0006).
 - **Principles**: 15 codified product principles (PP-001–015) — autonomous agents, provider-agnostic, tool-based execution, persistent memory, agent-driven execution, plugins, background execution, multi-agent orchestration, dashboards, sandboxing, observability, and more.
-- **Scale**: 15+ modules, 25+ tool categories, 300-500 tools, 10-20 agents.
+- **Scale**: 17+ modules, 26 tool categories, 300-500 tools, 10-20 agents.
 - **Phases**: 8 development phases (Foundation through Plugin Marketplace).
 
 ---
@@ -55,7 +55,7 @@ This is the **master index** for the Nexora project. All detailed content lives 
 
 | ADR | Title | Path |
 |-----|-------|------|
-| ADR-0001 | Workspace-First Architecture | [docs/adr/ADR-0001-Workspace-First.md](docs/adr/ADR-0001-Workspace-First.md) |
+| ADR-0001 | Workspace-First Architecture (amended by ADR-0006) | [docs/adr/ADR-0001-Workspace-First.md](docs/adr/ADR-0001-Workspace-First.md) |
 | ADR-0002 | Plugin-First Design | [docs/adr/ADR-0002-Plugin-System.md](docs/adr/ADR-0002-Plugin-System.md) |
 | ADR-0003 | Autonomous Agent Runtime Loop | [docs/adr/ADR-0003-Agent-Runtime.md](docs/adr/ADR-0003-Agent-Runtime.md) |
 | ADR-0004 | Sandboxed Execution | [docs/adr/ADR-0004-Sandbox.md](docs/adr/ADR-0004-Sandbox.md) |
@@ -375,7 +375,7 @@ Nexora/
 | **4** | Tools | Tool interface + foundational tools | 50+ tools across 8 categories |
 | **5** | AI Providers | Provider abstraction + 9 providers | All 9 providers, streaming, health checks |
 | **6** | Memory | Persistent memory system | Session, project, long-term, semantic search |
-| **7** | Autonomous Agents | Built-in agent types | 15 agents, multi-agent coordination |
+| **7** | Autonomous Agents | Built-in agent types | 16 agents, multi-agent coordination |
 | **8** | Plugin Marketplace | Everything is a plugin | Plugin SDK, Nexora Hub, community plugins |
 
 ---

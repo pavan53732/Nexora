@@ -17,7 +17,7 @@ feature).
 ## Requirements
 
 - Multiple concurrent terminal sessions (internal).
-- Agent-invocable: the agent runs commands as tools (`terminal_run`, `terminal_run_script`, etc.).
+- Agent-invocable: the agent runs commands as tools (`terminal_run` TOOL-020, `terminal_run_script` TOOL-021, `terminal_run_background` TOOL-022, `terminal_kill` TOOL-023 — see [registry/TOOLS.md](../registry/TOOLS.md)).
 - Command history persistent across sessions (agent-managed, internal).
 - Session restore after app restart.
 - All output captured for execution history and streamed into the agent activity feed.

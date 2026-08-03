@@ -88,7 +88,7 @@ Session, Project, Long-Term memory. Semantic search. Execution history.
 
 ## Phase 7 — Autonomous Agents
 
-**Goal:** 15 built-in agent types.
+**Goal:** 16 built-in agent types.
 
 Planner, Coder, Researcher, Browser, Reviewer, Tester, Debugger, Documentation Writer, and more.
 

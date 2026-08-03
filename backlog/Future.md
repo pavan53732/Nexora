@@ -3,7 +3,7 @@
 > Scope: Phases 7-8 and beyond.
 
 ## Phase 7: Autonomous Agents
-- [ ] 15 built-in agent types
+- [ ] 16 built-in agent types
 - [ ] Agent registry
 - [ ] Multi-agent task delegation
 - [ ] Agent collaboration (shared context)

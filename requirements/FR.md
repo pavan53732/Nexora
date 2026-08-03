@@ -25,7 +25,7 @@
 | FR-A002 | Configure agent (model, tools, memory, temperature) | Must | 1 |
 | FR-A003 | Delete agent with cascade option for history | Must | 1 |
 | FR-A004 | List agents in workspace with filters | Must | 1 |
-| FR-A005 | Support 15 agent roles (coder, researcher, planner, etc.) | Must | 1 |
+| FR-A005 | Support 16 agent roles (coder, researcher, planner, architect, etc.) | Must | 1 |
 | FR-A006 | Define agent permissions per tool and resource | Must | 2 |
 | FR-A007 | Chat interface for agent interaction | Must | 1 |
 | FR-A008 | Multi-agent coordination via delegation protocol | Must | 5 |

@@ -55,7 +55,7 @@ Chats are one artifact within a workspace. This scales much better as the platfo
 
 ## Key Features
 
-- **Autonomous Agents** — 15 built-in agent types (Planner, Coder, Researcher, Reviewer, etc.)
+- **Autonomous Agents** — 16 built-in agent types (Planner, Coder, Researcher, Reviewer, etc.)
 - **Skills** — first-class expertise units (Kotlin Development, Android Debugging, Git Conflict Resolution, API Design…) that agents acquire and apply via tools (Agent = who, Skill = what, Tool = how)
 - **Agent-First Chat** — you give the agent a goal; everything else happens automatically.
 - **Agent-Driven Execution** — agents automatically use the terminal, runtimes (Python/Node), Git, and SQLite inside an isolated sandbox — no infrastructure UI.

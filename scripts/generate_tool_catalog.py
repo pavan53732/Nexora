@@ -655,7 +655,7 @@ def render_agent_matrix():
     lines.append("")
     lines.append("## Phase Rollout")
     lines.append("")
-    lines.append("- **Phase 7** — All 15 agent types, agent registry, task delegation (see [AGENTS.md](./AGENTS.md)).")
+    lines.append("- **Phase 7** — All 16 agent types, agent registry, task delegation (see [AGENTS.md](./AGENTS.md)).")
     lines.append("- **Phase 8** — Community agent plugins.")
     lines.append("")
     lines.append("## Execution Depth")

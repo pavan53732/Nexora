@@ -142,4 +142,4 @@ pipeline returns to the relevant earlier stage (bounded fix loop, FR-EL-013).
   build/static-analysis/test stages (FR-EL-013); tool/plugin selection.
 - **Phase 5**: Per-task provider/model selection (FR-EL-005).
 - **Phase 6**: Memory storage of results, follow-up identification (FR-EL-012).
-- **Phase 7**: Automatic agent selection across the 15 agent types (FR-EL-003).
+- **Phase 7**: Automatic agent selection across the 16 agent types (FR-EL-003).
