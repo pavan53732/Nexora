@@ -10,17 +10,17 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 2.0.0 |
-| **Status** | Phase 0 — Foundation |
+| **Spec Version** | 3.0.0 |
+| **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v2.0 — Split into focused documents) |
+| **Last Updated** | 2026-08-03 (v3.0 — Full documentation foundation) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
 
 ## What is This Document?
 
-This is the **master index** for the Nexora project specification. The detailed content lives in focused documents linked below. This file provides a single entry point to navigate the entire specification.
+This is the **master index** for the Nexora project. All detailed content lives in focused documents linked below. This file is the single entry point to navigate the entire specification.
 
 > **Rule**: Update the relevant document BEFORE implementing significant changes. The specification and implementation must never diverge.
 
@@ -40,40 +40,140 @@ This is the **master index** for the Nexora project specification. The detailed 
 
 ### Product & Vision
 
-| Document | Description | Path |
-|----------|-------------|------|
-| **Product Vision** | Vision, positioning, philosophy, brand identity, scale, comparable products. | [docs/PRODUCT_VISION.md](docs/PRODUCT_VISION.md) |
-| **Architecture** | High-level system architecture, UI layer, workspace-first design, inter-module communication. | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
-| **System Design** | Execution flow, agent loop, workspace model, observability. | [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) |
-| **Roadmap** | 8-phase development roadmap with deliverables and success metrics. | [docs/ROADMAP.md](docs/ROADMAP.md) |
-| **Changelog** | Version history and changes. | [docs/CHANGELOG.md](docs/CHANGELOG.md) |
+| Document | Path |
+|----------|------|
+| **Product Vision** | [docs/PRODUCT_VISION.md](docs/PRODUCT_VISION.md) |
+| **Architecture** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
+| **System Design** | [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) |
+| **Roadmap** | [docs/ROADMAP.md](docs/ROADMAP.md) |
+| **Changelog** | [docs/CHANGELOG.md](docs/CHANGELOG.md) |
+
+### Architecture Decision Records (ADRs)
+
+| ADR | Title | Path |
+|-----|-------|------|
+| ADR-0001 | Workspace-First Architecture | [docs/adr/ADR-0001-Workspace-First.md](docs/adr/ADR-0001-Workspace-First.md) |
+| ADR-0002 | Plugin-First Design | [docs/adr/ADR-0002-Plugin-System.md](docs/adr/ADR-0002-Plugin-System.md) |
+| ADR-0003 | Autonomous Agent Runtime Loop | [docs/adr/ADR-0003-Agent-Runtime.md](docs/adr/ADR-0003-Agent-Runtime.md) |
+| ADR-0004 | Sandboxed Execution | [docs/adr/ADR-0004-Sandbox.md](docs/adr/ADR-0004-Sandbox.md) |
+| ADR-0005 | Provider Abstraction Layer | [docs/adr/ADR-0005-Provider-Abstraction.md](docs/adr/ADR-0005-Provider-Abstraction.md) |
+
+### API Documentation
+
+| Document | Path |
+|----------|------|
+| **Tool API** | [docs/api/Tool-API.md](docs/api/Tool-API.md) |
+| **Plugin API** | [docs/api/Plugin-API.md](docs/api/Plugin-API.md) |
+| **Agent API** | [docs/api/Agent-API.md](docs/api/Agent-API.md) |
+| **Provider API** | [docs/api/Provider-API.md](docs/api/Provider-API.md) |
+| **Runtime API** | [docs/api/Runtime-API.md](docs/api/Runtime-API.md) |
+
+### SDK Documentation
+
+| Document | Path |
+|----------|------|
+| **Tool SDK** | [sdk/ToolSDK.md](sdk/ToolSDK.md) |
+| **Plugin SDK** | [sdk/PluginSDK.md](sdk/PluginSDK.md) |
+| **Provider SDK** | [sdk/ProviderSDK.md](sdk/ProviderSDK.md) |
+| **Agent SDK** | [sdk/AgentSDK.md](sdk/AgentSDK.md) |
 
 ### Architecture Deep Dives
 
-| Document | Description | Path |
-|----------|-------------|------|
-| **Core Runtime** | 15 runtime modules, execution flow, event bus, checkpoint system. | [architecture/RUNTIME.md](architecture/RUNTIME.md) |
-| **Agent Runtime** | Agent loop, state management, token budgeting, autonomous capabilities. | [architecture/AGENT_RUNTIME.md](architecture/AGENT_RUNTIME.md) |
-| **Sandbox** | Virtual file system, process isolation, storage layout, resource limits. | [architecture/SANDBOX.md](architecture/SANDBOX.md) |
-| **Tool System** | Tool interface contract, 25 categories, registration, execution flow. | [architecture/TOOL_SYSTEM.md](architecture/TOOL_SYSTEM.md) |
-| **Memory System** | Memory tiers, semantic search, embeddings, vector DB, interfaces. | [architecture/MEMORY_SYSTEM.md](architecture/MEMORY_SYSTEM.md) |
-| **Workflow Engine** | Workflow types (linear, parallel, branching), DAG execution, error recovery. | [architecture/WORKFLOW_ENGINE.md](architecture/WORKFLOW_ENGINE.md) |
-| **Plugin System** | Plugin interface, lifecycle, marketplace, example plugins. | [architecture/PLUGIN_SYSTEM.md](architecture/PLUGIN_SYSTEM.md) |
-| **Security Model** | Sandboxed execution, permission scopes, API key encryption, audit logs. | [architecture/SECURITY_MODEL.md](architecture/SECURITY_MODEL.md) |
-| **Provider System** | AI provider abstraction, 9 providers, request/response models. | [architecture/PROVIDER_SYSTEM.md](architecture/PROVIDER_SYSTEM.md) |
-| **Multi-Agent System** | 15 agent roles, shared context, communication flow, agent registry. | [architecture/MULTI_AGENT_SYSTEM.md](architecture/MULTI_AGENT_SYSTEM.md) |
+| Document | Path |
+|----------|------|
+| **Core Runtime** | [architecture/RUNTIME.md](architecture/RUNTIME.md) |
+| **Agent Runtime** | [architecture/AGENT_RUNTIME.md](architecture/AGENT_RUNTIME.md) |
+| **Sandbox** | [architecture/SANDBOX.md](architecture/SANDBOX.md) |
+| **Tool System** | [architecture/TOOL_SYSTEM.md](architecture/TOOL_SYSTEM.md) |
+| **Memory System** | [architecture/MEMORY_SYSTEM.md](architecture/MEMORY_SYSTEM.md) |
+| **Workflow Engine** | [architecture/WORKFLOW_ENGINE.md](architecture/WORKFLOW_ENGINE.md) |
+| **Plugin System** | [architecture/PLUGIN_SYSTEM.md](architecture/PLUGIN_SYSTEM.md) |
+| **Security Model** | [architecture/SECURITY_MODEL.md](architecture/SECURITY_MODEL.md) |
+| **Provider System** | [architecture/PROVIDER_SYSTEM.md](architecture/PROVIDER_SYSTEM.md) |
+| **Multi-Agent System** | [architecture/MULTI_AGENT_SYSTEM.md](architecture/MULTI_AGENT_SYSTEM.md) |
 
 ### Component Specifications
 
-| Document | Description | Path |
-|----------|-------------|------|
-| **File System** | Virtual file system operations, storage paths, requirements. | [specs/FILE_SYSTEM.md](specs/FILE_SYSTEM.md) |
-| **Terminal** | Embedded terminal, supported commands, multi-session. | [specs/TERMINAL.md](specs/TERMINAL.md) |
-| **Git** | Git integration, 13 supported operations. | [specs/GIT.md](specs/GIT.md) |
-| **Browser** | Browser automation capabilities. | [specs/BROWSER.md](specs/BROWSER.md) |
-| **Database** | SQLite usage, tools, storage for memory and history. | [specs/DATABASE.md](specs/DATABASE.md) |
-| **AI Providers** | Detailed per-provider specification (9 providers). | [specs/AI_PROVIDERS.md](specs/AI_PROVIDERS.md) |
-| **Workspace** | Workspace model, hierarchy, operations, configuration. | [specs/WORKSPACE.md](specs/WORKSPACE.md) |
+| Document | Path |
+|----------|------|
+| **File System** | [specs/FILE_SYSTEM.md](specs/FILE_SYSTEM.md) |
+| **Terminal** | [specs/TERMINAL.md](specs/TERMINAL.md) |
+| **Git** | [specs/GIT.md](specs/GIT.md) |
+| **Browser** | [specs/BROWSER.md](specs/BROWSER.md) |
+| **Database** | [specs/DATABASE.md](specs/DATABASE.md) |
+| **AI Providers** | [specs/AI_PROVIDERS.md](specs/AI_PROVIDERS.md) |
+| **Workspace** | [specs/WORKSPACE.md](specs/WORKSPACE.md) |
+
+### Domain Models
+
+| Model | Path |
+|-------|------|
+| **Workspace** | [models/Workspace.md](models/Workspace.md) |
+| **Agent** | [models/Agent.md](models/Agent.md) |
+| **Task** | [models/Task.md](models/Task.md) |
+| **Execution** | [models/Execution.md](models/Execution.md) |
+| **Memory** | [models/Memory.md](models/Memory.md) |
+| **Tool** | [models/Tool.md](models/Tool.md) |
+| **Plugin** | [models/Plugin.md](models/Plugin.md) |
+| **Provider** | [models/Provider.md](models/Provider.md) |
+| **Workflow** | [models/Workflow.md](models/Workflow.md) |
+| **Session** | [models/Session.md](models/Session.md) |
+| **TerminalSession** | [models/TerminalSession.md](models/TerminalSession.md) |
+| **Permission** | [models/Permission.md](models/Permission.md) |
+
+### Protocols
+
+| Protocol | Path |
+|----------|------|
+| **Agent Protocol** | [protocols/Agent-Protocol.md](protocols/Agent-Protocol.md) |
+| **Tool Protocol** | [protocols/Tool-Protocol.md](protocols/Tool-Protocol.md) |
+| **Execution Protocol** | [protocols/Execution-Protocol.md](protocols/Execution-Protocol.md) |
+| **Plugin Protocol** | [protocols/Plugin-Protocol.md](protocols/Plugin-Protocol.md) |
+| **Memory Protocol** | [protocols/Memory-Protocol.md](protocols/Memory-Protocol.md) |
+| **Provider Protocol** | [protocols/Provider-Protocol.md](protocols/Provider-Protocol.md) |
+
+### Development Standards
+
+| Standard | Path |
+|----------|------|
+| **Coding Standard** | [standards/Coding-Standard.md](standards/Coding-Standard.md) |
+| **Documentation Standard** | [standards/Documentation-Standard.md](standards/Documentation-Standard.md) |
+| **Testing Standard** | [standards/Testing-Standard.md](standards/Testing-Standard.md) |
+| **Logging Standard** | [standards/Logging-Standard.md](standards/Logging-Standard.md) |
+| **Security Standard** | [standards/Security-Standard.md](standards/Security-Standard.md) |
+| **Performance Standard** | [standards/Performance-Standard.md](standards/Performance-Standard.md) |
+| **Naming Standard** | [standards/Naming-Standard.md](standards/Naming-Standard.md) |
+
+### UI Specifications
+
+| Spec | Path |
+|-----|------|
+| **Navigation** | [ui/Navigation.md](ui/Navigation.md) |
+| **Theme** | [ui/Theme.md](ui/Theme.md) |
+| **Components** | [ui/Components.md](ui/Components.md) |
+| **Typography** | [ui/Typography.md](ui/Typography.md) |
+| **Spacing** | [ui/Spacing.md](ui/Spacing.md) |
+| **Icons** | [ui/Icons.md](ui/Icons.md) |
+| **Animations** | [ui/Animations.md](ui/Animations.md) |
+
+### Backlog
+
+| Version | Path |
+|---------|------|
+| **MVP (Phase 1)** | [backlog/MVP.md](backlog/MVP.md) |
+| **V1 (Phases 1-3)** | [backlog/V1.md](backlog/V1.md) |
+| **V2 (Phases 4-6)** | [backlog/V2.md](backlog/V2.md) |
+| **Future (Phases 7+)** | [backlog/Future.md](backlog/Future.md) |
+
+### Feature Registry (Stable IDs)
+
+| Registry | Path |
+|---------|------|
+| **Features** | [registry/FEATURES.md](registry/FEATURES.md) |
+| **Tools** | [registry/TOOLS.md](registry/TOOLS.md) |
+| **Agents** | [registry/AGENTS.md](registry/AGENTS.md) |
+| **Plugins** | [registry/PLUGINS.md](registry/PLUGINS.md) |
+| **Providers** | [registry/PROVIDERS.md](registry/PROVIDERS.md) |
 
 ---
 
@@ -87,34 +187,50 @@ Nexora/
 │   ├── ARCHITECTURE.md
 │   ├── SYSTEM_DESIGN.md
 │   ├── ROADMAP.md
-│   └── CHANGELOG.md
-├── architecture/           # Architecture deep dives
-│   ├── RUNTIME.md
-│   ├── AGENT_RUNTIME.md
-│   ├── SANDBOX.md
-│   ├── TOOL_SYSTEM.md
-│   ├── MEMORY_SYSTEM.md
-│   ├── WORKFLOW_ENGINE.md
-│   ├── PLUGIN_SYSTEM.md
-│   ├── SECURITY_MODEL.md
-│   ├── PROVIDER_SYSTEM.md
-│   └── MULTI_AGENT_SYSTEM.md
-├── specs/                  # Component specifications
-│   ├── FILE_SYSTEM.md
-│   ├── TERMINAL.md
-│   ├── GIT.md
-│   ├── BROWSER.md
-│   ├── DATABASE.md
-│   ├── AI_PROVIDERS.md
-│   └── WORKSPACE.md
+│   ├── CHANGELOG.md
+│   ├── adr/               # Architecture Decision Records
+│   │   ├── ADR-0001-Workspace-First.md
+│   │   ├── ADR-0002-Plugin-System.md
+│   │   ├── ADR-0003-Agent-Runtime.md
+│   │   ├── ADR-0004-Sandbox.md
+│   │   └── ADR-0005-Provider-Abstraction.md
+│   └── api/               # API documentation
+│       ├── Tool-API.md
+│       ├── Plugin-API.md
+│       ├── Agent-API.md
+│       ├── Provider-API.md
+│       └── Runtime-API.md
+├── architecture/           # Architecture deep dives (10 docs)
+├── specs/                  # Component specifications (7 docs)
+├── models/                 # Canonical domain models (13 docs)
+├── protocols/              # Communication contracts (6 docs)
+├── sdk/                    # SDK documentation (4 docs)
+│   ├── ToolSDK.md
+│   ├── PluginSDK.md
+│   ├── ProviderSDK.md
+│   └── AgentSDK.md
+├── standards/              # Development standards (7 docs)
+├── ui/                     # UI specifications (7 docs)
+├── backlog/                # Versioned backlog (MVP, V1, V2, Future)
+├── registry/               # Feature registry with stable IDs
+│   ├── FEATURES.md
+│   ├── TOOLS.md
+│   ├── AGENTS.md
+│   ├── PLUGINS.md
+│   └── PROVIDERS.md
 ├── android/                # Android application source (Phase 1)
+├── core/                   # Core interfaces and abstractions
 ├── runtime/                # Core runtime implementation (Phase 2)
-├── plugins/                # Plugin implementations (Phase 8)
-├── tools/                  # Tool implementations (Phase 4)
-├── agents/                 # Agent implementations (Phase 7)
-├── memory/                 # Memory system implementation (Phase 6)
 ├── sandbox/                # Sandbox implementation (Phase 3)
-├── provider/               # AI provider implementations (Phase 5)
+├── tools/                  # Tool implementations (Phase 4)
+├── providers/              # AI provider implementations (Phase 5)
+├── memory/                 # Memory system implementation (Phase 6)
+├── agents/                 # Agent implementations (Phase 7)
+├── plugins/                # Plugin implementations (Phase 8)
+├── workflows/              # Workflow definitions and templates
+├── storage/                # Database and persistence layer
+├── services/               # Android services (foreground, scheduled)
+├── shared/                 # Shared utilities and extensions
 ├── testing/                # Test suites
 ├── scripts/                # Build and utility scripts
 ├── assets/                 # Static assets (icons, fonts, etc.)
@@ -136,15 +252,15 @@ Nexora/
 
 | Phase | Name | Goal | Key Deliverables |
 |-------|------|------|-----------------|
-| **0** | Foundation | Repository structure, documentation | This repo structure, all spec docs |
-| **1** | Android Foundation | Bootable app, no AI yet | Navigation, theme, settings, workspace manager, file manager, interfaces |
-| **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, context builder, event bus |
-| **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node runtimes |
-| **4** | Tools | Generic tool interface + foundational tools | File, terminal, search, git, network, memory, package manager tools |
-| **5** | AI Providers | Provider abstraction + 9 providers | OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom |
-| **6** | Memory | Persistent memory system | Session, project, long-term memory, semantic search, execution history |
-| **7** | Autonomous Agents | Built-in agent types | 15 agent roles, agent registry, multi-agent coordination |
-| **8** | Plugin Marketplace | Everything is a plugin | Plugin SDK, Nexora Hub, tools/providers/agents as plugins |
+| **0** | Foundation | Repo structure, documentation, registries | This repo (75+ docs, 13 models, 6 protocols, 7 standards) |
+| **1** | Android Foundation | Bootable app, no AI yet | Navigation, theme, settings, workspace manager, interfaces |
+| **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, event bus, checkpoints |
+| **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node |
+| **4** | Tools | Tool interface + foundational tools | 50+ tools across 8 categories |
+| **5** | AI Providers | Provider abstraction + 9 providers | All 9 providers, streaming, health checks |
+| **6** | Memory | Persistent memory system | Session, project, long-term, semantic search |
+| **7** | Autonomous Agents | Built-in agent types | 15 agents, multi-agent coordination |
+| **8** | Plugin Marketplace | Everything is a plugin | Plugin SDK, Nexora Hub, community plugins |
 
 ---
 
