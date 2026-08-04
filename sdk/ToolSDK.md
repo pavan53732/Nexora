@@ -1,3 +1,10 @@
+> **Status: DERIVED** for ToolSDK SDK.
+> This document describes the sdk surface for ToolSDK. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for ToolSDK.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Tool SDK — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

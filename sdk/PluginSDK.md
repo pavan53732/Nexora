@@ -1,3 +1,10 @@
+> **Status: DERIVED** for PluginSDK SDK.
+> This document describes the sdk surface for PluginSDK. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for PluginSDK.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Plugin SDK — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

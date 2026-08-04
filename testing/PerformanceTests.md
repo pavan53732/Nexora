@@ -1,3 +1,10 @@
+> **Status: DERIVED** for PerformanceTests tests.
+> This document describes the tests surface for PerformanceTests. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for PerformanceTests.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # Performance Tests

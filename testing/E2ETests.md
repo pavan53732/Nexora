@@ -1,3 +1,10 @@
+> **Status: DERIVED** for E2ETests tests.
+> This document describes the tests surface for E2ETests. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for E2ETests.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # End-to-End Tests

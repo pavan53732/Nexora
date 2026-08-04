@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Tool-API API.
+> This document describes the api surface for Tool-API. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Tool-API.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Tool API — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/TOOL_SYSTEM.md](../../architecture/TOOL_SYSTEM.md)

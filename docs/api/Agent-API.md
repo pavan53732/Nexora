@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Agent-API API.
+> This document describes the api surface for Agent-API. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Agent-API.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Agent API — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../../architecture/AGENT_RUNTIME.md](../../architecture/AGENT_RUNTIME.md)

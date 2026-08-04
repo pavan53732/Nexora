@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Plugin-API API.
+> This document describes the api surface for Plugin-API. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Plugin-API.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Plugin API — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/PLUGIN_SYSTEM.md](../../architecture/PLUGIN_SYSTEM.md)

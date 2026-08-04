@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Provider-API API.
+> This document describes the api surface for Provider-API. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Provider-API.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Provider API — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/PROVIDER_SYSTEM.md](../../architecture/PROVIDER_SYSTEM.md)

@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Runtime-API API.
+> This document describes the api surface for Runtime-API. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Runtime-API.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Runtime API — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../architecture/RUNTIME.md](../../architecture/RUNTIME.md)

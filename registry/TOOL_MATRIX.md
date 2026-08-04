@@ -1,3 +1,10 @@
+> **Status: DERIVED** for TOOL_MATRIX registry.
+> This document describes the registry surface for TOOL_MATRIX. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for TOOL_MATRIX.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Nexora Tool Capability Matrix
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [TOOLS.md](./TOOLS.md)

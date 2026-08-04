@@ -1,3 +1,10 @@
+> **Status: DERIVED** for AGENTS registry.
+> This document describes the registry surface for AGENTS. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for AGENTS.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Agent Registry — Nexora
 
 > Stable agent identifiers. See [docs/api/Agent-API.md](../docs/api/Agent-API.md) for the Agent API.

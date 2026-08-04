@@ -1,3 +1,10 @@
+> **Status: DERIVED** for FEATURES registry.
+> This document describes the registry surface for FEATURES. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for FEATURES.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Feature Registry — Nexora
 
 > Stable identifiers for all features. Used across documentation, implementation, testing, and issue tracking.

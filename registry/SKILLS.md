@@ -1,3 +1,10 @@
+> **Status: DERIVED** for SKILLS registry.
+> This document describes the registry surface for SKILLS. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for SKILLS.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Skill Registry — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

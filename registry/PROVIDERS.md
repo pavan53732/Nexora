@@ -1,3 +1,10 @@
+> **Status: DERIVED** for PROVIDERS registry.
+> This document describes the registry surface for PROVIDERS. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for PROVIDERS.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Provider Registry — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

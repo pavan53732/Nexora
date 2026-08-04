@@ -1,3 +1,10 @@
+> **Status: DERIVED** for AGENT_MATRIX registry.
+> This document describes the registry surface for AGENT_MATRIX. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for AGENT_MATRIX.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Nexora Agent Capability Matrix
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [AGENTS.md](./AGENTS.md)

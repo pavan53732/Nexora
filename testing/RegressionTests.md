@@ -1,3 +1,10 @@
+> **Status: DERIVED** for RegressionTests tests.
+> This document describes the tests surface for RegressionTests. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for RegressionTests.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # Regression Tests

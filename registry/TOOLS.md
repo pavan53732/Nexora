@@ -1,3 +1,10 @@
+> **Status: DERIVED** for TOOLS registry.
+> This document describes the registry surface for TOOLS. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for TOOLS.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Tool Registry — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [docs/api/Tool-API.md](../docs/api/Tool-API.md) for the Tool API.

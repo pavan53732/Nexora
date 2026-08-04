@@ -1,3 +1,10 @@
+> **Status: DERIVED** for ProviderSDK SDK.
+> This document describes the sdk surface for ProviderSDK. Canonical behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for ProviderSDK.
+> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+
+
 # Provider SDK — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
