@@ -82,6 +82,30 @@ stateDiagram-v2
     Configured --> Cancelled : cancel()
 ```
 
+## Normative Transition Contract
+
+Every transition in this state machine MUST be treated as an atomic command. The implementation MUST evaluate the guard against the current persisted version, apply the state change and side effects in one transaction, persist the resulting version, and emit the event only after durable persistence succeeds.
+
+| Contract field | Requirement |
+|---|---|
+| Source and trigger | The trigger MUST be valid for the current state; unsupported triggers are rejected without mutation. |
+| Guard | Guards are evaluated before mutation using current durable state and required authorization/context. |
+| Target | The target is the only legal resulting state for the accepted trigger. |
+| Side effects | Resource allocation/release, checkpointing, cleanup, routing, or child-operation changes MUST be listed by the owning subsystem. |
+| Persistence | Durable state, transition version, actor, timestamp, correlation ID, and error context MUST be written before the event is published. |
+| Event | One semantic transition event is emitted after commit; retries MUST NOT duplicate the committed transition event. |
+| Idempotency | Repeating the same command with the same idempotency key returns the committed result; a conflicting version is rejected. |
+| Failure | Guard failure and invalid transition return a canonical error and leave state unchanged. Side-effect failure MUST use the subsystem rollback or recovery rule. |
+| Recovery | On restart, persisted state and transition version are authoritative; incomplete work resumes only through an explicitly listed recovery transition. |
+
+### Transition Event Minimum
+
+Each emitted lifecycle event MUST carry: `entityId`, `entityType`, `fromState`, `toState`, `trigger`, `transitionVersion`, `occurredAt`, `actor`, `correlationId`, and optional canonical error information. Consumers MUST treat events as at-least-once and deduplicate by `(entityType, entityId, transitionVersion)`.
+
+### Invalid Transition Contract
+
+An invalid transition MUST return a canonical error without changing persisted state, emitting a success event, or executing target-state side effects. The error MUST identify current state, requested trigger, entity ID, and correlation ID in redacted structured details.
+
 ## Implementation Notes
 
 The lifecycle is enforced by `AgentStateMachine` in the core module. Every state transition fires an `AgentStateEvent` onto the shared event bus, enabling logging, metrics, and UI reactivity. Guards are evaluated synchronously on the caller thread; async validation should complete before invoking the trigger.
