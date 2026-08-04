@@ -31,3 +31,10 @@ On restart, the runtime loads the latest checkpoint and resumes.
 ## Background Execution
 
 Tasks run in an Android `ForegroundService` with a persistent notification showing task ID and status.
+
+
+## Cross-Layer Contract Rules
+
+Protocol messages MUST map to the normative operation contract of the corresponding API. A message MUST preserve correlation ID, operation ID, lifecycle effect, transition version when applicable, and the canonical error envelope fields defined in [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
+
+A protocol consumer MUST treat events as at-least-once, deduplicate by entity and transition version, and never infer success from transport completion alone. Stream and cancellation messages MUST include an explicit terminal outcome.
