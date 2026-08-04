@@ -1,98 +1,138 @@
-# Audit 2 Report — End-to-End Repository Architecture Validation
+# Audit 2 Report — Deep Architecture and Contract Audit
 
-## Scope and Method
+## Audit Scope
 
-This audit covers the Nexora repository at baseline commit `e768f19` on `main`. The repository was treated as an integrated specification rather than a collection of isolated files: all 133 tracked Markdown documents were read completely, subsystem document chains were re-read, canonical ownership was compared with supporting and derived documents, and relative links were resolved before findings were recorded.
+This deep audit covers the repository at commit `8491b8d` on `main`, including the previously generated audit report as part of the repository corpus. All 134 tracked Markdown documents were read completely. High-risk subsystem chains were re-read in full, then compared across canonical architecture, ADRs, lifecycle state machines, models, protocols, APIs, SDKs, registries, requirements, security documents, tests, and diagrams.
 
-The audit distinguishes document navigation from evidence. Search-like extraction was used only to organize already-read material; findings below are based on cross-document reasoning across architecture, state machines, models, protocols, APIs, SDKs, registries, requirements, security, testing, and diagrams.
+The audit intentionally treats search and extraction as navigation and bookkeeping only. Findings below are based on cross-document interpretation and contract comparison, not isolated keyword absence.
 
-## Repository Model
+## Deep Repository Model
 
-The repository contains 136 tracked files, including 133 Markdown documents and 12,365 Markdown lines. The documentation hierarchy consists of 10 architecture documents, 8 ADR documents, 13 models, 6 protocols, 5 APIs, 4 SDKs, 8 registries, 6 requirement documents, 5 lifecycle state machines, 6 testing documents, 5 diagrams, 3 security documents, 12 focused specifications, 7 standards, 7 UI documents, 4 backlog documents, and master/meta documents.
+The repository describes an Android agent-first runtime with a layered execution path: user/workspace interaction feeds tasks and workflows; the runtime resolves context and plans execution; agent loops invoke providers and tools; tools cross permission and sandbox boundaries; plugins and registries extend capabilities; memory and context services persist and project state; background execution preserves eligible work; lifecycle state machines define formal state; APIs, protocols, and SDKs expose contracts; tests and requirements define expected behavior.
 
-The integrated system model is: product and master specification → runtime and subsystem architecture → lifecycle state machines → domain models → wire protocols → public APIs → SDK convenience layers → registries and capability views → requirements → tests and diagrams. The repository now contains a canonical-source index and glossary, but those documents are governance aids; the subsystem documents remain the behavioral authorities identified by that index.
+The document graph contains 649 normalized internal Markdown edges with no unresolved relative file links. Structural link correctness is therefore strong, but semantic traceability and contract completeness are not equivalent to link correctness.
 
-## Ownership and Graph Validation
+## Critical Finding 1 — Requirements Are Not Traceable End to End
 
-`docs/CANONICAL_SOURCES.md` identifies 19 major concept owners, including runtime, agent loop, multi-agent coordination, workflow progression, tools, memory, context assembly, providers, plugins, sandbox, security, permissions, Full Environment behavior, task lifecycle, and background execution. The cross-reference graph contains 649 normalized internal Markdown edges and no unresolved relative file links.
+The requirements corpus contains 274 distinct requirement-like identifiers, while `docs/TRACEABILITY.md` contains 12 rows and 12 identifiers. Testing documents contain only 10 requirement identifiers, and the 28 threat IDs in `security/ThreatModel.md` appear in none of the testing documents.
 
-The graph is structurally connected, but structural connectivity is not equivalent to semantic traceability. Several API, protocol, SDK, registry, and testing documents still use generic “owning architecture document” language instead of precise ownership relationships. That weakens the ability to determine whether a contract is authoritative, derived, or merely explanatory.
+This is a direct cross-document failure between requirements, threat analysis, traceability, and testing. The current matrix has only a small sample and marks each sample as `✅`, but it does not prove implementation, test behavior, security coverage, performance coverage, or end-to-end satisfaction.
 
-## Finding 1 — Traceability Is Incomplete
+**Impact:** the project cannot demonstrate that its specified behavior is implemented or testable. Missing rows conceal unimplemented, contradictory, deferred, and untested requirements.
 
-**Severity: Critical.** The requirements documents contain 274 distinct requirement-like identifiers, while `docs/TRACEABILITY.md` contains only 12 rows and 12 identifiers. The matrix therefore omits 262 identified requirements, including large portions of agent, autonomy, context management, execution lifecycle, sandbox, and environment requirements.
+**Remediation:** create one row per requirement and threat identifier with canonical owner, lifecycle, model, protocol, API, SDK, registry, implementation owner, unit test, integration test, E2E test, security/performance test, evidence, and status. Do not use `✅` unless the linked evidence defines and verifies the requirement.
 
-This is a cross-document gap between `requirements/FR.md` and `requirements/NFR.md` on one side and `docs/TRACEABILITY.md` on the other. The matrix currently maps only a small sample and marks every mapped row with `✅`, but it does not provide implementation modules, security/performance test columns, or evidence that each linked document actually satisfies the requirement.
+## Critical Finding 2 — Security Threats Are Not Connected to Security Tests
 
-**Required remediation:** expand the matrix to one row per requirement, add canonical architecture, lifecycle, model, protocol, API, SDK, registry, implementation, unit, integration, E2E, security/performance, and status columns, and use evidence-based statuses rather than treating a link as proof.
+`security/ThreatModel.md` defines 28 threat identifiers, but `testing/SecurityTests.md`, `testing/IntegrationTests.md`, and the other testing documents contain no threat identifiers. The security test document describes penetration scenarios, but the scenarios are not traceably tied to the threat model’s specific threats.
 
-## Finding 2 — Derived Contract Ownership Is Too Generic
+**Impact:** a security scenario can appear covered while the actual threat, attack precondition, expected control, and failure signal remain unknown. This prevents proving that sandbox escape, credential leakage, permission bypass, network policy failure, plugin abuse, and prompt-injection containment are tested against the stated threat model.
 
-**Severity: High.** Twenty-six documents have derived status declarations that still refer generically to “the owning architecture document.” This affects API, protocol, SDK, registry, and test documents. Those layers have different responsibilities and cannot all be derived from architecture in the same way.
+**Remediation:** map every `TM-*` identifier to one or more test cases with attacker capability, precondition, action, expected control, expected denial or containment result, logging/audit expectation, and cleanup condition.
 
-For example, an API should derive public operations and request/response semantics from architecture plus its protocol and model; a protocol should own wire/message shape; an SDK should provide convenience behavior over the API; a registry should own catalog membership or a capability projection; and testing documents should map behavior to requirements and lifecycle contracts. Generic ownership language makes it difficult to resolve conflicts and violates the repository’s intended distinction between identity, behavior, lifecycle, wire contract, API, SDK, registry, and derived capability view.
+## High Finding 3 — Formal Agent Lifecycle and Agent Model Use Different State Vocabularies
 
-**Required remediation:** assign precise source relationships to every API, protocol, SDK, registry, and test document. State what the document owns and what it may not redefine.
+The canonical Agent lifecycle defines `Created`, `Configured`, `Ready`, `Running`, `Paused`, `WaitingApproval`, `Reflecting`, `Completing`, `Completed`, `Failed`, and `Cancelled`. `models/Agent.md` instead defines `IDLE`, `THINKING`, `EXECUTING`, `WAITING`, `ERROR`, and `CANCELLED` as `AgentStatus` values.
 
-## Finding 3 — Task Model Has Duplicate Authority Declarations
+These may be intended as persisted lifecycle states versus runtime loop phases, but the model does not establish that distinction strongly enough. `WAITING` is not the canonical `WaitingApproval`; `ERROR` is not the canonical `Failed`; `THINKING` and `EXECUTING` are not canonical states; and `Created`, `Configured`, `Ready`, `Paused`, `Reflecting`, and `Completing` are absent from the model enum.
 
-**Severity: Medium.** `models/Task.md` contains two top-level derived status declarations: one document-level block and a second block immediately above the persisted shape. The second block is useful because it states that the `TaskStatus` enum must match `state-machines/TaskLifecycle.md`, but the duplicate document authority declaration creates ambiguity about which block is the controlling metadata.
+**Impact:** persistence, event consumers, API responses, and UI state can disagree about the current agent state. Recovery and approval logic may be implemented against the wrong enum.
 
-The canonical task lifecycle defines Draft, Pending, Queued, Running, Blocked, WaitingApproval, Completed, Failed, Cancelled, and RetryPending. The model includes corresponding status values, so the lifecycle relationship is substantively clear; the problem is ownership metadata duplication rather than a verified state mismatch.
+**Remediation:** either make `AgentStatus` exactly derive from the canonical state machine or explicitly split the model into `AgentLifecycleState` and `AgentExecutionPhase`, with a normative mapping table and API serialization rules.
 
-**Required remediation:** retain one document-level authority block and convert the enum consistency statement into a normal model constraint or explicit “Derived constraints” section.
+## High Finding 4 — Plugin Model Is a Projection, but Its Mapping Is Undefined
 
-## Finding 4 — Lifecycle Contract Requires Explicit Compatibility Matrices
+The canonical Plugin lifecycle contains 13 states, including discovery, download, verification, installation, activation, deactivation, uninstall, and failure states. `models/Plugin.md` exposes only `INSTALLED`, `ACTIVE`, `DISABLED`, and `ERROR`.
 
-**Severity: High.** The canonical state machines define formal states for Agent, Plugin, Provider, Task, and Workflow, but supporting execution and background documents use overlapping state vocabulary from multiple lifecycles. For example, `specs/EXECUTION_LIFECYCLE.md` and `specs/BACKGROUND_EXECUTION.md` use task and execution terms such as `RetryPending`, `WaitingApproval`, `Queued`, `Running`, and `Blocked`, while the protocol layer introduces execution terms such as `PLANNING` and `EXECUTING`.
+A compact persisted status can be valid, but the repository does not define whether the model is a coarse projection, whether transient states are event-only, or how `Failed`, `Inactive`, `Verifying`, and `Activating` are represented during recovery. The protocol and API documents describe lifecycle messages and hooks, but do not provide a complete state-to-model mapping.
 
-This is not automatically a contradiction: some terms may represent execution phases rather than TaskStatus values. However, the repository does not consistently state that distinction at every contract boundary. Without compatibility tables, implementers can incorrectly treat a phase as a persisted state or introduce a state that is absent from the canonical machine.
+**Impact:** plugin installation progress, retries, failure recovery, UI display, and audit logs cannot be implemented consistently.
 
-**Required remediation:** add compatibility tables for Task/Execution, Agent/AgentStep, Workflow/WorkflowStep, Provider/ProviderRequest, Plugin/PluginOperation, TerminalSession, Workspace, and ToolCall. Each table must classify every term as formal state, phase, operation, event, or prose and identify the canonical owner.
+**Remediation:** define a canonical mapping from every lifecycle state to persisted model state, event state, API state, and registry state. Specify which transitions are durable and which are transient.
 
-## Finding 5 — Full Environment Architecture Is Consistent but Cross-Document Coverage Is Uneven
+## High Finding 5 — Tool Protocol and Tool Model Are Not Fully Aligned
 
-**Severity: Medium.** `specs/FULL_ENVIRONMENT.md` and `architecture/SANDBOX.md` consistently describe one bundled Debian-slim environment with glibc, apt, proot, APK-bundled rootfs assets, on-demand extraction, Python, Node/npm, and workspace overlays. The old “legacy optional environment” phrase is absent from the repository, and the sandbox roadmap no longer presents that phrase as an alternative installation tier.
+`models/Tool.md` defines `PENDING`, `APPROVED`, `EXECUTING`, `COMPLETED`, `DENIED`, and `ERROR` for `ToolCallStatus`. `protocols/Tool-Protocol.md` defines invocation, error handling, and timeout behavior but does not expose the complete status contract or a formal mapping to the model. The tool architecture and API additionally use approval predicates such as `NeedsApproval`.
 
-The supporting security policy and several requirement documents describe the containment or requirement consequences without repeating all Full Environment properties. That is acceptable when ownership is explicit, but the current source map and traceability matrix do not connect every environment requirement to the Full Environment canonical source and the corresponding extraction, apt, Python, Node, APK-integrity, and performance tests.
+**Impact:** callers cannot determine whether approval is a state, a permission decision, or an operation result; timeout and denial outcomes may be serialized inconsistently; and tool execution events may not match persisted status.
 
-**Required remediation:** keep `specs/FULL_ENVIRONMENT.md` as the environment behavior owner, link every environment requirement to it, and add explicit tests for bundled asset integrity, architecture selection, extraction, proot launch, apt installation, Python wheel behavior, npm/native-module behavior, cleanup, and recovery.
+**Remediation:** define ToolCall lifecycle ownership, request/response fields, approval decision semantics, timeout transitions, cancellation transitions, error codes, and event-to-model mapping in one normative contract chain.
 
-## Finding 6 — Test Documents Are Not Yet Requirement-Complete
+## High Finding 6 — Execution Protocol Uses Phase Terms Without a Formal Relationship to Task Lifecycle
 
-**Severity: Critical.** The six testing documents describe unit, integration, E2E, performance, regression, and security areas, but only 10 requirement identifiers appear across the testing corpus. The testing layer therefore does not provide complete requirement traceability for the 274 requirement identifiers.
+The canonical Task lifecycle defines `Draft`, `Pending`, `Queued`, `Running`, `Blocked`, `WaitingApproval`, `Completed`, `Failed`, `Cancelled`, and `RetryPending`. `protocols/Execution-Protocol.md` introduces `PLANNING` and `EXECUTING`, while `specs/EXECUTION_LIFECYCLE.md` describes planning and execution stages and background execution uses task lifecycle terms.
 
-The test documents include important scenario themes, but a feature mention is not enough to demonstrate coverage. The audit requires each behavior to identify inputs, setup, action, expected result, failure conditions, and relevant state transitions. This information must be connected to requirement IDs and contract documents.
+Those terms may correctly represent execution phases, but the protocol does not make the phase/state distinction normative. There is no complete mapping specifying whether `PLANNING` is inside `Pending`, `Queued`, or `Running`, or how phase transitions are emitted while the Task remains in a formal lifecycle state.
 
-**Required remediation:** add requirement IDs and executable scenario definitions to each testing document, then link every requirement to the appropriate test level and identify uncovered or deferred behavior explicitly.
+**Impact:** event consumers, checkpoint recovery, retry logic, and user-facing status can diverge.
 
-## Finding 7 — Implementation Feasibility Evidence Is Not Yet Traceable
+**Remediation:** add a formal TaskState/ExecutionPhase compatibility matrix, define serialization, persistence, events, cancellation, approval, retry, and recovery behavior for every combination.
 
-**Severity: High.** The Full Environment documentation contains detailed implementation assumptions, including Debian rootfs assets, proot binaries, APK extraction, overlays, package installation, PT_INTERP handling, and runtime probes. Background and runtime documents also describe Android service and lifecycle behavior. However, there is no complete implementation traceability layer connecting each referenced service, class, module, package, asset, process-control behavior, and recovery rule to a stable implementation owner and tests.
+## High Finding 7 — Provider Model Does Not Expose the Canonical Provider Lifecycle
 
-This does not establish that the implementation is impossible. It establishes that feasibility is not yet demonstrated end to end from specification to implementation module and test evidence.
+The canonical Provider lifecycle defines `Registered`, `Configuring`, `Configured`, `Testing`, `Healthy`, `Degraded`, `Unhealthy`, `Disabled`, and `Removed`. `models/Provider.md` defines provider identity and configuration but does not provide a corresponding lifecycle status field or explicit state projection.
 
-**Required remediation:** create implementation-owner mappings inside the traceability matrix or an authoritative implementation mapping document, then verify module names, service names, Android lifecycle assumptions, process termination, storage cleanup, asset integrity, and checkpoint recovery against tests.
+The provider architecture, API, protocol, SDK, registry, and lifecycle documents describe routing and health behavior, but the persisted model does not clearly identify where lifecycle state is stored or how API consumers observe it.
 
-## Security and Boundary Assessment
+**Impact:** provider health, failover eligibility, disablement, removal, and routing decisions may be maintained only in implementation assumptions instead of a stable domain contract.
 
-The repository assigns security architecture to `architecture/SECURITY_MODEL.md`, threat analysis to `security/ThreatModel.md`, permission semantics to `security/PermissionModel.md`, containment to `security/SandboxPolicy.md`, and implementation architecture to `architecture/SANDBOX.md`. This ownership division is coherent and should be preserved.
+**Remediation:** add a canonical provider status projection and define the relationship between persisted status, in-memory `ProviderStatusMap`, registry membership, API responses, and routing eligibility.
 
-The remaining validation need is evidence linkage: permission-before-execution, plugin containment, credential isolation, network policy, background approval enforcement, secret-safe logs, package-install containment, and prompt-injection containment must each map to requirements and security/integration tests. The current testing and traceability documents do not yet demonstrate that complete chain.
+## High Finding 8 — API, Protocol, SDK, Registry, and Test Ownership Remains Generic
 
-## Required Execution Order
+Twenty-six documents use derived headers that refer to an “owning architecture document” without identifying the precise source relationship. This includes APIs, protocols, SDKs, registries, and testing documents. Several additional derived headers lack a Markdown source link in their opening metadata, including `models/Session.md`, all protocol documents, and `registry/FEATURES.md`.
 
-1. Normalize the remaining document ownership declarations, especially API, protocol, SDK, registry, and testing documents.
-2. Add lifecycle compatibility matrices for all formal state machines and execution phases.
-3. Expand requirement traceability from 12 rows to the complete requirement universe.
-4. Map implementation ownership and feasibility assumptions.
-5. Add detailed test scenarios and requirement IDs across unit, integration, E2E, security, performance, and regression documents.
-6. Reconcile diagrams and high-level overviews with canonical sources.
-7. Re-read every changed and related document.
-8. Rebuild the graph, rerun link validation, and perform a final finding verification.
+These layers cannot all derive the same way: protocols define message contracts, APIs define public operations, SDKs define convenience wrappers, registries define identity/catalog membership, and tests define evidence. Generic ownership statements make conflict resolution and change impact analysis unreliable.
 
-## Final Status
+**Remediation:** replace generic headers with precise ownership and dependency declarations for every contract-layer document.
 
-The repository has completed the full-read discovery and integrated-model phases, and the current audit has verified the main cross-document gaps above. It is **not yet end-to-end normalized** because requirement traceability, test mapping, precise contract ownership, lifecycle compatibility tables, and implementation feasibility mapping remain incomplete.
+## Medium Finding 9 — Task Model Contains Duplicate Authority Metadata
 
-The current baseline remains clean at commit `e768f19`. No repository files were modified during this audit pass.
+`models/Task.md` has two document-level derived declarations. Its enum constraint correctly points to `state-machines/TaskLifecycle.md`, but the duplicate authority blocks create ambiguity about document metadata and should be reduced to one declaration plus a separate model constraint section.
+
+This is a documentation governance defect, not a verified Task state mismatch: the Task status values correspond to the canonical lifecycle names.
+
+## Medium Finding 10 — Full Environment Behavior Is Strongly Specified but Not Fully Verified by Tests
+
+`specs/FULL_ENVIRONMENT.md` and `architecture/SANDBOX.md` consistently describe the single bundled Debian-slim environment: glibc, apt, proot, APK assets, on-demand extraction, Python, Node/npm, binary-wheel compatibility, and workspace overlays. The obsolete “legacy optional environment” phrase is absent.
+
+However, the requirement and testing layers do not establish complete evidence for architecture selection, APK asset integrity, rootfs extraction, proot startup, apt installation, Python binary wheels, npm native modules, overlay isolation, cache cleanup, and recovery. The environment specification is detailed, but the implementation and test chain is incomplete.
+
+**Remediation:** add explicit requirement and test mappings for each provisioning and runtime behavior, including failure and rollback conditions.
+
+## High Finding 11 — Testing Documents Describe Areas but Not Complete Behavioral Contracts
+
+The testing corpus has six documents and covers unit, integration, E2E, performance, regression, and security categories. However, most testing documents do not carry requirement IDs, threat IDs, lifecycle IDs, or complete scenario structures. `testing/E2ETests.md` contains journey tables, but the broader test corpus is not connected to the full requirement universe.
+
+**Impact:** test existence cannot be distinguished from test intent, and gaps in cancellation, approval, checkpoint recovery, provider failover, plugin disablement, sandbox isolation, package installation, background recovery, and secret handling remain unmeasured.
+
+**Remediation:** define each test with setup, input, action, expected output, failure condition, state transition, requirement ID, and test level.
+
+## Deep Security Boundary Assessment
+
+The ownership split among `SECURITY_MODEL.md`, `ThreatModel.md`, `PermissionModel.md`, `SandboxPolicy.md`, and `SANDBOX.md` is architecturally sensible. The missing piece is a verifiable chain from each security responsibility to a requirement, enforcement point, audit event, and test.
+
+The most important unproven controls are permission-before-execution, plugin containment, provider credential isolation from guest processes, network egress enforcement, background approval preservation, secret-safe logging, package installation confinement, and prompt-injection containment. These should be treated as explicit control objectives rather than prose assertions.
+
+## Deep Feasibility Assessment
+
+The Full Environment documents contain concrete assumptions about Debian rootfs assets, proot binaries, APK extraction, overlays, PT_INTERP handling, package managers, and runtime probes. Runtime and background documents contain Android service and lifecycle assumptions. The repository still lacks a complete stable mapping from these assumptions to implementation modules, service classes, persistence tables, process-control components, and test fixtures.
+
+The system is not proven infeasible from the documents reviewed. It is under-specified at the implementation traceability boundary. The next remediation must identify the implementation owner for every named service, manager, registry, process boundary, asset, database record, and recovery operation.
+
+## Required Remediation Order
+
+1. Define exact ownership and mapping rules for lifecycle states, execution phases, events, models, and APIs.
+2. Resolve Agent, Plugin, Provider, Tool, and Task contract mismatches.
+3. Replace generic derived headers with precise source relationships.
+4. Build complete requirement and threat traceability.
+5. Add implementation-owner mappings for runtime, Android services, sandbox, Full Environment, persistence, and process control.
+6. Expand test documents into requirement- and threat-linked behavioral scenarios.
+7. Reconcile diagrams and supporting overviews with the corrected canonical contracts.
+8. Re-read all changed and related documents, rebuild the graph, and repeat the deep audit.
+
+## Final Assessment
+
+The repository has a coherent high-level architecture and a strong structural documentation graph, but it is not yet contract-complete or evidence-complete. The most serious risks are incomplete traceability, absent threat-to-test mapping, and lifecycle/model/protocol ambiguity across Agent, Plugin, Provider, Tool, and Task execution.
+
+This report is a deep audit of the current repository state; it is not a completion claim. The repository remains clean except for this report file, and no remediation changes were made during the audit.
