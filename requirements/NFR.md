@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for NFR requirements.
+> This document records focused requirements for NFR; canonical subsystem definitions remain in the owning architecture documents.
+
+
 # Non-Functional Requirements — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

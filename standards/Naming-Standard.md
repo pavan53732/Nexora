@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Naming Standard coding standard.
+> This document defines conventions for Naming Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Naming Standard — Nexora
 
 ## Code

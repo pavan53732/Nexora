@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Performance Standard coding standard.
+> This document defines conventions for Performance Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Performance Standard — Nexora
 
 ## Targets

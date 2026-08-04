@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for ERROR CODES focused behavior.
+> This document explains focused behavior for ERROR CODES. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # Nexora Error Catalog
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

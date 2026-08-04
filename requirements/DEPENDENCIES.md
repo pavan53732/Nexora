@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for DEPENDENCIES requirements.
+> This document records focused requirements for DEPENDENCIES; canonical subsystem definitions remain in the owning architecture documents.
+
+
 # External Dependencies — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

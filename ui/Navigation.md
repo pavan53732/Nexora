@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for Navigation focused behavior.
+> This document explains focused behavior for Navigation. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # UI: Navigation — Nexora
 
 > Agent-first interaction model: see [ADR-0006](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md).

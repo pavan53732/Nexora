@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for Typography focused behavior.
+> This document explains focused behavior for Typography. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # UI: Typography — Nexora
 
 ## Font Stack

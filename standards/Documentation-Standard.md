@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Documentation Standard coding standard.
+> This document defines conventions for Documentation Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Documentation Standard — Nexora
 
 ## Rule

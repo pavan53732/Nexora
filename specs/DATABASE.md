@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for DATABASE focused behavior.
+> This document explains focused behavior for DATABASE. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # Database Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md)

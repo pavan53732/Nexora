@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for WORKSPACE focused behavior.
+> This document explains focused behavior for WORKSPACE. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # Workspace Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/SANDBOX.md](../architecture/SANDBOX.md) | [../docs/ARCHITECTURE.md](../docs/ARCHITECTURE.md)

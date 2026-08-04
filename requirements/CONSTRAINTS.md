@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for CONSTRAINTS requirements.
+> This document records focused requirements for CONSTRAINTS; canonical subsystem definitions remain in the owning architecture documents.
+
+
 # Design and Implementation Constraints — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

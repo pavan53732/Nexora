@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for BROWSER focused behavior.
+> This document explains focused behavior for BROWSER. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # Browser Automation Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

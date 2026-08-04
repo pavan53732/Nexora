@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for Animations focused behavior.
+> This document explains focused behavior for Animations. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # UI: Animations — Nexora
 
 ## Principles

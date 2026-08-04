@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for Icons focused behavior.
+> This document explains focused behavior for Icons. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # UI: Icons — Nexora
 
 ## Icon Set

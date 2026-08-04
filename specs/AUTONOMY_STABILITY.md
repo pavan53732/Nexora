@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for AUTONOMY STABILITY focused behavior.
+> This document explains focused behavior for AUTONOMY STABILITY. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # Autonomy & Stability Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

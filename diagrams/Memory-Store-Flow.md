@@ -1,3 +1,9 @@
+> **Status: DERIVED** for Memory Store Flow visual flow.
+> This diagram illustrates Memory Store Flow flow. The canonical definition is in the relevant architecture or state-machine document.
+>
+> Depends on: the relevant canonical architecture or state-machine document.
+
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # Memory Store Flow

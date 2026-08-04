@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for CONTEXT MANAGEMENT focused behavior.
+> This document explains focused behavior for CONTEXT MANAGEMENT. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # Context Management Specification — Nexora
 
 > **Status: CANONICAL** for read-time context assembly and projection.

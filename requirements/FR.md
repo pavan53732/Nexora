@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for FR requirements.
+> This document records focused requirements for FR; canonical subsystem definitions remain in the owning architecture documents.
+
+
 # Functional Requirements — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

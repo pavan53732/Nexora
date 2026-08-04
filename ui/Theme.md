@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for Theme focused behavior.
+> This document explains focused behavior for Theme. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # UI: Theme — Nexora
 
 ## Design System

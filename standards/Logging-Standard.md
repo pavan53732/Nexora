@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Logging Standard coding standard.
+> This document defines conventions for Logging Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Logging Standard — Nexora
 
 ## Logger

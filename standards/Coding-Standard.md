@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Coding Standard coding standard.
+> This document defines conventions for Coding Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Coding Standard — Nexora
 
 ## Language

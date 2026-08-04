@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for ASSUMPTIONS requirements.
+> This document records focused requirements for ASSUMPTIONS; canonical subsystem definitions remain in the owning architecture documents.
+
+
 # Project Assumptions — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

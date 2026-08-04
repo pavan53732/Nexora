@@ -1,3 +1,9 @@
+> **Status: DERIVED** for Agent Execution Flow visual flow.
+> This diagram illustrates Agent Execution Flow flow. The canonical definition is in the relevant architecture or state-machine document.
+>
+> Depends on: the relevant canonical architecture or state-machine document.
+
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # Agent Execution Flow

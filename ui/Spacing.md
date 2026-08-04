@@ -1,3 +1,9 @@
+> **Status: SUPPORTING** for Spacing focused behavior.
+> This document explains focused behavior for Spacing. The canonical subsystem definition is in the owning architecture document.
+>
+> Depends on: the relevant canonical architecture document.
+
+
 # UI: Spacing — Nexora
 
 ## Grid

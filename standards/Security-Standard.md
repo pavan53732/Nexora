@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Security Standard coding standard.
+> This document defines conventions for Security Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Security Standard — Nexora
 
 ## Principles

@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for Testing Standard coding standard.
+> This document defines conventions for Testing Standard. It applies across all subsystems and does not override canonical subsystem definitions.
+
+
 # Testing Standard — Nexora
 
 ## Test Pyramid
