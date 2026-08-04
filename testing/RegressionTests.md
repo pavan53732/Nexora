@@ -4,6 +4,13 @@
 
 Regression tests guard against contract drift and previously fixed failures.
 
+## Suite IDs
+
+- `RT-CONTRACT-*` — contract sample regression
+- `RT-PLUGIN-*` — plugin compatibility regression
+- `RT-PROVIDER-*` — provider compatibility regression
+- `RT-MIG-*` — schema and migration regression
+
 ## Framework Stack
 
 - reproducible fixture harness

@@ -2,36 +2,36 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest end-to-end contract hardening pass.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest structural normalization pass.
 
 ## Improvements completed in this pass
 
-- Added compatibility metadata expectations to the Tool and Skill registries.
-- Strengthened Security and Performance testing docs with explicit contract-evidence expectations.
-- Expanded traceability to include representative performance, security, reliability, and compatibility NFR concerns.
-- Improved cross-linkage between registry/versioning concerns and the hardened API/SDK contract path.
+- Introduced a shared `standards/Registry-Standard.md` for compatibility metadata expectations across registries.
+- Added suite-family identifiers to Unit, Integration, Regression, E2E, Security, and Performance testing documents.
+- Linked traceability rows to testing suite families instead of only document names.
+- Strengthened the compatibility trace path between versioning, registries, APIs, SDKs, and regression validation.
 
 ## Remaining gaps
 
-### 1. Full FR/NFR coverage is still incomplete
+### 1. Exhaustive FR/NFR enumeration is still missing
 
-The matrix now covers more representative concerns, but it still does not enumerate all requirements from `requirements/FR.md` and `requirements/NFR.md`.
+The traceability matrix is more structured, but it still does not enumerate the full requirement set.
 
-### 2. Test traceability still lacks executable IDs
+### 2. Suite-family IDs are not executable test case inventories
 
-Testing docs now specify stronger evidence expectations, but they still do not map to concrete executable suite IDs or case IDs.
+The testing docs now define suite namespaces, but most suites still lack concrete case lists, ownership, and execution status.
 
-### 3. Some entities still lack explicit lifecycle authorities
+### 3. Lifecycle authority remains uneven
 
-Workspace, Session, Memory, and TerminalSession still rely on architecture/spec documents rather than dedicated lifecycle/state authorities.
+Workspace, Session, Memory, and TerminalSession still do not have dedicated lifecycle/state documents.
 
-### 4. Registry compatibility expectations are still partly descriptive
+### 4. Shared registry schema is defined but not fully normalized into each registry
 
-The registries now express better compatibility intent, but they are not yet normalized into a single common compatibility schema across all registries.
+A common standard now exists, but full registry-by-registry normalization is still incomplete.
 
 ## Recommended follow-up work
 
-1. Exhaustively enumerate all FR and priority NFR rows in `docs/TRACEABILITY.md`.
-2. Introduce executable suite/case identifiers in testing docs and link them from traceability.
-3. Decide whether additional lifecycle/state documents are needed for Workspace, Session, Memory, and TerminalSession.
-4. Normalize compatibility metadata expectations into a shared registry standard.
+1. Enumerate all remaining FR and priority NFR rows in `docs/TRACEABILITY.md`.
+2. Add concrete test case inventory sections or files for each testing suite family.
+3. Decide whether to create dedicated lifecycle/state authorities for Workspace, Session, Memory, and TerminalSession.
+4. Normalize every registry to the shared registry standard field set.

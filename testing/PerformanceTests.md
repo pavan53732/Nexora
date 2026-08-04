@@ -4,6 +4,14 @@
 
 Performance tests validate latency, throughput, resource usage, background execution behavior, and scalability-sensitive contract paths.
 
+## Suite IDs
+
+- `PERF-START-*` — startup and navigation
+- `PERF-EXEC-*` — task and execution paths
+- `PERF-PROV-*` — provider streaming responsiveness
+- `PERF-MEM-*` — memory retrieval and ranking
+- `PERF-BG-*` — background execution stability
+
 ## Framework Stack
 
 - benchmark harnesses

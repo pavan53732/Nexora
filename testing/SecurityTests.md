@@ -4,6 +4,13 @@
 
 Security tests validate permission mediation, sandbox isolation, secret handling, integrity, and abuse resistance.
 
+## Suite IDs
+
+- `SEC-PERM-*` — permission enforcement
+- `SEC-SBX-*` — sandbox isolation
+- `SEC-SECRET-*` — secret handling and redaction
+- `SEC-PLUGIN-*` — plugin integrity and rollback
+
 ## Framework Stack
 
 - security-focused test harnesses
@@ -12,11 +19,11 @@ Security tests validate permission mediation, sandbox isolation, secret handling
 
 ## Penetration Test Scenarios
 
-- unauthorized tool invocation
-- sandbox escape attempts
-- secret leakage through provider/plugin boundaries
-- permission bypass during plugin activation
-- invalid approval or cancellation sequencing
+- `SEC-PERM-001` unauthorized tool invocation
+- `SEC-SBX-001` sandbox escape attempts
+- `SEC-SECRET-001` secret leakage through provider/plugin boundaries
+- `SEC-PLUGIN-001` permission bypass during plugin activation
+- `SEC-PERM-002` invalid approval or cancellation sequencing
 
 ## Run Schedule
 

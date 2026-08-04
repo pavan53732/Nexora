@@ -4,6 +4,16 @@
 
 Unit tests validate individual domain and contract behaviors in isolation.
 
+## Suite IDs
+
+- `UT-CONTRACT-*` — envelope, error, retry, pagination, and deduplication semantics
+- `UT-GT-*` — Git grounding
+- `UT-GND-*` — response grounding
+- `UT-RN-*` — reasoning
+- `UT-EV-*` — evidence and validation
+- `UT-MA-*` — multi-agent delegation
+- `UT-AG-*` — agent orchestration
+
 ## Framework Stack
 
 - Kotlin test framework
@@ -20,11 +30,11 @@ Tests SHOULD mirror the module and contract boundaries they validate.
 
 ## Example Tests
 
-- schema validation for tool input
-- error envelope mapping
-- retry/idempotency handling
-- pagination cursor encoding/decoding
-- event deduplication behavior
+- `UT-CONTRACT-001` schema validation for tool input
+- `UT-CONTRACT-002` canonical error-envelope mapping
+- `UT-CONTRACT-003` retry/idempotency handling
+- `UT-CONTRACT-004` pagination cursor encoding/decoding
+- `UT-CONTRACT-005` event deduplication behavior
 
 ## Coverage Targets
 
