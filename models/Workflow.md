@@ -1,35 +1,26 @@
-> **Status: DERIVED** for Workflow entity shape.
-> This document defines the data model for Workflow. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> **Status: DERIVED** for Workflow domain model.
+> This document defines the shape and semantics of Workflow in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Workflow.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Workflow.
-
+> Depends on: the canonical workflow architecture and lifecycle sources.
+> Referenced by: protocols, APIs, registries, and orchestration implementations.
 
 # Domain Model: Workflow
 
-> Canonical domain model. See [architecture/WORKFLOW_ENGINE.md](../architecture/WORKFLOW_ENGINE.md).
-
 ```kotlin
-package com.nexora.app.runtime.workflow
-
 data class Workflow(
     val id: String,
-    val name: String,
-    val steps: List<WorkflowStep>,
-    val onError: ErrorStrategy = ErrorStrategy.RETRY,
-    val maxRetries: Int = 3,
     val workspaceId: String,
-    val createdAt: Instant
+    val correlationId: String,
+    val status: WorkflowStatus,
+    val currentStepId: String?,
+    val steps: List<WorkflowStep>,
+    val version: Long,
+    val createdAt: Instant,
+    val updatedAt: Instant,
+    val completedAt: Instant? = null
 )
-
-enum class ErrorStrategy { RETRY, SKIP, ABORT, FALLBACK }
 ```
 
 ## Lifecycle and Step Semantics
 
-Workflow lifecycle is owned by [state-machines/WorkflowLifecycle.md](../state-machines/WorkflowLifecycle.md). Workflow-level state and step sub-state are separate: a workflow can be `Running` while multiple steps are `StepRunning`, `Pending`, or `StepCompleted`. Step updates MUST be versioned and persisted before workflow transition events are emitted.
-
-```kotlin
-enum class WorkflowLifecycleState { DEFINED, VALIDATED, RUNNING, PAUSED, COMPLETED, FAILED, CANCELLED }
-enum class WorkflowStepState { PENDING, RUNNING, COMPLETED, FAILED, SKIPPED }
-```
+`status` is the durable workflow lifecycle projection aligned to [state-machines/WorkflowLifecycle.md](../state-machines/WorkflowLifecycle.md). Step execution details are subordinate runtime state and MUST NOT replace workflow lifecycle state. Workflow transition events MUST be deduplicated by `(workflowId, version, transition)`.

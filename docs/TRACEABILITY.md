@@ -1,6 +1,6 @@
 # Requirement-to-Implementation Traceability Matrix
 
-> **Status: DERIVED** traceability index linking requirements to architecture, contracts, and validation artifacts.
+> **Status: DERIVED** traceability index linking requirements to architecture, contracts, registries, security, and validation artifacts.
 
 ## Legend
 
@@ -25,11 +25,20 @@ When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model
 | FR-EL-006 Execution lifecycle and checkpoint durability | `architecture/RUNTIME.md`, `specs/EXECUTION_LIFECYCLE.md` | `models/Execution.md`, `protocols/Execution-Protocol.md`, `docs/api/Runtime-API.md`, `state-machines/TaskLifecycle.md` | `testing/IntegrationTests.md`, `testing/PerformanceTests.md` | OK |
 | FR-S011 Sandbox mediation for execution | `architecture/SANDBOX.md` | `security/SandboxPolicy.md`, `specs/FULL_ENVIRONMENT.md`, `docs/SANDBOX_DEPTH.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md` | `testing/SecurityTests.md` | PARTIAL |
 | FR-M011 Tool history memory persistence | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md`, `specs/CONTEXT_MANAGEMENT.md` | `testing/UnitTests.md`, `testing/IntegrationTests.md` | PARTIAL |
+| FR-M012 File history persistence | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md`, `specs/FILE_SYSTEM.md`, `specs/CONTEXT_MANAGEMENT.md` | `testing/IntegrationTests.md` | PARTIAL |
+| FR-M013 User preference persistence | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md`, `docs/PRODUCT_PRINCIPLES.md` | `testing/UnitTests.md` | PARTIAL |
+| FR-M014 Knowledge graph entity persistence | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md`, `specs/CONTEXT_MANAGEMENT.md` | `testing/IntegrationTests.md` | PARTIAL |
+| FR-M015 Knowledge graph relationship persistence | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md`, `specs/CONTEXT_MANAGEMENT.md` | `testing/IntegrationTests.md` | PARTIAL |
+| FR-W001 Workspace runtime ownership | `architecture/RUNTIME.md` | `models/Workspace.md`, `docs/api/Runtime-API.md`, `docs/ARCHITECTURE.md` | `testing/UnitTests.md` | PARTIAL |
+| FR-TE001 Terminal tool execution | `specs/TERMINAL.md`, `architecture/SANDBOX.md` | `models/TerminalSession.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md` | `testing/SecurityTests.md`, `testing/IntegrationTests.md` | PARTIAL |
+| FR-MA-003 Multi-agent delegation | `architecture/MULTI_AGENT_SYSTEM.md` | `models/Task.md`, `protocols/Agent-Protocol.md`, `docs/api/Agent-API.md` | `testing/E2ETests.md`, `testing/UnitTests.md` | PARTIAL |
+| FR-WF-001 Workflow lifecycle orchestration | `architecture/WORKFLOW_ENGINE.md` | `models/Workflow.md`, `state-machines/WorkflowLifecycle.md` | `testing/IntegrationTests.md` | PARTIAL |
 | Canonical error envelope | `errors/ERROR_CODES.md` | all `docs/api/*`, `protocols/*`, `sdk/*`, runtime and task projections | `testing/RegressionTests.md`, `testing/IntegrationTests.md` | OK |
-| Correlation, idempotency, resume, and version semantics | owning architecture documents | API envelopes, execution/task models, protocol events, SDK helpers | `testing/E2ETests.md`, replay/retry scenarios | PARTIAL |
+| Correlation, idempotency, resume, and version semantics | owning architecture documents | API envelopes, execution/task/workflow models, protocol events, SDK helpers, testing docs | `testing/E2ETests.md`, `testing/UnitTests.md`, `testing/IntegrationTests.md` | PARTIAL |
 
 ## Open Gaps
 
-- Requirement-level mapping remains incomplete for many `FR-*` identifiers outside the core contract path.
-- Some registries and testing docs describe capability coverage but do not yet reference the hardened envelope semantics explicitly.
-- State-machine alignment is stronger for Task/Execution than for every remaining domain model.
+- Requirement-level mapping remains incomplete for large portions of `requirements/FR.md` and most `requirements/NFR.md` entries.
+- Several validation artifacts still describe coverage at a high level rather than linking to explicit requirement IDs.
+- Some registries remain inventory-first and only partially capture compatibility metadata.
+- Workspace and session lifecycle semantics are still less explicit than task, execution, and workflow semantics.

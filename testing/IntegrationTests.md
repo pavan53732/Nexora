@@ -1,75 +1,46 @@
-> **Status: DERIVED** for IntegrationTests tests.
-> This document describes the tests surface for IntegrationTests. Canonical behavior is defined in the owning architecture document.
->
-> Depends on: the canonical architecture document for IntegrationTests.
-> Referenced by: upstream architecture, models, protocols, and implementation consumers.
-
-
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
-
 # Integration Tests
 
 ## Scope
 
-Integration tests verify that Nexora modules interact correctly when wired together. These tests use real Android framework classes but mock external services (AI provider APIs, network).
-
-| Interaction Path | What Is Tested |
-|------------------|----------------|
-| Tool execution in sandbox | ToolManager → SandboxManager → filesystem operations |
-| Provider calls | AgentLoop → ProviderManager → HTTP client (mocked server) |
-| Memory read/write | MemoryManager → Room DAO → in-memory database |
-| Event bus pub/sub | EventBus → multiple subscribers receive correct events |
-| Plugin loading | PluginManager → PluginRegistry → DexClassLoader → tool registration |
-| Room database | Full DAO round-trips with migration scripts |
+Integration tests validate subsystem interactions and cross-layer contract preservation.
 
 ## Framework Stack
 
-| Tool | Purpose |
-|------|--------|
-| JUnit 5 | Test runner |
-| AndroidX Test | `@RunWith(AndroidJUnit4::class)`, test application context |
-| Room In-Memory DB | `:memory:` SQLite instance per test |
-| MockK | Mocking AI provider HTTP responses |
-| MockWebServer | OkHttp mock server for provider API simulation |
-| Turbine | Flow integration testing |
+- Kotlin integration test framework
+- emulator/device harness where needed
+- service doubles for providers and plugins
 
 ## Test Environment
 
-| Requirement | Specification |
-|-------------|---------------|
-| Emulator | Android API 34 (Google APIs) |
-| Runner | `androidTest` instrumentation |
-| Isolation | Fresh in-memory DB + fresh EventBus per test |
+Integration environments MUST exercise storage, eventing, and orchestration layers together.
 
 ## Key Scenarios
 
-1. **Full agent loop with mock provider** — Agent receives a goal, creates a plan via a mocked LLM response, executes a tool in the sandbox, stores the result in memory, and publishes a completion event.
-2. **Sandbox file operations** — Tool writes a file inside the sandbox, reads it back, verifies path confinement (cannot escape to `/sdcard`).
-3. **Workspace creation flow** — Create workspace → initialize Room tables → verify default agent template is inserted.
-4. **Plugin lifecycle** — Install plugin APK → verify signature → activate → register tools → execute a tool via ToolManager → deactivate → verify tools unregistered.
+- agent starts task and emits durable lifecycle events
+- tool invocation flows through permission and sandbox checks
+- provider streaming returns ordered terminal semantics
+- plugin activation registers capabilities transactionally
+- runtime replay or retry preserves correlation and durable versions
 
 ## Naming Convention
 
-```
-should_<expected>_when_<modules_interact>
-```
-
-Example: `should_storeResultInMemory_when_agentLoopCompletesToolExecution`
+Names SHOULD reflect subsystem boundaries and requirement or contract concerns.
 
 ## Coverage Target
 
-| Path | Target |
-|------|--------|
-| Integration paths (module boundaries) | **60%** |
+Cross-layer contract-sensitive paths are mandatory.
 
 ## CI Policy
 
-- **Trigger**: Every pull request (core scenarios), nightly (full suite).
-- **Timeout**: 10 minutes per test class.
-- **Emulator**: Reused via Android Test Orchestrator for parallel execution.
+Contract-affecting documentation changes SHOULD be mirrored by integration evidence updates.
 
 ## Canonical Contract Evidence
 
-Tests asserting failure or recovery MUST assert the canonical `NXR-*` code and the semantic envelope fields, not only message text or a boolean failure. Lifecycle tests MUST assert no state mutation for invalid transitions, durable persistence before success events, transition-version deduplication, idempotent repeats, and cleanup/recovery behavior.
+Integration suites SHOULD explicitly validate:
 
-Operation tests MUST identify the API/protocol/SDK operation under test and its corresponding traceability row. Security tests MUST identify the threat or permission control they exercise.
+- `correlationId` continuity across subsystem boundaries
+- idempotent retry behavior for keyed operations
+- terminal outcome semantics for streaming and cancellation
+- canonical error-envelope preservation across adapters
+- lifecycle event ordering after durable commit
+- event deduplication and replay behavior

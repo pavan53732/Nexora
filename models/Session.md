@@ -1,36 +1,23 @@
-> **Status: DERIVED** for Session entity shape.
-> This document defines the data model for Session. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> **Status: DERIVED** for Session domain model.
+> This document defines the shape and semantics of Session in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Session.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Session.
-
+> Depends on: the canonical runtime and context-management sources.
+> Referenced by: memory, execution, and orchestration implementations.
 
 # Domain Model: Session
 
-> Canonical domain model.
-
 ```kotlin
-package com.nexora.app.core.models
-
-/**
- * A chat session within a workspace.
- */
 data class Session(
     val id: String,
     val workspaceId: String,
-    val title: String,
-    val messages: List<Message>,
+    val correlationId: String?,
+    val status: SessionStatus,
+    val activeTaskId: String?,
+    val activeAgentId: String?,
     val createdAt: Instant,
-    val updatedAt: Instant
+    val updatedAt: Instant,
+    val closedAt: Instant? = null
 )
-
-data class Message(
-    val id: String,
-    val role: MessageRole,
-    val content: String,
-    val toolCalls: List<ToolCall>?,
-    val timestamp: Instant
-)
-
-enum class MessageRole { SYSTEM, USER, ASSISTANT, TOOL }
 ```
+
+Session state is durable runtime context, not a substitute for task or execution lifecycle state. When a session is associated with a live execution, it SHOULD retain the active `correlationId` for observability and replay alignment.

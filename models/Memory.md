@@ -1,27 +1,25 @@
-> **Status: DERIVED** for Memory entity shape.
-> This document defines the data model for Memory. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> **Status: DERIVED** for Memory domain model.
+> This document defines the shape and semantics of Memory in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Memory.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Memory.
-
+> Depends on: the canonical memory architecture document.
+> Referenced by: protocols, storage, ranking, and context-management implementations.
 
 # Domain Model: Memory
 
-> Canonical domain model. See [architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md).
-
 ```kotlin
-package com.nexora.app.memory.models
-
-data class MemoryEntry(
+data class MemoryRecord(
     val id: String,
-    val content: String,
-    val embedding: FloatArray?,  // Vector representation
-    val scope: MemoryScope,
     val workspaceId: String?,
-    val tags: List<String>,
+    val sessionId: String?,
+    val correlationId: String?,
+    val scope: MemoryScope,
+    val kind: MemoryKind,
+    val content: JsonObject,
+    val embeddingRef: String?,
+    val score: Double?,
     val createdAt: Instant,
-    val metadata: Map<String, String>
+    val updatedAt: Instant
 )
-
-enum class MemoryScope { SESSION, WORKSPACE, LONG_TERM }
 ```
+
+Memory writes are durable records, not transient context projections. Memory retrieval, scoring, and replay operations SHOULD preserve `correlationId` where available so retrieved evidence can be tied back to the originating execution path.

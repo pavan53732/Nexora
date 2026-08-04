@@ -2,42 +2,42 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the API/SDK contract hardening work.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest contract hardening passes.
 
-## Confirmed alignments
+## Improvements completed in this pass
 
-- API specs now define stronger ownership boundaries between Agent, Tool, Provider, Plugin, and Runtime.
-- API and SDK docs consistently reference correlation IDs, idempotency keys, resume tokens, pagination cursors, durable version semantics, cancellation, and canonical error envelopes.
-- Protocol docs now mirror explicit lifecycle, deduplication, and terminal-outcome rules for Agent, Tool, Provider, Plugin, and Execution flows.
-- Task and Execution models were strengthened to separate durable lifecycle status from transient execution phase.
-- Traceability was restored from concern-only coverage to a requirement-level matrix for the core contract path.
+- Extended lifecycle-aware model guidance to Workflow, Session, Memory, and TerminalSession.
+- Strengthened the Memory protocol with provenance and correlation expectations.
+- Added compatibility/version metadata expectations to Agent, Provider, and Plugin registries.
+- Upgraded unit, integration, regression, and E2E testing docs to explicitly mention canonical envelope and replay/retry semantics.
+- Expanded the requirement-level traceability matrix to cover additional memory, workspace, terminal, workflow, and multi-agent concerns.
 
-## Remaining contradictions or gaps
+## Remaining gaps
 
-### 1. Requirement coverage is still incomplete
+### 1. Full requirement coverage is still incomplete
 
-The repository requirements set is far broader than the restored matrix. Many requirement IDs in `requirements/FR.md` and `requirements/NFR.md` still lack explicit rows, so traceability remains partial.
+The repository still lacks row-level traceability for many entries in `requirements/FR.md` and most of `requirements/NFR.md`.
 
-### 2. State-machine-to-model alignment is not complete across all entities
+### 2. Some lifecycle authorities remain indirect
 
-Task/Execution alignment was improved, but other models such as Workspace, Session, Workflow, Memory, and TerminalSession still need explicit lifecycle alignment checks against their operational documents.
+Session, Workspace, Memory, and TerminalSession now have stronger semantics, but they still rely on architecture/spec documents rather than explicit dedicated state-machine authorities.
 
-### 3. Testing docs do not uniformly assert envelope semantics
+### 3. Registry compatibility metadata is not yet universal
 
-The testing documents mention canonical contract evidence, but most do not yet explicitly enumerate checks for `correlationId`, `idempotencyKey`, `resumeToken`, pagination cursor semantics, or event deduplication behavior.
+Some registries, especially tools and skills, remain richer in inventory detail than in explicit contract-compatibility metadata.
 
-### 4. Registries remain mostly descriptive
+### 4. Testing docs describe expected evidence but not concrete executable test case identifiers
 
-The registries define inventory and capability matrices, but they do not consistently capture contract-version or compatibility metadata implied by the hardened SDK/API documents.
+The testing layer is stronger conceptually, but traceability to concrete executable test IDs remains limited.
 
-### 5. Memory contract path remains lighter than the other subsystems
+### 5. Security and performance traceability remain relatively high-level
 
-Memory protocols and models are comparatively less explicit about the same envelope and lifecycle rigor now applied to Agent/Tool/Provider/Plugin/Runtime paths.
+Security and performance testing are mentioned, but fine-grained mapping from NFRs to validation artifacts still needs expansion.
 
 ## Recommended follow-up work
 
-1. Extend requirement-level traceability to all requirement IDs in `requirements/FR.md` and key `NFR.md` entries.
-2. Audit remaining models against state machines or authoritative lifecycle sources.
-3. Add explicit canonical envelope assertions to unit, integration, regression, and E2E testing docs.
-4. Add compatibility/version metadata expectations to registries where relevant.
-5. Harmonize the memory path with the same cross-layer contract precision used elsewhere.
+1. Expand traceability to the complete `FR.md` and priority `NFR.md` set.
+2. Introduce explicit lifecycle authorities or state documents for Session, Workspace, Memory, and TerminalSession if those lifecycles are meant to be durable first-class concerns.
+3. Add compatibility metadata expectations to remaining registries where appropriate.
+4. Introduce concrete test case IDs or suites in testing docs to tighten traceability.
+5. Extend security and performance traceability to the same granularity as functional contract coverage.
