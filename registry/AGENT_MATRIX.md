@@ -1,8 +1,8 @@
-> **Status: DERIVED** for AGENT_MATRIX registry.
-> This document describes the registry surface for AGENT_MATRIX. Canonical behavior is defined in the owning architecture document.
+> **Status: DERIVED** for the agent capability matrix.
+> Agent identity and catalog membership are canonical in [AGENTS.md](./AGENTS.md). This matrix is derived from that catalog and is authoritative only for capability mapping.
 >
-> Depends on: the canonical architecture document for AGENT_MATRIX.
-> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+> Depends on: [AGENTS.md](./AGENTS.md), [../architecture/MULTI_AGENT_SYSTEM.md](../architecture/MULTI_AGENT_SYSTEM.md).
+> Referenced by: dispatch, permission, and scheduling consumers.
 
 
 # Nexora Agent Capability Matrix

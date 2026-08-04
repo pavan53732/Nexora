@@ -11,6 +11,8 @@
 
 ## 1. Purpose
 
+Nexora supports exactly one guest environment: the bundled Full Environment defined in [../specs/FULL_ENVIRONMENT.md](../specs/FULL_ENVIRONMENT.md). The roadmap below describes sandbox capabilities and phases, not alternative environment installation tiers.
+
 The sandbox is where agents *live*. Baseline isolation (paths, processes, quotas,
 network, permissions) is specified in `security/SandboxPolicy.md`. This document
 extends the sandbox toward **complete autonomy** — not just "safe" but
@@ -23,7 +25,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 
 ---
 
-## 2. legacy optional environment — Core Depth (Phase 3, ships with the sandbox)
+## 2. Sandbox autonomy foundations — Core Depth (Phase 3)
 
 ### 2.1 Sandbox Telemetry — agents observe themselves (FR-S011)
 - **What:** Tools for the agent to query its own environment: running processes, disk
@@ -143,7 +145,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 
 ---
 
-## 4. Tier 3 — Advanced (Phases 7–8+)
+## 4. Future sandbox capabilities (Phases 7–8+, not supported environment tiers)
 
 | Capability | Description | License/Impact |
 |-----------|-------------|----------------|
@@ -178,12 +180,12 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 
 ## 6. Phase Mapping
 
-- **Phase 3 (legacy optional environment):** FR-S011/012/014/015 + FR-S013 interfaces; telemetry, egress
+- **Phase 3 (sandbox autonomy foundations):** FR-S011/012/014/015 + FR-S013 interfaces; telemetry, egress
   proxy, quarantine, lifecycle tools; encryption design.
 - **Phase 4 (Full Environment start):** FR-S013 full snapshots; FR-S016 autonomy modes;
   FR-S017 encryption; prompt-injection containment; watchdog/self-healing.
 - **Phase 5 (Full Environment finish):** FR-S018 per-agent sandboxes; checkpoint integrity.
-- **Phase 7–8 (Tier 3):** WASM micro-sandboxes, isolatedProcess, template
+- **Phase 7–8 (future sandbox capabilities; not alternative environment tiers):** WASM micro-sandboxes, isolatedProcess, template
   marketplace, offline autonomy, export governance.
 
 

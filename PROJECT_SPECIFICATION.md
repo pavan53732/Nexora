@@ -26,6 +26,10 @@ This is the **master index** for the Nexora project. All detailed content lives 
 
 ---
 
+## Canonical Documentation
+
+The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SOURCES.md). Shared runtime terminology is defined in [docs/GLOSSARY.md](docs/GLOSSARY.md). High-level overview documents are non-normative summaries.
+
 ## Quick Reference
 
 - **One-line**: Nexora is an Android application that transforms your phone into a powerful autonomous AI agent workspace.

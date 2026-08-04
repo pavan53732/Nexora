@@ -1,6 +1,7 @@
 # Architecture Decision Records — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md)
+> Canonical source ownership is defined in [../CANONICAL_SOURCES.md](../CANONICAL_SOURCES.md). ADR status is recorded in each ADR metadata block below.
 
 Architecture Decision Records (ADRs) document major architectural decisions, their context, and consequences. Each ADR is immutable once accepted.
 

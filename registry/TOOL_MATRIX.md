@@ -1,8 +1,8 @@
-> **Status: DERIVED** for TOOL_MATRIX registry.
-> This document describes the registry surface for TOOL_MATRIX. Canonical behavior is defined in the owning architecture document.
+> **Status: DERIVED** for the tool capability matrix.
+> Tool identity and catalog membership are canonical in [TOOLS.md](./TOOLS.md). This matrix is derived from that catalog and is authoritative only for capability mapping.
 >
-> Depends on: the canonical architecture document for TOOL_MATRIX.
-> Referenced by: upstream architecture, models, protocols, and implementation consumers.
+> Depends on: [TOOLS.md](./TOOLS.md), [../architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md), [../security/PermissionModel.md](../security/PermissionModel.md).
+> Referenced by: sandbox, permission, and scheduling consumers.
 
 
 # Nexora Tool Capability Matrix

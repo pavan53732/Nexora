@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for the high-level system architecture overview. This document is non-normative and summarizes canonical subsystem documents. Authoritative definitions live in [CANONICAL_SOURCES.md](CANONICAL_SOURCES.md) and the linked `architecture/`, `specs/`, `security/`, and `state-machines/` documents.
+>
+> Depends on: [CANONICAL_SOURCES.md](CANONICAL_SOURCES.md), [GLOSSARY.md](GLOSSARY.md).
+>
 # System Architecture — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [architecture/](../architecture/) | [ADR-0003 Agent Runtime](adr/ADR-0003-Agent-Runtime.md) | [ADR-0006 Agent-First](adr/ADR-0006-Agent-First-Interaction-Model.md)

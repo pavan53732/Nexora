@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for the high-level system design narrative. This document is non-normative; execution, lifecycle, security, sandbox, and contract behavior are owned by the canonical documents listed in [CANONICAL_SOURCES.md](CANONICAL_SOURCES.md).
+>
+> Depends on: [CANONICAL_SOURCES.md](CANONICAL_SOURCES.md), [GLOSSARY.md](GLOSSARY.md).
+>
 # System Design — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
