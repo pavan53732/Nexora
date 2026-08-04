@@ -1,3 +1,11 @@
+> **Status: CANONICAL** for plugin lifecycle states and transitions.
+> This document owns the formal plugin state machine. It does NOT own plugin
+> subsystem architecture (see [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md))
+> or plugin identity (see [../registry/PLUGINS.md](../registry/PLUGINS.md)).
+>
+> Depends on: [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md).
+> Referenced by: [../registry/PLUGINS.md](../registry/PLUGINS.md).
+
 # Plugin Lifecycle State Machine
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

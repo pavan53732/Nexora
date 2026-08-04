@@ -1,3 +1,11 @@
+> **Status: CANONICAL** for plugin subsystem architecture and responsibility.
+> This document owns how plugins are loaded, sandboxed, and integrated. Plugin
+> lifecycle states are defined in [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
+> Plugin identity catalog lives in [../registry/PLUGINS.md](../registry/PLUGINS.md).
+>
+> Depends on: [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
+> Referenced by: [../registry/PLUGINS.md](../registry/PLUGINS.md), [../sdk/PluginSDK.md](../sdk/PluginSDK.md).
+
 # Plugin System — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [TOOL_SYSTEM.md](TOOL_SYSTEM.md)

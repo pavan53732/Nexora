@@ -1,3 +1,10 @@
+> **Status: DERIVED** for plugin identity catalog.
+> This document lists plugin IDs, names, versions, and metadata. Plugin lifecycle
+> states are defined in [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
+> Plugin subsystem architecture is defined in [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md).
+>
+> Depends on: [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md), [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
+
 # Plugin Registry — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
