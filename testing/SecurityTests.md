@@ -1,64 +1,33 @@
-> **Status: DERIVED** for SecurityTests tests.
-> This document describes the tests surface for SecurityTests. Canonical behavior is defined in the owning architecture document.
->
-> Depends on: the canonical architecture document for SecurityTests.
-> Referenced by: upstream architecture, models, protocols, and implementation consumers.
-
-
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
-
 # Security Tests
 
 ## Scope
 
-Security tests validate that Nexora's defenses hold against known attack vectors. Coverage is aligned with the **OWASP Mobile Top 10 (2024)**.
-
-| OWASP Category | Nexora Test Area |
-|----------------|------------------|
-| M1 — Improper Credential Storage | API keys stored in EncryptedSharedPreferences, not plaintext |
-| M2 — Inadequate Supply Chain Security | Plugin signing verification, APK integrity checks |
-| M3 — Insecure Communication | Provider API calls enforce TLS 1.3, certificate pinning |
-| M4 — Insecure Authentication | Session tokens validated server-side, no client-side bypass |
-| M5 — Insufficient Input Validation | Tool parameters sanitized, plan content validated |
-| M6 — Insecure Authorization | PermissionManager enforced at every tool call boundary |
-| M7 — Client Code Quality | No hardcoded secrets (detected via `detect-secrets`)
-| M8 — Code Tampering | APK signature verification, runtime integrity check |
-| M9 — Reverse Engineering | ProGuard/R8 obfuscation verified on release builds |
-| M10 — Extraneous Functionality | Debug logs, hidden UI, test endpoints removed in release |
+Security tests validate permission mediation, sandbox isolation, secret handling, integrity, and abuse resistance.
 
 ## Framework Stack
 
-| Tool | Purpose |
-|------|--------|
-| JUnit 5 | Test runner |
-| Custom security test helpers | `SandboxEscapeTestHelper`, `InjectionTestHelper` |
-| OWASP ZAP (Docker) | Automated API security scan against local test server |
-| `detect-secrets` | Static analysis for hardcoded credentials |
-| ProGuard/R8 verifier | Confirm obfuscation on release APK |
+- security-focused test harnesses
+- device/emulator and sandbox validation tools
+- adversarial fixtures where appropriate
 
 ## Penetration Test Scenarios
 
-| # | Scenario | Expected Result |
-|---|----------|----------------|
-| 1 | Tool in sandbox attempts `File("/sdcard/data").readText()` | `SecurityException` — path outside sandbox root |
-| 2 | Inject SQL via tool parameter into Room query | Query returns empty / sanitized result, no data leak |
-| 3 | Load a plugin APK with an invalid or tampered signature | `PluginVerificationException`, plugin rejected |
-| 4 | Exceed token budget by crafting a prompt that requests max tokens repeatedly | `InsufficientBudgetException` after first cycle |
-| 5 | XSS payload injected into agent output displayed in WebView | Payload rendered as plain text, not executed |
-| 6 | Agent in Workspace A attempts to read Workspace B's memory | `AccessDeniedException`, zero data returned |
-| 7 | Audit log completeness — execute 10 actions, query audit log | All 10 actions present with correct timestamp and actor |
-| 8 | EncryptedSharedPreferences — force-clear encryption key, restart app | API keys still accessible (re-encrypted on first boot) |
+- unauthorized tool invocation
+- sandbox escape attempts
+- secret leakage through provider/plugin boundaries
+- permission bypass during plugin activation
+- invalid approval or cancellation sequencing
 
 ## Run Schedule
 
-| Trigger | Scope |
-|---------|--------|
-| Every PR | Fast subset: scenarios 1–4 (no external tools, < 30 s) |
-| Weekly | Full suite: all 8 scenarios + OWASP ZAP scan + `detect-secrets` |
-| Pre-release | Full suite + manual penetration review by security team |
+Run on security-sensitive changes and before release gating.
 
 ## Canonical Contract Evidence
 
-Tests asserting failure or recovery MUST assert the canonical `NXR-*` code and the semantic envelope fields, not only message text or a boolean failure. Lifecycle tests MUST assert no state mutation for invalid transitions, durable persistence before success events, transition-version deduplication, idempotent repeats, and cleanup/recovery behavior.
+Security validation SHOULD explicitly assert:
 
-Operation tests MUST identify the API/protocol/SDK operation under test and its corresponding traceability row. Security tests MUST identify the threat or permission control they exercise.
+- permissions are enforced before side effects
+- canonical error-envelope redaction rules are preserved
+- credentials never cross caller-visible boundaries
+- cancellation and retries do not bypass authorization
+- plugin activation rollback preserves isolation guarantees

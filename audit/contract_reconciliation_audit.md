@@ -2,42 +2,36 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest contract hardening passes.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest end-to-end contract hardening pass.
 
 ## Improvements completed in this pass
 
-- Extended lifecycle-aware model guidance to Workflow, Session, Memory, and TerminalSession.
-- Strengthened the Memory protocol with provenance and correlation expectations.
-- Added compatibility/version metadata expectations to Agent, Provider, and Plugin registries.
-- Upgraded unit, integration, regression, and E2E testing docs to explicitly mention canonical envelope and replay/retry semantics.
-- Expanded the requirement-level traceability matrix to cover additional memory, workspace, terminal, workflow, and multi-agent concerns.
+- Added compatibility metadata expectations to the Tool and Skill registries.
+- Strengthened Security and Performance testing docs with explicit contract-evidence expectations.
+- Expanded traceability to include representative performance, security, reliability, and compatibility NFR concerns.
+- Improved cross-linkage between registry/versioning concerns and the hardened API/SDK contract path.
 
 ## Remaining gaps
 
-### 1. Full requirement coverage is still incomplete
+### 1. Full FR/NFR coverage is still incomplete
 
-The repository still lacks row-level traceability for many entries in `requirements/FR.md` and most of `requirements/NFR.md`.
+The matrix now covers more representative concerns, but it still does not enumerate all requirements from `requirements/FR.md` and `requirements/NFR.md`.
 
-### 2. Some lifecycle authorities remain indirect
+### 2. Test traceability still lacks executable IDs
 
-Session, Workspace, Memory, and TerminalSession now have stronger semantics, but they still rely on architecture/spec documents rather than explicit dedicated state-machine authorities.
+Testing docs now specify stronger evidence expectations, but they still do not map to concrete executable suite IDs or case IDs.
 
-### 3. Registry compatibility metadata is not yet universal
+### 3. Some entities still lack explicit lifecycle authorities
 
-Some registries, especially tools and skills, remain richer in inventory detail than in explicit contract-compatibility metadata.
+Workspace, Session, Memory, and TerminalSession still rely on architecture/spec documents rather than dedicated lifecycle/state authorities.
 
-### 4. Testing docs describe expected evidence but not concrete executable test case identifiers
+### 4. Registry compatibility expectations are still partly descriptive
 
-The testing layer is stronger conceptually, but traceability to concrete executable test IDs remains limited.
-
-### 5. Security and performance traceability remain relatively high-level
-
-Security and performance testing are mentioned, but fine-grained mapping from NFRs to validation artifacts still needs expansion.
+The registries now express better compatibility intent, but they are not yet normalized into a single common compatibility schema across all registries.
 
 ## Recommended follow-up work
 
-1. Expand traceability to the complete `FR.md` and priority `NFR.md` set.
-2. Introduce explicit lifecycle authorities or state documents for Session, Workspace, Memory, and TerminalSession if those lifecycles are meant to be durable first-class concerns.
-3. Add compatibility metadata expectations to remaining registries where appropriate.
-4. Introduce concrete test case IDs or suites in testing docs to tighten traceability.
-5. Extend security and performance traceability to the same granularity as functional contract coverage.
+1. Exhaustively enumerate all FR and priority NFR rows in `docs/TRACEABILITY.md`.
+2. Introduce executable suite/case identifiers in testing docs and link them from traceability.
+3. Decide whether additional lifecycle/state documents are needed for Workspace, Session, Memory, and TerminalSession.
+4. Normalize compatibility metadata expectations into a shared registry standard.
