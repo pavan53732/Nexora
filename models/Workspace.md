@@ -1,15 +1,15 @@
 > **Status: DERIVED** for Workspace domain model.
 > This document defines the shape and semantics of Workspace in the data model.
 >
-> Depends on: the canonical runtime/workspace sources and [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md).
-> Referenced by: runtime, files, memory, tasks, and project ownership semantics.
+> Depends on: the canonical runtime and workspace architecture sources.
+> Referenced by: tasks, sessions, files, tools, memory, and orchestration implementations.
 
 # Domain Model: Workspace
 
 ```kotlin
 data class Workspace(
     val id: String,
-    val name: String,
+    val ownerId: String,
     val status: WorkspaceStatus,
     val createdAt: Instant,
     val updatedAt: Instant,
@@ -17,4 +17,4 @@ data class Workspace(
 )
 ```
 
-Workspace is the durable project boundary for tasks, memory, files, sessions, and execution ownership. Lifecycle state authority is defined in [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md).
+Workspace lifecycle authority is defined in [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md). Workspace lifecycle governs durable availability and ownership context for contained sessions, tasks, files, tools, and memory operations.

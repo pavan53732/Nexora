@@ -1,12 +1,12 @@
 # Unit Test Case Inventory — Nexora
 
-| Case ID | Suite | Owner | Status | Purpose |
+| Case ID | Suite | Purpose | Owner | Status |
 |---|---|---|---|---|
-| UT-CONTRACT-001 | UT-CONTRACT | Core Runtime | Planned | Validate tool input schema enforcement |
-| UT-CONTRACT-002 | UT-CONTRACT | Core Runtime | Planned | Validate canonical error-envelope field preservation |
-| UT-CONTRACT-003 | UT-CONTRACT | Core Runtime | Planned | Validate idempotent retry handling for keyed operations |
-| UT-CONTRACT-004 | UT-CONTRACT | Core Runtime | Planned | Validate pagination cursor encode/decode behavior |
-| UT-CONTRACT-005 | UT-CONTRACT | Core Runtime | Planned | Validate event deduplication by entity/version/transition |
-| UT-MA-001 | UT-MA | Agent Runtime | Planned | Validate delegated sub-task linkage |
-| UT-AG-001 | UT-AG | Agent Runtime | Planned | Validate agent cancellation lifecycle projection |
-| UT-GND-001 | UT-GND | Validation Engine | Planned | Validate response grounding metadata shape |
+| UT-CONTRACT-001 | UT-CONTRACT | Validate tool input schema enforcement | Core Runtime | Planned |
+| UT-CONTRACT-002 | UT-CONTRACT | Validate canonical error-envelope field preservation | Core Runtime | Planned |
+| UT-CONTRACT-003 | UT-CONTRACT | Validate idempotent retry handling for keyed operations | Core Runtime | Planned |
+| UT-CONTRACT-004 | UT-CONTRACT | Validate pagination cursor encode/decode behavior | API Contracts | Planned |
+| UT-CONTRACT-005 | UT-CONTRACT | Validate event deduplication by entity/version/transition | Core Runtime | Planned |
+| UT-MA-001 | UT-MA | Validate delegated sub-task linkage | Agent Runtime | Planned |
+| UT-AG-001 | UT-AG | Validate agent cancellation lifecycle projection | Agent Runtime | Planned |
+| UT-GND-001 | UT-GND | Validate response grounding metadata shape | Grounding | Planned |

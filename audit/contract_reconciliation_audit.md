@@ -2,30 +2,31 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, lifecycle authorities, and testing documents after the latest operational traceability pass.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest operationalization pass.
 
 ## Improvements completed in this pass
 
-- Expanded all concrete test inventories with owner and status metadata.
-- Back-linked lifecycle authorities into the highest-value remaining model and memory-protocol documents.
-- Strengthened traceability rows so linked validation artifacts now include operational owner/status context instead of only bare case IDs.
+- Back-linked lifecycle authority documents into Workspace, Session, Memory, and TerminalSession models plus the Memory protocol.
+- Upgraded all test case inventory files with ownership and status metadata.
+- Extended traceability rows so validation references now include case ownership and status context.
+- Improved the operational usefulness of the traceability layer by making validation artifacts auditable rather than only structural.
 
 ## Remaining gaps
 
-### 1. Full requirement enumeration is still incomplete
+### 1. Full FR/NFR enumeration is still incomplete
 
-The traceability matrix is now more operationally useful, but it still does not enumerate the entire FR/NFR set.
+The traceability matrix is more operational, but it still does not enumerate the full requirement set.
 
-### 2. Execution evidence remains mostly planned
+### 2. Lifecycle back-linking is still partial at repository scale
 
-Most test inventories still mark cases as `Planned`, so coverage intent is stronger than realized verification.
+The most important model/protocol documents now reference lifecycle authorities, but broader architecture, API, SDK, and testing references are still incomplete.
 
-### 3. Lifecycle back-linking is improved but not exhaustive
+### 3. Test inventories still need execution metadata
 
-The new lifecycle authorities are now referenced from more documents, but repository-wide normalization is still incomplete.
+Owner and status fields now exist, but there is still no execution history, evidence location, or pass/fail status tracking.
 
 ## Recommended follow-up work
 
-1. Continue enumerating the remaining FR and priority NFR rows with the existing owner/status-aware case-ID scheme.
-2. Expand case inventories further with execution evidence fields when implementation begins.
-3. Continue lifecycle back-link normalization across additional architecture, API, SDK, and protocol documents.
+1. Continue exhaustive FR and priority NFR row enumeration using the operationalized case-ID model.
+2. Back-link lifecycle authorities into all remaining architecture, API, SDK, and testing docs where lifecycle semantics matter.
+3. Add execution evidence fields or reporting conventions to the test case inventory model.

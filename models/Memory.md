@@ -1,7 +1,7 @@
 > **Status: DERIVED** for Memory domain model.
 > This document defines the shape and semantics of Memory in the data model.
 >
-> Depends on: the canonical memory architecture document and [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md).
+> Depends on: the canonical memory architecture document.
 > Referenced by: protocols, storage, ranking, and context-management implementations.
 
 # Domain Model: Memory
@@ -22,4 +22,4 @@ data class MemoryRecord(
 )
 ```
 
-Memory writes are durable records, not transient context projections. Memory retrieval, scoring, and replay operations SHOULD preserve `correlationId` where available so retrieved evidence can be tied back to the originating execution path. Lifecycle state authority is defined in [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md).
+Memory lifecycle authority is defined in [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md). Memory writes are durable records, not transient context projections. Memory retrieval, scoring, and replay operations SHOULD preserve `correlationId` where available so retrieved evidence can be tied back to the originating execution path.
