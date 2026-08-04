@@ -1,84 +1,13 @@
-> **Status: SUPPORTING** for terminal and shell behavior. This document explains focused usage and behavior but does not own the canonical definition. The canonical source is [../architecture/SANDBOX.md](../architecture/SANDBOX.md).
->
-> Depends on: [../architecture/SANDBOX.md](../architecture/SANDBOX.md).
-
 # Terminal Specification — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/SANDBOX.md](../architecture/SANDBOX.md) | [../docs/adr/ADR-0006-Agent-First-Interaction-Model.md](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md)
+## Scope
 
----
+Defines terminal execution behavior inside the sandboxed environment.
 
-## Overview
+## Lifecycle Alignment
 
-Nexora includes an embedded terminal that provides a Linux-like shell experience inside
-the sandbox. Per **ADR-0006 (Agent-First Interaction Model)**, the terminal is an
-**internal implementation detail**: it is invoked automatically by agents as a tool —
-never opened directly by the user. Terminal output is surfaced in the chat activity
-feed and captured in execution logs. There is **no user-facing terminal screen or
-navigation tab** (an optional developer mode may expose one later, but not as a primary
-feature).
+Terminal session lifecycle semantics are governed by [../lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md).
 
-## Requirements
+## Notes
 
-- Multiple concurrent terminal sessions (internal).
-- Agent-invocable: the agent runs commands as tools (`terminal_run` TOOL-020, `terminal_run_script` TOOL-021, `terminal_run_background` TOOL-022, `terminal_kill` TOOL-023 — see [registry/TOOLS.md](../registry/TOOLS.md)).
-- Command history persistent across sessions (agent-managed, internal).
-- Session restore after app restart.
-- All output captured for execution history and streamed into the agent activity feed.
-- Not reachable from the primary UI: no terminal tab, no terminal screen, no shell prompt UI.
-
-## Supported Operations
-
-Operations run inside Nexora's bundled [Full Environment](../specs/FULL_ENVIRONMENT.md).
-
-| Category | Commands |
-|---|---|
-| **Shell** | `bash`, `sh`, `dash` |
-| **Navigation** | `ls`, `cd`, `pwd`, `tree` |
-| **File Ops** | `cat`, `head`, `tail`, `touch`, `mkdir`, `rm`, `cp`, `mv`, `chmod` |
-| **System** | `ps`, `kill`, `top`, `htop`, `df`, `du`, `free` |
-| **Search** | `grep`, `find`, `rg`, `fd`, `ag` |
-| **Network** | `curl`, `wget`, `ping`, `netstat`, `ss` |
-| **Process** | `ps`, `kill`, `jobs`, `fg`, `bg`, `nohup` |
-| **Git** | Full native `git` |
-| **Python** | `python3`, `python3.11`, `pip`, `pip3`, `venv` |
-| **Node** | `node`, `npm`, `npx`, `corepack` |
-| **Build** | `make`, `gcc`, `g++`, `ld` |
-| **Package** | `apt`, `apt-get`, `dpkg` |
-| **Database** | `sqlite3`, `psql` (client) |
-| **Media** | `ffmpeg`, `ffprobe` (if installed via apt) |
-
-## Terminal Features
-
-- Tab completion for commands and file paths.
-- Color-coded output (preserved when rendered in activity cards).
-- Scrollable output buffer (configurable size).
-- Copy/paste support (via activity card interactions).
-
-## Phase Mapping
-
-- **Phase 1**: Terminal interface contracts only (`TerminalSession`, command execution interface). No terminal UI.
-- **Phase 3**: Full terminal implementation with shell, history, sessions — internal, agent-invoked; activity feed integration.
-- **Phase 8**: Optional developer mode exposing terminal views to advanced users.
-
-## Environment Integration
-
-### Command Routing
-
-```kotlin
-fun execute(command: String): ExecutionResult {
-    return proot.execute(command, debianRootfs, overlay)
-}
-```
-
-### Session Environment
-
-```bash
-export NEXORA_WORKSPACE_ID="ws-uuid"
-export NEXORA_ENVIRONMENT="full"
-export NEXORA_APP_VERSION="1.2.3"
-export HOME="/workspace/home"
-export PATH="/usr/local/bin:/usr/bin:/bin:/workspace/.local/bin"
-```
-
-These variables allow scripts to detect that they are running inside Nexora and adapt behavior.
+Terminal process activity may support tool or task execution, but terminal session state MUST NOT replace higher-level execution lifecycle authority.
