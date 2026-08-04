@@ -50,3 +50,13 @@ data class ProviderProfile(
     val isDefault: Boolean = false
 )
 ```
+
+## Lifecycle and Health Semantics
+
+Every persisted provider profile MUST carry a lifecycle projection from [state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md). Configuration identity and health are separate concerns: routing eligibility is derived from lifecycle state and the latest health version, never from a nullable or stale model field.
+
+```kotlin
+enum class ProviderLifecycleState { REGISTERED, CONFIGURING, CONFIGURED, TESTING, HEALTHY, DEGRADED, UNHEALTHY, DISABLED, REMOVED }
+```
+
+The in-memory health map is a cache. The persisted transition version and last committed state are authoritative after restart; stale health observations MUST NOT overwrite a newer transition.

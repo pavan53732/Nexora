@@ -27,3 +27,7 @@ data class Plugin(
 
 enum class PluginStatus { INSTALLED, ACTIVE, DISABLED, ERROR }
 ```
+
+## Lifecycle and Operation Semantics
+
+`status` is a durable projection of [state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md): `INSTALLED` represents `Installed` or `Inactive`; `ACTIVE` represents `Active`; `ERROR` represents `Failed`; and `DISABLED` is an administrative projection that MUST include the reason and underlying lifecycle state. Download, verification, installation, activation, deactivation, and uninstall progress MUST be represented by the lifecycle state or an associated operation record, not inferred from `status`.

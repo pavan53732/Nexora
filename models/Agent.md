@@ -35,3 +35,14 @@ enum class AgentType {
 
 enum class AgentStatus { IDLE, THINKING, EXECUTING, WAITING, ERROR, CANCELLED }
 ```
+
+## Lifecycle and Execution Semantics
+
+`lifecycleState` is the durable state-machine value defined by [state-machines/AgentLifecycle.md](../state-machines/AgentLifecycle.md). `executionPhase` is transient runtime activity and MUST NOT replace lifecycle state.
+
+```kotlin
+enum class AgentLifecycleState { CREATED, CONFIGURED, READY, RUNNING, PAUSED, WAITING_APPROVAL, REFLECTING, COMPLETING, COMPLETED, FAILED, CANCELLED }
+enum class AgentExecutionPhase { NONE, PLANNING, ACTING, OBSERVING, REFLECTING, FINALIZING }
+```
+
+The legacy `status` field is not a second authority. If retained for compatibility, it MUST be a projection: `IDLE` for `CREATED`, `CONFIGURED`, or `READY`; `THINKING` for `PLANNING` or `REFLECTING`; `EXECUTING` for `ACTING` or `OBSERVING`; `WAITING` for `PAUSED` or `WAITING_APPROVAL`; `ERROR` for `FAILED`; and `CANCELLED` for `CANCELLED`. `COMPLETING` and `COMPLETED` require an explicit API representation and MUST NOT be silently collapsed.

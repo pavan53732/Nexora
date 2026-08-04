@@ -24,3 +24,12 @@ data class Workflow(
 
 enum class ErrorStrategy { RETRY, SKIP, ABORT, FALLBACK }
 ```
+
+## Lifecycle and Step Semantics
+
+Workflow lifecycle is owned by [state-machines/WorkflowLifecycle.md](../state-machines/WorkflowLifecycle.md). Workflow-level state and step sub-state are separate: a workflow can be `Running` while multiple steps are `StepRunning`, `Pending`, or `StepCompleted`. Step updates MUST be versioned and persisted before workflow transition events are emitted.
+
+```kotlin
+enum class WorkflowLifecycleState { DEFINED, VALIDATED, RUNNING, PAUSED, COMPLETED, FAILED, CANCELLED }
+enum class WorkflowStepState { PENDING, RUNNING, COMPLETED, FAILED, SKIPPED }
+```

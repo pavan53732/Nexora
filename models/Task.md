@@ -45,3 +45,13 @@ enum class TaskStatus {
     WAITING_APPROVAL, COMPLETED, FAILED, CANCELLED, RETRY_PENDING
 }
 ```
+
+## Lifecycle and Execution Semantics
+
+`status` is the durable `TaskStatus` projection of [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). Execution phase is separate and transient.
+
+```kotlin
+enum class TaskExecutionPhase { NONE, PLANNING, EXECUTING, OBSERVING, REFLECTING, FINALIZING }
+```
+
+A task MAY be `RUNNING` while its phase changes. Phase changes MUST NOT create Task lifecycle transitions unless the lifecycle document explicitly lists the trigger. Approval, blocking, retry, cancellation, and checkpoint recovery are lifecycle concerns and MUST remain observable independently of phase.

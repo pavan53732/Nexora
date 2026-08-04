@@ -40,3 +40,9 @@ data class TokenUsage(
     val totalTokens: Int
 )
 ```
+
+## Execution Phase Semantics
+
+`EventType` identifies an immutable execution record; it is not a lifecycle state. Runtime phase is represented by the event stream and current execution projection. Each event MUST preserve task ID, agent ID, correlation ID, sequence/version, phase or event type, status, and canonical error information when applicable.
+
+Execution events are append-only and at-least-once. Consumers MUST deduplicate by execution ID and sequence/version. A checkpoint event is durable only after the referenced checkpoint has been committed.
