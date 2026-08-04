@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for security threat modeling. This document explains focused usage and behavior but does not own the canonical definition. The canonical source is [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md).
+>
+> Depends on: [../architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md).
+
 # Threat Model — Nexora (STRIDE)
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for execution lifecycle behavior. This document explains focused usage and behavior but does not own the canonical definition. The canonical source is [../state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md).
+>
+> Depends on: [../state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md).
+
 # Execution Lifecycle Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

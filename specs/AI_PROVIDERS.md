@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for AI provider usage and configuration. This document explains focused usage and behavior but does not own the canonical definition. The canonical source is [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md), [../state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md).
+>
+> Depends on: [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md), [../state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md).
+
 # AI Providers Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md)

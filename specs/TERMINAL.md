@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for terminal and shell behavior. This document explains focused usage and behavior but does not own the canonical definition. The canonical source is [../architecture/SANDBOX.md](../architecture/SANDBOX.md).
+>
+> Depends on: [../architecture/SANDBOX.md](../architecture/SANDBOX.md).
+
 # Terminal Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/SANDBOX.md](../architecture/SANDBOX.md) | [../docs/adr/ADR-0006-Agent-First-Interaction-Model.md](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md)

@@ -1,3 +1,7 @@
+> **Status: SUPPORTING** for sandbox depth and implementation roadmap. This document explains focused usage and behavior but does not own the canonical definition. The canonical source is [../architecture/SANDBOX.md](../architecture/SANDBOX.md), [../security/SandboxPolicy.md](../security/SandboxPolicy.md).
+>
+> Depends on: [../architecture/SANDBOX.md](../architecture/SANDBOX.md), [../security/SandboxPolicy.md](../security/SandboxPolicy.md).
+
 # Sandbox Depth & Autonomy Roadmap — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
