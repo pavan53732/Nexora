@@ -1,19 +1,19 @@
 # Plugin Registry — Nexora
 
-The plugin registry is the authoritative inventory of installable plugin packages and their exported capability surfaces.
+## Standard Fields
 
-## Registry
+| Field | Meaning |
+|---|---|
+| `pluginId` | Stable plugin identifier |
+| `version` | Plugin package version |
+| `origin` | Built-in or external source |
+| `compatibilityRange` | Compatible runtime/API range |
+| `dependencyRanges` | Dependency version constraints |
+| `exportedCapabilities` | Exported agent/tool/provider/skill references |
+| `integrityState` | Signature/integrity state |
+| `minContractVersion` | Minimum compatible API/SDK contract version |
+| `manifestVersion` | Manifest/schema version |
 
-Each plugin entry SHOULD include or derive the following metadata:
+## Notes
 
-- stable `pluginId`
-- plugin version
-- compatibility range
-- exported capability types
-- dependency ranges
-- integrity/signature state
-- minimum compatible API/SDK and manifest/schema versions
-
-## User Operations ↔ Lifecycle Mapping
-
-Registry views may summarize plugin lifecycle state, but transactional activation and rollback semantics remain governed by the canonical Plugin API and protocol documents.
+The Plugin registry remains an inventory document, but it SHOULD stay aligned with the compatibility expectations defined in [standards/Registry-Standard.md](../standards/Registry-Standard.md).

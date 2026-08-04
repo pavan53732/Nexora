@@ -2,36 +2,31 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest structural normalization pass.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after executing the stronger normalization sequence.
 
 ## Improvements completed in this pass
 
-- Introduced a shared `standards/Registry-Standard.md` for compatibility metadata expectations across registries.
-- Added suite-family identifiers to Unit, Integration, Regression, E2E, Security, and Performance testing documents.
-- Linked traceability rows to testing suite families instead of only document names.
-- Strengthened the compatibility trace path between versioning, registries, APIs, SDKs, and regression validation.
+- Added concrete test inventory documents with case identifiers for Unit, Integration, Regression, E2E, Security, and Performance suites.
+- Upgraded traceability rows from suite-family references to explicit case IDs.
+- Introduced lifecycle authority documents for Workspace, Session, Memory, and TerminalSession.
+- Normalized the major registries to the shared registry standard field model.
 
 ## Remaining gaps
 
-### 1. Exhaustive FR/NFR enumeration is still missing
+### 1. Full requirement enumeration is still incomplete
 
-The traceability matrix is more structured, but it still does not enumerate the full requirement set.
+The traceability matrix is stronger and now case-linked, but it still does not cover every requirement row in `requirements/FR.md` and `requirements/NFR.md`.
 
-### 2. Suite-family IDs are not executable test case inventories
+### 2. Newly introduced lifecycle authorities are not yet referenced everywhere
 
-The testing docs now define suite namespaces, but most suites still lack concrete case lists, ownership, and execution status.
+The new lifecycle documents exist, but not every architecture, model, protocol, or testing document has been updated to reference them where useful.
 
-### 3. Lifecycle authority remains uneven
+### 3. Case inventories are still minimal seeds
 
-Workspace, Session, Memory, and TerminalSession still do not have dedicated lifecycle/state documents.
-
-### 4. Shared registry schema is defined but not fully normalized into each registry
-
-A common standard now exists, but full registry-by-registry normalization is still incomplete.
+Concrete case IDs now exist, but the inventories are only starter sets and not comprehensive verification catalogs.
 
 ## Recommended follow-up work
 
-1. Enumerate all remaining FR and priority NFR rows in `docs/TRACEABILITY.md`.
-2. Add concrete test case inventory sections or files for each testing suite family.
-3. Decide whether to create dedicated lifecycle/state authorities for Workspace, Session, Memory, and TerminalSession.
-4. Normalize every registry to the shared registry standard field set.
+1. Exhaustively enumerate the remaining FR and priority NFR rows using the new case-ID scheme.
+2. Back-link lifecycle authority documents into all relevant models, protocols, and architecture documents.
+3. Expand the test inventories from seed sets into complete verification catalogs with ownership and status metadata.

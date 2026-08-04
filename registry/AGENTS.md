@@ -1,13 +1,18 @@
 # Agent Registry — Nexora
 
-The agent registry is the authoritative inventory of registered agent identities and declared capabilities.
+## Standard Fields
 
-Each registered agent SHOULD include or derive the following compatibility metadata:
+| Field | Meaning |
+|---|---|
+| `agentId` | Stable agent identifier |
+| `version` | Agent version or revision |
+| `origin` | `built-in` or plugin/provider origin |
+| `declaredSkills` | Declared skill identifiers |
+| `requiredPermissions` | Required permission scopes |
+| `supportsDelegation` | Delegation capability flag |
+| `supportsBackgroundExecution` | Background execution capability flag |
+| `minContractVersion` | Minimum compatible API/SDK contract version |
+|
+## Notes
 
-- stable `agentId`
-- semantic version or registry version
-- declared skills
-- required permissions
-- delegation support
-- background execution support
-- minimum compatible API/SDK contract version
+The Agent registry remains an inventory document, but it SHOULD stay aligned with the compatibility expectations defined in [standards/Registry-Standard.md](../standards/Registry-Standard.md).

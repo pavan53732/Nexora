@@ -1,18 +1,16 @@
 # Skill Registry — Nexora
 
-## Registry
+## Standard Fields
 
-The skill registry is the authoritative inventory of declared skill identities and capability semantics.
-
-Each skill entry SHOULD include or derive the following metadata:
-
-- stable `skillId`
-- skill version or revision marker
-- domain/capability scope
-- prerequisite tools or providers where applicable
-- minimum compatible API/SDK or manifest/schema version where relevant
-- owning plugin or built-in origin
+| Field | Meaning |
+|---|---|
+| `skillId` | Stable skill identifier |
+| `version` | Skill revision marker |
+| `origin` | Built-in or plugin source |
+| `domainScope` | Capability/domain scope |
+| `prerequisites` | Required tools/providers/skills |
+| `minContractVersion` | Minimum compatible contract or manifest/schema version |
 
 ## Notes
 
-Skills describe capability semantics, not direct execution authority. Execution remains governed by the owning agent, tool, provider, workflow, or plugin contract path.
+The Skill registry remains an inventory document, but it SHOULD stay aligned with the compatibility expectations defined in [standards/Registry-Standard.md](../standards/Registry-Standard.md).

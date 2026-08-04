@@ -1,22 +1,21 @@
 # Tool Registry — Nexora
 
-## Category Index
+## Standard Fields
 
-The tool registry is the authoritative inventory of tool identities, categories, and declared capabilities.
+| Field | Meaning |
+|---|---|
+| `toolId` | Stable tool identifier |
+| `version` | Tool version |
+| `origin` | `built-in` or plugin/provider origin |
+| `category` | Registry category |
+| `requiredPermissions` | Required permission scopes |
+| `requiresSandbox` | Sandbox requirement flag |
+| `supportsStreaming` | Streaming capability flag |
+| `supportsCancellation` | Cancellation capability flag |
+| `isIdempotent` | Idempotency declaration |
+| `parametersSchemaRef` | Parameter schema reference |
+| `minContractVersion` | Minimum compatible API/SDK contract version |
 
-Every tool entry SHOULD include or derive the following compatibility metadata in addition to category placement:
+## Notes
 
-- stable `toolId`
-- tool version
-- category
-- required permissions
-- sandbox requirement
-- streaming support
-- cancellation support
-- idempotency declaration
-- minimum compatible API/SDK contract version
-- parameters schema reference
-
-## File System (FILE)
-
-File-system tools operate on the workspace or sandboxed virtual file system and MUST follow the Tool API and Tool Protocol contract path for permission, correlation, lifecycle, and canonical error-envelope semantics.
+The Tool registry remains an inventory document, but it SHOULD stay aligned with the compatibility expectations defined in [standards/Registry-Standard.md](../standards/Registry-Standard.md).
