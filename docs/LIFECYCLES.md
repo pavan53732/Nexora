@@ -82,7 +82,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 ## 7. Background Execution Lifecycle
 
-**Start & Maintenance.** A long-running agent task starts `AgentExecutionService` as a foreground service with a persistent notification. The service holds a CPU wake lock (within Android's limits), checkpoints every 30 seconds, and monitors battery level.
+**Start & Maintenance.** A long-running agent task starts `AgentExecutionService` as a foreground service (Android background behavior is defined canonically in specs/BACKGROUND_EXECUTION.md) with a persistent notification. The service holds a CPU wake lock (within Android's limits), checkpoints every 30 seconds, and monitors battery level.
 
 **Optimization.** When battery is low, checkpoint frequency is reduced, non-essential work is paused, and the user is notified of the throttle.
 

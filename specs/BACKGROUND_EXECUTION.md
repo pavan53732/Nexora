@@ -1,3 +1,11 @@
+> **Status: CANONICAL** for Android background execution behavior.
+> This document owns foreground services, WorkManager integration, checkpointing,
+> crash recovery, notifications, and background task persistence. Other documents
+> may reference this behavior but must not redefine it.
+>
+> Depends on: [../architecture/RUNTIME.md](../architecture/RUNTIME.md) (service composition).
+> Referenced by: [../architecture/RUNTIME.md](../architecture/RUNTIME.md), [../docs/LIFECYCLES.md](../docs/LIFECYCLES.md), [../models/Execution.md](../models/Execution.md).
+
 # Background Execution Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
