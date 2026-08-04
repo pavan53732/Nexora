@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Plugin entity shape.
+> This document defines the data model for Plugin. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Plugin.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Plugin.
+
+
 # Domain Model: Plugin
 
 > Canonical domain model. See [architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md).

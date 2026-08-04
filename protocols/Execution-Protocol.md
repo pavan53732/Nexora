@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Execution message contract.
+> This document defines protocol messages for Execution. Canonical subsystem behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Execution.
+> Referenced by: models, APIs, SDKs, and tests.
+
+
 # Execution Protocol — Nexora
 
 > Communication contract for task execution lifecycle.

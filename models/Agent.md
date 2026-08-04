@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Agent entity shape.
+> This document defines the data model for Agent. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Agent.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Agent.
+
+
 # Domain Model: Agent
 
 > Canonical domain model. See [architecture/MULTI_AGENT_SYSTEM.md](../architecture/MULTI_AGENT_SYSTEM.md).

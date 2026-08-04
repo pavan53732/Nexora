@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Memory entity shape.
+> This document defines the data model for Memory. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Memory.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Memory.
+
+
 # Domain Model: Memory
 
 > Canonical domain model. See [architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md).

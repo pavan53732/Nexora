@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Agent message contract.
+> This document defines protocol messages for Agent. Canonical subsystem behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Agent.
+> Referenced by: models, APIs, SDKs, and tests.
+
+
 # Agent Protocol — Nexora
 
 > Communication contract between the runtime and agents.

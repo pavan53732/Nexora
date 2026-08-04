@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Permission entity shape.
+> This document defines the data model for Permission. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Permission.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Permission.
+
+
 # Domain Model: Permission
 
 > Canonical domain model. See [architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md).

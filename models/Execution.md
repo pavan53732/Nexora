@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Execution entity shape.
+> This document defines the data model for Execution. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Execution.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Execution.
+
+
 # Domain Model: Execution
 
 > Canonical domain model. See [architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md).

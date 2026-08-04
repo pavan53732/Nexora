@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Memory message contract.
+> This document defines protocol messages for Memory. Canonical subsystem behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Memory.
+> Referenced by: models, APIs, SDKs, and tests.
+
+
 # Memory Protocol — Nexora
 
 > Communication contract for the memory system.

@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Provider message contract.
+> This document defines protocol messages for Provider. Canonical subsystem behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Provider.
+> Referenced by: models, APIs, SDKs, and tests.
+
+
 # Provider Protocol — Nexora
 
 > Communication contract between the runtime and AI providers.

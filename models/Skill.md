@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Skill entity shape.
+> This document defines the data model for Skill. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Skill.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Skill.
+
+
 # Domain Model: Skill
 
 > Canonical domain model. See [docs/adr/ADR-0007-Skills-First-Class.md](../docs/adr/ADR-0007-Skills-First-Class.md) and [registry/SKILLS.md](../registry/SKILLS.md).

@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Workspace entity shape.
+> This document defines the data model for Workspace. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Workspace.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Workspace.
+
+
 # Domain Model: Workspace
 
 > Canonical domain model. See [specs/WORKSPACE.md](../specs/WORKSPACE.md) for full spec.

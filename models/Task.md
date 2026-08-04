@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Task entity shape.
+> This document defines the data model for Task. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+>
+> Depends on: the canonical architecture and lifecycle sources for Task.
+> Referenced by: APIs, SDKs, protocols, and tests that consume Task.
+
+
 # Domain Model: Task
 
 > **Status: DERIVED.** This document defines the persisted shape of a Task. The

@@ -1,3 +1,10 @@
+> **Status: DERIVED** for Tool message contract.
+> This document defines protocol messages for Tool. Canonical subsystem behavior is defined in the owning architecture document.
+>
+> Depends on: the canonical architecture document for Tool.
+> Referenced by: models, APIs, SDKs, and tests.
+
+
 # Tool Protocol — Nexora
 
 > Communication contract between the runtime/tool manager and tools.
