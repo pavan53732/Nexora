@@ -1,3 +1,10 @@
+> **Status: CANONICAL** for agent lifecycle states and transitions.
+> This document owns the formal agent state machine: IDLE, THINKING, EXECUTING, WAITING, ERROR, TERMINATED.
+> It does NOT own the agent runtime loop (see [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md)).
+>
+> Depends on: [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md).
+> Referenced by: [../models/Agent.md](../models/Agent.md), [../docs/api/Agent-API.md](../docs/api/Agent-API.md).
+
 # Agent Lifecycle State Machine
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

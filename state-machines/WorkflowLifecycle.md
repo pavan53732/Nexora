@@ -1,3 +1,10 @@
+> **Status: CANONICAL** for workflow lifecycle states and transitions.
+> This document owns the formal workflow state machine.
+> It does NOT own workflow graph progression logic (see [../architecture/WORKFLOW_ENGINE.md](../architecture/WORKFLOW_ENGINE.md)).
+>
+> Depends on: [../architecture/WORKFLOW_ENGINE.md](../architecture/WORKFLOW_ENGINE.md).
+> Referenced by: [../models/Workflow.md](../models/Workflow.md), [../docs/api/Runtime-API.md](../docs/api/Runtime-API.md).
+
 # Workflow Lifecycle State Machine
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

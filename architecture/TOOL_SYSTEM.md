@@ -1,3 +1,11 @@
+> **Status: CANONICAL** for tool subsystem architecture and execution.
+> This document owns how tools are discovered, loaded, sandboxed, and executed.
+> Tool identity catalog lives in [../registry/TOOLS.md](../registry/TOOLS.md).
+> Tool invocation contract lives in [../protocols/Tool-Protocol.md](../protocols/Tool-Protocol.md).
+>
+> Depends on: [../registry/TOOLS.md](../registry/TOOLS.md), [../protocols/Tool-Protocol.md](../protocols/Tool-Protocol.md).
+> Referenced by: [AGENT_RUNTIME.md](AGENT_RUNTIME.md), [RUNTIME.md](RUNTIME.md), [../sdk/ToolSDK.md](../sdk/ToolSDK.md).
+
 # Tool System — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [SANDBOX.md](SANDBOX.md) | [RUNTIME.md](RUNTIME.md)

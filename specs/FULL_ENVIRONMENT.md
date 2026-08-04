@@ -1,3 +1,12 @@
+> **Status: CANONICAL** for Full Environment (Debian-slim rootfs) behavior.
+> This document owns the on-demand rootfs specification, provisioning lifecycle,
+> and guest binary compatibility. It does NOT own sandbox subsystem design
+> (see [../architecture/SANDBOX.md](../architecture/SANDBOX.md)) or security policy
+> (see [../security/SandboxPolicy.md](../security/SandboxPolicy.md)).
+>
+> Depends on: [../architecture/SANDBOX.md](../architecture/SANDBOX.md), [../security/SandboxPolicy.md](../security/SandboxPolicy.md).
+> Referenced by: [../docs/ENVIRONMENT_SETUP.md](../docs/ENVIRONMENT_SETUP.md), [../docs/PERFORMANCE_BUDGET.md](../docs/PERFORMANCE_BUDGET.md).
+
 # Full Environment Specification — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [../architecture/SANDBOX.md](../architecture/SANDBOX.md) | [../docs/ENVIRONMENT_SETUP.md](../docs/ENVIRONMENT_SETUP.md)
