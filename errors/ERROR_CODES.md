@@ -1,7 +1,7 @@
-> **Status: SUPPORTING** for ERROR CODES focused behavior.
-> This document explains focused behavior for ERROR CODES. The canonical subsystem definition is in the owning architecture document.
+> **Status: CANONICAL** for the cross-subsystem error identity and recovery contract.
+> Architecture documents own subsystem behavior; this document owns the stable error identity, envelope, categories, and recovery metadata shared by protocols, APIs, SDKs, persistence, audit, and tests.
 >
-> Depends on: the relevant canonical architecture document.
+> Depends on: subsystem architecture documents for error causes and lifecycle effects.
 
 
 # Nexora Error Catalog
@@ -13,6 +13,33 @@
 ## Overview
 
 All Nexora errors use the `NXR-` prefix and are grouped by subsystem. Each error carries an HTTP-like category indicating the responsible party and a recovery strategy for callers.
+
+## Canonical Error Envelope
+
+Every error crossing a subsystem, persistence, protocol, API, SDK, background-worker, or audit boundary MUST use the same semantic envelope. Transport-specific representations MAY differ, but they MUST preserve these fields:
+
+| Field | Responsibility | Required meaning |
+|---|---|---|
+| `code` | Error catalog | Stable `NXR-####` identity; callers MUST branch on this value, not message text |
+| `category` | Error catalog | `Client`, `Server`, or `Infrastructure` responsibility |
+| `message` | Boundary adapter | Safe human-readable explanation; never the compatibility key |
+| `retryability` | Recovery owner | `NEVER`, `SAFE`, or `CONDITIONAL`; conditional errors MUST include a condition |
+| `idempotency` | Operation owner | Whether repeating the failed operation is safe, unsafe, or requires an idempotency key |
+| `lifecycleEffect` | Owning state machine | State transition or `NO_CHANGE`; failures MUST NOT silently invent a state |
+| `recoveryOwner` | Subsystem owner | Component responsible for retry, rollback, cleanup, checkpoint restore, or user action |
+| `correlationId` | Runtime boundary | Identifier connecting logs, events, API responses, and audit records |
+| `details` | Subsystem adapter | Structured, redacted context; MUST NOT expose credentials or secrets |
+
+A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`, `idempotency`, `lifecycleEffect`, `correlationId`, and redacted `details`. It MAY rename fields for transport conventions, but the mapping MUST be documented and tested.
+
+## Error Responsibility Rules
+
+- The error catalog owns identity and shared recovery metadata.
+- The subsystem lifecycle owns the legal lifecycle effect of an error.
+- The operation owner owns idempotency and retry conditions.
+- The boundary adapter owns serialization and redaction, not reinterpretation.
+- Tests MUST assert the canonical code and semantic fields, not only message text or HTTP-like category.
+
 
 ### Category Legend
 

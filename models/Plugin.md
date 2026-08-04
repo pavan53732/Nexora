@@ -1,5 +1,5 @@
 > **Status: DERIVED** for Plugin entity shape.
-> This document defines the data model for Plugin. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> This document defines the data model for Plugin. The explicit lifecycle/behavior authority is [state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
 >
 > Depends on: the canonical architecture and lifecycle sources for Plugin.
 > Referenced by: APIs, SDKs, protocols, and tests that consume Plugin.

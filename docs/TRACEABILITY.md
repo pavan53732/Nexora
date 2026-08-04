@@ -26,6 +26,10 @@
 
 ## Maintenance Rule
 
+Every requirement row MUST identify the canonical behavior owner and the executable evidence owner. A row is `✅` only when the linked documents agree on the same semantic type, lifecycle state, protocol operation, error contract, and expected test result. A row is `🚧` when any contract or evidence link is partial; `❌` when the requirement has no implementation or test mapping; and `⏳` only when the deferral is explicitly approved.
+
+The matrix MUST be updated in the same change as any requirement, lifecycle, model, protocol, API, SDK, security, or test contract change.
+
 When adding a new requirement or changing an existing one, update this matrix
 in the SAME commit. A PR that adds/modifies a requirement without updating
 traceability will fail CI.

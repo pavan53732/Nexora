@@ -1,5 +1,5 @@
 > **Status: DERIVED** for Agent entity shape.
-> This document defines the data model for Agent. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> This document defines the data model for Agent. The explicit lifecycle/behavior authority is [state-machines/AgentLifecycle.md](../state-machines/AgentLifecycle.md).
 >
 > Depends on: the canonical architecture and lifecycle sources for Agent.
 > Referenced by: APIs, SDKs, protocols, and tests that consume Agent.

@@ -1,5 +1,5 @@
 > **Status: DERIVED** for Tool entity shape.
-> This document defines the data model for Tool. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> This document defines the data model for Tool. The explicit lifecycle/behavior authority is [architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md).
 >
 > Depends on: the canonical architecture and lifecycle sources for Tool.
 > Referenced by: APIs, SDKs, protocols, and tests that consume Tool.
