@@ -1,3 +1,12 @@
+> **Status: CANONICAL** for provider lifecycle states, health checks, failover, and routing eligibility.
+> This document owns the formal state machine for provider lifecycle:
+> health state, failover state, disablement, and routing eligibility.
+> It does NOT own provider subsystem architecture (see
+> [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md)).
+>
+> Depends on: [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md).
+> Referenced by: [../models/Provider.md](../models/Provider.md), [../protocols/Provider-Protocol.md](../protocols/Provider-Protocol.md).
+
 # Provider Lifecycle State Machine
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)

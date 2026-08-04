@@ -1,3 +1,11 @@
+> **Status: CANONICAL** for provider subsystem architecture and routing.
+> This document owns provider registration, capability discovery, request routing,
+> and the provider abstraction layer. Provider lifecycle states and health/failover
+> semantics are defined in [../state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md).
+>
+> Depends on: [../state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md).
+> Referenced by: [../models/Provider.md](../models/Provider.md), [../protocols/Provider-Protocol.md](../protocols/Provider-Protocol.md), [../sdk/ProviderSDK.md](../sdk/ProviderSDK.md), [../specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md).
+
 # AI Provider System — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [AGENT_RUNTIME.md](AGENT_RUNTIME.md)
