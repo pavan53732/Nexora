@@ -1,134 +1,134 @@
-# Audit 2 Report — Deep Semantic Consistency Audit
+# Audit 2 Report — Semantic Meaning and Responsibility Audit
 
 ## Scope and Method
 
-This pass audits the repository at commit `af9a699` on `main`. All 134 tracked Markdown documents were read completely again. The audit then compared meaning across canonical architecture, state machines, models, protocols, APIs, SDKs, registries, errors, security, requirements, testing, diagrams, and the Full Environment documentation.
+This audit covers the repository at commit `2fe8e43` on `main`. All 134 tracked Markdown documents were read completely again. The review compared concepts by responsibility and meaning across architecture, state machines, models, protocols, APIs, SDKs, registries, errors, security, requirements, tests, diagrams, standards, UI guidance, and the Full Environment specification.
 
-The review does not treat token presence as semantic proof. Extracted tables, identifiers, and references were used only to locate and organize concepts already read in context. Findings are reported only where the documents collectively leave a contradiction, undefined mapping, or unverifiable implementation obligation.
+Search and extraction were used only to organize documents already read in full. A term appearing in two documents was not treated as compatibility evidence. Findings below require an ownership, semantic, lifecycle, or evidence relationship that remains undefined, contradictory, or unverifiable after reading the related documents.
 
 ## Repository Integrity
 
-The repository contains 134 Markdown documents and approximately 12,509 Markdown lines. The normalized Markdown graph has 649 internal edges and zero broken relative links. The documentation is structurally connected, but several connected layers do not share explicit semantic contracts.
+The repository contains 134 Markdown documents and approximately 12,499 Markdown lines. The normalized internal Markdown graph has 649 edges and no broken relative links. Structural connectivity is strong, but semantic connectivity is incomplete: many related documents do not state the same authority, type, transition, error, or evidence relationship.
 
-The central audit question was: can an implementer, without inventing policy, derive one deterministic state model, error model, security model, execution protocol, persistence model, and test evidence chain from the repository?
+The audit question was whether two independent implementers could produce behaviorally equivalent runtime, persistence, protocol, security, and test implementations using only the repository. The answer remains no.
 
-## Critical Finding 1 — The Evidence System Cannot Prove Completion
+## Critical Finding 1 — Evidence Does Not Prove Coverage
 
-The requirement documents contain 274 distinct requirement-like identifiers. The traceability matrix contains 12 identifiers, leaving 262 requirements unrepresented. Testing documents contain only 10 identifiers, leaving 264 requirements without explicit test linkage. The threat model contains 28 threat identifiers, but security tests contain no `TM-*` references.
+The requirements corpus contains 274 distinct requirement-like identifiers. The traceability matrix contains 12 identifiers, leaving 262 requirements without traceability rows. Testing documents contain only 10 identifiers, leaving 264 requirements without explicit test linkage. The threat model contains 28 threat identifiers, while security tests contain no `TM-*` references.
 
-This means the repository cannot prove the complete chain `requirement/threat → canonical behavior → implementation → executable test → observed result`. A test inventory or scenario description is not sufficient evidence without an identifier, expected result, failure behavior, contract owner, and implementation target.
+This prevents proving the complete chain `requirement/threat → canonical behavior → implementation → executable test → result`. Scenario tables are useful planning material but are not evidence unless they identify the requirement or threat, contract source, implementation target, expected result, failure condition, and evidence artifact.
 
-**Required action:** create a complete evidence matrix for every FR, NFR, TM, and TOOL identifier, with canonical source, lifecycle/model/protocol/API links, implementation owner, test case, expected result, failure condition, artifact location, and status.
+**Required action:** create a complete evidence matrix covering every FR, NFR, TM, and TOOL identifier with ownership, contract chain, implementation, tests, expected behavior, failure behavior, and status.
 
-## Critical Finding 2 — Error Semantics Stop at the Catalog Boundary
+## Critical Finding 2 — Error Responsibility Is Not Distributed as a Contract
 
-`errors/ERROR_CODES.md` defines 78 canonical `NXR-*` codes. Protocol, API, and SDK documents do not reference the canonical codes. Testing references only two codes and security documents reference six. The catalog provides recovery descriptions, but public contracts do not carry a stable mapping for error identity, retryability, idempotency, lifecycle effect, audit sensitivity, or cleanup.
+`errors/ERROR_CODES.md` defines 78 canonical `NXR-*` codes. Protocol, API, and SDK documents contain no canonical error-code references. Testing references only two codes, and security documents reference six. The error catalog describes recovery, but public contracts do not state which layer owns error classification, retryability, idempotency, lifecycle transition, audit sensitivity, or cleanup.
 
-This creates semantic drift even if every layer uses the word “error.” An API caller cannot derive whether a failure is retryable; a protocol consumer cannot know the wire representation; an SDK cannot know which exception maps to which code; and a background service cannot know whether to restore a checkpoint, cancel, or retry.
+The semantic consequence is that “error handling” means different things at different boundaries. An API may return an error without a stable catalog identity; an SDK may throw without preserving retry policy; a protocol may describe failure without wire shape; and a background service may not know whether to retry, restore, cancel, or mark failed.
 
-**Required action:** define a canonical error envelope and map every public operation and protocol failure to one or more `NXR-*` codes and recovery rules. Test those mappings.
+**Required action:** define a canonical error envelope and operation-level error mapping. Every public operation and protocol failure must identify code, category, retryability, idempotency, lifecycle effect, user action, audit policy, and recovery owner.
 
-## Critical Finding 3 — Agent Lifecycle, Model Status, and Runtime Phase Are Three Different Vocabularies
+## Critical Finding 3 — Agent State Has No Single Meaning
 
-The canonical Agent lifecycle contains `Created`, `Configured`, `Ready`, `Running`, `Paused`, `WaitingApproval`, `Reflecting`, `Completing`, `Completed`, `Failed`, and `Cancelled`. The Agent model contains `IDLE`, `THINKING`, `EXECUTING`, `WAITING`, `ERROR`, and `CANCELLED`. The runtime architecture also describes loop activities such as planning, reflection, tool execution, and completion.
+The canonical Agent lifecycle defines `Created`, `Configured`, `Ready`, `Running`, `Paused`, `WaitingApproval`, `Reflecting`, `Completing`, `Completed`, `Failed`, and `Cancelled`. The Agent model defines `IDLE`, `THINKING`, `EXECUTING`, `WAITING`, `ERROR`, and `CANCELLED`. Runtime architecture describes planning, reflection, tool execution, and completion activities.
 
-The documents never establish whether the model enum is a persisted projection, whether runtime activities are phases, or how a status such as `WAITING` distinguishes approval from dependency blocking or provider waiting. Several canonical states have no model representation.
+The documents never establish whether model status is a persisted lifecycle projection, whether runtime activities are phases, or whether `WAITING` means approval, dependency waiting, provider waiting, or another condition. Several canonical states have no model representation.
 
-**Impact:** persistence, UI, event consumers, API responses, approval gates, cancellation, and checkpoint restore can disagree.
+**Required action:** define separate lifecycle-state and execution-phase types, with mapping, persistence, event, API, UI, checkpoint, and recovery semantics. Alternatively, make the model exactly derive from the canonical Agent lifecycle.
 
-**Required action:** define separate lifecycle state and runtime phase types with a complete mapping, or make the model exactly derive from the canonical lifecycle.
+## Critical Finding 4 — Lifecycle Authority Is Not Local to Contract Definitions
 
-## Critical Finding 4 — Contract Layers Do Not Directly Declare Lifecycle Authority
+Models, protocols, APIs, SDKs, and registries for Agent, Plugin, Provider, Task, Workflow, ToolCall, Session, and Workspace generally do not directly link to their canonical lifecycle documents. The source index can point a reader toward lifecycle documents, but it does not itself define the status-to-state or event-to-transition relationship.
 
-The audited models, protocols, APIs, SDKs, and registries generally describe their domain without directly linking to the canonical lifecycle document. This affects Agent, Plugin, Provider, Task, Workflow, ToolCall, and related sessions/workspaces.
+This is a responsibility problem: the lifecycle machine owns legal state transitions, the model owns representation, the protocol owns wire events, the API owns public operations, and the SDK owns convenience behavior. Without explicit local mappings, each layer can reinterpret the same word differently.
 
-Indirect references through architecture or a source index do not provide enough local authority for a contract consumer. A status field, protocol event, API response, and SDK callback must state whether it is a lifecycle state, a phase, an event, or a projection.
+**Required action:** add direct lifecycle authority and compatibility sections to every lifecycle-bearing model, protocol, API, SDK, and registry document.
 
-**Required action:** add direct lifecycle authority and compatibility sections to every lifecycle-bearing contract document.
+## High Finding 5 — Lifecycle Documents Do Not Fully Own Transition Semantics
 
-## High Finding 5 — Lifecycle Tables Do Not Define Transition Semantics
+The lifecycle documents contain state tables and transition tables with triggers, source, target, and guards. They do not consistently define side effects, emitted events, persistence points, rollback, idempotency, invalid transitions, duplicate-event behavior, or crash recovery.
 
-The five lifecycle documents provide state descriptions but their state tables do not consistently define guards, effects, emitted events, persistence points, invalid transitions, rollback behavior, or idempotency. The documents discuss transitions in prose, but the implementer still must infer parts of the transition contract.
+A state machine without these responsibilities is not enough to implement reliable background execution or distributed event handling. Two implementations can follow the same listed transition while producing different durable state, event ordering, retry behavior, or recovery results.
 
-**Impact:** valid/invalid transition behavior, retries, cancellation, approval, crash recovery, and duplicate events can differ between implementations.
+**Required action:** expand every transition with guard, target, side effects, emitted events, persistence, rollback, idempotency, invalid-transition response, and recovery behavior.
 
-**Required action:** expand each lifecycle machine with explicit transition rows containing source, event, guard, target, side effects, emitted events, persistence, rollback, idempotency, and invalid-transition behavior.
+## High Finding 6 — Provider Lifecycle Has No Stable State Owner
 
-## High Finding 6 — Provider State Has No Stable Persistence/API Projection
+Provider lifecycle defines `Registered`, `Configuring`, `Configured`, `Testing`, `Healthy`, `Degraded`, `Unhealthy`, `Disabled`, and `Removed`. The Provider model defines identity and configuration but no explicit lifecycle status projection. Architecture refers to registry and in-memory health structures without resolving persistence authority, cache invalidation, API serialization, or routing eligibility.
 
-Provider lifecycle defines `Registered`, `Configuring`, `Configured`, `Testing`, `Healthy`, `Degraded`, `Unhealthy`, `Disabled`, and `Removed`, but the Provider model does not define a lifecycle status field or a normative projection. The architecture mentions registry and in-memory health state without resolving persistence authority, cache invalidation, API serialization, or routing eligibility.
+**Required action:** define the provider state source of truth and its persisted, cached, registry, event, API, and router projections.
 
-**Required action:** define the provider-state source of truth and its persistence, cache, event, API, and router mappings.
+## High Finding 7 — Plugin Lifecycle Cannot Be Recovered Deterministically
 
-## High Finding 7 — Plugin Transient States Are Not Durable or Recoverable by Contract
+Plugin lifecycle defines discovery, download, verification, installation, activation, deactivation, uninstall, and failure states. The model exposes only `INSTALLED`, `ACTIVE`, `DISABLED`, and `ERROR`. The repository does not define which states are durable, which are transient, how interrupted operations resume, or how `Inactive` differs from `Disabled`.
 
-Plugin lifecycle defines download, verification, install, activation, deactivation, uninstall, and failure states. The model exposes only `INSTALLED`, `ACTIVE`, `DISABLED`, and `ERROR`. No complete mapping says which states survive process death, how progress is restored, or how `Inactive` differs from `Disabled`.
+**Required action:** define durable/transient boundaries and lifecycle-to-model/event/API/registry projections, including process-death and partial-install recovery.
 
-**Required action:** define durable/transient state boundaries and model/event/API/registry projections, including interrupted-operation recovery.
+## High Finding 8 — Task Status and Execution Phase Have Different Responsibilities but No Mapping
 
-## High Finding 8 — Task Lifecycle and Execution Phase Semantics Are Unresolved
+Task lifecycle defines formal task states such as `Queued`, `Running`, `Blocked`, `WaitingApproval`, `RetryPending`, and `Completed`. Execution protocol and execution lifecycle documents introduce planning/execution phases and `PLANNING`/`EXECUTING` protocol vocabulary.
 
-Task lifecycle defines formal states such as `Queued`, `Running`, `Blocked`, `WaitingApproval`, `RetryPending`, and `Completed`. Execution protocol and execution lifecycle documents introduce planning/execution phases and protocol states such as `PLANNING` and `EXECUTING`.
+The repository does not state whether phases are persisted, events, protocol states, or an independent machine. It also does not define phase behavior during approval, cancellation, retry, checkpoint restore, or background interruption.
 
-The repository does not define whether phases are persisted, how they map to TaskStatus, which events are ordered, or how cancellation, approval, retry, checkpointing, and background recovery interact with them.
+**Required action:** define `TaskStatus`, `ExecutionPhase`, `TaskEvent`, checkpoint state, and recovery in one normative compatibility matrix.
 
-**Required action:** define TaskStatus, ExecutionPhase, TaskEvent, checkpoint, and recovery compatibility in one normative matrix.
+## High Finding 9 — ToolCall Responsibility Is Split Across Model, Policy, Protocol, and Error Catalog
 
-## High Finding 9 — ToolCall Approval and Failure Semantics Are Split Across Documents
+The Tool model defines status values; tool architecture and API define approval predicates; tool protocol defines invocation, timeout, cancellation, and errors; security policy defines permission and containment; the error catalog defines tool codes. No single contract maps approval decision, permission result, execution, timeout, partial output, audit event, canonical error, retry, and final status.
 
-Tool model status, tool architecture approval predicates, tool protocol timeout/error behavior, error catalog codes, and security policy each describe a portion of ToolCall behavior. No single mapping connects approval decision, permission result, execution, timeout, cancellation, partial output, error code, audit event, retry, and final status.
+**Required action:** make ToolCall a complete contract with request, decision, execution, result, error, audit, timeout, cancellation, and retry semantics.
 
-**Required action:** define a complete ToolCall contract and test every state/error/security transition.
+## High Finding 10 — Operations Do Not Have End-to-End Contract Ownership
 
-## High Finding 10 — Public Operations Do Not Have Wire-Contract Matrices
+Provider architecture/API/SDK share operations such as completion, streaming, embedding, model listing, and health checks, but protocol documents do not explicitly map each operation to wire messages, models, events, errors, permissions, timeout, cancellation, and tests. Agent, Tool, Plugin, and Runtime layers show the same separation.
 
-Provider architecture/API/SDK share methods such as completion, streaming, embedding, model listing, and health checks, but protocols do not provide explicit operation-to-message mappings. Agent, Tool, Plugin, and Runtime chains show the same pattern: operations exist at some layers while protocol messages, error envelopes, lifecycle effects, permissions, timeouts, cancellation, and idempotency are not connected in one matrix.
+**Required action:** create an operation matrix for every public API and SDK operation. The matrix must identify request/response models, protocol messages, event order, errors, lifecycle effects, security controls, idempotency, and tests.
 
-**Required action:** add an operation matrix for every public API and SDK operation containing request model, response model, protocol message, events, errors, lifecycle effects, security requirements, and tests.
+## High Finding 11 — Security Controls Are Not Semantically Assigned to Threats
 
-## High Finding 11 — Threat Controls Are Not Semantically Verified
+Security ownership is split sensibly among security architecture, threat model, permission model, sandbox policy, and sandbox architecture. However, the 28 threat identifiers are not referenced by security tests, and controls do not consistently identify the threat they mitigate, enforcement point, audit event, expected containment, or residual risk.
 
-The security ownership split is reasonable, but the threat model’s 28 threats are not linked to security test cases. Permission and sandbox documents also do not carry threat identifiers that identify which threats each control mitigates.
+**Required action:** map each threat to protected asset, attacker capability, precondition, control, enforcement point, expected denial/containment, telemetry, cleanup, test, and residual risk.
 
-**Required action:** map each threat to protected asset, attacker capability, precondition, control, enforcement point, expected denial/containment, audit event, cleanup, test, and residual risk.
+## High Finding 12 — Full Environment Invariants Lack Operational Proof
 
-## High Finding 12 — Full Environment Is Internally Coherent but Operationally Under-Evidenced
-
-The Full Environment documents consistently specify one APK-bundled Debian-slim rootfs with glibc, apt, proot, on-demand extraction, Python, Node/npm, binary wheels, and overlays. The semantic gap is not the environment description; it is the absence of complete evidence for asset integrity, architecture selection, extraction rollback, proot startup, apt operations, Python wheel loading, npm native modules, overlay isolation, cache cleanup, and restart recovery.
+The Full Environment documents consistently specify one APK-bundled Debian-slim rootfs with glibc, apt, proot, on-demand extraction, Python, Node/npm, binary wheels, and overlays. The semantic gap is not the stated architecture; it is the absence of a complete proof chain for APK integrity, architecture selection, extraction rollback, proot startup, apt operations, Python wheel loading, npm native modules, overlay isolation, cache cleanup, and restart recovery.
 
 **Required action:** link every environment invariant to a requirement, implementation owner, operational test, failure case, and rollback/recovery behavior.
 
-## High Finding 13 — Supporting Documents Often Refer to an Unnamed Owner
+## High Finding 13 — Canonical Ownership Is Often Deferred to an Unnamed Document
 
-Multiple derived and supporting documents state that behavior is defined by an “owning architecture document” without naming the document. This pattern appears in protocols, registries, models, UI support documents, and standards. It makes semantic conflict resolution dependent on external inference.
+Multiple derived and supporting documents say that behavior belongs to an “owning architecture document” without naming it. This appears in protocols, registries, models, UI support, standards, and other focused documents.
 
-**Required action:** replace generic ownership language with explicit canonical source, supporting sources, derived boundaries, and conflict-resolution rules. Keep the source map as an index, not as a substitute for local authority.
+This creates semantic ambiguity because architecture, behavior, lifecycle, model, protocol, API, SDK, registry, and test evidence do not have identical authority. A generic owner cannot resolve conflicts or determine which document governs a change.
 
-## Medium Finding 14 — Task Metadata Contains Duplicate Authority Declarations
+**Required action:** replace generic language with explicit canonical source, supporting sources, derived boundaries, and conflict-resolution rules.
 
-`models/Task.md` contains duplicate derived declarations. The Task status relationship to its lifecycle is substantively aligned, but document metadata ownership is ambiguous.
+## Medium Finding 14 — Task Authority Metadata Is Duplicated
 
-**Required action:** keep one authority block and move enum consistency into an explicit constraint section.
+`models/Task.md` contains duplicate derived declarations. The Task status relationship to the Task lifecycle is substantively aligned, but document-level authority is ambiguous.
+
+**Required action:** retain one authority block and move enum consistency into an explicit model-constraints section.
 
 ## Semantic Implementation Risk
 
-The most dangerous remaining implementation decisions are not isolated missing fields. They are boundary decisions: what is persisted versus transient, which state is authoritative after a crash, which event is emitted first, which error code controls recovery, whether approval is a state or decision, how registry caches invalidate, how provider health becomes routing truth, how plugin installation resumes, and how Full Environment extraction rolls back.
+The most dangerous gaps are responsibility gaps rather than missing words: who owns durable state after a crash, who owns event ordering, who owns error classification, who owns retry and idempotency, who owns approval decisions, who owns provider health truth, who owns plugin recovery, who owns sandbox cleanup, and who owns evidence that a requirement is satisfied.
 
-The current documents provide enough intent for a skilled team to make those decisions, but not enough normative detail to guarantee that two independent implementations would behave identically.
+The repository provides enough intent for a skilled team to make these decisions, but not enough normative detail to ensure two independent implementations behave equivalently.
 
 ## Required Remediation Sequence
 
-1. Define canonical semantic types: lifecycle state, execution phase, event, error, decision, result, and projection.
+1. Define semantic types: lifecycle state, execution phase, event, error, decision, result, projection, and recovery action.
 2. Expand lifecycle machines into complete transition contracts.
-3. Connect every public operation to request/response/event/error/security/test matrices.
-4. Define durable versus transient state for Agent, Task, Plugin, Provider, Workflow, ToolCall, Session, Workspace, and background execution.
+3. Add direct lifecycle authority to all lifecycle-bearing contract layers.
+4. Create operation-to-message-to-error-to-security-to-test matrices.
 5. Build complete requirement and threat evidence traceability.
-6. Assign explicit ownership to all derived/supporting documents.
-7. Add Full Environment operational and failure-recovery evidence.
-8. Re-read all changed documents and repeat the semantic audit.
+6. Assign implementation, persistence, event, and recovery ownership.
+7. Add Full Environment provisioning and failure-recovery evidence.
+8. Re-read every changed document and repeat semantic validation.
 
 ## Final Assessment
 
-The repository is structurally connected and architecturally coherent at a high level, but it is not semantically deterministic or evidence-complete. The primary blockers are the disconnected evidence system, orphaned error catalog, divergent lifecycle/model/phase vocabularies, incomplete transition semantics, absent operation-to-wire matrices, and unverified threat controls.
+The repository is structurally connected and high-level intent is coherent, but it is not semantically deterministic or evidence-complete. The primary blockers are disconnected evidence, orphaned error semantics, divergent lifecycle/model/phase vocabularies, incomplete transition ownership, missing operation matrices, and unverified threat controls.
 
-This report records the maximum-depth semantic audit of the current repository state. No source documents were modified during the audit itself.
+This report records the deepest semantic audit of the current repository state. No source documents were modified during the audit itself.
