@@ -2,20 +2,20 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest logical reconciliation pass.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, requirements, traceability, and testing documents after the latest logical reconciliation pass.
 
 ## Improvements completed in this pass
 
-- Extended lifecycle-aware linkage into Tool, Execution, and Provider protocol documents.
-- Added Plugin API and Plugin SDK lifecycle and compatibility guidance.
-- Introduced `docs/TRACEABILITY_RULES.md` to define operating rules for maintaining traceability quality.
-- Updated the traceability matrix to reference the new operating rules and corrected the plugin SDK linkage in the plugin contract path.
+- Added `docs/REQUIREMENT_COVERAGE_LEDGER.md` containing all 207 functional and 65 non-functional requirement identifiers extracted from the canonical requirement documents.
+- Added an explicit completeness rule to `docs/TRACEABILITY_RULES.md` requiring every canonical requirement to appear in the coverage ledger.
+- Preserved the existing evidence-path, owner, status, and review-date conventions for validation planning.
+- Strengthened the audit boundary so requirement completeness is checked independently from detailed implementation mapping.
 
 ## Remaining gaps
 
-### 1. Full FR/NFR enumeration is still incomplete
+### 1. Requirement mapping is now explicit but not complete
 
-The matrix is still selective rather than exhaustive.
+The full requirement identifier inventory exists, but most rows remain `UNMAPPED` until primary artifacts, owners, validation cases, and evidence paths are assigned.
 
 ### 2. Evidence state is still planning-oriented
 
@@ -23,10 +23,10 @@ Logical evidence locations exist, but there are still no real verification artif
 
 ### 3. Lifecycle linkage still needs wider saturation
 
-More protocol and contract surfaces are now aligned, but full repository coverage is still incomplete.
+Many important protocol/API/SDK/spec surfaces are aligned, but full repository coverage remains incomplete.
 
 ## Recommended follow-up work
 
-1. Continue exhaustive requirement enumeration within the rule-based traceability framework.
-2. Populate evidence paths with real validation artifacts and status updates when implementation/testing appears.
-3. Continue systematic lifecycle linkage across remaining architecture, protocol, API, SDK, and specification surfaces.
+1. Assign owners and primary artifacts to the highest-priority unmapped requirements.
+2. Add validation case IDs and evidence paths as each requirement is mapped.
+3. Continue lifecycle linkage and update the ledger and traceability matrix in the same commits.

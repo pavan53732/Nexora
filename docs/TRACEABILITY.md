@@ -11,7 +11,7 @@
 
 ## Maintenance Rule
 
-When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model, registry, security, or test artifact changes, this matrix MUST be updated in the same change or the gap MUST be recorded explicitly. Operational rules are further defined in [TRACEABILITY_RULES.md](./TRACEABILITY_RULES.md).
+When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model, registry, security, or test artifact changes, this matrix MUST be updated in the same change or the gap MUST be recorded explicitly. Operational rules are further defined in [TRACEABILITY_RULES.md](./TRACEABILITY_RULES.md). The complete canonical requirement identifier inventory is maintained in [REQUIREMENT_COVERAGE_LEDGER.md](./REQUIREMENT_COVERAGE_LEDGER.md).
 
 ## Requirement-Level Matrix
 
@@ -40,6 +40,10 @@ When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model
 | NFR-COMP-001 Contract compatibility and versioning | `VERSIONING.md`, `standards/Registry-Standard.md` | `docs/api/*`, `sdk/*`, `registry/AGENTS.md`, `registry/PROVIDERS.md`, `registry/PLUGINS.md`, `registry/TOOLS.md`, `registry/SKILLS.md` | `RT-CONTRACT-001` (Owner: API Contracts, Status: Planned, Evidence: `evidence/regression/RT-CONTRACT-001/`), `RT-PLUGIN-001` (Owner: Plugin System, Status: Planned, Evidence: `evidence/regression/RT-PLUGIN-001/`), `RT-PROVIDER-001` (Owner: Provider Layer, Status: Planned, Evidence: `evidence/regression/RT-PROVIDER-001/`) | PARTIAL |
 | Canonical error envelope | `errors/ERROR_CODES.md` | all `docs/api/*`, `protocols/*`, `sdk/*`, runtime and task projections | `UT-CONTRACT-002` (Owner: Core Runtime, Status: Planned, Evidence: `evidence/unit/UT-CONTRACT-002/`), `RT-CONTRACT-001` (Owner: API Contracts, Status: Planned, Evidence: `evidence/regression/RT-CONTRACT-001/`), `IT-CONTRACT-001` (Owner: Core Runtime, Status: Planned, Evidence: `evidence/integration/IT-CONTRACT-001/`) | OK |
 | Correlation, idempotency, resume, and version semantics | owning architecture documents | API envelopes, execution/task/workflow models, protocol events, SDK helpers, lifecycle docs, testing docs | `UT-CONTRACT-003` (Owner: Core Runtime, Status: Planned, Evidence: `evidence/unit/UT-CONTRACT-003/`), `UT-CONTRACT-005` (Owner: Core Runtime, Status: Planned, Evidence: `evidence/unit/UT-CONTRACT-005/`), `IT-CONTRACT-001` (Owner: Core Runtime, Status: Planned, Evidence: `evidence/integration/IT-CONTRACT-001/`), `E2E-CORE-001` (Owner: Orchestration, Status: Planned, Evidence: `evidence/e2e/E2E-CORE-001/`) | PARTIAL |
+
+## Coverage Checkpoint
+
+The complete requirement identifier inventory is tracked separately in `docs/REQUIREMENT_COVERAGE_LEDGER.md`. The detailed matrix below remains focused on requirements whose architecture, contract, and validation relationships have been explicitly reconciled.
 
 ## Open Gaps
 
