@@ -1,53 +1,33 @@
 > **Status: DERIVED** for Provider message contract.
-> This document defines protocol messages for Provider. Canonical subsystem behavior is defined in the owning architecture document.
+> This document defines protocol messages for Provider execution. Canonical subsystem behavior is defined in the owning architecture document.
 >
 > Depends on: the canonical architecture document for Provider.
-> Referenced by: models, APIs, SDKs, and tests.
-
+> Referenced by: models, APIs, SDKs, registries, and tests.
 
 # Provider Protocol — Nexora
 
-> Communication contract between the runtime and AI providers.
-
 ## Request Flow
 
-1. Runtime builds a `CompletionRequest` (messages + tools + model config).
-2. Runtime calls `provider.complete(request)` or `provider.stream(request)`.
-3. Provider translates to its native API format.
-4. Provider makes the HTTP call.
-5. Provider translates the response back to `CompletionResponse`.
-6. Runtime receives the response.
+1. Caller submits a `ProviderRequest` containing `requestId`, `correlationId`, `providerRequestId`, provider/model identity, caller scope, and normalized message payload.
+2. Runtime resolves credentials internally and MUST NOT expose raw credentials in request or response payloads.
+3. Provider completion or stream execution emits ordered events and terminal outcome after durable commit.
+4. Response returns normalized output, usage accounting, status, version, and canonical error envelope when failed.
 
 ## Streaming Protocol
 
-Providers use Kotlin `Flow<StreamChunk>`. Each chunk contains:
-- `content: String?` — Text delta (null for tool call chunks).
-- `toolCalls: List<PartialToolCall>?` — Partial tool call deltas.
-- `finishReason: FinishReason?` — Set on the final chunk.
+Streaming events MUST carry monotonically increasing sequence numbers plus a terminal marker. Socket closure or transport completion alone MUST NOT be interpreted as success. Resumable streams require an opaque `resumeToken`; unsupported resume capability MUST be declared explicitly.
 
 ## Error Handling
 
-- **Network errors**: Provider throws `ProviderUnavailableException`. Runtime retries with backoff.
-- **Auth errors**: Provider throws `ProviderAuthException`. Runtime notifies user to check API key.
-- **Rate limits**: Provider throws `RateLimitException`. Runtime waits and retries.
-- **Model errors**: Provider throws `ModelNotFoundException`. Runtime notifies user.
-
+Rate limit, unavailability, timeout, invalid request, capability mismatch, and cancellation outcomes MUST map to canonical `NXR-*` errors.
 
 ## Cross-Layer Contract Rules
 
-Protocol messages MUST map to the normative operation contract of the corresponding API. A message MUST preserve correlation ID, operation ID, lifecycle effect, transition version when applicable, and the canonical error envelope fields defined in [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
-
-A protocol consumer MUST treat events as at-least-once, deduplicate by entity and transition version, and never infer success from transport completion alone. Stream and cancellation messages MUST include an explicit terminal outcome.
+Protocol messages MUST map to [docs/api/Provider-API.md](../docs/api/Provider-API.md). Consumers MUST treat events as at-least-once, deduplicate by `(entityId, version, transition)`, and never infer success from transport completion alone.
 
 ## Canonical Error Mapping
 
-The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
-
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| Completion | NXR-4001, NXR-4002, NXR-4003, NXR-4005, NXR-4006 |
-| Streaming | NXR-4002, NXR-4007 |
-| Embedding | NXR-4008 |
-| Health | NXR-4009, NXR-4010 |
-
-See [ERROR_CODES.md](../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
+| complete / stream | NXR-4003, NXR-4004, NXR-4005, NXR-4006, NXR-4007 |
+| cancelRequest | NXR-4008, NXR-7007 |

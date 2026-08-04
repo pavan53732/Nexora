@@ -1,52 +1,33 @@
 > **Status: DERIVED** for Execution message contract.
-> This document defines protocol messages for Execution. Canonical subsystem behavior is defined in the owning architecture document.
+> This document defines protocol messages for Runtime execution orchestration. Canonical subsystem behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Execution.
-> Referenced by: models, APIs, SDKs, and tests.
-
+> Depends on: the canonical architecture document for Runtime.
+> Referenced by: models, APIs, testing, and orchestration implementations.
 
 # Execution Protocol — Nexora
 
-> Communication contract for task execution lifecycle.
-
 ## States
 
-```
-PENDING → PLANNING → EXECUTING → COMPLETED
-                      ↘ FAILED
-                      ↘ CANCELLED
-                      ↘ BLOCKED → EXECUTING (after approval)
-```
+Execution messages represent durable execution transitions such as `Pending`, `Queued`, `Running`, `Paused`, `Completed`, `Failed`, and `Cancelled`. Transition messages MUST carry committed `version` values and MUST NOT describe uncommitted lifecycle movement as durable fact.
 
 ## Checkpointing
 
-Every N iterations (configurable, default 5), the runtime saves a checkpoint:
-- Current plan and step index
-- Memory snapshot
-- Token usage so far
-- Timestamp
-
-On restart, the runtime loads the latest checkpoint and resumes.
+Checkpoint creation, persistence, and replay MUST preserve `correlationId`, execution identity, checkpoint identity, and commit order. A checkpoint is externally visible only after the referenced state has been durably committed.
 
 ## Background Execution
 
-Tasks run in an Android `ForegroundService` with a persistent notification showing task ID and status.
-
+Background job start, status, and cancellation messages are part of the execution protocol boundary. Cancellation is terminal only after durable cancellation commit and terminal event publication.
 
 ## Cross-Layer Contract Rules
 
-Protocol messages MUST map to the normative operation contract of the corresponding API. A message MUST preserve correlation ID, operation ID, lifecycle effect, transition version when applicable, and the canonical error envelope fields defined in [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
+Protocol messages MUST map to [docs/api/Runtime-API.md](../docs/api/Runtime-API.md). A message MUST preserve correlation ID, operation identity, lifecycle effect, transition version when applicable, and canonical error-envelope fields.
 
-A protocol consumer MUST treat events as at-least-once, deduplicate by entity and transition version, and never infer success from transport completion alone. Stream and cancellation messages MUST include an explicit terminal outcome.
+Consumers MUST treat events as at-least-once, deduplicate by `(entityId, version, transition)`, and never infer success from transport completion alone. Stream and cancellation messages MUST include explicit terminal outcome.
 
 ## Canonical Error Mapping
 
-The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
-
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| Task execution | NXR-1005, NXR-3004, NXR-3010, NXR-4002, NXR-1003 |
-| Checkpoint save/restore | NXR-1003, NXR-1004, NXR-3009 |
-| Cancellation | NXR-3010 |
-
-See [ERROR_CODES.md](../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
+| enqueueExecution | NXR-7001, NXR-7002, NXR-7004 |
+| publishEvent / subscribe | NXR-7003, NXR-7005 |
+| startBackgroundJob / cancelBackgroundJob | NXR-7006, NXR-7007 |

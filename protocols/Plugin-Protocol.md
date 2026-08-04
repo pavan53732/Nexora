@@ -1,30 +1,21 @@
 > **Status: DERIVED** for Plugin message contract.
-> This document defines protocol messages for Plugin. Canonical subsystem behavior is defined in the owning architecture document.
+> This document defines protocol messages for Plugin lifecycle operations. Canonical subsystem behavior is defined in the owning architecture document.
 >
 > Depends on: the canonical architecture document for Plugin.
-> Referenced by: models, APIs, SDKs, and tests.
-
+> Referenced by: models, APIs, SDKs, registries, security, and tests.
 
 # Plugin Protocol — Nexora
 
-> Communication contract between the plugin manager and plugins.
-
 ## Lifecycle Messages
 
-| Message | Direction | Description |
-|---------|-----------|-------------|
-| `INSTALL` | Manager → Plugin | Plugin should initialize persistent storage. |
-| `ACTIVATE` | Manager → Plugin | Plugin should register capabilities. |
-| `DEACTIVATE` | Manager → Plugin | Plugin should unregister capabilities. |
-| `UNINSTALL` | Manager → Plugin | Plugin should clean up all data. |
+Plugin protocol messages cover install, activate, deactivate, and remove operations. Each message MUST carry `correlationId`, plugin identity, target version where applicable, caller scope, and durable lifecycle version on emitted transitions.
+
+Activation is transactional across exported capability registration. A failed capability registration MUST trigger rollback to the prior durable plugin state; partial exported visibility is not valid.
 
 ## Registration
 
-During `ACTIVATE`, the plugin calls registration methods on `PluginContext`:
-- `toolRegistry.register(tool)`
-- `agentRegistry.register(agent)`
-- `providerRegistry.register(provider)`
+After successful activation, exported agents, tools, providers, and skills register through their owning APIs. The plugin protocol may reference those registrations, but it MUST NOT redefine their payload contracts.
 
 ## Isolation
 
-Plugins run in the same process but are logically isolated. A misbehaving plugin should not crash the app. The plugin manager wraps each plugin call in try/catch.
+Protocol handlers MUST enforce signature/integrity verification, compatibility checks, dependency checks, and permission constraints before installation or activation side effects occur.

@@ -1,25 +1,35 @@
 # Requirement-to-Implementation Traceability Matrix
 
-The matrix links each requirement family to its primary implementation and contract artifacts.
+> **Status: DERIVED** traceability index linking requirements to architecture, contracts, and validation artifacts.
 
 ## Legend
 
 - **Primary** — canonical owning document.
-- **Derived** — contract or support document derived from the canonical owner.
-- **Validation** — test or audit artifact expected to verify the contract.
+- **Derived** — supporting document derived from the primary owner.
+- **Validation** — expected verification artifact.
+- **Status** — `OK`, `PARTIAL`, or `GAP` based on current repository coverage.
 
 ## Maintenance Rule
 
-When a canonical architecture or requirement changes, all derived APIs, SDKs, protocols, models, registries, and tests MUST be updated in the same change or explicitly deferred with a recorded gap.
+When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model, registry, security, or test artifact changes, this matrix MUST be updated in the same change or the gap MUST be recorded explicitly.
 
-## Contract Coverage
+## Requirement-Level Matrix
 
-| Concern | Primary | Derived | Validation |
-|---|---|---|---|
-| Agent lifecycle and execution | `architecture/AGENT_RUNTIME.md` | `docs/api/Agent-API.md`, `protocols/Agent-Protocol.md`, `models/Agent.md`, `sdk/AgentSDK.md` | integration, lifecycle, and SDK conformance tests |
-| Tool registration and invocation | `architecture/TOOL_SYSTEM.md` | `docs/api/Tool-API.md`, `protocols/Tool-Protocol.md`, `models/Tool.md`, `sdk/ToolSDK.md` | registry, protocol, security, and SDK conformance tests |
-| Provider completion and streaming | `architecture/PROVIDER_SYSTEM.md` | `docs/api/Provider-API.md`, `protocols/Provider-Protocol.md`, `models/Provider.md`, `sdk/ProviderSDK.md` | streaming, lifecycle, and SDK conformance tests |
-| Plugin lifecycle and capability export | `architecture/PLUGIN_SYSTEM.md` | `docs/api/Plugin-API.md`, `protocols/Plugin-Protocol.md`, `models/Plugin.md`, `sdk/PluginSDK.md` | lifecycle, rollback, security, and SDK conformance tests |
-| Runtime orchestration and event guarantees | `architecture/RUNTIME.md` | `docs/api/Runtime-API.md`, `protocols/Execution-Protocol.md`, `models/Execution.md` | event bus, background execution, and orchestration tests |
-| Canonical error envelope | `errors/ERROR_CODES.md` | all APIs, protocols, SDKs, and runtime projections | contract and regression tests |
-| Correlation, idempotency, resume, and version semantics | owning architecture documents | API envelopes, protocols, runtime event streams, and SDK helpers | contract, replay, and retry tests |
+| Requirement / Concern | Primary | Derived contracts | Validation | Status |
+|---|---|---|---|---|
+| FR-A001 Agent registration and runtime identity | `architecture/AGENT_RUNTIME.md` | `models/Agent.md`, `protocols/Agent-Protocol.md`, `docs/api/Agent-API.md`, `sdk/AgentSDK.md`, `registry/AGENTS.md` | `testing/UnitTests.md`, `testing/IntegrationTests.md` | OK |
+| FR-A007 Task execution orchestration | `architecture/AGENT_RUNTIME.md` | `models/Task.md`, `models/Execution.md`, `protocols/Agent-Protocol.md`, `protocols/Execution-Protocol.md`, `docs/api/Agent-API.md`, `docs/api/Runtime-API.md` | `testing/E2ETests.md`, `testing/IntegrationTests.md` | PARTIAL |
+| FR-T001 Tool invocation and lifecycle | `architecture/TOOL_SYSTEM.md` | `models/Tool.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md`, `sdk/ToolSDK.md`, `registry/TOOLS.md` | `testing/UnitTests.md`, `testing/SecurityTests.md`, `testing/IntegrationTests.md` | OK |
+| FR-P001 Provider registration and capability abstraction | `architecture/PROVIDER_SYSTEM.md` | `models/Provider.md`, `protocols/Provider-Protocol.md`, `docs/api/Provider-API.md`, `sdk/ProviderSDK.md`, `registry/PROVIDERS.md` | `testing/IntegrationTests.md`, `testing/RegressionTests.md` | PARTIAL |
+| FR-PL001 Plugin lifecycle and exported capability registration | `architecture/PLUGIN_SYSTEM.md` | `models/Plugin.md`, `protocols/Plugin-Protocol.md`, `docs/api/Plugin-API.md`, `sdk/PluginSDK.md`, `registry/PLUGINS.md` | `testing/IntegrationTests.md`, `testing/SecurityTests.md`, `testing/RegressionTests.md` | PARTIAL |
+| FR-EL-006 Execution lifecycle and checkpoint durability | `architecture/RUNTIME.md`, `specs/EXECUTION_LIFECYCLE.md` | `models/Execution.md`, `protocols/Execution-Protocol.md`, `docs/api/Runtime-API.md`, `state-machines/TaskLifecycle.md` | `testing/IntegrationTests.md`, `testing/PerformanceTests.md` | OK |
+| FR-S011 Sandbox mediation for execution | `architecture/SANDBOX.md` | `security/SandboxPolicy.md`, `specs/FULL_ENVIRONMENT.md`, `docs/SANDBOX_DEPTH.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md` | `testing/SecurityTests.md` | PARTIAL |
+| FR-M011 Tool history memory persistence | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md`, `specs/CONTEXT_MANAGEMENT.md` | `testing/UnitTests.md`, `testing/IntegrationTests.md` | PARTIAL |
+| Canonical error envelope | `errors/ERROR_CODES.md` | all `docs/api/*`, `protocols/*`, `sdk/*`, runtime and task projections | `testing/RegressionTests.md`, `testing/IntegrationTests.md` | OK |
+| Correlation, idempotency, resume, and version semantics | owning architecture documents | API envelopes, execution/task models, protocol events, SDK helpers | `testing/E2ETests.md`, replay/retry scenarios | PARTIAL |
+
+## Open Gaps
+
+- Requirement-level mapping remains incomplete for many `FR-*` identifiers outside the core contract path.
+- Some registries and testing docs describe capability coverage but do not yet reference the hardened envelope semantics explicitly.
+- State-machine alignment is stronger for Task/Execution than for every remaining domain model.

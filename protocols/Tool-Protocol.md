@@ -1,47 +1,47 @@
 > **Status: DERIVED** for Tool message contract.
-> This document defines protocol messages for Tool. Canonical subsystem behavior is defined in the owning architecture document.
+> This document defines protocol messages for Tool invocation. Canonical subsystem behavior is defined in the owning architecture document.
 >
 > Depends on: the canonical architecture document for Tool.
-> Referenced by: models, APIs, SDKs, and tests.
-
+> Referenced by: models, APIs, SDKs, security, and tests.
 
 # Tool Protocol — Nexora
 
-> Communication contract between the runtime/tool manager and tools.
-
 ## Invocation
 
-1. Tool Manager receives a `ToolCall` from the AI response.
-2. Tool Manager validates parameters against the tool's `JsonSchema`.
-3. Tool Manager checks permissions via `PermissionManager`.
-4. If approved, Tool Manager calls `tool.execute(params, context)`.
-5. Tool returns a `ToolResult` (Success, Error, or NeedsApproval).
+1. Caller submits a `ToolInvokeRequest` containing `requestId`, `correlationId`, `toolCallId`, workspace scope, caller identity, and typed input payload.
+2. Runtime validates schema, permissions, policy, sandbox requirements, and approval state before side effects.
+3. Tool execution emits ordered lifecycle events only after durable transition commit.
+4. Terminal outcome returns a `ToolInvokeResponse` with status, version, output/artifacts, usage, approvals required, and canonical error envelope when failed.
+
+## Message Rules
+
+Every invocation or event message MUST preserve:
+
+- `correlationId`
+- `toolCallId`
+- `workspaceId`
+- `toolId`
+- durable `version` on lifecycle transitions
+- `idempotencyKey` for side-effecting retries
+- opaque `resumeToken` for resumable streams or long-running calls
+- canonical error envelope fields on failure
 
 ## Error Handling
 
-- **Recoverable errors**: Return `ToolResult.Error(recoverable = true)`. The agent loop retries.
-- **Non-recoverable errors**: Return `ToolResult.Error(recoverable = false)`. The agent loop reports failure.
-- **Permission denied**: Return `ToolResult.NeedsApproval`. The agent loop pauses for user input.
+Permission denial, approval requirements, timeout, cancellation, invalid parameters, sandbox failure, and provider failure MUST map to canonical `NXR-*` errors. Clients MUST use error code and metadata, not free-form text, as compatibility inputs.
 
 ## Timeout
 
-Each tool declares a `timeout`. If exceeded, the Tool Manager cancels the execution and returns an error.
-
+Timeout is a terminal tool-call outcome and MUST emit a final lifecycle event after the timeout state is durably committed.
 
 ## Cross-Layer Contract Rules
 
-Protocol messages MUST map to the normative operation contract of the corresponding API. A message MUST preserve correlation ID, operation ID, lifecycle effect, transition version when applicable, and the canonical error envelope fields defined in [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
-
-A protocol consumer MUST treat events as at-least-once, deduplicate by entity and transition version, and never infer success from transport completion alone. Stream and cancellation messages MUST include an explicit terminal outcome.
+Protocol messages MUST map to [docs/api/Tool-API.md](../docs/api/Tool-API.md). Consumers MUST treat events as at-least-once, deduplicate by `(entityId, version, transition)`, and never infer success from transport completion alone.
 
 ## Canonical Error Mapping
 
-The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
-
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| Tool invocation | NXR-2001, NXR-2002, NXR-2003, NXR-2004, NXR-2005, NXR-2009 |
-| Tool chain | NXR-2007, NXR-2008 |
-| Cancellation/cleanup | NXR-2002, NXR-7007 |
-
-See [ERROR_CODES.md](../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
+| invoke | NXR-2001, NXR-2002, NXR-2003, NXR-2004, NXR-2005, NXR-2009 |
+| cancelToolCall | NXR-2010, NXR-7007 |
+| result/cleanup | NXR-2008, NXR-7007 |

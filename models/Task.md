@@ -1,57 +1,33 @@
-> **Status: DERIVED** for Task entity shape.
-> This document defines the data model for Task. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> **Status: DERIVED** for Task domain model.
+> This document defines the shape and semantics of Task in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Task.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Task.
-
+> Depends on: the canonical architecture and task lifecycle sources.
+> Referenced by: protocols, APIs, SDKs, and storage implementations.
 
 # Domain Model: Task
 
-> **Status: DERIVED.** This document defines the persisted shape of a Task. The
-> `TaskStatus` enum below MUST exactly match the canonical state set defined in
-> [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). Do not add,
-> remove, or rename states here without updating the canonical state machine first.
->
-> See also [architecture/RUNTIME.md](../architecture/RUNTIME.md).
-
 ```kotlin
-package com.nexora.app.runtime.models
-
-/**
- * A task represents a unit of work assigned to an agent.
- */
 data class Task(
-    val id: String,                // UUID
+    val id: String,
     val workspaceId: String,
     val agentId: String,
-    val parentTaskId: String?,     // For subtasks
-    val goal: String,               // What the task should achieve
+    val correlationId: String,
+    val parentTaskId: String?,
     val status: TaskStatus,
-    val plan: ExecutionPlan?,
-    val result: TaskResult?,
-    val error: String?,
+    val phase: ExecutionPhase,
+    val version: Long,
+    val goal: String,
+    val input: JsonObject,
+    val output: JsonObject?,
+    val childTaskIds: List<String>,
+    val delegatedAgentIds: List<String>,
     val createdAt: Instant,
-    val startedAt: Instant?,
-    val completedAt: Instant?,
-    val updatedAt: Instant
+    val updatedAt: Instant,
+    val completedAt: Instant? = null,
+    val latestError: CanonicalErrorEnvelope? = null
 )
-
-/**
- * Canonical source: state-machines/TaskLifecycle.md.
- * Do not redefine this enum's members anywhere else in the codebase or docs.
- */
-enum class TaskStatus {
-    DRAFT, PENDING, QUEUED, RUNNING, BLOCKED,
-    WAITING_APPROVAL, COMPLETED, FAILED, CANCELLED, RETRY_PENDING
-}
 ```
 
 ## Lifecycle and Execution Semantics
 
-`status` is the durable `TaskStatus` projection of [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). Execution phase is separate and transient.
-
-```kotlin
-enum class TaskExecutionPhase { NONE, PLANNING, EXECUTING, OBSERVING, REFLECTING, FINALIZING }
-```
-
-A task MAY be `RUNNING` while its phase changes. Phase changes MUST NOT create Task lifecycle transitions unless the lifecycle document explicitly lists the trigger. Approval, blocking, retry, cancellation, and checkpoint recovery are lifecycle concerns and MUST remain observable independently of phase.
+`status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.
