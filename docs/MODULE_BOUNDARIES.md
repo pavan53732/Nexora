@@ -1,3 +1,9 @@
+> **Status: CANONICAL** for feature module ownership and responsibilities.
+> For the mapping between these feature modules and architectural layers,
+> see [MODULE_LAYER_MAPPING.md](MODULE_LAYER_MAPPING.md).
+>
+> Depends on: [MODULE_LAYER_MAPPING.md](MODULE_LAYER_MAPPING.md).
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # Module Boundaries
