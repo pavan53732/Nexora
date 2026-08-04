@@ -13,6 +13,24 @@
 
 ---
 
+## Normative SDK Contract
+
+The SDK is an adapter over the corresponding API and protocol. SDK convenience methods MUST NOT create a second lifecycle or error vocabulary. Every operation MUST preserve correlation ID, canonical error fields, lifecycle effect, cancellation outcome, and idempotency behavior from the API contract.
+
+| SDK responsibility | Required behavior |
+|---|---|
+| Request construction | Validate local arguments without changing server-side lifecycle semantics. |
+| Result projection | Expose durable status, execution phase, transition version, and correlation ID where the API provides them. |
+| Errors | Map canonical `NXR-*` codes to typed SDK errors while preserving the original envelope and redacted details. |
+| Retry | Never retry automatically unless the canonical error says retry is safe and the operation is idempotent or keyed. |
+| Cancellation | Propagate cancellation to the API/protocol and expose the committed terminal outcome. |
+| Events/streams | Preserve ordering metadata and deduplicate at-least-once events; do not infer success from transport closure. |
+| Compatibility | SDK version changes MUST document any renamed projection or transport mapping without changing canonical meanings. |
+
+### Required Operation Coverage
+
+The SDK MUST expose or explicitly mark unsupported the operation contracts for agent execution, task cancellation/status, tool invocation, provider completion/streaming, and plugin install/activation. Unsupported operations MUST return a canonical capability error rather than a generic exception.
+
 ## Overview
 
 The Tool SDK enables developers to create custom tools that agents can use. Tools are the primary way to extend Nexora's capabilities.
