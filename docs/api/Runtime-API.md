@@ -1,7 +1,7 @@
-> **Status: DERIVED** for Runtime-API API.
-> This document describes the api surface for Runtime-API. Canonical behavior is defined in the owning architecture document.
+> **Status: DERIVED** for Runtime API.
+> This document describes the api surface for Runtime. Canonical behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Runtime-API.
+> Depends on: the canonical architecture document for Runtime.
 > Referenced by: upstream architecture, models, protocols, and implementation consumers.
 
 
@@ -13,86 +13,79 @@
 
 ## Normative Operation Contract
 
-The operation below is a contract boundary, not merely a Kotlin convenience method. Implementations MUST preserve the lifecycle, event, error, security, retry, cancellation, and idempotency semantics shown here. Transport-specific names MAY differ only when the mapping is documented and lossless.
+The Runtime API owns orchestration, execution scheduling, durable event publication guarantees, background work control, and cross-subsystem correlation. It does not redefine tool, provider, plugin, or agent-specific payload contracts.
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `execute` / `startTask` | Task `Draft/Pending → Queued → Running`; Agent `Ready → Running` | Task projection plus correlation ID | Invalid input, unavailable agent/provider, permission/approval, timeout, cancellation, internal fault; use `NXR-*` envelope | Client retries require idempotency key; duplicate key returns original task; execution retry is lifecycle-controlled | Workspace authorization and tool policy checked before side effects; cancellation emits lifecycle event and performs cleanup | Runtime integration and end-to-end tests |
-| `cancel` / `cancelTask` | Active task/agent → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same task and cancellation key; repeated request returns committed result | Caller must own workspace/task; cancellation propagates to child jobs and sandbox operations | Lifecycle and cancellation tests |
-| `getTaskStatus` | No lifecycle change | Durable status, execution phase, version, latest error | Not found, unauthorized, storage failure | Safe to retry; read is versioned | Redact sensitive error details according to caller scope | API contract tests |
-| `invoke` | ToolCall `Pending → Approved/Denied → Executing → Completed/Error` | Tool result, event sequence, correlation ID | Permission denied, approval required, timeout, cancellation, invalid parameters, sandbox/provider failure | Re-execution requires tool idempotency declaration; duplicate call key MUST NOT repeat non-idempotent effects | Permission and sandbox checks precede execution; cancellation releases resources | Tool protocol and security tests |
-| `complete` / `stream` | Provider remains lifecycle-authorized; request execution gets committed result or canonical failure | Completion response or ordered stream with terminal marker | Provider unavailable, rate limit, timeout, invalid request, capability mismatch | Retry follows error envelope; non-idempotent external effects require key; stream reconnect must declare resume policy | Provider credentials never cross boundary; cancellation closes stream and records outcome | Provider protocol and integration tests |
-| `install` / `activate` | Plugin lifecycle follows verification/install/activation transitions | Plugin projection and registered capabilities | Integrity failure, incompatibility, dependency, permission, timeout, cancellation | Install keyed by plugin/version; duplicate operation returns existing result; activation is not repeated after commit | Signature, compatibility, permission, and sandbox checks precede activation; cancellation rolls back partial artifacts | Plugin lifecycle and security tests |
+| `enqueueExecution` | Execution `Pending → Queued` | Durable execution projection | Invalid request, queue/storage failure, permission failure | Idempotent with request key | Authorization MUST complete before queue visibility | Runtime integration tests |
+| `getExecution` / `listExecutions` | No lifecycle change | Stable projection(s), status, pagination cursor | Not found, invalid filter, unauthorized, storage failure | Safe to retry | Sensitive payloads redacted by caller scope | API contract tests |
+| `publishEvent` | No entity transition by itself; records durable event | Committed event projection | Storage failure, invalid envelope, version conflict | Duplicate `(entityId, version, transition)` is deduplicated | Events MUST publish only after durable state commit | Event bus contract tests |
+| `startBackgroundJob` / `cancelBackgroundJob` | Background job lifecycle transitions | Durable job projection | Invalid request, conflict, cleanup failure | Idempotent by job and operation key | Cancellation propagates to underlying execution resources | Background execution tests |
 
-Every operation MUST return or emit a correlation ID. Errors MUST preserve `code`, `category`, `retryability`, `idempotency`, `lifecycleEffect`, `recoveryOwner`, and redacted `details` from [ERROR_CODES.md](../../errors/ERROR_CODES.md). Lifecycle events are published only after durable state commit and are deduplicated by entity plus transition version.
+## Contract Shapes
+
+```kotlin
+data class RuntimeEnvelope(
+    val requestId: String,
+    val correlationId: String,
+    val workspaceId: String,
+    val actor: CallerRef,
+    val metadata: Map<String, String> = emptyMap()
+)
+
+data class ExecutionProjection(
+    val executionId: String,
+    val correlationId: String,
+    val workspaceId: String,
+    val status: ExecutionStatus,
+    val version: Long,
+    val createdAt: Instant,
+    val updatedAt: Instant,
+    val latestError: CanonicalErrorEnvelope? = null
+)
+```
 
 ## Overview
 
-The Runtime API is the central coordination point. It connects the planner, executor, tool manager, and provider system into the agent loop.
+The Runtime API defines the orchestration layer that ties together agents, tools, providers, plugins, memory, and background execution.
 
 ## Core API
 
 ```kotlin
-package com.nexora.app.runtime
-
-/**
- * Main entry point for executing agent tasks.
- */
-interface NexoraRuntime {
-    // Execute a goal within a workspace
-    suspend fun execute(goal: String, workspaceId: String): Task
-
-    // Cancel a running task
-    suspend fun cancel(taskId: String)
-
-    // Get task status
-    suspend fun getTaskStatus(taskId: String): Task
-
-    // List running tasks
-    suspend fun getRunningTasks(workspaceId: String): List<Task>
-
-    // Get execution history
-    suspend fun getHistory(workspaceId: String, limit: Int): List<ExecutionEvent>
+interface RuntimeApi {
+    suspend fun enqueueExecution(request: RuntimeExecutionRequest): ExecutionProjection
+    suspend fun getExecution(executionId: String): ExecutionProjection
+    suspend fun listExecutions(filter: ExecutionFilter, page: PageRequest): Page<ExecutionProjection>
 }
 ```
 
 ## Event Bus API
 
 ```kotlin
-interface EventBus {
-    fun publish(event: NexoraEvent)
-    fun subscribe(eventType: KClass<out NexoraEvent>, handler: (NexoraEvent) -> Unit)
-    fun unsubscribe(eventType: KClass<out NexoraEvent>, handler: (NexoraEvent) -> Unit)
-}
-
-// Usage
-eventBus.subscribe(TaskProgress::class) { event ->
-    updateUI(event)
+interface EventBusApi {
+    suspend fun publishEvent(event: CanonicalLifecycleEvent): CanonicalLifecycleEvent
+    fun subscribe(filter: EventFilter, resumeToken: String? = null): Flow<CanonicalLifecycleEvent>
 }
 ```
+
+Event subscriptions MUST define resume semantics. If replay/resume is unsupported for a transport, the implementation MUST say so explicitly and MUST NOT imply durable replay by exposing a dummy token.
 
 ## Background Service API
 
 ```kotlin
-/**
- * Android Foreground Service for long-running agent execution.
- * Survives app minimize and device restart.
- */
-class AgentExecutionService : LifecycleService() {
-    fun startTask(taskId: String, goal: String, workspaceId: String)
-    fun cancelTask(taskId: String)
-    fun getActiveTasks(): List<String>
+interface BackgroundServiceApi {
+    suspend fun startBackgroundJob(request: BackgroundJobRequest): BackgroundJobProjection
+    suspend fun cancelBackgroundJob(jobId: String, correlationId: String, operationKey: String?): BackgroundJobProjection
 }
 ```
 
 ## Canonical Error Mapping
 
-The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
-
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| execute/startTask | NXR-1008, NXR-3004, NXR-4002, NXR-1005 |
-| cancel/cancelTask | NXR-3010, NXR-1003 |
-| getTaskStatus | NXR-1009, NXR-9001 |
+| enqueueExecution | NXR-7001, NXR-7002, NXR-7004 |
+| getExecution / listExecutions | NXR-7001 |
+| publishEvent / subscribe | NXR-7003, NXR-7005 |
+| startBackgroundJob / cancelBackgroundJob | NXR-7006, NXR-7007 |
 
-See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for canonical envelope requirements.

@@ -1,7 +1,7 @@
-> **Status: DERIVED** for Provider-API API.
-> This document describes the api surface for Provider-API. Canonical behavior is defined in the owning architecture document.
+> **Status: DERIVED** for Provider API.
+> This document describes the api surface for Provider. Canonical behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Provider-API.
+> Depends on: the canonical architecture document for Provider.
 > Referenced by: upstream architecture, models, protocols, and implementation consumers.
 
 
@@ -13,89 +13,84 @@
 
 ## Normative Operation Contract
 
-The operation below is a contract boundary, not merely a Kotlin convenience method. Implementations MUST preserve the lifecycle, event, error, security, retry, cancellation, and idempotency semantics shown here. Transport-specific names MAY differ only when the mapping is documented and lossless.
+The Provider API owns model capability discovery, request validation, completion, streaming, cancellation, and usage accounting. Credential loading and redaction are part of the contract boundary; raw credentials MUST NOT cross into caller-visible payloads.
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `execute` / `startTask` | Task `Draft/Pending → Queued → Running`; Agent `Ready → Running` | Task projection plus correlation ID | Invalid input, unavailable agent/provider, permission/approval, timeout, cancellation, internal fault; use `NXR-*` envelope | Client retries require idempotency key; duplicate key returns original task; execution retry is lifecycle-controlled | Workspace authorization and tool policy checked before side effects; cancellation emits lifecycle event and performs cleanup | Runtime integration and end-to-end tests |
-| `cancel` / `cancelTask` | Active task/agent → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same task and cancellation key; repeated request returns committed result | Caller must own workspace/task; cancellation propagates to child jobs and sandbox operations | Lifecycle and cancellation tests |
-| `getTaskStatus` | No lifecycle change | Durable status, execution phase, version, latest error | Not found, unauthorized, storage failure | Safe to retry; read is versioned | Redact sensitive error details according to caller scope | API contract tests |
-| `invoke` | ToolCall `Pending → Approved/Denied → Executing → Completed/Error` | Tool result, event sequence, correlation ID | Permission denied, approval required, timeout, cancellation, invalid parameters, sandbox/provider failure | Re-execution requires tool idempotency declaration; duplicate call key MUST NOT repeat non-idempotent effects | Permission and sandbox checks precede execution; cancellation releases resources | Tool protocol and security tests |
-| `complete` / `stream` | Provider remains lifecycle-authorized; request execution gets committed result or canonical failure | Completion response or ordered stream with terminal marker | Provider unavailable, rate limit, timeout, invalid request, capability mismatch | Retry follows error envelope; non-idempotent external effects require key; stream reconnect must declare resume policy | Provider credentials never cross boundary; cancellation closes stream and records outcome | Provider protocol and integration tests |
-| `install` / `activate` | Plugin lifecycle follows verification/install/activation transitions | Plugin projection and registered capabilities | Integrity failure, incompatibility, dependency, permission, timeout, cancellation | Install keyed by plugin/version; duplicate operation returns existing result; activation is not repeated after commit | Signature, compatibility, permission, and sandbox checks precede activation; cancellation rolls back partial artifacts | Plugin lifecycle and security tests |
+| `registerProvider` | Provider `Discovered → Registered → Available` | Durable provider projection | Duplicate provider, incompatible adapter/API version, invalid capabilities, storage failure | Duplicate `(providerId, version)` is idempotent | Registration validates capability declaration and compatibility before visibility | Registry and SDK conformance tests |
+| `getProvider` / `listProviders` | No lifecycle change | Stable projection(s), capabilities, pagination cursor | Not found, invalid filter, unauthorized, storage failure | Safe to retry; reads are side-effect free | Secret material and internal routing metadata MUST be redacted | API contract tests |
+| `complete` | Request execution committed with terminal result | Completion payload, usage, correlation ID | Provider unavailable, rate limit, timeout, invalid request, capability mismatch | Side-effect-free completion retries SHOULD use same idempotency key and return equivalent terminal outcome where supported | Credentials never cross boundary; cancellation closes external request and records terminal outcome | Provider protocol and integration tests |
+| `stream` | Request execution emits ordered stream and terminal marker | Ordered chunks plus terminal event and usage | Disconnect, timeout, provider unavailable, capability mismatch, invalid request | Resume support REQUIRES opaque `resumeToken`; if unsupported, provider MUST declare non-resumable streams | Cancellation closes stream, emits terminal event after durable commit, and frees external resources | Streaming and lifecycle tests |
+| `cancelRequest` | Active provider request → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same request and cancellation key | Caller must own workspace/request scope | Cancellation tests |
 
-Every operation MUST return or emit a correlation ID. Errors MUST preserve `code`, `category`, `retryability`, `idempotency`, `lifecycleEffect`, `recoveryOwner`, and redacted `details` from [ERROR_CODES.md](../../errors/ERROR_CODES.md). Lifecycle events are published only after durable state commit and are deduplicated by entity plus transition version.
+## Contract Shapes
+
+```kotlin
+data class ProviderRequest(
+    val requestId: String,
+    val correlationId: String,
+    val idempotencyKey: String?,
+    val workspaceId: String,
+    val providerRequestId: String,
+    val providerId: String,
+    val model: String,
+    val messages: List<MessagePart>,
+    val toolsOffered: List<ToolDescriptorRef> = emptyList(),
+    val responseFormat: ResponseFormat?,
+    val temperature: Double?,
+    val maxTokens: Int?,
+    val timeoutMs: Long?,
+    val caller: CallerRef,
+    val metadata: Map<String, String> = emptyMap(),
+    val resumeToken: String? = null
+)
+
+data class ProviderResponse(
+    val correlationId: String,
+    val providerRequestId: String,
+    val status: ProviderRequestStatus,
+    val version: Long,
+    val output: ProviderOutput?,
+    val usage: UsageRecord?,
+    val error: CanonicalErrorEnvelope? = null,
+    val resumeToken: String? = null
+)
+```
+
+Streaming chunks MUST carry monotonically increasing sequence numbers and a terminal marker. Clients MUST NOT infer completion from socket closure alone.
 
 ## Overview
 
-The Provider API defines how AI providers are integrated. The runtime interacts with providers exclusively through this API.
+The Provider API defines how AI providers are registered, discovered, invoked, streamed, cancelled, and metered.
 
 ## Provider Interface
 
 ```kotlin
-package com.nexora.app.core.providers
-
-interface AIProvider {
-    val id: String
-    val name: String
-    val type: ProviderType
-    val supportedCapabilities: Set<ProviderCapability>
-
-    suspend fun complete(request: CompletionRequest): CompletionResponse
-    fun stream(request: CompletionRequest): Flow<StreamChunk>
-    suspend fun embed(request: EmbeddingRequest): EmbeddingResponse
-    suspend fun listModels(): List<Model>
-    suspend fun healthCheck(): HealthStatus
-}
-
-enum class ProviderType {
-    OPENAI_COMPATIBLE, ANTHROPIC, GEMINI, GROQ,
-    OPENROUTER, OLLAMA, LM_STUDIO, LOCAL_GGUF, CUSTOM
-}
-
-enum class ProviderCapability {
-    CHAT_COMPLETION, STREAMING, TOOL_CALLING, VISION, EMBEDDINGS,
-    FUNCTION_CALLING, REASONING
+interface ProviderApi {
+    suspend fun registerProvider(descriptor: ProviderDescriptor): ProviderProjection
+    suspend fun getProvider(providerId: String): ProviderProjection
+    suspend fun listProviders(filter: ProviderFilter, page: PageRequest): Page<ProviderProjection>
+    suspend fun complete(request: ProviderRequest): ProviderResponse
+    fun stream(request: ProviderRequest): Flow<ProviderStreamEvent>
+    suspend fun cancelRequest(providerRequestId: String, correlationId: String, cancellationKey: String?): ProviderResponse
 }
 ```
 
 ## Usage API
 
-```kotlin
-// Get a provider instance
-val provider = providerRegistry.get("openai")
-
-// Synchronous completion
-val response = provider.complete(CompletionRequest(
-    model = "gpt-4o",
-    messages = listOf(Message(role = "user", content = "Build a todo app")),
-    tools = toolRegistry.toToolDefinitions()
-))
-
-// Streaming
-provider.stream(request).collect { chunk ->
-    // Handle each chunk
-}
-
-// Health check
-val health = provider.healthCheck()
-```
+Usage accounting MUST be part of the success and terminal-failure contract where the upstream provider exposes billable units. Missing usage data MUST be represented explicitly as unknown, not silently omitted.
 
 ## Design Rule
 
-> The runtime must NEVER depend on a specific provider implementation.
-> All provider-specific logic lives in `providers/` as plugins.
-
-See [registry/PROVIDERS.md](../../registry/PROVIDERS.md) for the complete provider registry.
+Provider-specific response formats MAY vary internally, but the exported contract MUST normalize capabilities, usage, errors, cancellation outcome, and streaming terminal semantics.
 
 ## Canonical Error Mapping
 
-The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
-
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| complete/stream | NXR-4001, NXR-4002, NXR-4003, NXR-4005, NXR-4006, NXR-4007 |
-| embed | NXR-4008 |
-| healthCheck | NXR-4009, NXR-4010 |
+| registerProvider | NXR-4001, NXR-4002, NXR-5007 |
+| getProvider / listProviders | NXR-4001, NXR-7001 |
+| complete / stream | NXR-4003, NXR-4004, NXR-4005, NXR-4006, NXR-4007 |
+| cancelRequest | NXR-4008, NXR-7007 |
 
-See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for canonical envelope requirements.

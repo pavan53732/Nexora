@@ -13,44 +13,114 @@
 
 ## Normative Operation Contract
 
-The operation below is a contract boundary, not merely a Kotlin convenience method. Implementations MUST preserve the lifecycle, event, error, security, retry, cancellation, and idempotency semantics shown here. Transport-specific names MAY differ only when the mapping is documented and lossless.
+The operations below define the **wire-level contract boundary** for tool discovery, registration, and invocation. They are not merely Kotlin convenience methods. Implementations MUST preserve lifecycle, authorization, event ordering, error-envelope, retry, cancellation, redaction, and idempotency semantics. Transport-specific names MAY differ only when the mapping is documented, lossless, and test-covered.
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `execute` / `startTask` | Task `Draft/Pending → Queued → Running`; Agent `Ready → Running` | Task projection plus correlation ID | Invalid input, unavailable agent/provider, permission/approval, timeout, cancellation, internal fault; use `NXR-*` envelope | Client retries require idempotency key; duplicate key returns original task; execution retry is lifecycle-controlled | Workspace authorization and tool policy checked before side effects; cancellation emits lifecycle event and performs cleanup | Runtime integration and end-to-end tests |
-| `cancel` / `cancelTask` | Active task/agent → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same task and cancellation key; repeated request returns committed result | Caller must own workspace/task; cancellation propagates to child jobs and sandbox operations | Lifecycle and cancellation tests |
-| `getTaskStatus` | No lifecycle change | Durable status, execution phase, version, latest error | Not found, unauthorized, storage failure | Safe to retry; read is versioned | Redact sensitive error details according to caller scope | API contract tests |
-| `invoke` | ToolCall `Pending → Approved/Denied → Executing → Completed/Error` | Tool result, event sequence, correlation ID | Permission denied, approval required, timeout, cancellation, invalid parameters, sandbox/provider failure | Re-execution requires tool idempotency declaration; duplicate call key MUST NOT repeat non-idempotent effects | Permission and sandbox checks precede execution; cancellation releases resources | Tool protocol and security tests |
-| `complete` / `stream` | Provider remains lifecycle-authorized; request execution gets committed result or canonical failure | Completion response or ordered stream with terminal marker | Provider unavailable, rate limit, timeout, invalid request, capability mismatch | Retry follows error envelope; non-idempotent external effects require key; stream reconnect must declare resume policy | Provider credentials never cross boundary; cancellation closes stream and records outcome | Provider protocol and integration tests |
-| `install` / `activate` | Plugin lifecycle follows verification/install/activation transitions | Plugin projection and registered capabilities | Integrity failure, incompatibility, dependency, permission, timeout, cancellation | Install keyed by plugin/version; duplicate operation returns existing result; activation is not repeated after commit | Signature, compatibility, permission, and sandbox checks precede activation; cancellation rolls back partial artifacts | Plugin lifecycle and security tests |
+| `registerTool` | Tool `Discovered → Registered` | Durable tool projection with version | Duplicate ID, invalid manifest/schema, incompatible SDK/version, permission failure, storage failure | Duplicate `(toolId, version)` is idempotent and returns committed projection | Registration MUST validate ownership, permissions, and declared capabilities before visibility | Registry and SDK conformance tests |
+| `getTool` / `listTools` | No lifecycle change | Stable projection(s), filter metadata, pagination cursor | Not found, invalid filter, unauthorized, storage failure | Safe to retry; reads are side-effect free and versioned | Results MUST redact hidden/internal capabilities based on caller scope | API contract tests |
+| `invoke` | ToolCall `Pending → Approved/Denied → Executing → Completed/Error` | Tool result envelope, ordered events, correlation ID | Permission denied, approval required, timeout, cancellation, invalid parameters, sandbox/provider failure | Client retries require idempotency key for side-effecting tools; duplicate key MUST return original committed outcome | Authorization, permission, sandbox, and policy checks MUST occur before side effects; cancellation releases resources and emits terminal event after commit | Protocol, security, and integration tests |
+| `cancelToolCall` | Active ToolCall → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same `toolCallId` and cancellation key | Caller MUST own workspace or delegated execution scope; cancellation propagates to child processes/resources | Lifecycle and cancellation tests |
 
-Every operation MUST return or emit a correlation ID. Errors MUST preserve `code`, `category`, `retryability`, `idempotency`, `lifecycleEffect`, `recoveryOwner`, and redacted `details` from [ERROR_CODES.md](../../errors/ERROR_CODES.md). Lifecycle events are published only after durable state commit and are deduplicated by entity plus transition version.
+Every request and every emitted event MUST include `correlationId`. Side-effecting requests MUST include `idempotencyKey`. Durable state MUST commit before lifecycle events are published. Duplicate events MUST be deduplicated by `(entityId, version, transition)`. Errors MUST preserve canonical envelope fields from [ERROR_CODES.md](../../errors/ERROR_CODES.md): `code`, `category`, `retryability`, `idempotency`, `lifecycleEffect`, `recoveryOwner`, and redacted `details`.
+
+## Contract Shapes
+
+The following envelope fields are **normative across transports**. JSON, protobuf, IPC, or in-process adapters MAY rename fields only when the mapping is exact, documented, and reversible.
+
+### Request Envelope
+
+```kotlin
+data class ToolInvokeRequest(
+    val requestId: String,
+    val correlationId: String,
+    val idempotencyKey: String?,
+    val workspaceId: String,
+    val agentId: String?,
+    val taskId: String?,
+    val toolCallId: String,
+    val toolId: String,
+    val toolVersion: String?,
+    val input: JsonObject,
+    val caller: CallerRef,
+    val approvals: List<ApprovalRef> = emptyList(),
+    val timeoutMs: Long?,
+    val resumeToken: String? = null,
+    val metadata: Map<String, String> = emptyMap()
+)
+```
+
+### Response Envelope
+
+```kotlin
+data class ToolInvokeResponse(
+    val correlationId: String,
+    val toolCallId: String,
+    val status: ToolCallStatus,
+    val version: Long,
+    val startedAt: Instant?,
+    val completedAt: Instant?,
+    val output: JsonObject?,
+    val artifacts: List<ArtifactRef> = emptyList(),
+    val usage: ToolUsage?,
+    val approvalsRequired: List<ApprovalRequirement> = emptyList(),
+    val error: CanonicalErrorEnvelope? = null,
+    val nextPageCursor: String? = null,
+    val resumeToken: String? = null
+)
+```
+
+### Event Envelope
+
+```kotlin
+data class ToolEvent(
+    val eventId: String,
+    val correlationId: String,
+    val entityId: String,
+    val entityType: String,
+    val transition: String,
+    val version: Long,
+    val publishedAt: Instant,
+    val workspaceId: String,
+    val taskId: String?,
+    val toolCallId: String,
+    val payload: JsonObject,
+    val terminal: Boolean
+)
+```
+
+### Required Rules
+
+- `requestId` identifies the transport request; `correlationId` groups all work spawned by the same logical operation.
+- `toolCallId` is client- or runtime-generated and stable across retries.
+- `version` is a monotonically increasing durable entity version used for deduplication and optimistic reads.
+- `resumeToken` is REQUIRED for resumable streams or long-running invocations and MUST be opaque to clients.
+- Pagination MUST use opaque cursors rather than offset-based scanning for registry reads.
 
 ## Overview
 
-The Tool API defines how tools are discovered, registered, invoked, and how results are returned. Every tool in Nexora implements this API.
+The Tool API defines how tools are discovered, registered, invoked, cancelled, and how results, artifacts, approvals, and events are returned. Every tool in Nexora implements this contract either directly or through an adapter.
 
 ## Core Interface
 
 ```kotlin
 package com.nexora.app.runtime.tools
 
-/**
- * Every capability in Nexora implements this interface.
- * Tools are registered in the ToolRegistry and invoked by the ToolManager.
- */
 interface Tool {
-    val id: String           // Unique identifier, e.g. "file_read"
-    val name: String         // Human-readable name
-    val description: String  // Description for AI discovery
+    val id: String
+    val name: String
+    val description: String
     val category: ToolCategory
-    val parameters: JsonSchema  // Input parameter schema
+    val parameters: JsonSchema
     val requiredPermissions: List<PermissionScope>
-    val timeout: Duration    // Max execution time
-    val requiresSandbox: Boolean  // Must execute in sandbox?
+    val timeout: Duration
+    val requiresSandbox: Boolean
+    val supportsStreaming: Boolean
+    val supportsCancellation: Boolean
+    val isIdempotent: Boolean
     val version: String
 
-    suspend fun execute(params: JsonObject, context: ToolContext): ToolResult
+    suspend fun execute(request: ToolInvokeRequest, context: ToolContext): ToolInvokeResponse
 }
 
 enum class ToolCategory {
@@ -62,53 +132,44 @@ enum class ToolCategory {
 }
 ```
 
-## Request/Response
+## Request/Response Context
 
 ```kotlin
 data class ToolContext(
     val workspaceId: String,
     val sandbox: Sandbox,
     val memoryManager: MemoryManager,
-    val eventBus: EventBus
-)
-
-sealed class ToolResult {
-    data class Success(
-        val output: JsonObject,
-        val metadata: ToolMetadata
-    ) : ToolResult()
-
-    data class Error(
-        val message: String,
-        val code: String,
-        val recoverable: Boolean
-    ) : ToolResult()
-
-    data class NeedsApproval(
-        val toolCall: ToolCall,
-        val reason: String
-    ) : ToolResult()
-}
-
-// Example usage by the runtime
-toolManager.invoke(
-    toolId = "file_read",
-    params = jsonObjectOf("path" to "/src/main.kt"),
-    context = toolContext
+    val eventBus: EventBus,
+    val logger: StructuredLogger,
+    val cancellation: CancellationToken,
+    val clock: Clock
 )
 ```
+
+`Map<String, Any>`, free-form strings, or transport-specific exception types MUST NOT be treated as the normative contract shape. Generated SDKs and adapters SHOULD derive from a machine-readable schema source (OpenAPI, JSON Schema, or protobuf) that preserves these envelope semantics.
 
 ## Registration API
 
 ```kotlin
-// Built-in registration (at app startup)
-toolRegistry.register(FileReadTool())
-
-// Plugin registration (at plugin activation)
-pluginContext.toolRegistry.register(MyCustomTool())
+interface ToolRegistryApi {
+    suspend fun registerTool(tool: ToolDescriptor, context: RegistryContext): ToolProjection
+    suspend fun getTool(toolId: String, version: String? = null): ToolProjection
+    suspend fun listTools(filter: ToolFilter, page: PageRequest): Page<ToolProjection>
+}
 ```
 
-See [registry/TOOLS.md](../../registry/TOOLS.md) for the complete tool registry with stable IDs.
+Built-in tools register at runtime startup. Plugin tools register only after plugin verification and activation succeed. Stable IDs are governed by [registry/TOOLS.md](../../registry/TOOLS.md).
+
+## Ownership Boundaries
+
+This specification covers tool registration, discovery, invocation, and tool-call lifecycle only.
+
+- Agent planning, task ownership, and delegation semantics belong to [Agent-API.md](./Agent-API.md).
+- Provider completion and streaming semantics belong to [Provider-API.md](./Provider-API.md).
+- Plugin package verification and activation semantics belong to [Plugin-API.md](./Plugin-API.md).
+- Runtime orchestration, background work, and global event bus guarantees belong to [Runtime-API.md](./Runtime-API.md).
+
+Cross-domain behavior MUST be referenced, not redefined, to avoid contract drift.
 
 ## Canonical Error Mapping
 
@@ -116,7 +177,10 @@ The following mapping is normative. Adapters MUST preserve these codes and the c
 
 | Operation | Canonical `NXR-*` codes |
 |---|---|
+| registerTool | NXR-5001, NXR-5002, NXR-5004, NXR-5007 |
+| getTool / listTools | NXR-2001, NXR-7001 |
 | invoke | NXR-2001, NXR-2002, NXR-2003, NXR-2004, NXR-2005, NXR-2009 |
+| cancelToolCall | NXR-2010, NXR-7007 |
 | result/cleanup | NXR-2008, NXR-7007 |
 
 See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.

@@ -1,7 +1,7 @@
-> **Status: DERIVED** for Plugin-API API.
-> This document describes the api surface for Plugin-API. Canonical behavior is defined in the owning architecture document.
+> **Status: DERIVED** for Plugin API.
+> This document describes the api surface for Plugin. Canonical behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Plugin-API.
+> Depends on: the canonical architecture document for Plugin.
 > Referenced by: upstream architecture, models, protocols, and implementation consumers.
 
 
@@ -13,97 +13,58 @@
 
 ## Normative Operation Contract
 
-The operation below is a contract boundary, not merely a Kotlin convenience method. Implementations MUST preserve the lifecycle, event, error, security, retry, cancellation, and idempotency semantics shown here. Transport-specific names MAY differ only when the mapping is documented and lossless.
+The Plugin API owns package verification, dependency resolution, installation, activation, deactivation, and removal. Capability registration by plugins is delegated to the owning Agent, Tool, and Provider APIs after plugin activation succeeds.
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `execute` / `startTask` | Task `Draft/Pending → Queued → Running`; Agent `Ready → Running` | Task projection plus correlation ID | Invalid input, unavailable agent/provider, permission/approval, timeout, cancellation, internal fault; use `NXR-*` envelope | Client retries require idempotency key; duplicate key returns original task; execution retry is lifecycle-controlled | Workspace authorization and tool policy checked before side effects; cancellation emits lifecycle event and performs cleanup | Runtime integration and end-to-end tests |
-| `cancel` / `cancelTask` | Active task/agent → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same task and cancellation key; repeated request returns committed result | Caller must own workspace/task; cancellation propagates to child jobs and sandbox operations | Lifecycle and cancellation tests |
-| `getTaskStatus` | No lifecycle change | Durable status, execution phase, version, latest error | Not found, unauthorized, storage failure | Safe to retry; read is versioned | Redact sensitive error details according to caller scope | API contract tests |
-| `invoke` | ToolCall `Pending → Approved/Denied → Executing → Completed/Error` | Tool result, event sequence, correlation ID | Permission denied, approval required, timeout, cancellation, invalid parameters, sandbox/provider failure | Re-execution requires tool idempotency declaration; duplicate call key MUST NOT repeat non-idempotent effects | Permission and sandbox checks precede execution; cancellation releases resources | Tool protocol and security tests |
-| `complete` / `stream` | Provider remains lifecycle-authorized; request execution gets committed result or canonical failure | Completion response or ordered stream with terminal marker | Provider unavailable, rate limit, timeout, invalid request, capability mismatch | Retry follows error envelope; non-idempotent external effects require key; stream reconnect must declare resume policy | Provider credentials never cross boundary; cancellation closes stream and records outcome | Provider protocol and integration tests |
-| `install` / `activate` | Plugin lifecycle follows verification/install/activation transitions | Plugin projection and registered capabilities | Integrity failure, incompatibility, dependency, permission, timeout, cancellation | Install keyed by plugin/version; duplicate operation returns existing result; activation is not repeated after commit | Signature, compatibility, permission, and sandbox checks precede activation; cancellation rolls back partial artifacts | Plugin lifecycle and security tests |
-
-Every operation MUST return or emit a correlation ID. Errors MUST preserve `code`, `category`, `retryability`, `idempotency`, `lifecycleEffect`, `recoveryOwner`, and redacted `details` from [ERROR_CODES.md](../../errors/ERROR_CODES.md). Lifecycle events are published only after durable state commit and are deduplicated by entity plus transition version.
+| `installPlugin` | Plugin `Discovered → Verified → Installed` | Durable plugin projection | Integrity failure, incompatibility, dependency failure, storage failure, timeout | Duplicate `(pluginId, version)` install is idempotent | Signature, compatibility, dependency, and permission checks MUST precede install | Lifecycle and security tests |
+| `activatePlugin` | Installed plugin `Installed → Activated` | Activated projection plus registered capability references | Permission denied, dependency inactive, capability registration failure, timeout | Duplicate activation after durable commit returns active projection | Activation MUST be transactional; partial capability registration requires rollback | Activation and rollback tests |
+| `deactivatePlugin` | Active plugin `Activated → Deactivated` | Durable deactivation projection | Not found, already inactive, dependency conflict, cleanup failure | Idempotent for same plugin and operation key | Deactivation MUST unregister exposed capabilities before final commit | Lifecycle tests |
+| `removePlugin` | Plugin `Deactivated/Installed → Removed` | Durable removal projection | Not found, dependency conflict, cleanup/storage failure | Idempotent after commit | Caller must have administrative scope; removal clears stored artifacts after commit-safe point | Removal tests |
+| `getPlugin` / `listPlugins` | No lifecycle change | Stable projection(s), dependency and capability metadata, pagination cursor | Not found, invalid filter, unauthorized, storage failure | Safe to retry | Internal verification data may be redacted by caller scope | API contract tests |
 
 ## Overview
 
-The Plugin API defines how plugins are loaded, registered, and managed. Plugins can register tools, agents, providers, and UI screens.
+The Plugin API defines package-level lifecycle management only. Plugin-exposed tools, agents, and providers must register through their own canonical APIs after activation.
 
 ## Plugin Interface
 
 ```kotlin
-package com.nexora.app.runtime.plugins
-
-interface NexoraPlugin {
-    val id: String
-    val name: String
-    val version: String
-    val description: String
-    val requiredPermissions: List<PermissionScope>
-    val dependencies: List<String>  // Other plugin IDs
-    val minAppVersion: String
-
-    fun onInstall(context: PluginContext)
-    fun onActivate(context: PluginContext)
-    fun onDeactivate(context: PluginContext)
-    fun onUninstall(context: PluginContext)
+interface PluginApi {
+    suspend fun installPlugin(request: PluginInstallRequest): PluginProjection
+    suspend fun activatePlugin(pluginId: String, correlationId: String, operationKey: String?): PluginProjection
+    suspend fun deactivatePlugin(pluginId: String, correlationId: String, operationKey: String?): PluginProjection
+    suspend fun removePlugin(pluginId: String, correlationId: String, operationKey: String?): PluginProjection
+    suspend fun getPlugin(pluginId: String): PluginProjection
+    suspend fun listPlugins(filter: PluginFilter, page: PageRequest): Page<PluginProjection>
 }
-
-/**
- * PluginContext gives plugins access to Nexora's core systems.
- * Plugins should ONLY interact with the system through this context.
- */
-class PluginContext(
-    val toolRegistry: ToolRegistry,
-    val agentRegistry: AgentRegistry,
-    val providerRegistry: ProviderRegistry,
-    val sandbox: Sandbox,
-    val eventBus: EventBus,
-    val memoryManager: MemoryManager
-)
 ```
 
 ## Plugin Manifest
 
-Each plugin includes a `plugin.json` manifest:
+The manifest is a normative contract artifact and MUST declare:
 
-```json
-{
-  "id": "nexora-browser",
-  "name": "Browser Automation",
-  "version": "1.0.0",
-  "minAppVersion": "0.1.0",
-  "permissions": ["network:http", "sandbox:execute"],
-  "dependencies": [],
-  "registers": {
-    "tools": ["browser_navigate", "browser_screenshot", "browser_extract"],
-    "agents": [],
-    "providers": [],
-    "screens": []
-  }
-}
-```
+- `pluginId`
+- `version`
+- compatibility range
+- required permissions
+- exported capabilities by type (`agents`, `tools`, `providers`, `skills`)
+- dependency list and minimum versions
+- signature/integrity metadata
+
+Free-form manifest blobs are not sufficient for compatibility checking.
 
 ## Lifecycle
 
-1. **Install** — Download, validate manifest, check permissions, store.
-2. **Load** — Instantiate plugin class, call `onInstall()`.
-3. **Activate** — Call `onActivate()`. Plugin registers its capabilities.
-4. **Use** — Registered capabilities available to the runtime.
-5. **Deactivate** — Call `onDeactivate()`. Unregister capabilities.
-6. **Uninstall** — Call `onUninstall()`. Delete plugin data.
-
-See [sdk/PluginSDK.md](../../sdk/PluginSDK.md) for the full plugin development guide.
+Activation MUST be transactional across capability registration. If any exported capability fails registration, the plugin returns to the prior durable state and no partial registration remains visible.
 
 ## Canonical Error Mapping
 
-The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
-
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| install/verify | NXR-6001, NXR-6002, NXR-6005, NXR-6007 |
-| activate/deactivate | NXR-6003, NXR-6004, NXR-6008 |
-| update/uninstall | NXR-6006, NXR-6001 |
+| installPlugin | NXR-5001, NXR-5002, NXR-5003, NXR-5004 |
+| activatePlugin | NXR-5005, NXR-5006, NXR-5007 |
+| deactivatePlugin / removePlugin | NXR-5008, NXR-5009, NXR-7007 |
+| getPlugin / listPlugins | NXR-5001, NXR-7001 |
 
-See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for canonical envelope requirements.
