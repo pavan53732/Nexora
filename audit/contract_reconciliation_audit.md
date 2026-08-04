@@ -2,31 +2,31 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest synchronization pass.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after the latest logical reconciliation pass.
 
 ## Improvements completed in this pass
 
-- Added `testing/EVIDENCE_CONVENTIONS.md` to define evidence path and result conventions.
-- Back-linked lifecycle authorities into `specs/CONTEXT_MANAGEMENT.md`, `specs/TERMINAL.md`, and `docs/ARCHITECTURE.md`.
-- Replaced evidence placeholders in test case inventories and traceability rows with stable evidence path conventions.
-- Improved the auditability of the validation model by standardizing where verification artifacts should live.
+- Extended lifecycle-aware linkage into Tool, Execution, and Provider protocol documents.
+- Added Plugin API and Plugin SDK lifecycle and compatibility guidance.
+- Introduced `docs/TRACEABILITY_RULES.md` to define operating rules for maintaining traceability quality.
+- Updated the traceability matrix to reference the new operating rules and corrected the plugin SDK linkage in the plugin contract path.
 
 ## Remaining gaps
 
 ### 1. Full FR/NFR enumeration is still incomplete
 
-The traceability matrix remains selective rather than exhaustive.
+The matrix is still selective rather than exhaustive.
 
-### 2. Evidence paths are defined but unpopulated
+### 2. Evidence state is still planning-oriented
 
-The repository now defines where evidence should live, but it still lacks actual verification artifacts and execution status updates.
+Logical evidence locations exist, but there are still no real verification artifacts or non-planned case statuses.
 
-### 3. Lifecycle linkage still needs broader saturation
+### 3. Lifecycle linkage still needs wider saturation
 
-The most important architecture/spec surfaces now link to lifecycle authorities, but full repository saturation is still incomplete.
+More protocol and contract surfaces are now aligned, but full repository coverage is still incomplete.
 
 ## Recommended follow-up work
 
-1. Continue exhaustive requirement enumeration using the established evidence-aware traceability model.
-2. Populate evidence paths as real validation artifacts become available.
-3. Continue systematic lifecycle back-linking in remaining architecture, API, SDK, and protocol surfaces.
+1. Continue exhaustive requirement enumeration within the rule-based traceability framework.
+2. Populate evidence paths with real validation artifacts and status updates when implementation/testing appears.
+3. Continue systematic lifecycle linkage across remaining architecture, protocol, API, SDK, and specification surfaces.
