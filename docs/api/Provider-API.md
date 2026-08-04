@@ -87,3 +87,15 @@ val health = provider.healthCheck()
 > All provider-specific logic lives in `providers/` as plugins.
 
 See [registry/PROVIDERS.md](../../registry/PROVIDERS.md) for the complete provider registry.
+
+## Canonical Error Mapping
+
+The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
+
+| Operation | Canonical `NXR-*` codes |
+|---|---|
+| complete/stream | NXR-4001, NXR-4002, NXR-4003, NXR-4005, NXR-4006, NXR-4007 |
+| embed | NXR-4008 |
+| healthCheck | NXR-4009, NXR-4010 |
+
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.

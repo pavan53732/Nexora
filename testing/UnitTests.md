@@ -168,3 +168,10 @@ class PermissionManagerTest {
 | `orchestrator_routesViaEventBus` | Results flow through the orchestration layer, not point-to-point |
 | `docsGate_blocksCompletion` | Documentation-affected task without docs changes cannot report completion |
 | `architectAgent_designsFirst` | Architect sub-agent runs design/validation before implementation tasks |
+
+
+## Canonical Contract Evidence
+
+Tests asserting failure or recovery MUST assert the canonical `NXR-*` code and the semantic envelope fields, not only message text or a boolean failure. Lifecycle tests MUST assert no state mutation for invalid transitions, durable persistence before success events, transition-version deduplication, idempotent repeats, and cleanup/recovery behavior.
+
+Operation tests MUST identify the API/protocol/SDK operation under test and its corresponding traceability row. Security tests MUST identify the threat or permission control they exercise.

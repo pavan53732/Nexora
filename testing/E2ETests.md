@@ -118,3 +118,10 @@ E2E tests exercise the complete application on a real device or emulator, valida
 | No direct sub-agent calls | Two sub-agents need to exchange info | They publish/read shared memory via orchestrator; no direct calls observed |
 | Docs gate enforcement | Code change requiring CHANGELOG/README update | Completion blocked until documentation updated |
 | Conflict resolution by master | Two sub-agent outputs conflict | Coordinator detects, resolves (or reassigns), documents decision |
+
+
+## Canonical Contract Evidence
+
+Tests asserting failure or recovery MUST assert the canonical `NXR-*` code and the semantic envelope fields, not only message text or a boolean failure. Lifecycle tests MUST assert no state mutation for invalid transitions, durable persistence before success events, transition-version deduplication, idempotent repeats, and cleanup/recovery behavior.
+
+Operation tests MUST identify the API/protocol/SDK operation under test and its corresponding traceability row. Security tests MUST identify the threat or permission control they exercise.

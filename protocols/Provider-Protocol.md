@@ -38,3 +38,16 @@ Providers use Kotlin `Flow<StreamChunk>`. Each chunk contains:
 Protocol messages MUST map to the normative operation contract of the corresponding API. A message MUST preserve correlation ID, operation ID, lifecycle effect, transition version when applicable, and the canonical error envelope fields defined in [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
 
 A protocol consumer MUST treat events as at-least-once, deduplicate by entity and transition version, and never infer success from transport completion alone. Stream and cancellation messages MUST include an explicit terminal outcome.
+
+## Canonical Error Mapping
+
+The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
+
+| Operation | Canonical `NXR-*` codes |
+|---|---|
+| Completion | NXR-4001, NXR-4002, NXR-4003, NXR-4005, NXR-4006 |
+| Streaming | NXR-4002, NXR-4007 |
+| Embedding | NXR-4008 |
+| Health | NXR-4009, NXR-4010 |
+
+See [ERROR_CODES.md](../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.

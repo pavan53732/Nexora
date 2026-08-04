@@ -109,3 +109,14 @@ pluginContext.toolRegistry.register(MyCustomTool())
 ```
 
 See [registry/TOOLS.md](../../registry/TOOLS.md) for the complete tool registry with stable IDs.
+
+## Canonical Error Mapping
+
+The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
+
+| Operation | Canonical `NXR-*` codes |
+|---|---|
+| invoke | NXR-2001, NXR-2002, NXR-2003, NXR-2004, NXR-2005, NXR-2009 |
+| result/cleanup | NXR-2008, NXR-7007 |
+
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.

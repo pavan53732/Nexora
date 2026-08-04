@@ -95,3 +95,15 @@ Each plugin includes a `plugin.json` manifest:
 6. **Uninstall** — Call `onUninstall()`. Delete plugin data.
 
 See [sdk/PluginSDK.md](../../sdk/PluginSDK.md) for the full plugin development guide.
+
+## Canonical Error Mapping
+
+The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
+
+| Operation | Canonical `NXR-*` codes |
+|---|---|
+| install/verify | NXR-6001, NXR-6002, NXR-6005, NXR-6007 |
+| activate/deactivate | NXR-6003, NXR-6004, NXR-6008 |
+| update/uninstall | NXR-6006, NXR-6001 |
+
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.

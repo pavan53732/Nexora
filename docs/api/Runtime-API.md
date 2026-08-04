@@ -84,3 +84,15 @@ class AgentExecutionService : LifecycleService() {
     fun getActiveTasks(): List<String>
 }
 ```
+
+## Canonical Error Mapping
+
+The following mapping is normative. Adapters MUST preserve these codes and the canonical error-envelope fields; message text MUST NOT be used as a compatibility key.
+
+| Operation | Canonical `NXR-*` codes |
+|---|---|
+| execute/startTask | NXR-1008, NXR-3004, NXR-4002, NXR-1005 |
+| cancel/cancelTask | NXR-3010, NXR-1003 |
+| getTaskStatus | NXR-1009, NXR-9001 |
+
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for identity, retryability, idempotency, lifecycle effect, recovery owner, and redaction requirements.
