@@ -1,26 +1,34 @@
-> **Status: DERIVED** for Tool entity shape.
-> This document defines the data model for Tool. The explicit lifecycle/behavior authority is [architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md).
+> **Status: DERIVED** for Tool domain model.
+> This document defines the shape and semantics of Tool in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Tool.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Tool.
-
+> Depends on: the canonical architecture document for Tool.
+> Referenced by: protocols, APIs, SDKs, registries, and runtime implementations.
 
 # Domain Model: Tool
 
-> Canonical domain model. See [architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md).
-
 ```kotlin
-package com.nexora.app.runtime.tools
-
-data class ToolCall(
+data class Tool(
     val id: String,
-    val toolId: String,
-    val parameters: JsonObject,
-    val status: ToolCallStatus,
-    val result: ToolResult?,
-    val durationMs: Long?,
-    val timestamp: Instant
+    val version: String,
+    val name: String,
+    val description: String,
+    val category: String,
+    val parametersSchemaRef: String,
+    val requiredPermissions: List<String>,
+    val timeoutMs: Long,
+    val requiresSandbox: Boolean,
+    val supportsStreaming: Boolean,
+    val supportsCancellation: Boolean,
+    val isIdempotent: Boolean,
+    val status: ToolStatus
 )
 
-enum class ToolCallStatus { PENDING, APPROVED, EXECUTING, COMPLETED, DENIED, ERROR }
+enum class ToolStatus {
+    DISCOVERED,
+    REGISTERED,
+    ACTIVE,
+    DISABLED
+}
 ```
+
+Tool invocation state is tracked separately from the static tool descriptor. Every tool call is correlated by `correlationId` and `toolCallId`, while durable lifecycle deduplication uses committed versioned transitions.

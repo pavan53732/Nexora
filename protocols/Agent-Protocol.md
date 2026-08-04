@@ -11,21 +11,36 @@
 
 ## Flow
 
-1. Runtime creates an `AgentTask` with a goal and workspace ID.
-2. Runtime calls `agent.execute(task, context)`.
-3. Agent enters the agent loop (reflect, plan, execute, repeat).
-4. Agent publishes events to the Event Bus at each step.
-5. Agent returns an `AgentResult` when the goal is complete (or fails).
+1. Runtime creates a `StartTaskRequest` with `requestId`, `correlationId`, workspace identity, caller identity, and task goal.
+2. Runtime calls the Agent API to start work; the agent runtime materializes or reuses a stable `taskId`.
+3. Agent enters the agent loop (reflect, plan, execute, repeat) and emits lifecycle-safe progress events.
+4. Runtime publishes events only after durable state transitions are committed.
+5. Agent returns a terminal `TaskProjection` or canonical error outcome.
+
+## Message Rules
+
+Every protocol message tied to task execution MUST include:
+
+- `correlationId`
+- `workspaceId`
+- `agentId`
+- `taskId` once assigned
+- durable `version` on lifecycle events
+- canonical error envelope on terminal failure
+
+Client retries MUST preserve the same `idempotencyKey` when resubmitting the same logical start request. Long-running or resumable streams MUST use opaque `resumeToken` values rather than transport-specific offsets.
 
 ## Events Published
 
-| Event | When | Payload |
+| Event | When | Required payload |
 |-------|------|--------|
-| `AgentStatusChanged` | Agent status changes | `{agentId, oldStatus, newStatus}` |
-| `TaskProgress` | Agent completes a step | `{taskId, stepIndex, totalSteps, description}` |
-| `ToolExecuted` | Agent invokes a tool | `{toolCallId, toolId, durationMs, success}` |
-| `AgentError` | Agent encounters an error | `{agentId, taskId, message, recoverable}` |
+| `AgentStatusChanged` | Agent status changes | `{correlationId, agentId, workspaceId, oldStatus, newStatus, version}` |
+| `TaskProgress` | Agent completes a step | `{correlationId, taskId, workspaceId, stepIndex, totalSteps, description, version}` |
+| `ToolExecuted` | Agent invokes a tool | `{correlationId, taskId, toolCallId, toolId, durationMs, success, version}` |
+| `AgentError` | Agent encounters a terminal or surfaced error | `{correlationId, agentId, taskId, code, retryability, lifecycleEffect, recoverable, version}` |
+
+Events are at-least-once and MUST be deduplicated by `(entityId, version, transition)`.
 
 ## Cancellation
 
-The runtime can set a `Job` cancellation flag. The agent loop checks this flag at each iteration and exits gracefully.
+Cancellation MUST propagate from runtime to the active agent loop, child tasks, delegated work, and in-flight tool/provider operations. A cancelled task is terminal only after the durable cancellation state is committed and the terminal lifecycle event is published.

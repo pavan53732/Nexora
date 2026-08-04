@@ -1,62 +1,27 @@
-> **Status: DERIVED** for Provider entity shape.
-> This document defines the data model for Provider. The explicit lifecycle/behavior authority is [state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md).
+> **Status: DERIVED** for Provider domain model.
+> This document defines the shape and semantics of Provider in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Provider.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Provider.
-
+> Depends on: the canonical architecture document for Provider.
+> Referenced by: protocols, APIs, SDKs, registries, and runtime implementations.
 
 # Domain Model: Provider
 
-> Canonical domain model. See [architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md).
-
 ```kotlin
-package com.nexora.app.core.providers
-
-data class ProviderConfig(
+data class Provider(
     val id: String,
-    val type: ProviderType,
+    val version: String,
     val name: String,
-    val baseUrl: String,
-    val defaultModel: String,
-    val maxTokens: Int = 4096,
-    val temperature: Double = 0.7
-    // API key stored separately in SecureKeyStore
-)
-
-data class Model(
-    val id: String,
-    val name: String,
-    val providerId: String,
-    val capabilities: Set<ProviderCapability>,  // incl. REASONING for reasoning-capable models
-    val contextWindow: Int,
-    val inputPricePer1k: Double?,
-    val outputPricePer1k: Double?
-)
-
-/**
- * A named, user-configurable provider configuration.
- * Users may create multiple profiles per provider (e.g. different API keys,
- * endpoints, models, or streaming settings) and switch between them at any
- * time. One profile is the default per workspace.
- */
-data class ProviderProfile(
-    val id: String,
-    val name: String,               // e.g. "OpenAI Work", "Local Fast"
-    val providerType: ProviderType,
-    val config: ProviderConfig,     // endpoint, default model, params
-    val apiKeyRef: String?,         // SecureKeyStore alias (key never in plaintext)
-    val streamingEnabled: Boolean = true,
-    val capabilities: Set<ProviderCapability> = emptySet(),
-    val isDefault: Boolean = false
+    val capabilities: List<String>,
+    val supportedModels: List<String>,
+    val supportsStreaming: Boolean,
+    val supportsResume: Boolean,
+    val status: ProviderStatus,
+    val health: ProviderHealth,
+    val createdAt: Instant,
+    val updatedAt: Instant
 )
 ```
 
 ## Lifecycle and Health Semantics
 
-Every persisted provider profile MUST carry a lifecycle projection from [state-machines/ProviderLifecycle.md](../state-machines/ProviderLifecycle.md). Configuration identity and health are separate concerns: routing eligibility is derived from lifecycle state and the latest health version, never from a nullable or stale model field.
-
-```kotlin
-enum class ProviderLifecycleState { REGISTERED, CONFIGURING, CONFIGURED, TESTING, HEALTHY, DEGRADED, UNHEALTHY, DISABLED, REMOVED }
-```
-
-The in-memory health map is a cache. The persisted transition version and last committed state are authoritative after restart; stale health observations MUST NOT overwrite a newer transition.
+Provider request execution is correlated by `correlationId` and provider-scoped request ID. Usage accounting, terminal markers, and canonical error envelopes are part of the durable contract even when the upstream provider omits optional fields.
