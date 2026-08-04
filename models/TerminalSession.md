@@ -1,7 +1,7 @@
 > **Status: DERIVED** for TerminalSession domain model.
 > This document defines the shape and semantics of TerminalSession in the data model.
 >
-> Depends on: the canonical sandbox and terminal specifications.
+> Depends on: the canonical sandbox and terminal specifications, and [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md).
 > Referenced by: tool execution, sandbox, and runtime implementations.
 
 # Domain Model: TerminalSession
@@ -19,4 +19,4 @@ data class TerminalSession(
 )
 ```
 
-Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state.
+Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state. Lifecycle state authority is defined in [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md).

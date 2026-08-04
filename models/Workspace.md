@@ -1,40 +1,20 @@
-> **Status: DERIVED** for Workspace entity shape.
-> This document defines the data model for Workspace. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> **Status: DERIVED** for Workspace domain model.
+> This document defines the shape and semantics of Workspace in the data model.
 >
-> Depends on: the canonical architecture and lifecycle sources for Workspace.
-> Referenced by: APIs, SDKs, protocols, and tests that consume Workspace.
-
+> Depends on: the canonical runtime/workspace sources and [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md).
+> Referenced by: runtime, files, memory, tasks, and project ownership semantics.
 
 # Domain Model: Workspace
 
-> Canonical domain model. See [specs/WORKSPACE.md](../specs/WORKSPACE.md) for full spec.
-
 ```kotlin
-package com.nexora.app.core.models
-
-/**
- * A Workspace is the primary entity in Nexora.
- * It contains all artifacts for a project: files, tasks, memory, chats, etc.
- */
 data class Workspace(
-    val id: String,               // UUID
-    val name: String,             // User-visible name
-    val description: String,      // Optional description
-    val status: WorkspaceStatus,  // ACTIVE or ARCHIVED
-    val settings: WorkspaceSettings,
+    val id: String,
+    val name: String,
+    val status: WorkspaceStatus,
     val createdAt: Instant,
-    val updatedAt: Instant
+    val updatedAt: Instant,
+    val archivedAt: Instant? = null
 )
+```
 
-enum class WorkspaceStatus { ACTIVE, ARCHIVED }
-
-data class WorkspaceSettings(
-    val defaultAgent: String = "coder",
-    val defaultProvider: String = "openai",
-    val defaultModel: String = "gpt-4o",
-    val sandboxLimits: SandboxLimits = SandboxLimits(),
-    val toolPermissions: Map<PermissionScope, PermissionDecision> = emptyMap()
-)
-
-// Storage: /data/data/com.nexora.app/sandbox/workspaces/{id}/
-// Schema version: 1.0
+Workspace is the durable project boundary for tasks, memory, files, sessions, and execution ownership. Lifecycle state authority is defined in [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md).

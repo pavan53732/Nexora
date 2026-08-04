@@ -2,31 +2,30 @@
 
 ## Scope
 
-This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, and testing documents after executing the stronger normalization sequence.
+This audit reviews consistency across architecture, models, state machines, protocols, APIs, SDKs, registries, traceability, lifecycle authorities, and testing documents after the latest operational traceability pass.
 
 ## Improvements completed in this pass
 
-- Added concrete test inventory documents with case identifiers for Unit, Integration, Regression, E2E, Security, and Performance suites.
-- Upgraded traceability rows from suite-family references to explicit case IDs.
-- Introduced lifecycle authority documents for Workspace, Session, Memory, and TerminalSession.
-- Normalized the major registries to the shared registry standard field model.
+- Expanded all concrete test inventories with owner and status metadata.
+- Back-linked lifecycle authorities into the highest-value remaining model and memory-protocol documents.
+- Strengthened traceability rows so linked validation artifacts now include operational owner/status context instead of only bare case IDs.
 
 ## Remaining gaps
 
 ### 1. Full requirement enumeration is still incomplete
 
-The traceability matrix is stronger and now case-linked, but it still does not cover every requirement row in `requirements/FR.md` and `requirements/NFR.md`.
+The traceability matrix is now more operationally useful, but it still does not enumerate the entire FR/NFR set.
 
-### 2. Newly introduced lifecycle authorities are not yet referenced everywhere
+### 2. Execution evidence remains mostly planned
 
-The new lifecycle documents exist, but not every architecture, model, protocol, or testing document has been updated to reference them where useful.
+Most test inventories still mark cases as `Planned`, so coverage intent is stronger than realized verification.
 
-### 3. Case inventories are still minimal seeds
+### 3. Lifecycle back-linking is improved but not exhaustive
 
-Concrete case IDs now exist, but the inventories are only starter sets and not comprehensive verification catalogs.
+The new lifecycle authorities are now referenced from more documents, but repository-wide normalization is still incomplete.
 
 ## Recommended follow-up work
 
-1. Exhaustively enumerate the remaining FR and priority NFR rows using the new case-ID scheme.
-2. Back-link lifecycle authority documents into all relevant models, protocols, and architecture documents.
-3. Expand the test inventories from seed sets into complete verification catalogs with ownership and status metadata.
+1. Continue enumerating the remaining FR and priority NFR rows with the existing owner/status-aware case-ID scheme.
+2. Expand case inventories further with execution evidence fields when implementation begins.
+3. Continue lifecycle back-link normalization across additional architecture, API, SDK, and protocol documents.

@@ -1,14 +1,14 @@
 > **Status: DERIVED** for Memory message contract.
 > This document defines protocol messages for Memory operations. Canonical subsystem behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical memory architecture document.
+> Depends on: the canonical memory architecture document and [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md).
 > Referenced by: models, context management, ranking, and tests.
 
 # Memory Protocol — Nexora
 
 ## Operations
 
-Memory protocol messages cover write, fetch, score, update, and retention operations across session, project, and long-term memory tiers. Messages SHOULD preserve `correlationId` when memory entries originate from a concrete execution or tool/provider interaction.
+Memory protocol messages cover write, fetch, score, update, and retention operations across session, project, and long-term memory tiers. Messages SHOULD preserve `correlationId` when memory entries originate from a concrete execution or tool/provider interaction. Lifecycle-sensitive writes and retention changes SHOULD remain consistent with [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md).
 
 ### Tool History (FR-M011)
 
