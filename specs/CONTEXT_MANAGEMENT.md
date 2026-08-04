@@ -1,7 +1,15 @@
 # Context Management Specification — Nexora
 
+> **Status: CANONICAL** for read-time context assembly and projection.
+> This document owns how context is built from memory, files, tasks, and history
+> at the moment an agent loop iteration begins. It does NOT own memory write (memory writes are owned by MEMORY_SYSTEM.md)
+> operations, summarization (summarization is owned by MEMORY_SYSTEM.md), retention (retention policy is owned by MEMORY_SYSTEM.md) policy, or tier promotion (promotion is owned by MEMORY_SYSTEM.md) (see
+> [../architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md)).
+>
+> Depends on: [../architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md) (memory source).
+> Referenced by: [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md), [../docs/api/Agent-API.md](../docs/api/Agent-API.md).
+
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
-> See also [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md) · [../architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md) · [../docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md) (prompt-injection containment)
 
 ---
 
@@ -42,7 +50,7 @@ restarts without "losing context".
 ```
 
 Layers 2–4 feed the Context Builder; layer 1 is loaded from the checkpoint and is
-authoritative. Nothing is ever dropped silently — eviction from layer 2 always lands
+authoritative. Nothing is ever dropped silently — eviction (retention policy is owned by MEMORY_SYSTEM.md) from layer 2 always lands
 in layer 3 or 4 first.
 
 ## 2. Token Budget Allocation (FR-CM-002)

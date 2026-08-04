@@ -1,6 +1,14 @@
 # Memory System — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See also [AGENT_RUNTIME.md](AGENT_RUNTIME.md)
+> **Status: CANONICAL** for memory storage tiers, retention, promotion, and summarization.
+> This document owns how memories are stored, tiered (working → short-term → long-term → episodic),
+> summarized, promoted between tiers, and retained/evicted. It does NOT own context assembly (context assembly at read time is defined in specs/CONTEXT_MANAGEMENT.md)
+> at read time (see [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md)).
+>
+> Depends on: [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) (read-time consumer).
+> Referenced by: [AGENT_RUNTIME.md](AGENT_RUNTIME.md), [RUNTIME.md](RUNTIME.md), [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md).
+
+> Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 ---
 
