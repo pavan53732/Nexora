@@ -64,8 +64,11 @@ data class CompletionRequest(
     val tools: List<ToolDefinition>?,
     val temperature: Double = 0.7,
     val maxTokens: Int = 4096,
-    val stopSequences: List<String>? = null
+    val stopSequences: List<String>? = null,
+    val reasoningEffort: ReasoningEffort? = null  // null = omit reasoning params entirely (OFF)
 )
+
+enum class ReasoningEffort { LOW, MEDIUM, HIGH, X_HIGH, MAX }
 
 data class CompletionResponse(
     val content: String,
@@ -127,6 +130,23 @@ Profiles are independent (create/edit/duplicate/delete/switch), stored with keys
 >
 > All provider-specific logic lives inside provider plugins.
 > The core runtime only sees the `AIProvider` interface.
+
+## Reasoning Effort Mapping
+
+`ReasoningEffort` is the wire-level projection of the user-facing reasoning effort
+scale defined in [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §6
+(FR-RN-007/008). Adapter rules:
+
+- **`OFF` is not a wire value** — when reasoning is disabled, `reasoningEffort` is
+  `null` and the adapter MUST omit reasoning parameters (`reasoning_effort`,
+  `thinking`, etc.) from the request entirely. Sending an explicit zero/off token is
+  provider-specific behavior and is only used when a provider requires it (recorded in
+  that provider's adapter).
+- **Non-REASONING models** ignore the field (adapters drop it); the graceful-degradation
+  and fail-fast rules live at the router level (FR-RN-004), not in adapters.
+- **Per-model mapping** (e.g. provider `minimal/low/medium/high` enums or thinking-token
+  budgets) is owned by each provider adapter; the runtime only carries the canonical
+  5-value enum.
 
 ## Phase Mapping
 

@@ -202,6 +202,8 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-RN-004` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
 | `FR-RN-005` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
 | `FR-RN-006` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-007` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-008` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
 | `FR-EV-001` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
 | `FR-EV-002` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
 | `FR-EV-003` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |

@@ -95,7 +95,7 @@ For tasks classified **important** (sensitivity, risk, or cost), the runtime
 Coder Agent → Tester Agent → Reviewer Agent → User
 ```
 
-- The Evidence & Validation Engine (CONTEXT_MANAGEMENT §11 EV-6) triggers the review;
+- The Evidence & Validation Engine (CONTEXT_MANAGEMENT §7 EV-6) triggers the review;
   no user-facing completion until the reviewer approves.
 - The reviewer checks against the task's declared validation criteria (FR-EL-008);
   findings return to the originating agent as a bounded fix loop (FR-AS-001).

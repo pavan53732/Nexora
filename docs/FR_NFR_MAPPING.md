@@ -68,3 +68,10 @@
 - `FR-CM-006` (context trust tagging) → inbound payloads are untrusted segments (PIPES.md §8).
 - `NFR-SEC-014` (pipe channel security) → `requirements/NFR.md`; validation `SEC-NET-001`.
 - `NFR-REL-002`/`012` (resume fidelity, exactly-once) → mid-task pipe recovery (PIPES.md §6, §9).
+
+## S6 — Reasoning Effort Scale
+- `FR-RN-003` (effort levels) → amended to 6-level scale (OFF/LOW/MEDIUM/HIGH/X_HIGH/MAX) in `specs/CONTEXT_MANAGEMENT.md` §6.
+- `FR-RN-004` (reasoning models) → amended: fail-fast at X_HIGH/MAX; graceful degradation at HIGH and below.
+- `FR-RN-007` (reasoning disable OFF) → `specs/CONTEXT_MANAGEMENT.md` §6 (OFF semantics: gate bypass, params omitted, RG/EV gates unaffected).
+- `FR-RN-008` (settings surface + override hierarchy) → `specs/CONTEXT_MANAGEMENT.md` §6 (task→agent→workspace→global→default MEDIUM; Settings → Model Config → Reasoning).
+- Wire contract → `architecture/PROVIDER_SYSTEM.md` (`CompletionRequest.reasoningEffort: ReasoningEffort?`, OFF = null/omitted; per-model mapping owned by adapters).

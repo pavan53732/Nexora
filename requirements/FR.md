@@ -288,7 +288,7 @@
 
 ## Response Grounding (anti-hallucination)
 
-> Rules RG-1..RG-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §9.
+> Rules RG-1..RG-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §5.
 > For Git-specific grounding see FR-GT-001..006.
 
 | ID | Requirement | Priority | Phase |
@@ -303,21 +303,23 @@
 
 ## Reasoning (think before answering)
 
-> RB-1..RB-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §10.
+> RB-1..RB-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §6.
 
 | ID | Requirement | Priority | Phase |
 |----|-------------|----------|-------|
 | FR-RN-001 | Deliberation gate — classify each message as answer-now / reasoning-pass / clarify-first; never guess on ambiguity (clarify instead) | Must | 2 |
 | FR-RN-002 | Reasoning pipeline — understand, clarify, retrieve evidence first, reason over evidence, draft, verify, answer with citations + confidence | Must | 2 |
-| FR-RN-003 | Deliberation effort levels — fast / balanced / thorough, configurable per workspace, agent, and task; effort proportional to stakes | Must | 2 |
-| FR-RN-004 | Reasoning-capable models — REASONING provider capability; per-task routing to reasoning models for thorough tasks; fail-fast if unavailable | Should | 5 |
+| FR-RN-003 | Deliberation effort levels — six-level reasoning effort scale (OFF / LOW / MEDIUM / HIGH / X_HIGH / MAX), configurable per workspace, agent, and task; effort proportional to stakes (see CONTEXT_MANAGEMENT §6 Reasoning Effort Scale) | Must | 2 |
+| FR-RN-004 | Reasoning-capable models — REASONING provider capability; per-task routing to reasoning models for thorough tasks; fail-fast if unavailable at X_HIGH/MAX; graceful degradation to model maximum at HIGH and below | Should | 5 |
 | FR-RN-005 | Reasoning visibility — collapsible reasoning trace in the activity feed; stored in execution history; token usage tracked | Must | 2 |
 | FR-RN-006 | Answer-quality gates — grounded, complete, consistent, confident before sending; assumptions stated; premise contradictions flagged; self-consistency for critical outputs | Must | 2 |
+| FR-RN-007 | Reasoning disable (OFF) — user can disable reasoning entirely per scope (task/agent/workspace/global); OFF bypasses the deliberation gate to the FAST path, omits reasoning parameters from provider requests, and never selects REASONING models; grounding/evidence gates (RG/EV) remain active under OFF | Must | 2 |
+| FR-RN-008 | Reasoning settings surface — Settings → Model Config → Reasoning: level selector (OFF first), effective-level indicator showing the governing layer (task → agent → workspace → global → default MEDIUM), per-agent/per-workspace overrides; changes apply to new messages immediately; no chat-embedded toggle (ADR-0006) | Must | 2 |
 
 
 ## Evidence & Validation Engine
 
-> EV-1..EV-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §11.
+> EV-1..EV-6 defined in [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §7.
 
 | ID | Requirement | Priority | Phase |
 |----|-------------|----------|-------|
