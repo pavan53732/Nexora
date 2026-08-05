@@ -1,11 +1,50 @@
 # Plugin SDK — Nexora
 
-The Plugin SDK defines the contract surface for plugin packaging, lifecycle, and exported capabilities.
+The Plugin SDK defines the standard packaging structure, entry-point interfaces, and registration utilities for developing third-party extensions in Nexora.
 
-## Lifecycle Alignment
+---
 
-Plugin SDK helpers SHOULD preserve transactional lifecycle semantics for install, activate, deactivate, and rollback operations rather than inferring state from partial adapter behavior.
+## SDK Architecture
 
-## Notes
+All Nexora plugins MUST implement the `NexoraPlugin` entry-point interface provided by the SDK. The platform's dynamic ClassLoader boundary loads the class marked as the `entry-point` in the plugin manifest and drives its activation.
 
-Compatibility declarations, manifest/schema versioning, and exported capability registration should remain consistent with registry and API contract expectations.
+```kotlin
+package com.nexora.app.sdk.plugin
+
+interface NexoraPlugin {
+    /**
+     * Called when the plugin is being loaded.
+     * Use the registrar to export tools, providers, or agent roles.
+     */
+    suspend fun onActivate(context: PluginContext, registrar: CapabilityRegistrar)
+
+    /**
+     * Called when the plugin is being unloaded.
+     * Clean up open sockets, file locks, or background threads.
+     */
+    suspend fun onDeactivate(context: PluginContext)
+}
+
+data class PluginContext(
+    val pluginId: String,
+    val version: String,
+    val storageDirectory: String,
+    val minContractVersion: String
+)
+
+interface CapabilityRegistrar {
+    fun registerTool(descriptor: ToolDescriptor, tool: BaseTool)
+    fun registerProvider(descriptor: ProviderDescriptor, adapter: BaseProviderAdapter)
+    fun registerAgent(descriptor: AgentDescriptor, factory: BaseAgentFactory)
+}
+```
+
+## Security & Permission Model
+
+Plugins operate within strict sandbox boundaries:
+- **ClassLoader Isolation**: Plugins are loaded via separate `DexClassLoader` instances. A plugin CANNOT inspect or invoke host classes unless they are explicitly exposed in the SDK package (`com.nexora.app.sdk.*`).
+- **Least-Privilege Declarations**: All required security permissions (e.g. `sandbox:read`, `network:http`) MUST be statically declared inside the plugin manifest. The platform validates these permissions against user-granted profiles at installation time, blocking activation if unauthorized.
+
+## Errors & Exception Guidelines
+
+Plugin authors MUST catch internal failures and translate them into clean, descriptive SDK outcomes. Leaking native platform exceptions triggers an unhandled crash trap, forcing the `PluginManager` to transition the plugin state to `FAILED`, disable its capabilities, and isolate its classloader for safety.

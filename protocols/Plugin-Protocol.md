@@ -1,21 +1,63 @@
 > **Status: DERIVED** for Plugin message contract.
 > This document defines protocol messages for Plugin lifecycle operations. Canonical subsystem behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Plugin.
+> Depends on: the canonical architecture document for Plugin (`architecture/PLUGIN_SYSTEM.md`).
 > Referenced by: models, APIs, SDKs, registries, security, and tests.
 
 # Plugin Protocol — Nexora
 
-## Lifecycle Messages
+> Communication contract between the PluginManager, Registry, and platform ClassLoader boundary.
 
-Plugin protocol messages cover install, activate, deactivate, and remove operations. Each message MUST carry `correlationId`, plugin identity, target version where applicable, caller scope, and durable lifecycle version on emitted transitions.
+## Installation Flow
 
-Activation is transactional across exported capability registration. A failed capability registration MUST trigger rollback to the prior durable plugin state; partial exported visibility is not valid.
+```text
+PluginManager             Security Engine             ClassLoader
+      │                          │                         │
+      ├─────── verify() ────────>│                         │
+      │                          │                         │
+      │<─────── VERIFIED ────────┤                         │
+      │                                                    │
+      ├────────────────── load() ─────────────────────────>│
+      │                                                    │
+      │<───────────── PluginLoaded ────────────────────────┤
+```
 
-## Registration
+1. **Verification**: The `PluginManager` downloads the plugin archive, computes the SHA-256 hash, and passes the archive handle to the `SecurityEngine` for Release-Key cryptographic signature verification.
+2. **Mount & Load**: On success, the `PluginManager` extracts dynamic DEX/JAR binaries to `/data/data/com.nexora.app/plugins/{id}/{version}/` and instantiates a private, isolated `DexClassLoader`.
+3. **Activation Command**: The engine invokes `onActivate` on the plugin's entry point interface. The plugin registers its exported capabilities via core APIs.
+4. **Outcome Publication**: The `PluginManager` commits the new status (`ACTIVE`) and emits the `PluginActivated` transition event.
 
-After successful activation, exported agents, tools, providers, and skills register through their owning APIs. The plugin protocol may reference those registrations, but it MUST NOT redefine their payload contracts.
+## Protocol Messages
 
-## Isolation
+### Plugin Loading Command
 
-Protocol handlers MUST enforce signature/integrity verification, compatibility checks, dependency checks, and permission constraints before installation or activation side effects occur.
+```kotlin
+data class LoadPluginMessage(
+    val correlationId: String,
+    val pluginId: String,
+    val version: String,
+    val binaryPath: String,
+    val permissions: List<String>,
+    val classloaderIsolationEnabled: Boolean = true
+)
+```
+
+### Plugin State Changed Event
+
+```kotlin
+data class PluginStateChangedEvent(
+    val eventId: String,
+    val correlationId: String,
+    val pluginId: String,
+    val fromStatus: PluginStatus,
+    val toStatus: PluginStatus,
+    val version: Long,
+    val occurredAt: Instant,
+    val errorEnvelope: CanonicalErrorEnvelope? = null
+)
+```
+
+## Conformance Rules
+
+- **Transactional Registration**: Capability registration is atomic. If any exported tool or provider registration fails (e.g. duplicate key or naming collision), the registration engine MUST throw an exception, triggering the `PluginManager` to immediately call `onDeactivate` and roll back state to `INACTIVE`.
+- **Deduplication**: Plugin lifecycle events MUST carry a monotonically increasing entity version and be deduplicated by `(pluginId, version, transition)`.
