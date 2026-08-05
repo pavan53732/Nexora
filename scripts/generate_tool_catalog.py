@@ -44,6 +44,7 @@ CATS = [
     ("MAG",   "Multi-Agent",       "7"),
     ("WF",    "Workflow",          "6"),
     ("SKL",   "Skills",            "4"),
+    ("MCP",   "MCP Integration",  "5"),
 ]
 
 # ------------------------------------------------------- existing tools (keep IDs)
@@ -489,6 +490,14 @@ EXTRA = {
  ],
  "OBS": [
   ("TOOL-396", "context_stats", "Show per-layer token allocation and context pipeline statistics", "2"),
+ ],
+ "MCP": [
+  ("TOOL-397", "mcp_connect_stdio", "Connect to an MCP server via stdio transport", "5"),
+  ("TOOL-398", "mcp_connect_http", "Connect to an MCP server via Streamable HTTP", "5"),
+  ("TOOL-399", "mcp_list_caps", "Perform capability negotiation", "5"),
+  ("TOOL-400", "mcp_call_tool", "Invoke an MCP-discovered tool", "5"),
+  ("TOOL-401", "mcp_read_resource", "Read a resource from an MCP server", "5"),
+  ("TOOL-402", "mcp_get_prompt", "Retrieve a prompt definition", "5"),
  ],
 }
 

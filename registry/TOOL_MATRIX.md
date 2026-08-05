@@ -1,10 +1,3 @@
-> **Status: DERIVED** for the tool capability matrix.
-> Tool identity and catalog membership are canonical in [TOOLS.md](./TOOLS.md). This matrix is derived from that catalog and is authoritative only for capability mapping.
->
-> Depends on: [TOOLS.md](./TOOLS.md), [../architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md), [../security/PermissionModel.md](../security/PermissionModel.md).
-> Referenced by: sandbox, permission, and scheduling consumers.
-
-
 # Nexora Tool Capability Matrix
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [TOOLS.md](./TOOLS.md)
@@ -333,12 +326,6 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `plugin_dependencies` | Plugin Dependencies | Plugin | ✓ | — | — | — | — | High | ✓ | — | — | 8 |
 | `plugin_pack` | Plugin Pack | Plugin | — | ✓ | — | — | — | High | ✓ | — | — | 8 |
 | `plugin_inspect` | Plugin Inspect | Plugin | ✓ | — | — | — | — | High | ✓ | — | — | 8 |
-| `mcp_connect_stdio` | MCP Connect Stdio | MCP Integration | ✓ | ✓ | ✓ | — | — | High | ✓ | ✓ | ✓ | 5 |
-| `mcp_connect_http` | MCP Connect HTTP | MCP Integration | ✓ | ✓ | ✓ | — | — | High | ✓ | ✓ | ✓ | 5 |
-| `mcp_list_caps` | MCP List Capabilities | MCP Integration | ✓ | — | ✓ | — | — | High | ✓ | ✓ | — | 5 |
-| `mcp_call_tool` | MCP Call Tool | MCP Integration | ✓ | ✓ | — | — | — | High | ✓ | ✓ | — | 5 |
-| `mcp_read_resource` | MCP Read Resource | MCP Integration | ✓ | — | — | — | — | Medium | ✓ | — | — | 5 |
-| `mcp_get_prompt` | MCP Get Prompt | MCP Integration | ✓ | — | — | — | — | Low | ✓ | — | — | 5 |
 | `agent_create` | Agent Create | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
 | `agent_delegate` | Agent Delegate | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
 | `agent_status` | Agent Status | Multi-Agent | ✓ | — | — | — | — | Medium | ✓ | — | — | 7 |
@@ -361,6 +348,12 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `workflow_validate` | Workflow Validate | Workflow | — | ✓ | — | — | — | Medium | ✓ | — | — | 6 |
 | `skill_list` | Skill List | Skills | — | ✓ | — | — | — | Low | ✓ | — | — | 4 |
 | `skill_acquire` | Skill Acquire | Skills | — | ✓ | — | — | — | Low | ✓ | — | — | 4 |
+| `mcp_connect_stdio` | Mcp Connect Stdio | MCP Integration | ✓ | ✓ | ✓ | — | — | High | ✓ | ✓ | ✓ | 5 |
+| `mcp_connect_http` | Mcp Connect Http | MCP Integration | ✓ | ✓ | ✓ | — | — | High | ✓ | ✓ | — | 5 |
+| `mcp_list_caps` | Mcp List Caps | MCP Integration | ✓ | — | ✓ | — | — | High | ✓ | ✓ | — | 5 |
+| `mcp_call_tool` | Mcp Call Tool | MCP Integration | ✓ | ✓ | — | — | — | High | ✓ | ✓ | — | 5 |
+| `mcp_read_resource` | Mcp Read Resource | MCP Integration | ✓ | — | — | — | — | Medium | ✓ | — | — | 5 |
+| `mcp_get_prompt` | Mcp Get Prompt | MCP Integration | ✓ | — | — | — | — | Low | ✓ | — | — | 5 |
 
 ## Permission Levels
 
