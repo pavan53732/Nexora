@@ -64,12 +64,21 @@ data class Task(
     val id: String,
     val workspaceId: String,
     val agentId: String,
+    val correlationId: String,
     val parentTaskId: String?,
-    val description: String,
-    val status: TaskStatus,  // Canonical states defined in state-machines/TaskLifecycle.md — see models/Task.md
-    val plan: ExecutionPlan?,
+    val status: TaskStatus,
+    val phase: ExecutionPhase,
+    val priority: TaskPriority = TaskPriority.NORMAL,
+    val version: Long,
+    val goal: String,
+    val input: JsonObject,
+    val output: JsonObject?,
+    val childTaskIds: List<String>,
+    val delegatedAgentIds: List<String>,
     val createdAt: Instant,
-    val updatedAt: Instant
+    val updatedAt: Instant,
+    val completedAt: Instant? = null,
+    val latestError: CanonicalErrorEnvelope? = null
 )
 ```
 
