@@ -159,9 +159,9 @@ Each tool execution runs in an isolated context:
 
 ```kotlin
 data class SandboxLimits(
-    val maxMemoryMb: Int = 512,
-    val maxDiskMb: Int = 1024,
-    val maxProcesses: Int = 10,
+    val maxMemoryMb: Int = 256,
+    val maxDiskMb: Int = 500,
+    val maxProcesses: Int = 8,
     val maxExecutionTimeSeconds: Long = 300,
     val networkAllowed: Boolean = true,
     val maxFileCount: Int = 10_000
