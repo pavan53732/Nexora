@@ -20,8 +20,37 @@ data class Provider(
     val createdAt: Instant,
     val updatedAt: Instant
 )
+
+enum class ProviderStatus {
+    REGISTERED,
+    CONFIGURING,
+    CONFIGURED,
+    TESTING,
+    ACTIVE,
+    DISABLED,
+    REMOVED
+}
+
+enum class ProviderHealth {
+    UNKNOWN,
+    HEALTHY,
+    DEGRADED,
+    UNHEALTHY
+}
 ```
 
 ## Lifecycle and Health Semantics
 
 Provider request execution is correlated by `correlationId` and provider-scoped request ID. Usage accounting, terminal markers, and canonical error envelopes are part of the durable contract even when the upstream provider omits optional fields.
+
+### Administrative Status vs. Operational Health
+
+To eliminate responsibility gaps and resolve High Finding 6, the Provider domain model separates administrative lifecycle status (`ProviderStatus`) from periodic operational health checks (`ProviderHealth`):
+- `status: ProviderStatus` tracks manual configuration, registration, enablement, and removal states. 
+- `health: ProviderHealth` tracks runtime reachability, latency thresholds, and consecutive error rates handled automatically by the background `HealthMonitor` coroutine.
+
+### Failover and Routing Constraints
+
+- Only providers with `status = ACTIVE` and `health = HEALTHY` are eligible for primary request routing.
+- Degraded providers may be used if no healthy alternative is configured (emitting warning events).
+- Unhealthy providers are immediately excluded from active routing tables and put on a connection re-probe cycle.

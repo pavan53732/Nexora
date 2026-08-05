@@ -15,6 +15,16 @@ data class Workspace(
     val updatedAt: Instant,
     val archivedAt: Instant? = null
 )
+
+enum class WorkspaceStatus {
+    CREATED,
+    ACTIVE,
+    SUSPENDED,
+    ARCHIVED,
+    DELETED
+}
 ```
+
+## Lifecycle and Workspace Semantics
 
 Workspace lifecycle authority is defined in [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md). Workspace lifecycle governs durable availability and ownership context for contained sessions, tasks, files, tools, and memory operations.

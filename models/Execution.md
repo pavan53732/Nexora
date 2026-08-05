@@ -21,6 +21,42 @@ data class Execution(
     val updatedAt: Instant,
     val completedAt: Instant? = null
 )
+
+enum class ExecutionStatus {
+    CREATED,
+    RUNNING,
+    COMPLETED,
+    FAILED,
+    CANCELLED
+}
+
+enum class ExecutionPhase {
+    REQUIREMENT_ANALYSIS,
+    PLANNING,
+    TASK_DECOMPOSITION,
+    AGENT_SELECTION,
+    SKILL_SELECTION,
+    TOOL_SELECTION,
+    DEPENDENCY_RESOLUTION,
+    EXECUTION,
+    BUILD,
+    STATIC_ANALYSIS,
+    TESTING,
+    VERIFICATION,
+    COMPLETION_REPORTING
+}
+
+data class CanonicalErrorEnvelope(
+    val code: String,
+    val category: String,
+    val message: String,
+    val retryability: String,
+    val idempotency: String,
+    val lifecycleEffect: String,
+    val recoveryOwner: String,
+    val correlationId: String,
+    val details: JsonObject? = null
+)
 ```
 
 ## Execution Phase Semantics

@@ -15,6 +15,7 @@ data class Task(
     val parentTaskId: String?,
     val status: TaskStatus,
     val phase: ExecutionPhase,
+    val priority: TaskPriority = TaskPriority.NORMAL,
     val version: Long,
     val goal: String,
     val input: JsonObject,
@@ -26,8 +27,60 @@ data class Task(
     val completedAt: Instant? = null,
     val latestError: CanonicalErrorEnvelope? = null
 )
+
+enum class TaskStatus {
+    DRAFT,
+    PENDING,
+    QUEUED,
+    RUNNING,
+    BLOCKED,
+    WAITING_APPROVAL,
+    COMPLETED,
+    FAILED,
+    CANCELLED,
+    RETRY_PENDING
+}
+
+enum class ExecutionPhase {
+    REQUIREMENT_ANALYSIS,
+    PLANNING,
+    TASK_DECOMPOSITION,
+    AGENT_SELECTION,
+    SKILL_SELECTION,
+    TOOL_SELECTION,
+    DEPENDENCY_RESOLUTION,
+    EXECUTION,
+    BUILD,
+    STATIC_ANALYSIS,
+    TESTING,
+    VERIFICATION,
+    COMPLETION_REPORTING
+}
+
+enum class TaskPriority {
+    LOW,
+    NORMAL,
+    HIGH,
+    CRITICAL
+}
+
+data class CanonicalErrorEnvelope(
+    val code: String,              // e.g. "NXR-1005"
+    val category: String,          // Client, Server, Infrastructure
+    val message: String,           // Redacted human-readable explanation
+    val retryability: String,      // NEVER, SAFE, CONDITIONAL
+    val idempotency: String,       // SAFE, UNSAFE, IDEMPOTENT_KEY
+    val lifecycleEffect: String,   // State transition or NO_CHANGE
+    val recoveryOwner: String,     // Component responsible for recovery
+    val correlationId: String,     // Tracing correlation identifier
+    val details: JsonObject? = null // Redacted extra context
+)
 ```
 
 ## Lifecycle and Execution Semantics
 
 `status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.
+
+### Error Envelope Propagation
+
+When a task fails (transitioning to `FAILED` or `RETRY_PENDING`), the terminal or transient error MUST be mapped into a `CanonicalErrorEnvelope`. This envelope is stored in the `latestError` field of the Task and propagated across all API and protocol boundaries. It guarantees that the exact recovery rules, retryability, and lifecycle effects are accessible to calling orchestrators and user interfaces alike.

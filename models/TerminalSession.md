@@ -17,6 +17,17 @@ data class TerminalSession(
     val updatedAt: Instant,
     val endedAt: Instant? = null
 )
+
+enum class TerminalSessionStatus {
+    CREATED,
+    ATTACHED,
+    RUNNING,
+    DETACHED,
+    CLOSED,
+    FAILED
+}
 ```
+
+## Terminal Session Semantics
 
 Terminal session lifecycle authority is defined in [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md). Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state.

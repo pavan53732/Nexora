@@ -18,6 +18,16 @@ data class Session(
     val updatedAt: Instant,
     val closedAt: Instant? = null
 )
+
+enum class SessionStatus {
+    CREATED,
+    ACTIVE,
+    IDLE,
+    CLOSED,
+    EXPIRED
+}
 ```
+
+## Lifecycle and Session Semantics
 
 Session lifecycle authority is defined in [lifecycle/SessionLifecycle.md](../lifecycle/SessionLifecycle.md). Session state is durable runtime context, not a substitute for task or execution lifecycle state. When a session is associated with a live execution, it SHOULD retain the active `correlationId` for observability and replay alignment.
