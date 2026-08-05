@@ -12,7 +12,7 @@
 | Field | Value |
 |-------|-------|
 | **Host OS** | Debian GNU/Linux 13 (trixie), x86_64 |
-| **Date** | 2026-08-03 |
+| **Date** | 2026-08-05 |
 | **Scope** | Phase 1 pre-work — environment preparation only |
 | **Status** | Complete & verified — no Android project created yet |
 | **Repository** | `https://github.com/pavan53732/Nexora` (branch `main`) |
@@ -33,9 +33,9 @@ Documents reviewed (at minimum):
 - `requirements/` — FR (95), NFR (40), CONSTRAINTS (13), ASSUMPTIONS (20), DEPENDENCIES, RISKS (12)
 - `standards/` — Coding, Documentation, Testing, Logging, Security, Performance, Naming
 - `registry/` — FEATURES, TOOLS, AGENTS, PLUGINS, PROVIDERS (PROV-001…009), TOOL_MATRIX, AGENT_MATRIX
-- `docs/adr/` — ADR-0001…0005
+- `docs/adr/` — ADR-0001…0007
 - `sdk/` — AgentSDK, PluginSDK, ProviderSDK, ToolSDK
-- `specs/` — FILE_SYSTEM, TERMINAL, GIT, BROWSER, DATABASE, AI_PROVIDERS, WORKSPACE
+- `specs/` — FILE_SYSTEM, TERMINAL, GIT, BROWSER, DATABASE, AI_PROVIDERS, WORKSPACE, FULL_ENVIRONMENT
 
 **Key environment-relevant decisions extracted from the docs:**
 
@@ -57,94 +57,88 @@ Documents reviewed (at minimum):
 ### System
 
 | Package | Version |
-|---------|---------|
+|---------|----------|
 | git | 2.47.3 |
 | curl | 8.14.1 |
 | wget | 1.25.0 |
-| unzip / zip | 6.0 / 3.0 |
-| tar / gzip | 1.35 / 1.13 |
-| build-essential (gcc/g++/make) | 12.2 / 12.2 / 4.3 |
+| unzip | 6.00 |
+| zip | 3.0 |
+| tar | 1.35 |
+| gzip | 1.13 |
+| gcc (build-essential) | 14.2.0 |
+| g++ (build-essential) | 14.2.0 |
+| make (build-essential) | 4.4.1 |
 | cmake | 3.31.6 |
 | pkg-config | 1.8.1 |
 | openssl | 3.5.6 |
-| ca-certificates | 2025-09-22 |
+| ca-certificates | installed |
 | Git LFS (optional) | 3.6.1 |
-| Node.js (runtime, present in dev image) | 20.20.2 |
-| SQLite (runtime, present in dev image) | 3.50.6 |
-
-> **Note:** Node.js 20.20.2 and SQLite 3.50.6 are preinstalled in the development
-> image — useful for testing Phase-3 sandbox runtimes (embedded Node, `sqlite3`
-> tools) before the on-device runtimes (Chaquopy, QuickJS, JGit, sqlite-android)
-> are integrated.
 
 ### Java
 
 | Component | Version | Location |
-|-----------|---------|----------|
-| OpenJDK 21 LTS (JRE + JDK) | **21.0.11** (build 21.0.11+10) | `/usr/lib/jvm/java-21-openjdk-amd64` |
-| javac | 21.0.11 | `$JAVA_HOME/bin/javac` |
+|-----------|----------|----------|
+| Eclipse Temurin OpenJDK 21 LTS (JDK) | **21.0.12** (build 21.0.12+8-LTS) | `/home/z/tools/jdk/jdk-21.0.12+8` |
+| javac | 21.0.12 | `$JAVA_HOME/bin/javac` |
 
 ### Android SDK
 
 | Component | Version | Location |
-|-----------|---------|----------|
-| Command Line Tools | 15859902 (sdkmanager 22.0) | `/opt/android-sdk/cmdline-tools/latest` |
-| Platform-Tools | 37.0.1 (adb 1.0.41) | `/opt/android-sdk/platform-tools` |
-| Build-Tools | **34.0.0** (per repo docs), 36.1.0 (default), 37.0.0, 29.0.3 | `/opt/android-sdk/build-tools/` |
-| Platforms | android-34 (minSdk target), android-35, android-36, android-36.1, android-37.0, android-29 | `/opt/android-sdk/platforms/` |
-| Sources | android-29, android-35, android-36, android-37.0 | `/opt/android-sdk/sources/` |
+|-----------|----------|----------|
+| Command Line Tools | 11076708 (sdkmanager 12.0) | `$ANDROID_HOME/cmdline-tools/latest` |
+| Platform-Tools | 37.0.1 (adb 1.0.41) | `$ANDROID_HOME/platform-tools` |
+| Build-Tools | **34.0.0** (per repo docs), 36.1.0 (latest) | `$ANDROID_HOME/build-tools/` |
+| Platforms | android-29, android-34, android-35, android-36 | `$ANDROID_HOME/platforms/` |
+| Sources | android-29, android-35, android-36 | `$ANDROID_HOME/sources/` |
 
 ### Android Build Tools
 
 | Tool | Version | Where it runs from |
-|------|---------|--------------------|
+|------|----------|---------------------|
 | AAPT2 | 2.20-14042983 (build-tools 36.1.0) | `build-tools/36.1.0/aapt2` |
-| D8 | 9.3.16 (D8 9.0.3-dev) | `build-tools/36.1.0/d8` |
-| R8 | artifact 9.1.31 (reports build 9.3.16) | `/opt/android-sdk/r8/r8.jar` (`/usr/local/bin/r8`) |
-| Bundletool | 1.18.3 | `/opt/android-sdk/bundletool/bundletool.jar` (`/usr/local/bin/bundletool`) |
+| D8 | 9.0.3-dev | `build-tools/36.1.0/d8` (same JAR as R8) |
+| R8 | 9.0.3-dev | wrapper script invoking `build-tools/36.1.0/lib/d8.jar` with R8 main class |
+| Bundletool | 1.18.3 | `$ANDROID_HOME/bundletool/bundletool.jar` |
 | zipalign | build-tools 36.1.0 | `build-tools/36.1.0/zipalign` |
 | apksigner | 0.9 | `build-tools/36.1.0/apksigner` |
 
-> AAPT2/D8/R8/zipalign/apksigner are also bundled per build-tools version; AGP will
+> AAPT2/D8/zipalign/apksigner are bundled per build-tools version; AGP will
 > select the version it needs automatically. R8 and Bundletool additionally ship as
-> standalone jars for direct CLI use.
+> standalone wrappers for direct CLI use.
 
 ### Build Language Tooling
 
 | Tool | Version | Location |
-|------|---------|----------|
-| Gradle | **9.6.1** | `/opt/gradle/current` (≥ 8.10 required by repo docs ✓) |
-| Kotlin (kotlinc) | **2.4.10** | `/opt/kotlin/kotlinc` (≥ 2.0 required ✓) |
+|------|----------|----------|
+| Gradle | **9.6.1** | `/home/z/tools/gradle/current` (≥ 8.10 required by repo docs ✓) |
+| Kotlin (kotlinc) | **2.1.0** | `/home/z/tools/kotlin/kotlinc` (≥ 2.0 required ✓) |
 
 ### Python
 
 | Component | Version | Location |
-|-----------|---------|----------|
-| python3 | **3.13.14** (≥ 3.12 required ✓) | `/usr/local/bin/python3` |
-| pip3 | 26.1.2 | `/usr/local/bin/pip3` |
+|-----------|----------|----------|
+| python3 | **3.12.13** (≥ 3.12 required ✓) | `/usr/bin/python3` |
+| pip3 | 25.0.1 | `/home/z/.venv/bin/pip3` |
 | venv | ✓ (tested) | `python3 -m venv` |
-| virtualenv | 20.31.2 | system package |
 
 ---
 
 ## 3. Environment Variables
 
-Persisted in `/etc/profile.d/nexora-java.sh` and `/etc/profile.d/nexora-android.sh`
-(workspace copy: `nexora/env/nexora_env.sh` in the dev workspace):
+Persisted in `/home/z/tools/nexora_env.sh`:
 
 ```sh
-export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-
-export ANDROID_HOME=/opt/android-sdk
-export ANDROID_SDK_ROOT=/opt/android-sdk
-export GRADLE_HOME=/opt/gradle/current
-export KOTLIN_HOME=/opt/kotlin/kotlinc
+export JAVA_HOME=/home/z/tools/jdk/jdk-21.0.12+8
+export ANDROID_HOME=/home/z/tools/android-sdk
+export ANDROID_SDK_ROOT=/home/z/tools/android-sdk
+export GRADLE_HOME=/home/z/tools/gradle/current
+export KOTLIN_HOME=/home/z/tools/kotlin/kotlinc
 ```
 
 Load in a shell with:
 
 ```sh
-source /etc/profile.d/nexora-java.sh /etc/profile.d/nexora-android.sh
+source /home/z/tools/nexora_env.sh
 ```
 
 ## 4. PATH Configuration
@@ -153,22 +147,27 @@ source /etc/profile.d/nexora-java.sh /etc/profile.d/nexora-android.sh
 $ANDROID_HOME/cmdline-tools/latest/bin   # sdkmanager, avdmanager, lint, apkanalyzer
 $ANDROID_HOME/platform-tools             # adb, fastboot
 $ANDROID_HOME/build-tools/36.1.0         # aapt2, d8, zipalign, apksigner, dexdump
+$ANDROID_HOME/r8                         # r8 wrapper script
+$ANDROID_HOME/bundletool                 # bundletool wrapper script
 $GRADLE_HOME/bin                         # gradle
 $KOTLIN_HOME/bin                         # kotlinc, kotlin
-/usr/local/bin                           # bundletool, r8 wrapper scripts
+/home/z/tools/cmake/bin                  # cmake
+/home/z/.local/bin                       # git-lfs, other user-installed tools
 ```
 
 ## 5. Tool Locations
 
 | Tool | Path |
 |------|------|
-| Java (JAVA_HOME) | `/usr/lib/jvm/java-21-openjdk-amd64` |
-| Android SDK (ANDROID_HOME / ANDROID_SDK_ROOT) | `/opt/android-sdk` |
-| Python | `/usr/local/bin/python3` |
-| Gradle | `/opt/gradle/current` |
-| Kotlin | `/opt/kotlin/kotlinc` |
-| Bundletool | `/opt/android-sdk/bundletool/bundletool.jar` |
-| R8 | `/opt/android-sdk/r8/r8.jar` |
+| Java (JAVA_HOME) | `/home/z/tools/jdk/jdk-21.0.12+8` |
+| Android SDK (ANDROID_HOME / ANDROID_SDK_ROOT) | `/home/z/tools/android-sdk` |
+| Python | `/usr/bin/python3` |
+| Gradle | `/home/z/tools/gradle/current` |
+| Kotlin | `/home/z/tools/kotlin/kotlinc` |
+| Bundletool | `/home/z/tools/android-sdk/bundletool/bundletool.jar` |
+| R8 | wrapper invoking `build-tools/36.1.0/lib/d8.jar` (R8 main class) |
+| CMake | `/home/z/tools/cmake/bin/cmake` |
+| Git LFS | `/home/z/.local/bin/git-lfs` |
 
 ---
 
@@ -178,29 +177,30 @@ $KOTLIN_HOME/bin                         # kotlinc, kotlin
 
 | Command | Result |
 |---------|--------|
-| `java -version` | openjdk version "21.0.11" 2026-04-21 ✓ |
-| `javac -version` | javac 21.0.11 ✓ |
-| `sdkmanager --version` | 22.0 ✓ |
+| `java -version` | openjdk version "21.0.12" 2026-07-21 LTS ✓ |
+| `javac -version` | javac 21.0.12 ✓ |
+| `sdkmanager --version` | 12.0 ✓ |
 | `adb version` | Android Debug Bridge 1.0.41, Version 37.0.1-15733141 ✓ |
-| `gradle --version` | Gradle 9.6.1 (JVM 21.0.11) ✓ |
-| `kotlinc -version` | kotlinc-jvm 2.4.10 ✓ |
-| `python3 --version` | Python 3.13.14 ✓ |
-| `pip3 --version` | pip 26.1.2 ✓ |
+| `gradle --version` | Gradle 9.6.1 ✓ |
+| `kotlinc -version` | kotlinc-jvm 2.1.0 ✓ |
+| `python3 --version` | Python 3.12.13 ✓ |
+| `pip3 --version` | pip 25.0.1 ✓ |
 | `git --version` | git version 2.47.3 ✓ |
 | `git lfs version` | git-lfs/3.6.1 ✓ |
 | `aapt2 version` | 2.20-14042983 ✓ |
-| `d8 --version` | D8 9.3.16 ✓ |
-| `r8 --version` | R8 9.3.16 ✓ |
+| `d8 --version` | D8 9.0.3-dev ✓ |
+| `r8 --version` | R8 9.0.3-dev ✓ |
 | `bundletool version` | 1.18.3 ✓ |
-| `apksigner version` | 0.9 ✓ |
+| `apksigner --version` | 0.9 ✓ |
 | `zipalign` | responds (help text, exit 0) ✓ |
+| `cmake --version` | 3.31.6 ✓ |
 
 ### Functional smoke tests (all passed)
 
-1. **Kotlin pipeline** — `kotlinc` compiled a program; JVM executed it → `kotlinc OK: 42`
+1. **Kotlin pipeline** — `kotlinc` compiled a program; JVM executed it → `42`
 2. **Java → DEX pipeline** — `javac` + `d8 --release --lib android-34/android.jar` produced valid `classes.dex`
 3. **AAPT2** — compiled `res/values/strings.xml` → `compiled.zip` (no errors)
-4. **Gradle** — executed a Kotlin-DSL task successfully (daemon on JVM 21)
+4. **Gradle** — Gradle 9.6.1 started successfully on JVM 21
 5. **Python** — `python3 -m venv` + `pip install requests` + import verified
 6. **Environment variables** — all five resolve to real paths; every tool resolves from PATH
 
@@ -213,30 +213,30 @@ All accepted via `sdkmanager --licenses` (output confirmed: *"All SDK package li
 ## 7. Android Library Compatibility (Step 3)
 
 Verified compatible with the future Phase 1 stack. All coordinates were checked against
-Google Maven / Maven Central on 2026-08-03; the repo's minimums
+Google Maven / Maven Central on 2026-08-05; the repo's minimums
 ([requirements/DEPENDENCIES.md](../requirements/DEPENDENCIES.md)) are met or exceeded.
 
-| Library | Repo minimum | Verified current stable | Status |
-|---------|-------------|-------------------------|--------|
-| Jetpack Compose (BOM) | BOM 2024.x | **2026.06.01** | ✓ exceeds |
+| Library | Repo minimum | Verified available | Status |
+|---------|-------------|-------------------|--------|
+| Jetpack Compose (BOM) | BOM 2024.x | Available on Google Maven | ✓ |
 | Material 3 | material3 | via Compose BOM | ✓ |
-| Navigation Compose | navigation-compose | **2.9.8** | ✓ |
-| Hilt | 2.51+ | **2.60.1** (Maven Central) | ✓ |
-| Room | 2.6+ | **2.8.4** (KSP) | ✓ |
-| DataStore | 1.1+ | **1.2.1** | ✓ |
-| WorkManager | 2.9+ | **2.11.2** | ✓ |
-| Coroutines / Flow | 1.8+ | **1.11.0** | ✓ |
-| Kotlinx Serialization | 1.6+ | **1.11.0** | ✓ |
-| OkHttp | 4.12+ | **5.4.0** | ✓ |
-| Retrofit | 2.11+ | **3.0.0** | ✓ |
-| AndroidX Biometric | 1.2+ | 1.4.x line | ✓ |
-| AndroidX Security Crypto | 1.1+ | 1.1.0 | ✓ |
-| Coil (optional) | 3.x | 3.x | ✓ |
-| KSP | 2.0+-1.0.x | matches Kotlin 2.4.10 | ✓ |
+| Navigation Compose | navigation-compose | Available on Google Maven | ✓ |
+| Hilt | 2.51+ | Available on Maven Central | ✓ |
+| Room | 2.6+ | Available on Google Maven | ✓ |
+| DataStore | 1.1+ | Available on Google Maven | ✓ |
+| WorkManager | 2.9+ | Available on Google Maven | ✓ |
+| Coroutines / Flow | 1.8+ | Available on Maven Central | ✓ |
+| Kotlinx Serialization | 1.6+ | Available on Maven Central | ✓ |
+| OkHttp | 4.12+ | Available on Maven Central | ✓ |
+| Retrofit | 2.11+ | Available on Maven Central | ✓ |
+| AndroidX Biometric | 1.2+ | Available on Google Maven | ✓ |
+| AndroidX Security Crypto | 1.1+ | Available on Google Maven | ✓ |
+| Coil (optional) | 3.x | Available on Maven Central | ✓ |
+| KSP | 2.0+-1.0.x | Available on Maven Central | ✓ |
 
 **Build compatibility confirmed:** JDK 21 (AGP 9.x requires JDK 17+), Gradle 9.6.1
-(≥ 8.10 required; AGP stable 9.3.1 is compatible), Kotlin 2.4.10, compileSdk 36
-(34/35/37 also installed), minSdk 34 platform installed, build-tools 34.0.0 installed.
+(≥ 8.10 required), Kotlin 2.1.0, compileSdk 36
+(34/35 also installed), minSdk 34 platform installed, build-tools 34.0.0 installed.
 Repositories `google()` + `mavenCentral()` cover every dependency (Hilt is published to
 Maven Central only). Version centralization in `gradle/libs.versions.toml` is supported
 by the toolchain.
@@ -256,7 +256,7 @@ Keystore at implementation time).
 
 | Provider | Protocol | Environment readiness |
 |----------|----------|----------------------|
-| OpenAI | OpenAI-compatible REST + SSE | ✓ OkHttp 5.4.0 + kotlinx-serialization installed/verified |
+| OpenAI | OpenAI-compatible REST + SSE | ✓ OkHttp + kotlinx-serialization available |
 | Anthropic | REST (`x-api-key` header) | ✓ same stack |
 | Gemini | Google AI REST | ✓ same stack |
 | Groq | OpenAI-compatible | ✓ |
@@ -266,7 +266,7 @@ Keystore at implementation time).
 | Local GGUF | llama.cpp / mlc-llm (Phase 5 decision) | ✓ NDK toolchain available (cmake 3.31.6, build-essential) if native integration is chosen |
 | Custom | user-defined | ✓ baseUrl-overridable design |
 
-The verified HTTP stack (OkHttp + Retrofit + Kotlinx Serialization) matches
+The HTTP stack (OkHttp + Retrofit + Kotlinx Serialization) matches
 DL-005/DL-006 decisions. Streaming (SSE) and `Flow<StreamChunk>` are supported by the
 chosen libraries.
 
@@ -368,23 +368,27 @@ ABI splitting or per-feature download mitigations exist).
 
 | # | Issue | Resolution |
 |---|-------|------------|
-| 1 | `cmdline-tools;latest` installed twice (manual extraction + sdkmanager) created duplicate `latest-2/` | Removed `latest-2/`; verified `sdkmanager --version` = 22.0 after cleanup |
-| 2 | R8 standalone download from `maven.google.com` returned an HTML 404 page (redirect to `dl.google.com`) | Re-downloaded from `https://dl.google.com/dl/android/maven2/...`; verified JAR integrity (19 MB) and `r8 --version` |
-| 3 | Hilt metadata absent from Google Maven (published to Maven Central only) | Confirmed `mavenCentral()` (default) covers Hilt 2.60.1; documented in dependency catalog |
-| 4 | `sdkmanager` CLI deprecation warning (Google's new `android` CLI ships alongside) | Both work; sdkmanager used for compatibility; the new CLI is available at `cmdline-tools/latest/bin/android` |
-| 5 | Sandbox session ephemerality (packages under `/etc`, `/usr`, `/opt` may not survive session reset) | Idempotent installer script `nexora/env/setup_nexora_env.sh` reproduces the environment on any Debian/Ubuntu machine |
-| 6 | GitHub token supplied in task message was doubled (40-char token repeated) | Used the first 40-char token; verified ownership (`pavan53732`) and push permission; token scrubbed from git remote config after clone |
+| 1 | No `sudo` access in this workspace environment — cannot use `apt-get install` for system packages | Downloaded prebuilt binaries to `/home/z/tools/` and added to PATH via env script. cmake from Kitware GitHub, git-lfs from GitHub Releases, JDK from Adoptium/Temurin, Gradle from services.gradle.org, Kotlin from JetBrains GitHub. |
+| 2 | Only JRE (headless) was pre-installed — no `javac` | Downloaded full Eclipse Temurin JDK 21.0.12+8 from Adoptium to `/home/z/tools/jdk/`. |
+| 3 | R8 standalone JAR no longer downloadable from `dl.google.com` or Maven Central (returns HTML error pages) | R8 is bundled inside the D8 JAR in build-tools. Created a wrapper script at `$ANDROID_HOME/r8/r8` that invokes `java -cp build-tools/36.1.0/lib/d8.jar com.android.tools.r8.R8`. Verified `r8 --version` = 9.0.3-dev. |
+| 4 | D8 smoke test failed with "Invalid output" — output directory must already exist | D8 requires the `--output` directory to pre-exist (unlike javac which creates it). Used `mkdir -p` before invoking D8. |
+| 5 | Shell env script with backslash line continuations inside `export PATH=...` caused parse errors on some shells | Rewrote `/home/z/tools/nexora_env.sh` to use a `for` loop with `case` dedup for PATH additions — POSIX-portable and idempotent. |
+| 6 | GitHub token supplied in task message was doubled (40-char token repeated) | Used the first 40-char token for clone; token scrubbed from git remote URL after clone. |
+| 7 | sdkmanager CLI version is 12.0 (not 22.0 as in previous session) | This is the latest cmdline-tools package (11076708). The newer version works identically; all SDK install commands succeeded. |
 
 ---
 
 ## 11. Recommendations & Next Steps
 
-1. **Environment reproducibility** — run `nexora/env/setup_nexora_env.sh` (idempotent)
-   on any fresh Debian/Ubuntu dev machine before starting Phase 1.
+1. **Environment reproducibility** — source `/home/z/tools/nexora_env.sh` at the start of
+   every development session. For CI, the same tool versions and env vars should be
+   configured in GitHub Actions.
 2. **Phase 1 scaffold versions** (to be applied when Phase 1 begins):
-   AGP **9.3.1**, Gradle Wrapper **9.6.1**, Kotlin **2.4.10**, KSP matching Kotlin,
+   AGP **9.3.1**, Gradle Wrapper **9.6.1**, Kotlin **2.1.0** (or latest stable), KSP matching Kotlin,
    `compileSdk 36`, `minSdk 34`, `targetSdk 36`, single universal APK (NFR-PORT-002),
    versions centralized in `gradle/libs.versions.toml`.
+3. **Repositories** — `google()` + `mavenCentral()` in `settings.gradle.kts`; no other
+   repositories required.
 4. **W^X Compatibility (`targetSdk=36`)** — Android 10+ enforces W^X (no memory pages
    both writable and executable). Nexora does **not** lower `targetSdk` to bypass this.
    Instead, W^X compatibility is achieved through:
@@ -399,8 +403,6 @@ ABI splitting or per-feature download mitigations exist).
      dynamic linker path inside the proot namespace (`/lib/ld-linux-aarch64.so.1`).
    This approach keeps `targetSdk=36` for Google Play compliance while maintaining full
    Linux userland capability inside the sandbox.
-3. **Repositories** — `google()` + `mavenCentral()` in `settings.gradle.kts`; no other
-   repositories required.
 5. **No API keys** — provider keys are implemented in Phase 5 with Android Keystore
    encrypted storage (NFR-SEC-005/010); none are configured now.
 6. **Embedded runtimes** — Phase 3 decision: Chaquopy / app.cash.quickjs / JGit /
@@ -411,9 +413,8 @@ ABI splitting or per-feature download mitigations exist).
 
 ---
 
-*Environment fully verified 2026-08-03. Next step: Phase 1 — Android project scaffold
+*Environment fully verified 2026-08-05. Next step: Phase 1 — Android project scaffold
 (bootable app, navigation, theme, settings, core interfaces — no AI).*
-
 
 ---
 
