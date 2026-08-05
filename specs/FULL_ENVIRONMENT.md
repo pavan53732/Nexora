@@ -106,16 +106,17 @@ Each workspace mounts the same read-only base rootfs with a private writable ove
 
 ```text
 /data/data/com.nexora.app/
-├── rootfs/
-├── workspaces/
-│   └── {workspace-id}/
-│       ├── files/
-│       ├── rootfs-overlay/
-│       │   ├── tmp/
-│       │   ├── var/cache/apt/
-│       │   ├── usr/local/
-│       │   └── home/agent/
-│       └── env/
+├── rootfs/                         # Shared read-only Debian base
+└── sandbox/
+    └── workspaces/
+        └── {workspace-id}/
+            ├── files/              # Workspace files and virtual filesystem
+            ├── rootfs-overlay/     # Private writable layer
+            │   ├── tmp/
+            │   ├── var/cache/apt/
+            │   ├── usr/local/
+            │   └── home/agent/
+            └── env/                # Environment config
 ```
 
 Writes go to the workspace overlay; reads fall through to the shared base. This keeps the bundled base immutable while allowing per-workspace customization.
@@ -191,7 +192,7 @@ Nexora handles this **without lowering `targetSdk`**:
 | Technique | What it does | Programs affected |
 |-----------|-------------|-------------------|
 | **proot seccomp-bpf filtering** | Intercepts `mmap`/`mprotect` from guest binaries and remaps pages safely | All guest binaries |
-| **Node.js `--jitless`** | Disables V8 JIT; runs pure interpreter mode | Node.js only |
+| **Node.js `--jitless`** | Disables V8 JIT; pure interpreter mode (enforced globally via `NODE_OPTIONS="--jitless"` env var injection to prevent seccomp crashes during direct execution bypassing bash) | Node.js only |
 | **Pre-patched ELF PT_INTERP** | Dynamic linker path rewritten for proot namespace | All dynamically-linked binaries |
 | **`extractNativeLibs=true`** | Native libs extracted to filesystem before load | Native libraries in APK |
 
@@ -200,7 +201,7 @@ Nexora handles this **without lowering `targetSdk`**:
 | Program | W^X Status | Notes |
 |---------|-----------|-------|
 | Python 3 (CPython) | ✅ Works | No JIT by default; pure interpreter |
-| Node.js | ✅ Works | `--jitless` flag set in rootfs `~/.bashrc` |
+| Node.js | ✅ Works | Enforced via global `NODE_OPTIONS="--jitless"` environment injection to avoid bypasses on direct exec |
 | Git | ✅ Works | Standard compiled binary |
 | pip packages | ✅ Mostly works | Avoid packages with native JIT (PyPy, numba) |
 | npm packages | ✅ Mostly works | Avoid packages bundling native JIT compilers |

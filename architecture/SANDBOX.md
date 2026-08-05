@@ -114,12 +114,12 @@ The sandbox uses a single bundled Full Environment based on a Debian-slim rootfs
 ├── rootfs/                         # Shared read-only Debian base
 │   ├── bin/, usr/, lib/, etc/      # Standard FHS layout
 │   └── .manifest.json              # Checksums, version, signature
-├── rootfs-overlays/                # Per-workspace writable layers
-│   └── {workspace-id}/
-│       ├── tmp/
-│       ├── var/
-│       ├── usr/local/              # User-installed packages
-│       └── home/agent/
+├── sandbox/
+│   └── workspaces/
+│       └── {workspace-id}/
+│           ├── files/              # Workspace files
+│           ├── rootfs-overlay/     # Private writable layer (tmp, var, usr/local, etc.)
+│           └── env/
 └── rootfs-cache/                   # Download cache for rootfs updates
     └── debian-slim-arm64-v1.2.3.tar.xz
 ```
