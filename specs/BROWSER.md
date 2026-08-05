@@ -105,6 +105,35 @@ To prevent prompt-injection attacks, data exfiltration, or sandbox escapes throu
 
 ---
 
+## 5.1 Blocked List & Isolation Warning (G3 — Added 2026-08-06)
+
+> **Status:** CANONICAL blocked-list specification for browser automation (added G3 — 2026-08-06).  
+> **Verified research reference:** `aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03 (`Kimi Claw` pattern — sensitive accounts must not be automated).  
+> **Reference:** `security/SandboxPolicy.md` (§Blocked Domains & Sensitive Apps); `docs/DECISION_LOG.md` (`DL-023`); `docs/research/NEXORA_VS_ZCODE_CAPABILITY_GAP.md` (§6.2 — bot integration missing; §5.2 — browser automation partial — blocked-list closes a security gap without redesign).
+
+### Blocked App Classes (UI Automation)
+
+When `AgentType.BROWSER` (`architecture/MULTI_AGENT_SYSTEM.md`) attempts interaction with a blocked app class (`banking`, `payment`, `trading`, `insurance` — see `security/SandboxPolicy.md` §Blocked App Classes), the following isolation flow activates:
+
+1. **Sandbox denial** (`security/SandboxPolicy.md`): `NXR-7005` (filesystem/network escape) or `NXR-2003` (network connection denied) returned; agent loop pauses at `Blocked` state (`state-machines/TaskLifecycle.md` — `Blocked` state definition).
+2. **Audit entry** (`FR-T015`): Severity `CRITICAL`; fields: `workspaceId`, `agentId`, `blockedAppClass`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), `isolationWarning` (`true`), `userActionRequired` (`true`).
+3. **User notification** (`specs/BACKGROUND_EXECUTION.md` §4 — `agent_error` notification type; `NotificationHelper` — `agent_error` channel): Message includes isolation instruction (`"Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."`).
+4. **Agent loop behavior**: The agent remains in `Blocked` (`TaskLifecycle` — `Blocked` state: waiting on unresolved dependency or resource lock) until the user either (a) resolves isolation (separate workspace + separate profile — `FR-W001` workspace isolation + `FR-P011` profile isolation) or (b) provides explicit `ALLOW` for the specific scope + domain/app combination through `Workspace Settings` (`security/PermissionModel.md` — `Workspace override` layer can override `DENY` with `ALLOW` for specific domains after user confirmation).
+
+### Blocked High-Risk Domains (Browser Navigation)
+
+When `browser_navigate` (`TOOL-201`) or `browser_open` (legacy name mapping — `LEGACY` table in `generate_tool_catalog.py`: `"browser_navigate"` → `"browser_open"`) attempts to load a blocked domain (`*.bank*`, `*.pay*`, `*.crypto*`, `*.insurance*` — see `security/SandboxPolicy.md` §Blocked Domains):
+
+- `WebView.loadUrl()` is intercepted by the sandbox manager (`ToolManager` — `executeTool()`); the URL is checked against the blocked-list (`security/SandboxPolicy.md` §Blocked Domains); if blocked, `execute()` returns `ToolResult.Error` (`NXR-2003`) immediately (before `WebView.loadUrl()` is called); the `EventBus` publishes `AgentError` (`protocols/Agent-Protocol.md` — `AgentError` event); the agent loop pauses (`Blocked`); the audit log records `CRITICAL` severity; the user receives `agent_error` notification with isolation instruction.
+
+### Evidence Classification (G3 — Per Discovery)
+
+- `VERIFIED` (`Kimi Claw` / `MiniMax Hailuo`): Sensitive account isolation required; verified by public sources (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03).
+- `ENGINEERING INFERENCE` (Domain-pattern blocklist): Standard web-security practice; `security/SandboxPolicy.md` §Network Policy already defines `DENY` default; blocked-list extends existing denial mechanism (`NXR-2003`) — no new mechanism.
+- `UNKNOWN` (None for G3 — all elements supported by existing architecture: `SandboxPolicy.md` denial, `TaskLifecycle.md` `Blocked`, `NotificationHelper`, `FR-T015` audit, `FR-W005` settings).
+
+---
+
 ## 6. Phase Mapping
 
 - **Phase 3 (Core Telemetry)**: Headless WebView class integration; core navigation and text extraction tools (`browser_navigate`, `browser_extract`).

@@ -333,6 +333,12 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `plugin_dependencies` | Plugin Dependencies | Plugin | ✓ | — | — | — | — | High | ✓ | — | — | 8 |
 | `plugin_pack` | Plugin Pack | Plugin | — | ✓ | — | — | — | High | ✓ | — | — | 8 |
 | `plugin_inspect` | Plugin Inspect | Plugin | ✓ | — | — | — | — | High | ✓ | — | — | 8 |
+| `mcp_connect_stdio` | MCP Connect Stdio | MCP Integration | ✓ | ✓ | ✓ | — | — | High | ✓ | ✓ | ✓ | 5 |
+| `mcp_connect_http` | MCP Connect HTTP | MCP Integration | ✓ | ✓ | ✓ | — | — | High | ✓ | ✓ | ✓ | 5 |
+| `mcp_list_caps` | MCP List Capabilities | MCP Integration | ✓ | — | ✓ | — | — | High | ✓ | ✓ | — | 5 |
+| `mcp_call_tool` | MCP Call Tool | MCP Integration | ✓ | ✓ | — | — | — | High | ✓ | ✓ | — | 5 |
+| `mcp_read_resource` | MCP Read Resource | MCP Integration | ✓ | — | — | — | — | Medium | ✓ | — | — | 5 |
+| `mcp_get_prompt` | MCP Get Prompt | MCP Integration | ✓ | — | — | — | — | Low | ✓ | — | — | 5 |
 | `agent_create` | Agent Create | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
 | `agent_delegate` | Agent Delegate | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
 | `agent_status` | Agent Status | Multi-Agent | ✓ | — | — | — | — | Medium | ✓ | — | — | 7 |

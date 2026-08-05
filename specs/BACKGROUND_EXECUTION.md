@@ -162,6 +162,63 @@ These are **hard platform constraints** for the target stack (minSdk 34):
 6. **Threat mitigation** — TM-021 (battery drain): foreground service + Doze awareness
    + JobScheduler for non-urgent tasks.
 
+## 8. OEM Battery-Optimization & Auto-Start Onboarding (G1 — Added 2026-08-06)
+
+> **Status:** CANONICAL specification for OEM battery-optimization handling (G1 — 2026-08-06).  
+> **Verified research reference:** `aihackers.net` 2026-07-03 (`Kimi Claw` / `MiniMax Hailuo` pattern); `digitalapplied.com` 2026-07-03 (`OEM battery managers kill background processes regardless of Android API rules`).  
+> **Principle:** OEM battery managers (`Xiaomi` HyperOS, `Huawei` EMUI, `OnePlus` OxygenOS, `Samsung` OneUI, `Oppo` ColorOS) enforce stricter kill rules than Android API contracts (`API 34+` `Doze`, `App Standby`, `dataSync` 6-hour cap). Nexora must detect denial and gracefully degrade — not assume Android rules alone guarantee background survival.
+
+### 8.1 Detection of Battery-Optimization Denial
+
+At startup (`AgentExecutionService` initialization) and before scheduling any `WorkRequest` (`FR-T011`), the runtime performs:
+
+- **Battery optimization status check**: Query `PowerManager.isIgnoringBatteryOptimizations()` (or OEM-specific equivalent via reflection, where permitted) and read `device_battery` (`device_battery` `TOOL-??`) status.
+- **Auto-start denial check**: Verify `BootReceiver` (`BootReceiver` — registered in manifest) has launch permission (`RECEIVE_BOOT_COMPLETED`); if denied (OEM-specific — `Xiaomi` auto-start, `Huawei` protected apps, `OnePlus` app autolaunch), log event (`FR-T015` — audit trail) and trigger onboarding flow.
+- **OEM-specific detection**: Check `Build.MANUFACTURER` (`Xiaomi`, `Huawei`, `OnePlus`, `Samsung`, `Oppo`, etc.) and read system settings (`Settings.Global` / `Secure` keys where accessible) to detect stricter kill policies.
+
+**Evidence classification (per G1 / audit rules):**
+- `VERIFIED`: `Kimi Claw` (`aihackers.net` 2026-07-03) and `MiniMax Hailuo` (`digitalapplied.com` 2026-07-03) document OEM battery manager kills; `specs/BACKGROUND_EXECUTION.md` (§7 Android Platform Rules) already notes `Doze` / `App Standby` / `Battery` throttle (`FR-T011` constraints: `Charging`, `BatteryNotLow`).
+- `ENGINEERING INFERENCE`: OEM-specific reflection checks (`Build.MANUFACTURER`, system settings keys) — standard Android technique, no new architecture; detection results feed into existing event bus (`EventBus`) and scheduling module (`TaskScheduler`).
+- `UNKNOWN` (explicitly noted): Exact reflection keys for every OEM version (`HyperOS` 2.0 vs `EMUI` 14) — documented as variable; the onboarding flow handles absence gracefully (defaults to `DENIED` if check fails).
+
+### 8.2 Settings Surface — "Keep Nexora Running"
+
+When detection indicates denial (`BatteryOptimizationStatus.DENIED` or `AutoStartDenied`), the app surfaces a user-facing settings flow (not an infrastructure screen — `ADR-0006`: infrastructure hidden; user sees it through notifications/activity feed):
+
+- **Notification (`agent_approval`)**: Deep-link into `Workspace Settings` (`FR-W005` — workspace settings surface; `PermissionModel.md` — `ASK` default for `device:notifications`).
+- **Settings entry (`Keep Nexora running`)**: Per-workspace toggle (`workspace.json` — `FR-W005`) that triggers the `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS` intent (standard Android API 23+) and OEM-specific onboarding (`Xiaomi` auto-start settings, `Huawei` protected apps, `OnePlus` battery optimization exceptions).
+- **User action**: User must explicitly navigate to OEM settings (guided by instructions) and grant the exception; Nexora does not auto-grant or bypass OEM restrictions.
+
+**Permission model (`security/PermissionModel.md`):**
+- `device:notifications` remains `ASK` (default); the settings surface does not change the permission model — it provides user education and navigation links (`FR-U011`: chat is single interaction surface; settings links surface through chat settings or workspace settings).
+- No new scope added — `device:*` scopes (`device:notifications`, `device:camera`, `device:audio`, etc.) remain unchanged; the settings flow is a user-guidance mechanism, not a new permission.
+
+### 8.3 Graceful Degradation to WorkManager-Only (Reduced Autonomy)
+
+If the user refuses battery optimization (or OEM denies auto-start and the user does not complete onboarding), the agent degrades gracefully — it does not crash or silently fail:
+
+- **Foreground service disabled** (`AgentExecutionService` not started for new tasks; existing tasks complete gracefully with checkpoint at cancellation).
+- **WorkManager-only mode** (`FR-T011`): All scheduling uses `PeriodicWorkRequest` (min 15 min interval) and `OneTimeWorkRequest` (deferred) — no expedited jobs; no real-time progress notifications (`agent_progress` disabled); no persistent `agent_running` notification (`agent_done`/`agent_error` only).
+- **Checkpoint interval reduced** (`LIFECYCLES §7` — already reduced on low battery; now reduced unconditionally in degraded mode): from 30 s default to 10 s (faster recovery from `WorkManager` interruption).
+- **Autonomy mode forced to `Manual`** (`FR-S016` — autonomy modes: `Manual` requires user approval for every action; `Assisted`/`Autopilot` disabled in degraded mode to prevent unexpected actions without real-time user awareness).
+- **Task priority capped** (`FR-T003`/`FR-T012`): `CRITICAL` tasks still queued; `HIGH`/`MEDIUM`/`LOW` tasks deferred until user initiates (`Manual` mode — user must explicitly trigger task execution).
+- **No browser preview updates** (`specs/BROWSER.md`): Live preview requires continuous agent loop; in `WorkManager`-only mode, preview updates occur only at task completion (`TaskProgress` event batch delivered at `agent_done`).
+- **Audit log preserved** (`FR-T015` — execution logging + audit trail): Degradation state is logged (`WorkManagerOnly` mode with timestamp, reason — `BatteryOptimizationDenied` or `AutoStartDenied`); no audit entry deleted.
+
+**Reference mapping (existing IDs, no redesign):**
+- `FR-T011` (scheduled execution — `WorkManager`-backed)
+- `FR-AS-009` (fault-injection + degradation ladder — extended with `BatteryOptimizationDenied` and `AutoStartDenied` triggers)
+- `FR-S016` (autonomy modes — `Manual` forced in degraded mode)
+- `NFR-REL-002` (resume after restart — preserved; `WorkManager` resumes from last checkpoint)
+- `NFR-REL-003` (exponential backoff — preserved for retry in degraded mode)
+- `NFR-PERF-006` (battery drain < 10%/hour — `WorkManager`-only mode reduces drain further by removing foreground service wake lock)
+- `FR-W005` (workspace settings — `Keep Nexora running` toggle added)
+- `DL-021` (decision log entry above — documents the decision)
+
+**Phase mapping:** Phase 2 (`specs/BACKGROUND_EXECUTION.md` — documentation update; no new architecture; no new module; `TaskScheduler` and `NotificationHelper` unchanged except for degradation-state checks).
+
+---
+
 ## Phase Mapping
 
 - **Phase 1**: Task interface + queue contracts; `TaskScheduler` interface;

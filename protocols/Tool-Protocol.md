@@ -61,6 +61,15 @@ data class ToolExecutedEvent(
 )
 ```
 
+## MCP Tool Mapping (Added G4)
+
+> **Status:** DERIVED protocol clarification (added G4 — 2026-08-06).  
+> **Verified research:** `bitdoze.com` 2026-07-24; `mcp.directory` 2026-07-09; `aihackers.net` 2026-07-03.  
+> **Mapping rule:** Every MCP primitive (`mcp_call_tool`, `mcp_read_resource`, `mcp_get_prompt`) produces a standard `ToolExecutionMessage` (same `correlationId`, `workspaceId`, `toolCallId`, `limits`) and returns through the standard `ToolResult.Success` / `.Error` / `.NeedsApproval` pipeline.  
+> **Transport isolation:** `mcp_connect_stdio` (`TOOL-397`) and `mcp_connect_http` (`TOOL-398`) are registered as `Tool` instances in the registry (`registry/TOOLS.md`) with `requiredPermissions` (`network:http` for HTTP transport; `sandbox:execute` for stdio subprocess execution) and `requiresSandbox` (`true` — sandbox isolation applies per `security/SandboxPolicy.md`).  
+> **Negotiation event:** `mcp_list_caps` (`TOOL-399`) produces a `ToolResult.Success` with `output` containing the negotiated capability set; the workspace settings (`FR-W005`) persist the active server profile. No separate event type required — standard `ToolExecutedEvent` covers negotiation outcomes.  
+> **Reference:** `architecture/TOOL_SYSTEM.md` (§MCP Client); `security/PermissionModel.md` (`DENY` default for undeclared scopes — G2); `protocols/Provider-Protocol.md` (provider isolation rules extended to MCP servers).
+
 ## Protocol Rules
 
 - **Correlation Tracing**: Every protocol message MUST propagate `correlationId` and `toolCallId`.

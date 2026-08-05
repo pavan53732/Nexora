@@ -53,7 +53,9 @@ data class ToolMetadata(
 )
 ```
 
-## Tool Categories (26)
+## Tool Categories (27)
+
+> **Note:** Category 27 (MCP Integration) added via G4 hardening (2026-08-06). MCP servers are an additional tool SOURCE alongside built-in and plugin tools — not a replacement. See [MCP Client](#mcp-client-model-context-protocol-client) below.
 
 | # | Category | Example Tools | Phase |
 |---|----------|--------------|-------|
@@ -74,7 +76,7 @@ data class ToolMetadata(
 | 15 | **Database** | sqlite_query, sqlite_create, sqlite_migrate | Later |
 | 16 | **Memory** | store_memory, recall_memory, search_memory, list_memories | 6 |
 | 17 | **AI** | complete, embed, image_generate, image_analyze | 5 |
-| 18 | **Android Device** | read_contacts, send_notification, access_camera | Later |
+| 18 | **Android Device** | read_contacts, send_notification, access_camera, device_audio_stream, device_camera_stream | Later (G5 — optional: real-time streaming `device_camera_stream` `TOOL-403`, `device_audio_stream` `TOOL-404`; default `DENY`; `Streaming` flag `✓`; `FR-S016` `Manual`/`Assisted` mode required) |
 | 19 | **Project Management** | create_task, update_task, list_tasks, track_progress | Later |
 | 20 | **Security** | check_permissions, encrypt_file, decrypt_file, scan_vulnerabilities | Later |
 | 21 | **Observability** | get_logs, get_metrics, get_trace, export_diagnostics | Later |
@@ -83,6 +85,7 @@ data class ToolMetadata(
 | 24 | **Multi-Agent** | create_agent, delegate_task, agent_status, agent_list | 7 |
 | 25 | **Workflow** | create_workflow, run_workflow, schedule_workflow | 6 |
 | 26 | **Skills** | skill_list, skill_acquire (skills are first-class expertise units — ADR-0007; these tools manage them) | 4 |
+| 27 | **MCP Integration** | mcp_connect_stdio, mcp_connect_http, mcp_list_caps, mcp_call_tool, mcp_read_resource, mcp_get_prompt | 5 |
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
 > registry of every tool — **333 tools** with stable `TOOL-###` IDs, descriptions, and
@@ -138,6 +141,21 @@ class ToolRegistry {
     fun listAll(): List<Tool>
 }
 ```
+
+## MCP Client (Model Context Protocol Client)
+
+> **Status:** CANONICAL specification for MCP integration (added G4 — 2026-08-06).  
+> **Verified research reference:** Industry precedent verified — Claude (Anthropic), Mistral Vibe (Mistral AI), Kimi CLI (Moonshot AI), MiniMax Hailuo (MiniMax) all document stdio + Streamable HTTP transport support, capability negotiation, and tool/resource/prompt primitives (`bitdoze.com` 2026-07-24; `mcp.directory` 2026-07-09; `aihackers.net` 2026-07-03; `blog.4sapi.com` 2026-07-07).  
+> **Position:** MCP servers are an additional **tool SOURCE** (alongside built-in and plugin tools) — they do **NOT** replace the `Tool` interface, `ToolRegistry`, or `PluginSDK`.  
+> **Mapping:** Every MCP primitive (`tool`, `resource`, `prompt`) maps onto the existing `Tool` contract (`id`, `name`, `description`, `parameters`, `requiredPermissions`, `execute` → `ToolResult`).  
+> **Transport:** `stdio` (subprocess) and `Streamable HTTP` (SSE-compatible over HTTPS) — both registered via `mcp_connect_stdio` (`TOOL-397`) and `mcp_connect_http` (`TOOL-398`).  
+> **Capability negotiation:** `mcp_list_caps` (`TOOL-399`) performs handshake; results stored per workspace in `workspace.json` settings (`FR-W005`).  
+> **Permission model:** MCP connections require `network:http` (for HTTP transport) and `plugin:install` (when registering external server capabilities) — both default `ASK` (`security/PermissionModel.md`). Each discovered MCP tool inherits the server's declared `requiredPermissions`; if not declared, defaults to `DENY` (deny-by-default principle — see G2).  
+> **Result flow:** MCP tool results (`mcp_call_tool` `TOOL-400`) return through the standard `ToolResult.Success` / `ToolResult.Error` / `ToolResult.NeedsApproval` pipeline (`protocols/Tool-Protocol.md`); no special error envelope — canonical error codes (`NXR-2004`, `NXR-7004`) apply.  
+> **Sandbox:** MCP client process runs inside the workspace sandbox (`sandbox:execute` scope required) with the same filesystem/network/process limits (`security/SandboxPolicy.md`); no host-level access granted by transport choice.  
+> **Phase:** Phase 5 (same phase as AI provider integrations — `specs/AI_PROVIDERS.md` Phase 5 mapping applies).  
+>
+> References: `FR-TL001`..`FR-TL015` (tool interface contract); `FR-P001`..`FR-P013` (provider isolation rules extended to MCP servers); `FR-S016` (autonomy modes control approval gates for MCP-discovered tools); `FR-S001`..`FR-S028` (sandbox rules apply to MCP client process); `security/PermissionModel.md` (§Permission Scopes — `plugin:install`, `network:http`); `protocols/Tool-Protocol.md` (§Execution Flow — authorization gate + sandbox runner); `registry/TOOLS.md` (`TOOL-397`..`TOOL-402` — MCP integration category); `docs/DECISION_LOG.md` (`DL-020` — see below).
 
 ## Phase Mapping
 

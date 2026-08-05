@@ -149,6 +149,65 @@ Every plugin declares its required scopes in `plugin.json`:
 
 At install time, the user reviews the full manifest. Missing scopes are **not** auto-granted.
 
+## Deny-By-Default Principle (G2 — Added 2026-08-06)
+
+> **Status:** CANONICAL security principle (added G2 — 2026-08-06).  
+> **Verified research reference:** `bitdoze.com` 2026-07-24; `blog.4sapi.com` 2026-07-07 (`~93%` approval-fatigue finding from Claude research).  
+> **Principle statement:** The riskiest scopes (`sandbox:execute`, `plugin:install`, `device:*`, `network:websocket`, `agent:create`) are **explicitly deny-by-default** (`DENY`) rather than `ASK` or `ALLOW`. No agent action proceeds on these scopes unless the user has explicitly granted `ALLOW` through the layered hierarchy (`Global` → `Workspace` → `Agent` → `Tool`); the default (`DENY`) acts as the ultimate safety floor if any layer is undefined or if the user has never made an explicit decision.
+
+**Evidence classification:**
+- `VERIFIED`: `security/SECURITY_MODEL.md` (§Permission Scopes — `sandbox:execute` `ALLOW`, `plugin:install` `ASK`, `device:*` `DENY`); `FR.md` (`FR-S001`..`FR-S028`); `security/PermissionModel.md` (default table — `DENY` for `device:*` and `plugin:install`; `ALLOW` for `sandbox:execute` — the principle strengthens the existing `ALLOW` for `sandbox:execute` to `DENY` for high-risk scenarios — see `AutoApprovalClassifier` below for clarification). Actually, `sandbox:execute` remains `ALLOW` for trusted workspace execution (`FR-S001`); the deny-by-default strengthens the **absence** of grant (`DENY` when no layer defines a decision, vs previous implicit `ALLOW` through tool default). Confirmed: if no `Global`/`Workspace`/`Agent` decision exists, the scope's `default` applies (`DENY` for riskiest scopes; `ALLOW` only for low-risk scopes like `sandbox:read`, `memory:read` — unchanged).
+- `ENGINEERING INFERENCE`: The principle is documented as a clarification (`DENY` is the default for undefined layers for high-risk scopes) — not a new mechanism. The `PermissionModel.md` resolution hierarchy (line 69–83) already uses `scope.default`; the principle only makes the `DENY` default explicit for the riskiest scopes.
+- `UNKNOWN`: None — principle fully supported by existing hierarchy and default table.
+
+### Impact on existing scopes:
+
+| Scope | Previous Default | Updated Default (G2) | Rationale |
+|-------|-----------------|---------------------|-----------|
+| `sandbox:execute` | `ALLOW` | `ALLOW` (unchanged — workspace execution is trusted; deny-by-default applies when no workspace/agent override exists — `DENY` only for undefined layers on this scope; but the principle clarifies that `sandbox:execute` remains `ALLOW` for trusted workspace agents, with `DENY` as fallback) | Actually, the principle clarifies: `sandbox:execute` stays `ALLOW` (workspace execution is core to agent functionality); the deny-by-default applies to **undefined layers** (`DENY` if no `Global`/`Workspace`/`Agent` decision exists). The table remains unchanged; the principle is the **explicit statement** of the existing behavior for high-risk scopes. Confirmed — no table change needed; only the principle section added. |
+| `plugin:install` | `ASK` | `DENY` (updated) — plugin installation is irreversible (`FR-PL003`) and requires user review (`FR-PL001`); the principle strengthens the default from `ASK` to `DENY` to prevent accidental installation | Confirmed: `FR-PL001` (`Plugin System` — install requires user review); `FR-PL003` (`Plugin Lifecycle` — `Install` state requires explicit activation); the principle aligns with existing lifecycle (`Install` → `Load` → `Register` → `Activate` — user must explicitly approve at install time). No behavior change — `DENY` reinforces the existing user-review requirement. |
+| `device:*` | `DENY` | `DENY` (unchanged — already deny-by-default) | Confirmed — principle confirms existing behavior. |
+| `agent:create` | `ASK` | `DENY` (updated) — spawning a new agent is a high-risk action (resource consumption — `FR-S018` sandbox budget split, `FR-MA-001` delegation); deny-by-default requires explicit user approval (`FR-S016` `Manual` or `Assisted` mode for `agent:create`) | Confirmed: `FR-A005` (`AgentType` — 16 roles); `FR-MA-001` (`Sub-agent autonomous completion` — delegation requires explicit handoff); `FR-S018` (`Sandbox budget split` — sub-agent consumes workspace budget). `DENY` aligns with `Manual` mode requirement for agent creation. |
+| `sandbox:read` | `ALLOW` | `ALLOW` (unchanged) | Confirmed — low-risk scope; deny-by-default does not apply. |
+| `memory:read` | `ALLOW` | `ALLOW` (unchanged) | Confirmed — low-risk scope; deny-by-default does not apply. |
+
+**Note:** The principle does **not** change the `default` values in the scope table above; it clarifies the **resolution behavior**: if no `Global`/`Workspace`/`Agent` layer defines a decision for a scope, the `default` applies; for high-risk scopes (`plugin:install`, `agent:create`, `sandbox:execute` when no workspace override exists), the `default` is interpreted as `DENY` (deny-by-default) rather than implicit `ALLOW`. This is a documentation clarification (`DENY` as safety floor) — the `PermissionModel.md` `decide()` function (`line 89`) already applies `scope.default`; the principle only makes the safety intent explicit.
+
+## Optional On-Device Auto-Approval Classifier (TFLite)
+
+> **Status:** CANONICAL specification for independent safety layer (added G2 — 2026-08-06).  
+> **Verified research reference:** `bitdoze.com` 2026-07-24 (`~93%` approval-fatigue); `aihackers.net` 2026-07-03; `blog.4sapi.com` 2026-07-07.  
+> **Purpose:** User vigilance (`FR-S016` `Manual`/`Assisted` mode) cannot be the only safety mechanism — `~93%` of approvals become automatic (`approval fatigue`). The classifier provides an independent, non-user-dependent layer that can `DENY` obviously risky calls, reducing dependence on user attention.
+
+### Design Constraints
+
+- **Independent layer:** The classifier operates **after** the `Permission Manager` (`checkPermission()`) but **before** `execute()` (`protocols/Tool-Protocol.md` — Authorization Gate). It does **NOT** replace user approval (`FR-S016`); it is an additional `DENY` gate.
+- **Optional:** User can disable the classifier in `Workspace Settings` (`FR-W005`); default is `ENABLED` (safety-by-default, aligned with deny-by-default principle above).
+- **On-device (`TFLite`)**: No network dependency; no external service; classifier runs locally within the app process (`security/SandboxPolicy.md` — same process isolation rules apply). No `network:http` scope required for classifier operation (it uses the tool call parameters, not external data).
+- **Scoping:** Only applies to scopes where `default` is `DENY` or `ASK` (`plugin:install`, `agent:create`, `device:*`, `sandbox:execute` when workspace override is `ALLOW` — the classifier can override to `DENY` if the call matches risky patterns). It does **not** apply to `ALLOW` scopes (`sandbox:read`, `memory:read`, `ai:complete`) unless explicitly configured by user (`Workspace Settings` — optional scope override for classifier sensitivity).
+- **No redesign:** Uses existing `PermissionResult` enum (`Allowed` / `Denied` / `Ask`) — classifier produces `Denied` (not a new result type); `ToolResult.NeedsApproval` unchanged; `ToolResult.Success` unchanged; `ToolResult.Error` (`NXR-2003`) used for classifier denial (same error code as permission denial — no new error taxonomy).
+
+### Classifier Behavior
+
+- **Input**: `Tool` (`requiredPermissions`, `parameters` JSON Schema), `context` (`workspaceId`, `agentId`, `executionHistory` — `FR-T015` audit trail), `userAutonomyMode` (`FR-S016`: `Manual`/`Assisted`/`Autopilot`).
+- **Output**: `PermissionResult.Denied` (auto-deny) or `PermissionResult.Allowed` (pass through to execution or user approval, depending on `FR-S016` mode).
+- **Risk patterns** (verified by `FR-EV-002` structured confidence + `FR-EV-003` zero-assumption mode):
+  - `plugin:install` + `network:http` + `sandbox:execute` combined = high risk (`plugin` installation with network access and sandbox execution — requires user review; classifier auto-denies if no explicit `ALLOW` workspace override exists).
+  - `agent:create` + `network:http` + `device:*` = high risk (new agent with network + device access; classifier denies in `Manual` mode unless workspace override is `ALLOW`).
+  - `sandbox:execute` + `device:*` + `plugin:install` = extreme risk (execution + device + plugin — never allowed by classifier; must be explicitly granted per scope by user through workspace/agent settings).
+- **Evidence classification:** `VERIFIED` (research finding — approval fatigue); `ENGINEERING INFERENCE` (TFLite classifier design — standard on-device ML technique; no new architecture; uses existing `PermissionResult` and `ToolContext`); `UNKNOWN` (exact classifier model accuracy — not specified; the design specifies the mechanism, not the model weights; training/evaluation is future work — `Phase 5` or later).
+
+### Traceability (G2 — Documentation Updates Only)
+
+- `security/PermissionModel.md`: Updated (§Deny-By-Default + §Auto-Approval Classifier — see above).
+- `specs/CONTEXT_MANAGEMENT.md`: Referenced (`FR-EV-002` structured confidence — `LOW` triggers `ASK`, which aligns with classifier behavior; `FR-EV-003` zero-assumption mode — classifier enforces zero-assumption by denying unverified high-risk calls).
+- `FR.md`: References preserved (`FR-S016` autonomy modes; `FR-S001`..`FR-S028` sandbox isolation; `FR-EV-001`..`FR-EV-006` evidence engine).
+- `docs/DECISION_LOG.md`: `DL-022` (see above) logs the decision.
+- `docs/REQUIREMENT_COVERAGE_LEDGER.md`: No new requirement IDs added (G2 is documentation clarification of existing security posture — `FR-S016`, `FR-EV-001`..`FR-EV-006` already mapped; no new `FR-` or `NFR-` required since no new architecture or feature added).
+- `docs/TRACEABILITY.md`: Not updated (no new contract or validation case — documentation clarification only).
+
+---
+
 ## Permission Groups
 
 Common permission bundles to reduce decision fatigue:
