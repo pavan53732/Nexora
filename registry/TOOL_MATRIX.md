@@ -35,7 +35,7 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `file_search` | File Search | File System | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
 | `file_read_binary` | File Read Binary | File System | ✓ | — | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_write_binary` | File Write Binary | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
-| `file_chmod` | File Chmod | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
+| `file_chmod` | File Chmod | File System | ✓ | ✓ | — | — | — | Medium | ✓ | ✓ | — | 4 |
 | `file_touch` | File Touch | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_head` | File Head | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_tail` | File Tail | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
@@ -43,7 +43,7 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `file_zip` | File Zip | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_unzip` | File Unzip | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_watch` | File Watch | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
-| `file_symlink` | File Symlink | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
+| `file_symlink` | File Symlink | File System | ✓ | ✓ | — | — | — | High | ✓ | ✓ | — | 4 |
 | `file_history` | File History | File System | ✓ | — | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `file_restore` | File Restore | File System | ✓ | ✓ | — | — | — | Low | ✓ | ✓ | — | 4 |
 | `workspace_create` | Workspace Create | Workspace | — | ✓ | — | — | — | Low | ✓ | — | — | 1 |
