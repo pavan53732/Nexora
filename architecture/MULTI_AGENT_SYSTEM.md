@@ -231,5 +231,19 @@ through the Reviewer pass (FR-EV-006) before merging.
 ## Phase Mapping (sub-agents)
 
 - **Phase 5**: Per-agent sandbox isolation (FR-S018) — the substrate for SA-1.
-- **Phase 7**: SA-1..SA-5 with the 15-agent registry, delegation, parallel
+- **Phase 7**: SA-1..SA-5 with the 16-agent registry, delegation, parallel
   orchestration.
+
+---
+
+## Cross-Instance Extension (Pipes)
+
+Multi-instance collaboration — delegating SA-1..SA-5 subtasks to **remote Nexora
+instances** (same machine or LAN) over authenticated pipes — is specified in
+[../specs/PIPES.md](../specs/PIPES.md) (canonical). The coordinator role, the
+no-direct-communication rule (FR-AG-002), the concurrency cap (SA-3), and all
+inherited policies (SA-4) apply unchanged across a pipe boundary: a remote sub-agent
+is a first-class `Task` whose executor happens to run in another instance's sandbox
+(FR-S018) with that instance's own provider profiles (FR-P011). Instance/pipe states
+are owned by [../state-machines/InstanceLifecycle.md](../state-machines/InstanceLifecycle.md);
+models in [../models/Instance.md](../models/Instance.md); requirements FR-MI-001..010.

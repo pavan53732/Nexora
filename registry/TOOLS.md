@@ -32,12 +32,12 @@
 | 21 | Observability | OBS | 16 | Later |
 | 22 | Import/Export | IO | 13 | Later |
 | 23 | Plugin | PLG | 10 | 8 |
-| 24 | Multi-Agent | MAG | 10 | 7 |
+| 24 | Multi-Agent | MAG | 14 | 7 |
 | 25 | Workflow | WF | 10 | 6 |
 | 26 | Skills | SKL | 2 | 4 |
 | 27 | MCP Integration | MCP | 6 | 5 |
 
-**Total registered tools: 339** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 343** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
 
 ## File System (FILE)
 
@@ -337,7 +337,7 @@
 | TOOL-384 | memory_preferences | Get or set learned user preferences | 4 | Planned |
 | TOOL-385 | memory_graph_query | Query the knowledge graph (entities, relationships) | 5 | Planned |
 | TOOL-386 | memory_graph_build | Extract entities and relationships into the knowledge graph | 5 | Planned |
-| TOOL-397 | memory_lessons | Store and retrieve lessons learned from task execution (closed-loop learning) | 4 | Planned |
+| TOOL-409 | memory_lessons | Store and retrieve lessons learned from task execution (closed-loop learning) | 4 | Planned |
 
 ## AI (AI)
 
@@ -479,6 +479,10 @@
 | TOOL-372 | agent_memory | Inspect an agent's memory | 7 | Planned |
 | TOOL-373 | agent_cancel | Cancel a running agent | 7 | Planned |
 | TOOL-374 | agent_broadcast | Send a message to all agents | 7 | Planned |
+| TOOL-405 | pipe_list | List discovered, paired, and connected peer instances for the active workspace | 7 | Planned |
+| TOOL-406 | pipe_connect | Open or attach a pipe to a paired instance | 7 | Planned |
+| TOOL-407 | pipe_broadcast | Broadcast a typed message to all connected pipes of the workspace | 7 | Planned |
+| TOOL-408 | pipe_delegate | Delegate a task to a remote instance through a pipe | 7 | Planned |
 
 ## Workflow (WF)
 

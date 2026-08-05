@@ -56,3 +56,15 @@
 - `FR-A010` (real-time monitoring) → `specs/TERMINAL.md` (§Audit — budget/cap/timeout events).
 - `FR-U005` (agent activity feed) → `specs/TERMINAL.md` (§Boundary Violation Response — denied actions surfaced).
 - `FR-GT-001`..`006` (git grounding) preserved — terminal session does not affect git grounding rules.
+
+## S5 — Multi-Instance Pipes
+- `FR-MI-001`..`010` (discovery, transport, same-machine orchestration, pairing, cross-instance delegation, heartbeats, broadcast, security gates, failure handling, settings surface) → `specs/PIPES.md` (canonical) + `state-machines/InstanceLifecycle.md` (canonical states) + `models/Instance.md` (derived).
+- `FR-AG-001`/`002` (coordinator role, no direct agent calls) → preserved across pipes via `architecture/MULTI_AGENT_SYSTEM.md` §Cross-Instance Extension.
+- `FR-S016` (autonomy modes) → per-pipe acceptance mode (PIPES.md §6).
+- `FR-S018` (per-agent sandbox) → remote sub-agent runs in the remote instance's own sandbox (PIPES.md §6).
+- `FR-P011`/`FR-P013` (provider profiles, provider isolation) → credentials never cross pipes; remote execution uses remote profiles (PIPES.md §2 rule 2, §8).
+- `FR-S014`/`FR-S015` (egress policy, quarantine) → pipe egress confinement + inbound artifact quarantine (PIPES.md §8).
+- `FR-T015` (audit trail) → pipe events audited end-to-end (PIPES.md §2 rule 4).
+- `FR-CM-006` (context trust tagging) → inbound payloads are untrusted segments (PIPES.md §8).
+- `NFR-SEC-014` (pipe channel security) → `requirements/NFR.md`; validation `SEC-NET-001`.
+- `NFR-REL-002`/`012` (resume fidelity, exactly-once) → mid-task pipe recovery (PIPES.md §6, §9).

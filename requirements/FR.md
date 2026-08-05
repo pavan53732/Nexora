@@ -352,3 +352,21 @@
 | FR-AG-002 | No direct sub-agent communication — all inter-agent communication flows through the orchestration layer (EventBus + coordinator + shared memory); agents publish results, never call other agents | Must | 7 |
 | FR-AG-003 | Agent Orchestrator composition — orchestration is an explicit concern composed from AgentManager + Executor + WorkflowEngine + EventBus + Evidence & Validation Engine | Must | 7 |
 | FR-AG-004 | Documentation completion gate — documentation-affected work requires docs updated (CHANGELOG, README, ADRs, specs, API docs as applicable) before completion is reported | Must | 4 |
+
+
+## Multi-Instance Pipes
+
+> Pipe transport, pairing, discovery, and cross-instance delegation defined in [specs/PIPES.md](../specs/PIPES.md).
+
+| ID | Requirement | Priority | Phase |
+|----|-------------|----------|-------|
+| FR-MI-001 | Instance discovery — zero-configuration discovery of peer Nexora instances on the same machine (rendezvous directory) and LAN (mDNS/DNS-SD `_nexorapipe._tcp`); no manual address entry | Must | 7 |
+| FR-MI-002 | Pipe transport — TLS 1.3 mutual-auth channels between instances (loopback same-machine, mTLS LAN); length-prefixed JSON envelopes with `correlationId`, `pipeId`, `workspaceId`, `version`; closed payload type set (DelegateTask/Accept/Reject/Progress/Result/Heartbeat/Revoke/Close) | Must | 7 |
+| FR-MI-003 | Same-machine main/sub orchestration — multiple local instances coordinate through pipes with automatic coordinator/sub-instance assignment (single coordinator role per FR-AG-001 preserved) | Must | 7 |
+| FR-MI-004 | Instance pairing & identity — per-install Ed25519 `pipeKey` (private key in SecureKeyStore), user-confirmed fingerprint pairing (QR or 6-word code), per-workspace pairing scope, one-tap revocation | Must | 7 |
+| FR-MI-005 | Cross-instance delegation — a coordinator delegates SA-1..SA-5 subtasks to a remote instance over a pipe; remote admission control (Manual/Assisted/Autopilot per pipe, FR-S016); remote sub-agent runs in its own sandbox (FR-S018) with its own provider profiles (FR-P011); results merge in dependency order | Must | 7 |
+| FR-MI-006 | Pipe heartbeats & auto-reconnect — 30 s heartbeats; 3 missed = Degraded, 5 missed = Disconnected; bounded reconnect (3 attempts, exponential backoff, NFR-REL-003); mid-task disconnect blocks the subtask and escalates per FR-AS-003, resuming from checkpoint on reconnect | Must | 7 |
+| FR-MI-007 | Pipe broadcast routing — coordinator broadcasts typed messages to all connected pipes of a workspace; recipients treat broadcasts as data, not instructions (FR-CM-006); rate-limited (1/s, burst 5); `DENY`-by-default scope | Should | 7 |
+| FR-MI-008 | Pipe security gates — pairing, connect, and broadcast pass PermissionManager checks with `instance:*` scopes (pair/connect `ASK`, broadcast `DENY` defaults); forged or malformed payloads rejected pre-parse, audited CRITICAL, 3 violations auto-revoke | Must | 7 |
+| FR-MI-009 | Pipe failure handling — discovery absence is graceful (not an error); pairing mismatch aborts with audit; version incompatibility blocks handshake with a clear user notice; revoked pipes close immediately with graceful remote cancellation | Must | 7 |
+| FR-MI-010 | Pipes settings surface — Settings → Pipes: paired instance list, pair/revoke, acceptance mode per pipe, discovery toggle; pipe activity surfaces in the chat activity feed with a pipe badge (FR-U005); no pipes tab or slash-command surface (FR-U011) | Must | 7 |

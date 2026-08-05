@@ -148,6 +148,7 @@ Nexora/
 - [Execution Lifecycle](specs/EXECUTION_LIFECYCLE.md)
 - [Context Management](specs/CONTEXT_MANAGEMENT.md)
 - [Autonomy & Stability](specs/AUTONOMY_STABILITY.md)
+- [Pipes (Multi-Instance Collaboration)](specs/PIPES.md)
 
 ---
 

@@ -40,7 +40,7 @@
 | FEAT-011 | Material You | 1 | Planned |
 | FEAT-012 | Multi-Workspace | 1 | Planned |
 | FEAT-013 | Agent-First Chat Interaction (goal entry, streaming, activity feed — primary surface) | 1 | Planned |
-| FEAT-014 | Full Tool Catalog (26 categories, 333 registered tools with stable IDs) | 4 | Planned |
+| FEAT-014 | Full Tool Catalog (27 categories, 343 registered tools with stable IDs) | 4 | Planned |
 | FEAT-015 | Scheduled Jobs (one-off delayed + recurring with constraints, WorkManager) | 2 | Planned |
 | FEAT-016 | Rich Background Notifications (running, progress %, completed, failed, approval) | 2 | Planned |
 | FEAT-017 | Knowledge Graph (entity extraction, relationships, traversal, semantic search) | 5 | Planned |
@@ -60,3 +60,4 @@
 | FEAT-031 | Context Pipeline (structured state, token allocation, progressive summarization, resume reconstruction, freshness, tagging) | 2 | Planned |
 | FEAT-032 | Autonomy Hardening (plan repair, heartbeat/watchdog, budget escalation, closed-loop learning, trust growth, verification gates) | 2 | Planned |
 | FEAT-033 | Stability Hardening (idempotent exactly-once recovery, degradation ladder, fault-injection suite) | 2 | Planned |
+| FEAT-034 | Multi-Instance Pipes (zero-config same-machine + LAN discovery, pairing, cross-instance delegation, broadcast routing — specs/PIPES.md) | 7 | Planned |

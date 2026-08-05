@@ -37,6 +37,9 @@ Every action in Nexora—tool invocation, network call, device access—requires
 | `memory:write` | Write entries to memory stores | `ALLOW` | Internal storage (own) |
 | `plugin:install` | Download and install a new plugin | `ASK` | `REQUEST_INSTALL_PACKAGES` (never granted) |
 | `agent:create` | Spawn a new agent instance | `ASK` | N/A (internal) |
+| `instance:pair` | Pair with a peer Nexora instance (fingerprint confirmation) | `ASK` | N/A (internal) |
+| `instance:connect` | Open a pipe to a paired instance | `ASK` | `INTERNET` (LAN pipes) |
+| `instance:broadcast` | Broadcast a typed message to connected pipes | `DENY` | N/A (internal) |
 
 ## Decision Levels
 

@@ -336,6 +336,10 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `agent_memory` | Agent Memory | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
 | `agent_cancel` | Agent Cancel | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
 | `agent_broadcast` | Agent Broadcast | Multi-Agent | — | ✓ | — | — | — | Medium | ✓ | — | — | 7 |
+| `pipe_list` | Pipe List | Multi-Agent | ✓ | — | ✓ | — | — | Low | ✓ | — | — | 7 |
+| `pipe_connect` | Pipe Connect | Multi-Agent | — | ✓ | ✓ | — | — | High | ✓ | — | — | 7 |
+| `pipe_broadcast` | Pipe Broadcast | Multi-Agent | — | ✓ | ✓ | — | — | High | ✓ | — | — | 7 |
+| `pipe_delegate` | Pipe Delegate | Multi-Agent | — | ✓ | ✓ | — | — | High | ✓ | — | — | 7 |
 | `workflow_create` | Workflow Create | Workflow | — | ✓ | — | — | — | Medium | ✓ | — | — | 6 |
 | `workflow_run` | Workflow Run | Workflow | — | ✓ | — | — | — | Medium | ✓ | — | — | 6 |
 | `workflow_schedule` | Workflow Schedule | Workflow | — | ✓ | — | — | ✓ | Medium | ✓ | — | — | 6 |

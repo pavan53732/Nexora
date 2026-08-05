@@ -75,7 +75,7 @@ After each task, the agent runs a short learning pass:
 Reflect (what worked / what failed / what was surprising)
    │
    ▼
-Store lesson → memory_lessons (TOOL-397) — tagged, retrievable
+Store lesson → memory_lessons (TOOL-409) — tagged, retrievable
    │
    ▼
 Propose skill refinement:

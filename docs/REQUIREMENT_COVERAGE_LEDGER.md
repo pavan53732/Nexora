@@ -217,6 +217,16 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-AG-002` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-AG-003` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-AG-004` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-001` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-002` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-003` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-004` | `requirements/FR.md` | MAPPED | Security | `specs/PIPES.md` | `SEC-NET-001` | `evidence/security/SEC-NET-001/` |
+| `FR-MI-005` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-006` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-007` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-008` | `requirements/FR.md` | MAPPED | Security | `security/PermissionModel.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `FR-MI-009` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MI-010` | `requirements/FR.md` | MAPPED | UI/UX | `specs/PIPES.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 
 ## Non-Functional Requirements
 
@@ -254,6 +264,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-SEC-011` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
 | `NFR-SEC-012` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
 | `NFR-SEC-013` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-014` | `requirements/NFR.md` | MAPPED | Security | `specs/PIPES.md` | `SEC-NET-001` | `evidence/security/SEC-NET-001/` |
 | `NFR-REL-010` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-REL-011` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-REL-012` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |

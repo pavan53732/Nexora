@@ -117,6 +117,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 | **Execution Lifecycle** | [specs/EXECUTION_LIFECYCLE.md](specs/EXECUTION_LIFECYCLE.md) |
 | **Context Management** | [specs/CONTEXT_MANAGEMENT.md](specs/CONTEXT_MANAGEMENT.md) |
 | **Autonomy & Stability** | [specs/AUTONOMY_STABILITY.md](specs/AUTONOMY_STABILITY.md) |
+| **Pipes (Multi-Instance)** | [specs/PIPES.md](specs/PIPES.md) |
 
 ### Domain Models
 
@@ -135,6 +136,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 | **TerminalSession** | [models/TerminalSession.md](models/TerminalSession.md) |
 | **Skill** | [models/Skill.md](models/Skill.md) |
 | **Permission** | [models/Permission.md](models/Permission.md) |
+| **Instance & Pipe** | [models/Instance.md](models/Instance.md) |
 
 ### Protocols
 
@@ -216,6 +218,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 | **Workflow Lifecycle** | [state-machines/WorkflowLifecycle.md](state-machines/WorkflowLifecycle.md) |
 | **Plugin Lifecycle** | [state-machines/PluginLifecycle.md](state-machines/PluginLifecycle.md) |
 | **Provider Lifecycle** | [state-machines/ProviderLifecycle.md](state-machines/ProviderLifecycle.md) |
+| **Instance & Pipe Lifecycle** | [state-machines/InstanceLifecycle.md](state-machines/InstanceLifecycle.md) |
 
 ### Sequence Diagrams
 
