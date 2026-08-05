@@ -34,7 +34,7 @@ sequenceDiagram
     UI->>AgentManager: createAgent(goal, workspaceId)
     AgentManager->>AgentLoop: start(agent)
     AgentManager-->>UI: AgentCreated event
-    EventBus-->>UI: AgentState.RUNNING
+    EventBus-->>UI: AgentStatus.RUNNING (phase: PLANNING)
 
     loop Until task complete or max cycles
         AgentLoop->>Planner: createPlan(context, goal)
@@ -63,12 +63,12 @@ sequenceDiagram
     end
 
     AgentLoop->>EventBus: publish(TaskCompletedEvent)
-    EventBus-->>UI: AgentState.COMPLETED
+    EventBus-->>UI: AgentStatus.COMPLETED (phase: TERMINATED)
     UI-->>User: Display final result
 
     alt Error during execution
         AgentLoop->>EventBus: publish(TaskFailedEvent, error)
-        EventBus-->>UI: AgentState.FAILED
+        EventBus-->>UI: AgentStatus.FAILED (phase: TERMINATED)
         UI-->>User: Display error
     end
 
@@ -77,6 +77,6 @@ sequenceDiagram
         UI->>AgentManager: cancelAgent(agentId)
         AgentManager->>AgentLoop: cancel()
         AgentLoop->>EventBus: publish(TaskCancelledEvent)
-        EventBus-->>UI: AgentState.CANCELLED
+        EventBus-->>UI: AgentStatus.CANCELLED (phase: TERMINATED)
     end
 ```

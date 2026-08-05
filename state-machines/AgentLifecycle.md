@@ -1,5 +1,5 @@
 > **Status: CANONICAL** for agent lifecycle states and transitions.
-> This document owns the formal agent state machine: IDLE, THINKING, EXECUTING, WAITING, ERROR, TERMINATED.
+> This document owns the formal agent state machine: Created, Configured, Ready, Running, Paused, WaitingApproval, Reflecting, Completing, Completed, Failed, Cancelled.
 > It does NOT own the agent runtime loop (see [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md)).
 >
 > Depends on: [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md).
@@ -26,6 +26,43 @@ The Agent Lifecycle governs the runtime state of every autonomous agent instance
 | **Completed** | Terminal state — agent finished successfully. |
 | **Failed** | Terminal state — unrecoverable error encountered. |
 | **Cancelled** | Terminal state — explicitly cancelled by user or system. |
+
+## Durable Status vs. Transient Execution Phase
+
+To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly separates the **durable agent lifecycle state** (`AgentStatus`) from the **transient runtime execution phase** (`AgentExecutionPhase`).
+
+1. **Durable Lifecycle State (`AgentStatus`)**: Tracks governance, transactional boundaries, and persistence-readiness. Persisted in the database.
+2. **Transient Execution Phase (`AgentExecutionPhase`)**: Tracks the exact operation of the autonomous agent loop at any millisecond. Memory-resident, saved in checkpoints, and streamed to the UI.
+
+### Compatibility & Mapping Matrix
+
+| Durable State (`AgentStatus`) | Allowed Transient Phases (`AgentExecutionPhase`) | Description / Meaning |
+|---|---|---|
+| **CREATED** | `IDLE` | Instance allocated; no configuration or goal applied. |
+| **CONFIGURED** | `IDLE` | System prompt, tools, permissions, and provider bound. |
+| **READY** | `IDLE` | Target goal validated, constraints cleared; ready to run. |
+| **RUNNING** | `PLANNING`, `THINKING`, `EXECUTING_TOOL`, `BUILDING_CONTEXT`, `WAITING` | Loop active; executing planner, calling provider, running tool, or preparing context. |
+| **PAUSED** | `IDLE` | Loop suspended. Retains memory and checkpoint. Resumable. |
+| **WAITING_APPROVAL** | `WAITING` | Blocked waiting on a human permission decision or confirmation. |
+| **REFLECTING** | `THINKING` | Active self-review, plan repair, or verification analysis. |
+| **COMPLETING** | `COMPLETING` | Finalizing artifacts, updating memory systems, compiling report. |
+| **COMPLETED** | `TERMINATED` | Terminal success. Resources released, execution frozen. |
+| **FAILED** | `TERMINATED` | Terminal failure. Carries canonical error; ready for retry. |
+| **CANCELLED** | `TERMINATED` | Terminal cancellation. Gracefully aborted; partial state saved. |
+
+### Operational Semantics & Enforcement
+
+- **Persistence Boundaries**:
+  - `AgentStatus` transitions MUST be transactionally persisted in the local SQLite database. Transitions evaluate guards, acquire write locks, commit the state and increment the entity `version`, and then emit the event to the Event Bus.
+  - `AgentExecutionPhase` is primarily memory-resident. To avoid database write-amplification during rapid loops, phase updates are published as lightweight events. However, the current phase MUST be persisted within the **Execution Checkpoint** (at least every 30s) to enable seamless crash recovery.
+- **Checkpoint & Recovery Rules**:
+  - Upon application crash or reboot, the system scans for agents with active status (`RUNNING`, `REFLECTING`, `WAITING_APPROVAL`).
+  - Active agents are re-hydrated from their latest checkpoint, restoring their `AgentExecutionPhase` (e.g. restoring back to `PLANNING` or `WAITING` for approval) and resuming the loop at that exact phase boundary.
+  - Terminal states (`COMPLETED`, `FAILED`, `CANCELLED`) are frozen and never recovered.
+- **UI & Event Bus Projections**:
+  - Event payloads (such as `AgentStatusChanged` or `TaskProgress`) carry both `AgentStatus` and `AgentExecutionPhase`.
+  - The UI renders coarse controls (like Cancel/Pause action buttons) according to `AgentStatus`.
+  - The UI displays real-time animation, spinners, and contextual text in the chat-embedded Agent Activity Feed (e.g. "Agent is thinking...", "Agent is running file-write tool") based on the active `AgentExecutionPhase`.
 
 ## Transitions
 

@@ -17,7 +17,7 @@ The Agent API defines the boundary for agent lifecycle, execution startup, assig
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `registerAgent` | Agent `Discovered → Registered → Ready` | Durable agent projection with version | Duplicate ID, invalid manifest, incompatible SDK/version, storage failure | Duplicate `(agentId, version)` is idempotent | Registration validates capabilities, declared skills, and permission scope before visibility | Registry and SDK conformance tests |
+| `registerAgent` | Agent `Created → Configured → Ready` | Durable agent projection with version | Duplicate ID, invalid manifest, incompatible SDK/version, storage failure | Duplicate `(agentId, version)` is idempotent | Registration validates capabilities, declared skills, and permission scope before visibility | Registry and SDK conformance tests |
 | `startTask` | Task `Draft/Pending → Queued → Running`; Agent `Ready → Running` | Task projection plus correlation ID | Invalid input, unavailable dependencies, permission/approval, timeout, cancellation, internal fault | Client retries require idempotency key; duplicate key returns original task projection | Workspace authorization checked before side effects; cancellation emits lifecycle event after durable commit | Runtime integration and E2E tests |
 | `cancelTask` | Active task/agent → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same task and cancellation key | Caller must own workspace/task; cancellation propagates to child jobs and delegated work | Lifecycle and cancellation tests |
 | `getTaskStatus` | No lifecycle change | Durable task/execution status, phase, version, latest redacted error | Not found, unauthorized, storage failure | Safe to retry; read is versioned | Sensitive error details are redacted by caller scope | API contract tests |
@@ -115,14 +115,15 @@ interface AgentApi {
 ```kotlin
 data class AgentProjection(
     val agentId: String,
-    val version: String,
+    val version: Long,
     val name: String,
     val description: String,
     val declaredSkills: List<String>,
     val requiredPermissions: List<String>,
     val supportsDelegation: Boolean,
     val supportsBackgroundExecution: Boolean,
-    val status: AgentStatus
+    val status: AgentStatus,
+    val phase: AgentExecutionPhase
 )
 ```
 

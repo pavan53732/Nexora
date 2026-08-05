@@ -34,12 +34,14 @@ Client retries MUST preserve the same `idempotencyKey` when resubmitting the sam
 
 | Event | When | Required payload |
 |-------|------|--------|
-| `AgentStatusChanged` | Agent status changes | `{correlationId, agentId, workspaceId, oldStatus, newStatus, version}` |
+| `AgentStatusChanged` | Agent status or execution phase changes | `{correlationId, agentId, workspaceId, oldStatus, newStatus, phase, version}` |
 | `TaskProgress` | Agent completes a step | `{correlationId, taskId, workspaceId, stepIndex, totalSteps, description, version}` |
 | `ToolExecuted` | Agent invokes a tool | `{correlationId, taskId, toolCallId, toolId, durationMs, success, version}` |
 | `AgentError` | Agent encounters a terminal or surfaced error | `{correlationId, agentId, taskId, code, retryability, lifecycleEffect, recoverable, version}` |
 
 Events are at-least-once and MUST be deduplicated by `(entityId, version, transition)`.
+
+- `AgentStatusChanged` events carry both the durable lifecycle state (`oldStatus`/`newStatus`) and the transient execution phase (`phase`).
 
 ## Cancellation
 
