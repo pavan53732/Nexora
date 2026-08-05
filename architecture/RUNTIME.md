@@ -35,19 +35,19 @@ It consists of 17 tightly coordinated modules.
 --------|---------------|----------------|
 | **Planner** | Decomposes goals into tasks, creates execution plans with dependencies. | `com.nexora.app.runtime.planner` |
 | **Executor** | Executes planned tasks sequentially or in parallel, manages execution state. | `com.nexora.app.runtime.executor` |
-| **Workflow Engine** | Manages workflow graph state and step progression. Delegates step execution to the Executor. | `com.nexora.app.runtime.workflow` |
-| **Tool Manager** | Discovers, registers, and invokes tools. Routes tool calls to the correct handler. | `com.nexora.app.runtime.tools` |
+| **Workflow Engine** | Manages workflow graph state and step progression. Delegates step execution to the Executor. | `com.nexora.app.workflows` |
+| **Tool Manager** | Discovers, registers, and invokes tools. Routes tool calls to the correct handler. | `com.nexora.app.tools` |
 | **Context Builder** | Assembles context for AI calls: system prompt, conversation history, file contents, memory. | `com.nexora.app.runtime.context` |
-| **Memory Manager** | Reads/writes to all memory stores. Manages recall and relevance scoring. | `com.nexora.app.runtime.memory` |
+| **Memory Manager** | Reads/writes to all memory stores. Manages recall and relevance scoring. | `com.nexora.app.memory` |
 | **Permission Manager** | Enforces tool permission policies. Prompts user for approval when required. | `com.nexora.app.runtime.permissions` |
-| **Plugin Manager** | Loads, validates, sandboxes, and manages plugin lifecycles. | `com.nexora.app.runtime.plugins` |
+| **Plugin Manager** | Loads, validates, sandboxes, and manages plugin lifecycles. | `com.nexora.app.plugins` |
 | **Scheduler** | Schedules deferred, recurring, and background tasks. | `com.nexora.app.runtime.scheduler` |
 | **Event Bus** | Central publish/subscribe system for inter-module communication. | `com.nexora.app.runtime.events` |
 | **Observability** | Collects metrics, traces, and logs for every runtime operation. | `com.nexora.app.runtime.observability` |
 | **Security Manager** | Enforces sandbox boundaries, resource limits, and access controls. | `com.nexora.app.runtime.security` |
 | **Background Runtime** | Manages long-running agent execution via Android foreground services. Behavior defined in [specs/BACKGROUND_EXECUTION.md](../specs/BACKGROUND_EXECUTION.md). | `com.nexora.app.runtime.background` |
 | **Resource Manager** | Tracks and limits CPU, memory, disk, and network usage per agent/workspace. | `com.nexora.app.runtime.resources` |
-| **Agent Manager** | Creates, configures, and manages multiple agent instances. | `com.nexora.app.runtime.agents` |
+| **Agent Manager** | Creates, configures, and manages multiple agent instances. | `com.nexora.app.agents` |
 | **Skill Registry** | Maintains the skill catalog, agent–skill bindings, and skill→tool mappings; supports skill acquisition (ADR-0007). | `com.nexora.app.runtime.skills` |
 | **Evidence & Validation Engine** | Owns anti-hallucination mechanics as a runtime policy, not a prompt: evidence collection, source attribution, statement classification (verified/derived/estimated/unknown/user-provided), confidence scoring, assumption detection, plan validation, output verification, self-review, completion validation, audit logging (RG/RB rules, FR-EV). | `com.nexora.app.runtime.evidence` |
 
