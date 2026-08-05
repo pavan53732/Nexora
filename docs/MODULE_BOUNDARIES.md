@@ -35,3 +35,5 @@
 
 - **`PermissionManager` (runtime enforcement)** — `com.nexora.app.runtime.permissions`. Evaluates each tool call against the policy hierarchy (global → workspace → agent → tool, see [PermissionModel](../security/PermissionModel.md)), prompts the user for `ASK` decisions, and returns `PermissionResult`. This is the runtime's per-call gate and is exercised on every tool invocation.
 - **`security` module (security services)** — `com.nexora.app.security`. Provides `SecureKeyStore` (Keystore-backed encryption of API keys/secrets), `AuditLogger` (tamper-evident, append-only audit trail), and `PermissionPolicyStore` (persistence of permission decisions). It defines the `PermissionScope`/`PermissionDecision` types and persists policy, but it **does not gate tool execution** — enforcement lives exclusively in the runtime's `PermissionManager`.
+
+> **S3 — Lifecycle specification (Option A):** Lifecycle modules (`Workspace`, `Session`, `Memory`, `TerminalSession`) now have expanded canonical specifications. Module boundaries unchanged; ownership preserved per `docs/CANONICAL_SOURCES.md`.

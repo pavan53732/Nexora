@@ -16,3 +16,7 @@
 ## Notes
 
 The Agent registry remains an inventory document, but it SHOULD stay aligned with the compatibility expectations defined in [standards/Registry-Standard.md](../standards/Registry-Standard.md).
+
+
+## S1 — Dynamic Concurrency Cap Note
+The multi-agent concurrency cap (`MULTI_AGENT_SYSTEM.md` SA-3) uses `min(memory_budget/per_agent_est, cpu_cores, configurable_max)` with default 3 and high-end 8–16. Per-agent concurrency configuration is not added as a separate registry field; the cap is enforced at the workspace/resource level (`Workspace.maxConcurrency`, `ResourceManager`).

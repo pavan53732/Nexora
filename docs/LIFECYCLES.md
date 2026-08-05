@@ -87,3 +87,6 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 **Optimization.** When battery is low, checkpoint frequency is reduced, non-essential work is paused, and the user is notified of the throttle.
 
 **Stop & Restore.** On agent completion, failure, or cancellation the service stops, the notification is removed, and the wake lock is released. After a device restart, `BootReceiver` checks for incomplete executions, restarts `AgentExecutionService`, and agents resume from their last checkpoint.
+
+
+> **S3 — Lifecycle specification (Option A):** All 4 lifecycle files (`WorkspaceLifecycle.md`, `SessionLifecycle.md`, `MemoryLifecycle.md`, `TerminalSessionLifecycle.md`) now contain expanded state definitions, transition rules, and dependency references. Canonical ownership preserved (`docs/CANONICAL_SOURCES.md` unchanged; `ARCHITECTURE.md` references stay valid). `DECISION_LOG.md` DL-027 (S3 lifecycle fill — Option A); `CHANGELOG.md` updated; `FR_NFR_MAPPING.md` references `FR-EL-007` (parallelism), `FR-AS-013` (resume/recovery), `FR-M001` (memory lifecycle), `FR-TE001` (terminal session).

@@ -38,3 +38,21 @@
 ---
 
 *No placeholders remain unmapped. All references point to verified ledger entries.*
+
+
+## S1 — Dynamic Concurrency Cap (SA-3)
+- `FR-MA-003` (parallel coordination) mapped to `MULTI_AGENT_SYSTEM.md` §SA-3.
+- `FR-AS-003` (budget escalation) mapped to concurrency cap budget feed.
+- `FR-S018` (sandbox isolation) mapped to per-sub-agent isolation under cap.
+- `NFR-REL-003` (reliability) preserved — cap prevents overload-induced failures.
+
+## S4 — Terminal Specification (Fully Specified)
+- `FR-TE001`..`005` (terminal execution/lifecycle/tools) → `specs/TERMINAL.md` (§Execution Model, §Lifecycle, §Security).
+- `FR-S002`/`003`/`018` (sandbox/process/workspace isolation) → `specs/TERMINAL.md` (§Security & Isolation) + `security/SandboxPolicy.md`.
+- `FR-AS-002`/`003`/`009`/`013` (heartbeat/budget/degradation/recovery) → `specs/TERMINAL.md` (§Timeout Discipline, §Restore Behavior) + `specs/BACKGROUND_EXECUTION.md`.
+- `FR-T015` (audit trail) → `specs/TERMINAL.md` (§Audit).
+- `FR-EV-002`/`006` (evidence/reviewer) → `specs/TERMINAL.md` (§Evidence & Validation Engine reference).
+- `FR-M012`/`013` (file version/user preferences) → `specs/TERMINAL.md` (§Restore Behavior — checkpoint storage + retention).
+- `FR-A010` (real-time monitoring) → `specs/TERMINAL.md` (§Audit — budget/cap/timeout events).
+- `FR-U005` (agent activity feed) → `specs/TERMINAL.md` (§Boundary Violation Response — denied actions surfaced).
+- `FR-GT-001`..`006` (git grounding) preserved — terminal session does not affect git grounding rules.

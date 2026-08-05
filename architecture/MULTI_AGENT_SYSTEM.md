@@ -192,12 +192,27 @@ Engine (EV), then continues — it never guesses (FR-EV-003).
 
 ### SA-3 — Parallel coordination (FR-MA-003)
 
+Dynamic, resource-budgeted concurrency cap (S1):
+
+```
+max_parallel_agents = min(
+    memory_budget / per_agent_memory_estimate,
+    cpu_cores,
+    configurable_max
+)
+```
+
+- **Default:** 3 sub-agents per workspace.
+- **High-end devices (8+ CPU cores, 8GB+ memory):** cap rises to 8–16.
+- The cap is enforced by the `ResourceManager` (see `RUNTIME.md`) using per-workspace `sandbox_limits.concurrency` (see `models/Workspace.md`).
+- If the cap is reached, additional delegation requests are queued (not rejected) and started when an active sub-agent completes.
+
 | Rule | Value |
 |------|-------|
-| Concurrency limit | Max 3 sub-agents per workspace (configurable) |
-| Fan-out | Independent subtasks (no dependency edge) run in parallel lanes (FR-EL-007); dependent tasks wait |
+| Concurrency limit | Dynamic `min(memory_budget/per_agent_est, cpu_cores, configurable_max)`; default 3; high-end 8–16 |
+| Fan-out | Independent subtasks (no dependency edge) run in parallel lanes (`FR-EL-007`); dependent tasks wait |
 | **File conflict** | A sub-agent holds a **write-lock per file**; a second writer waits, or the coordinator assigns a copy and merges at the end |
-| Sandbox budgets | Workspace limits split across active sub-agents (FR-S018); each sub-agent isolated |
+| Sandbox budgets | Workspace limits split across active sub-agents (`FR-S018`); each sub-agent isolated |
 | Result merging | Coordinator merges outputs + execution histories in dependency order |
 
 ### SA-4 — Inherited rules (FR-MA-004)

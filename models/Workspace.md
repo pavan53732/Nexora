@@ -7,6 +7,9 @@
 # Domain Model: Workspace
 
 ```kotlin
+// S1 — Dynamic concurrency cap: enforced by ResourceManager using
+// min(memory_budget/per_agent_est, cpu_cores, configurable_max)
+// Default: 3; High-end: 8–16 (see MULTI_AGENT_SYSTEM.md SA-3)
 data class Workspace(
     val id: String,
     val ownerId: String,

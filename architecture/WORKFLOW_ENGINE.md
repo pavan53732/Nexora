@@ -91,6 +91,8 @@ The engine uses a **directed acyclic graph (DAG)** for step dependencies:
 5. Pause at approval gates.
 6. **File Write Synchronization (Race Mitigation)**: When independent branches execute in parallel lanes, steps are prohibited from conflicting writes. The engine enforces per-file write locks (matching multi-agent SA-3): if a second parallel step attempts to write to a locked file, it suspends until the lock is released, or is assigned a private workspace overlay copy to be merged at join points.
 
+> **Concurrency cap inheritance:** Parallel lanes inherit the dynamic resource-budgeted cap defined in `MULTI_AGENT_SYSTEM.md` SA-3 (`min(memory_budget/per_agent_est, cpu_cores, configurable_max)`, default 3, high-end 8–16). The Workflow Engine does not enforce the cap directly; it relies on the `ResourceManager` (`RUNTIME.md`) and the Multi-Agent Coordinator (`MULTI_AGENT_SYSTEM.md`) to limit active sub-agent count per workspace.
+
 ## Phase Mapping
 
 - **Phase 2**: Basic linear and parallel workflows.

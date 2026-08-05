@@ -161,3 +161,6 @@ When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked 
 - `docs/TRACEABILITY.md`: Not updated (no new contract — existing `SandboxPolicy.md` and `BROWSER.md` contracts extended with blocked-list; no new validation case needed — `SEC-SBX-001` covers sandbox violations; blocked-list is a documentation-level specification of existing denial behavior).
 
 **Phase mapping:** `Phase 3` (`security/SandboxPolicy.md` — sandbox security is Phase 3 per `docs/ROADMAP.md`); `Phase 4` (`specs/BROWSER.md` — browser automation is Phase 4); no phase change required (documentation update to existing specs).
+
+
+> **S4 — Terminal isolation:** Terminal execution governed by `specs/TERMINAL.md` (§Execution Model, §Security & Isolation). Process isolation (`FR-S002`), workspace isolation (`FR-S018`), sandbox policy (`FULL_ENVIRONMENT.md` `proot`/`chroot` isolation) align with terminal mode (subprocess vs PTY). Working-dir boundary (`models/Workspace.md`), output cap (`FR-AS-003` budget), timeout (`FR-AS-002` heartbeat), and restore audit (`FR-AS-013` exactly-once) enforced. See `docs/DECISION_LOG.md` DL-028.

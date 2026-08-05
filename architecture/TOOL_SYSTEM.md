@@ -162,3 +162,6 @@ class ToolRegistry {
 - **Phase 1**: Define `Tool` interface, `ToolRegistry`, `ToolResult`.
 - **Phase 4**: Implement File System, Terminal, Search, Workspace, Git, Network, Package Manager, Memory tools.
 - **Phase 8**: Plugin-based tool installation.
+
+
+> **S4 — Terminal specification fully specified:** `specs/TERMINAL.md` (§Execution Model, §Session State Machine, §Working-Dir Boundary, §Output Caps, §Timeout Discipline, §Restore Behavior, §Security & Isolation) defines terminal behavior; lifecycle authority `lifecycle/TerminalSessionLifecycle.md` (S3 filled); model fields updated (`models/TerminalSession.md`); registry capabilities updated (`TOOL_MATRIX.md`). See `docs/DECISION_LOG.md` DL-028.

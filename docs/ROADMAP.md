@@ -111,3 +111,6 @@ Plugin SDK, Nexora Hub, tools/providers/agents as plugins.
 | Memory (idle) | Under 256 MB |
 | First-task time | Under 2 minutes |
 | Crash rate | Under 0.1% |
+
+
+> **S2 — MCP Canonical Status:** MCP adapter contract (`architecture/TOOL_SYSTEM.md` §MCP Client + `protocols/Tool-Protocol.md` §MCP Invocation) is now marked canonical in `docs/CANONICAL_SOURCES.md`. Implementation remains `Phase 5` (`specs/AI_PROVIDERS.md`); registry (`TOOL-397`..`402`) and capability matrix (`TOOL_MATRIX.md`) already synchronized (`G4` commit `8e1e937`). No phase timing change required.

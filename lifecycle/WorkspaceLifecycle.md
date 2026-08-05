@@ -11,3 +11,26 @@ Workspace lifecycle is the durable authority for workspace availability and owne
 ## Transition Minimums
 
 Every durable transition SHOULD emit workspace identity, prior state, new state, correlation reference when applicable, version, and timestamp.
+
+## Expanded Lifecycle Specification (S3 — Option A)
+
+### States (detailed)
+- `Created`: Workspace initialized; no active agents; sandbox clean; settings default.
+- `Active`: Workspace has running agents, tasks, or background execution; resources allocated.
+- `Suspended`: Workspace paused (user request or budget exhaustion); state preserved; no active execution.
+- `Archived`: Workspace frozen; read-only; no execution; data retained per retention policy.
+- `Deleted`: Workspace removed; sandbox cleaned; data deleted or archived per policy.
+
+### Transitions
+- `Created → Active`: First agent/task/background execution starts.
+- `Active → Suspended`: User suspends; budget limit reached (`FR-AS-003`); heartbeat failure (`FR-AS-002`).
+- `Suspended → Active`: User resumes; budget restored.
+- `Active/Active → Archived`: User archives; automatic archive after inactivity period (`PERFORMANCE_BUDGET.md`).
+- `Archived → Deleted`: User deletes; automatic deletion after retention period expires.
+
+### Lifecycle Authorities
+- `WorkspaceLifecycle.md` (this file) — canonical state machine.
+- `state-machines/WorkspaceLifecycle.md` — derived state-machine diagram.
+- `docs/LIFECYCLES.md` — overview referencing this document.
+- `docs/MODULE_BOUNDARIES.md` — workspace module boundary (runtime ownership).
+- `models/Workspace.md` — workspace model (`Workspace.md` updated with `maxConcurrency` per S1).

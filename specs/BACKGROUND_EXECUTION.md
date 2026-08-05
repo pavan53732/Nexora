@@ -227,3 +227,6 @@ If the user refuses battery optimization (or OEM denies auto-start and the user 
   `BootReceiver`; scheduler (delayed/recurring via WorkManager); progress events.
 - **Phase 6**: Scheduled workflows (`workflow_schedule`); chained work.
 - **Phase 8**: Plugin-provided scheduled jobs and background extensions.
+
+
+> **S4 — Terminal session restore in background execution:** Background tasks (`run_background`, `terminal_run_background`) reference terminal session state (`TerminalSession.status`, `restoreCheckpoint`, `sessionBufferReplay`) per `specs/TERMINAL.md` (§Restore Behavior). Session restore aligns with `FR-AS-013` (exactly-once recovery) + `FR-M013` (user preferences for persistence). Checkpoint saved on `SUSPENDED` transition; restored on `Restored` transition (`lifecycle/TerminalSessionLifecycle.md` — S3 filled). See `docs/DECISION_LOG.md` DL-028.
