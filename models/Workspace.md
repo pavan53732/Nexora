@@ -30,4 +30,4 @@ enum class WorkspaceStatus {
 
 ## Lifecycle and Workspace Semantics
 
-Workspace lifecycle authority is defined in [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md). Workspace lifecycle governs durable availability and ownership context for contained sessions, tasks, files, tools, and memory operations.
+Workspace lifecycle authority is defined in [lifecycle/WorkspaceLifecycle.md](../lifecycle/WorkspaceLifecycle.md). The canonical state machine is [state-machines/WorkspaceLifecycle.md](../state-machines/WorkspaceLifecycle.md). Workspace lifecycle governs durable availability and ownership context for contained sessions, tasks, files, tools, and memory operations.

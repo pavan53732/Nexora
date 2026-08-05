@@ -1,3 +1,10 @@
+> **Status: DERIVED** for session lifecycle narrative.
+> This document describes session lifecycle in prose. No standalone state-machine
+> companion exists for Session — session state is tracked inline through the
+> runtime module. Any state names used below are descriptive prose, not formal enums.
+>
+> Depends on: [../architecture/RUNTIME.md](../architecture/RUNTIME.md).
+
 # Session Lifecycle Authority — Nexora
 
 ## States

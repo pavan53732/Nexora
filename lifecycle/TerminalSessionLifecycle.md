@@ -1,3 +1,11 @@
+> **Status: DERIVED** for terminal session lifecycle narrative.
+> This document describes terminal session lifecycle in prose. The canonical state
+> machine definition is owned by
+> [../state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md).
+> This file must not be treated as an alternate source of truth for any state enum.
+>
+> Depends on: [../state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md).
+
 # Terminal Session Lifecycle Authority — Nexora
 
 ## States
@@ -14,16 +22,26 @@ Transitions SHOULD emit terminal session identity, workspace identity, sandbox i
 
 ## Expanded Lifecycle Specification (S3 — Option A)
 
-### States
-`Created`, `Active`, `Background`, `Suspended`, `Restored`, `Terminated`
+Narrative reference for the canonical state machine at
+[../state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md).
+States defined there: `Created`, `Attached`, `Running`, `Detached`, `Closed`, `Failed`.
+
+### Canonical State Alignment
+
+The states and transitions below are descriptive prose mirroring the canonical
+state machine. In case of discrepancy,
+`state-machines/TerminalSessionLifecycle.md` wins.
+
+#### States (from canonical source)
+`Created`, `Attached`, `Running`, `Detached`, `Closed`, `Failed`
 
 ### Transitions
-- `Created → Active`: Terminal session spawned (`FR-TE001`); process isolation activated (`FR-S002`).
-- `Active → Background`: User backgrounds session (`FR-T011` scheduling; `FR-AS-002` heartbeat continues).
-- `Background → Active`: User brings session to foreground.
-- `Active/Background → Suspended`: Session paused; state preserved (`FR-AS-013`); process may be frozen (not killed unless budget exceeded `FR-AS-003`).
-- `Suspended → Restored`: Session resumed from preserved state (checkpoint + terminal history); exactly-once recovery (`NFR-REL-012`).
-- `Restored/Active/Background → Terminated`: User kills session (`FR-TE004`); process cleaned; sandbox released (`FR-S018`).
+- `Created → Attached`: PTY/spawned process bound; session ready for I/O.
+- `Attached → Running`: Command or interactive input accepted.
+- `Attached / Running → Detached`: Process stays alive; disconnected from foreground I/O.
+- `Detached → Attached`: Reattached; process still alive.
+- `Attached / Running / Detached → Closed`: Process termination complete; resources released.
+- `Attached / Running / Detached → Failed`: Unrecoverable error (crash, sandbox violation).
 
 ### Dependencies (S4 — terminal spec interdependency)
 - `specs/TERMINAL.md` — terminal execution model (PTY vs subprocess, session state, working-dir boundary, output caps, timeouts, restore).

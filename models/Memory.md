@@ -49,7 +49,7 @@ enum class MemoryStatus {
 
 ## Lifecycle and Execution Semantics
 
-Memory lifecycle authority is defined in [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md). Memory writes are durable records, not transient context projections. Memory retrieval, scoring, and replay operations SHOULD preserve `correlationId` where available so retrieved evidence can be tied back to the originating execution path.
+Memory lifecycle authority is defined in [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md). The canonical state machine is [state-machines/MemoryLifecycle.md](../state-machines/MemoryLifecycle.md). Memory writes are durable records, not transient context projections. Memory retrieval, scoring, and replay operations SHOULD preserve `correlationId` where available so retrieved evidence can be tied back to the originating execution path.
 
 ### Memory Storage Tiers and Pruning
 

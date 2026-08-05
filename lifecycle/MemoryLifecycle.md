@@ -1,3 +1,11 @@
+> **Status: DERIVATIVE** for memory lifecycle narrative.
+> **The canonical state machine definition is owned by
+> [../state-machines/MemoryLifecycle.md](../state-machines/MemoryLifecycle.md).**
+> This file describes the memory lifecycle in prose; it MUST NOT redefine, rename,
+> or subset any state enum from the canonical source.
+>
+> Depends on: [../state-machines/MemoryLifecycle.md](../state-machines/MemoryLifecycle.md).
+
 # Memory Lifecycle Authority — Nexora
 
 ## States
@@ -14,15 +22,26 @@ Transitions SHOULD emit memory identity, scope, provenance/correlation reference
 
 ## Expanded Lifecycle Specification (S3 — Option A)
 
-### States
-`Created`, `Active`, `Summarized`, `Archived`, `Restored`, `Pruned`
+Narrative reference for the canonical state machine at
+[../state-machines/MemoryLifecycle.md](../state-machines/MemoryLifecycle.md).
+States defined there: `Recorded`, `Indexed`, `Retrieved`, `Retained`, `Expired`, `Deleted`.
+
+### Canonical State Alignment
+
+The states and transitions below are descriptive prose mirroring the canonical
+state machine. In case of discrepancy, `state-machines/MemoryLifecycle.md` wins.
+
+#### States (from canonical source)
+`Recorded`, `Indexed`, `Retrieved`, `Retained`, `Expired`, `Deleted`
 
 ### Transitions
-- `Created → Active`: Memory entry written; trust tag applied (`FR-M001`).
-- `Active → Summarized`: Token budget exceeded (`FR-CM-002`); progressive summarization triggered (`FR-CM-003`).
-- `Summarized → Archived`: Entry retained but compressed; retrieval requires reconstruction (`FR-CM-007`).
-- `Archived → Restored`: Full entry reconstructed from checkpoint + retrieval layer (`FR-AS-013`).
-- `Active/Archived → Pruned`: Entry deleted (stale, low relevance, or user-requested); audit logged (`FR-M010`).
+- `Recorded → Indexed`: Embedding/vector generated; searchable.
+- `Indexed → Retrieved`: Surfaced into a context/recall segment.
+- `Indexed / Retrieved → Retained`: Within retention policy; durable.
+- `Retrieved → Indexed`: Content changed; reindexed.
+- `Retained → Expired`: Lifetime/quota reached; pending eviction.
+- `Expired → Deleted`: Physical removal from store.
+- `Recorded / Indexed / Retrieved / Expired → Deleted`: Deleted at any non-terminal point.
 
 ### Dependencies
 - `specs/CONTEXT_MANAGEMENT.md` (§memory, summarization, resume).

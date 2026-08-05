@@ -1,3 +1,10 @@
+> **Status: DERIVED** for workspace lifecycle narrative.
+> This document describes workspace lifecycle in prose. The canonical state machine
+> definition is owned by [../state-machines/WorkspaceLifecycle.md](../state-machines/WorkspaceLifecycle.md).
+> This file must not be treated as an alternate source of truth for any state enum.
+>
+> Depends on: [../state-machines/WorkspaceLifecycle.md](../state-machines/WorkspaceLifecycle.md).
+
 # Workspace Lifecycle Authority — Nexora
 
 ## States
@@ -30,7 +37,8 @@ Every durable transition SHOULD emit workspace identity, prior state, new state,
 
 ### Lifecycle Authorities
 - `WorkspaceLifecycle.md` (this file) — canonical state machine.
-- `state-machines/WorkspaceLifecycle.md` — derived state-machine diagram.
+- `state-machines/WorkspaceLifecycle.md` — canonical state machine (Created/Active/Suspended/Archived/Deleted).
+- this file — thin lifecycle authority / narrative reference.
 - `docs/LIFECYCLES.md` — overview referencing this document.
 - `docs/MODULE_BOUNDARIES.md` — workspace module boundary (runtime ownership).
 - `models/Workspace.md` — workspace model (`Workspace.md` updated with `maxConcurrency` per S1).

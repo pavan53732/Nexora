@@ -36,7 +36,7 @@ enum class TerminalSessionStatus {
 
 ## Terminal Session Semantics
 
-Terminal session lifecycle authority is defined in [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md). Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state.
+Terminal session lifecycle authority is defined in [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md). The canonical state machine is [state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md). Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state.
 
 
 > **S4 — Terminal specification fully specified:** Execution model (PTY vs subprocess), working-dir boundary, output caps, timeout discipline, restore behavior, isolation rules. See `specs/TERMINAL.md` (§Execution Model, §Security & Isolation). Lifecycle authority: `lifecycle/TerminalSessionLifecycle.md` (S3 — filled). Registry sync: `registry/TOOLS.md` (`TOOL-020`..`023`) + `TOOL_MATRIX.md` (terminal capabilities).
