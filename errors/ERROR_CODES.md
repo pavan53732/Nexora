@@ -192,6 +192,35 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 
 ---
 
+---
+
+## Public Operation to Canonical Error Mapping Matrix
+
+To eliminate responsibility gaps and satisfy Critical Finding 2, every public interface, API, and SDK operation is mapped to its canonical error-handling and recovery behaviors. Implementations MUST enforce these mapping constraints end-to-end.
+
+| Service / Interface | Operation | Canonical Code | Category | Idempotency Rule | Retryability Strategy | Subsystem Lifecycle Effect | Recovery Owner & Action |
+|---|---|---|---|---|---|---|---|
+| **`AgentApi`** | `registerAgent` | `NXR-3002` | Server | Safe (Idempotent) | Safe | `NO_CHANGE` | Registry: validate manifest/incompatible SDK; reject if duplicate |
+| | `startTask` | `NXR-1008` | Client | Safe (Idempotent Key) | Safe | `NO_CHANGE` | User Action: prompt configuration of active provider profile |
+| | `startTask` | `NXR-7001` | Server | Unsafe | Conditional (storage-full) | Transition to `FAILED` | Sandbox: wipe temp / clean up workspace caches, retry sandbox creation |
+| | `cancelTask` | `NXR-3010` | Client | Safe (Idempotent) | Safe | Transition to `CANCELLED` | Orchestration: commit cancel projection, release CPU wake lock & child tasks |
+| | `getTaskStatus`| `NXR-1009` | Client | Safe | Safe | `NO_CHANGE` | Storage: return standard empty/404 projection |
+| **`ToolManager`** | `executeTool` | `NXR-2001` | Client | Safe | Never | `NO_CHANGE` | Agent Runtime: report tool not found so agent can self-correct parameters |
+| | `executeTool` | `NXR-2002` | Infrastructure | Safe (Idempotent Key) | Conditional (retry counts) | `NO_CHANGE` | Sandbox: kill process, return partial result or trigger exponential backoff |
+| | `executeTool` | `NXR-2003` | Client | Safe (Idempotent Key) | Conditional (User consent)| Transition to `WAITING_APPROVAL` | Security: prompt user for approval gate, resume on approve, deny on deny |
+| | `executeTool` | `NXR-2004` | Server | Unsafe | Conditional (retries) | `NO_CHANGE` | Developer Action: log stack trace, run agent bounded self-correction loop |
+| | `executeTool` | `NXR-7004` | Infrastructure | Unsafe | Never | Transition to `FAILED` | Sandbox: terminate offending process, record policy breach in audit |
+| **`ProviderManager`**| `complete` / `stream` | `NXR-4003` | Client | Safe | Never | `NO_CHANGE` | User Action: prompt to update API credentials in settings |
+| | | `NXR-4004` | Infrastructure | Safe | Conditional (rate-limit backoff)| `NO_CHANGE` | Provider Layer: parse `Retry-After` header, delay request execution |
+| | | `NXR-4009` | Infrastructure | Safe | Safe (Automatic fallback) | `NO_CHANGE` | Provider Layer: switch to next Healthy provider in priority queue, emit alert |
+| **`PluginManager`** | `installPlugin` | `NXR-6002` | Client | Safe | Never | Transition to `FAILED` | Plugin System: checksum/signature check failed, delete partial files, notify user |
+| | `activatePlugin`| `NXR-6003` | Server | Unsafe | Conditional (re-check SDK) | Rollback to `INACTIVE` | Plugin System: rollback exported capability registrations to prior state |
+| **`WorkspaceManager`**| `createWorkspace` | `NXR-7001` | Server | Unsafe | Safe | `NO_CHANGE` | Platform Infrastructure: clear storage cache, repair directory layout |
+| | `deleteWorkspace` | `NXR-7007` | Server | Safe (Idempotent) | Conditional | Transition to `DELETED` | Sandbox: queue deferred background purge of workspace directories |
+| **`WorkflowEngine`** | `executeWorkflow` | `NXR-1002` | Server | Unsafe | Safe | Transition to `FAILED` | Orchestration: cancel downstream tasks, release locks, report failure |
+
+---
+
 ## Error Handling Best Practices (Kotlin)
 
 ### 1. Sealed Class Hierarchy

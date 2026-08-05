@@ -10,283 +10,283 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 
 | Requirement ID | Source | Coverage Status | Owner | Primary | Validation | Evidence |
 |---|---|---|---|---|---|---|
-| `FR-W001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-W010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A014` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-A015` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-T013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL014` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TL015` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-P013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M014` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-M015` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S014` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S015` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S016` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S017` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S018` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-PL010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-U011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S019` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S020` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S021` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S022` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S023` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S024` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S025` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S026` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-S028` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TE001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TE002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TE003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TE004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-TE005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-010` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-011` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-012` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EL-013` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-SK-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-SK-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-SK-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-SK-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-SK-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-WS-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-WS-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-WS-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-WS-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-WS-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-CM-008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-007` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-008` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AS-009` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GT-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GT-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GT-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GT-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GT-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GT-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GND-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GND-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GND-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GND-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GND-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-GND-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-RN-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-RN-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-RN-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-RN-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-RN-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-RN-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EV-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EV-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EV-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EV-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EV-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-EV-006` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-MA-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-MA-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-MA-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-MA-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-MA-005` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AG-001` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AG-002` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AG-003` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `FR-AG-004` | `requirements/FR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
+| `FR-W001` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W002` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W003` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W004` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W005` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W009` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-W010` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-A001` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A002` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A003` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A004` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A005` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A006` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A007` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A008` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A009` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A010` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A011` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A012` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A013` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A014` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-A015` | `requirements/FR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `IT-AGENT-001` | `evidence/integration/IT-AGENT-001/` |
+| `FR-T001` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T002` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T003` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T004` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T005` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T006` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T007` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T008` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T009` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T010` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T011` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T012` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-T013` | `requirements/FR.md` | MAPPED | Orchestration | `models/Task.md` | `IT-CONTRACT-001` | `evidence/integration/IT-CONTRACT-001/` |
+| `FR-TL001` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL002` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL003` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL004` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL005` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL006` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL007` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL008` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL009` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL010` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL011` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL012` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL013` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL014` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL015` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-P001` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P002` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P003` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P004` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P005` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P006` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P007` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P008` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P009` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P010` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P011` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P012` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P013` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-M001` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M002` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M003` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M004` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M005` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M006` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M007` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M008` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M009` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M010` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M011` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M012` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M013` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M014` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-M015` | `requirements/FR.md` | MAPPED | Memory System | `architecture/MEMORY_SYSTEM.md` | `IT-MEMORY-001` | `evidence/integration/IT-MEMORY-001/` |
+| `FR-S001` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S002` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S003` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S004` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S005` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S006` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S007` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S008` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S009` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S010` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S011` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S012` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S013` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S014` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S015` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S016` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S017` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S018` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-PL001` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL002` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL003` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL004` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL005` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL006` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL007` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL008` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL009` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-PL010` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-U001` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U002` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U003` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U004` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U005` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U006` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U007` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U008` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U009` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U010` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U011` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-S019` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S020` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S021` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S022` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S023` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S024` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S025` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S026` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S028` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-TE001` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TE002` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TE003` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TE004` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TE005` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-EL-001` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-002` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-003` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-004` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-005` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-006` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-007` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-008` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-009` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-010` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-011` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-012` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-EL-013` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `FR-SK-001` | `requirements/FR.md` | MAPPED | Agent Runtime | `models/Skill.md` | `UT-AG-001` | `evidence/unit/UT-AG-001/` |
+| `FR-SK-002` | `requirements/FR.md` | MAPPED | Agent Runtime | `models/Skill.md` | `UT-AG-001` | `evidence/unit/UT-AG-001/` |
+| `FR-SK-003` | `requirements/FR.md` | MAPPED | Agent Runtime | `models/Skill.md` | `UT-AG-001` | `evidence/unit/UT-AG-001/` |
+| `FR-SK-004` | `requirements/FR.md` | MAPPED | Agent Runtime | `models/Skill.md` | `UT-AG-001` | `evidence/unit/UT-AG-001/` |
+| `FR-SK-005` | `requirements/FR.md` | MAPPED | Agent Runtime | `models/Skill.md` | `UT-AG-001` | `evidence/unit/UT-AG-001/` |
+| `FR-WS-001` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-WS-002` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-WS-003` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-WS-004` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-WS-005` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-CM-001` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-002` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-003` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-004` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-005` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-AS-001` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-002` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-003` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-004` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-005` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-009` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-GT-001` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
+| `FR-GT-002` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
+| `FR-GT-003` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
+| `FR-GT-004` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
+| `FR-GT-005` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
+| `FR-GT-006` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
+| `FR-GND-001` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-GND-002` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-GND-003` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-GND-004` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-GND-005` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-GND-006` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-RN-001` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-002` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-003` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-004` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-005` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-RN-006` | `requirements/FR.md` | MAPPED | Reasoning | `specs/CONTEXT_MANAGEMENT.md` | `E2E-RN-001` | `evidence/e2e/E2E-RN-001/` |
+| `FR-EV-001` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-EV-002` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-EV-003` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-EV-004` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-EV-005` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-EV-006` | `requirements/FR.md` | MAPPED | Grounding | `specs/CONTEXT_MANAGEMENT.md` | `E2E-GND-001` | `evidence/e2e/E2E-GND-001/` |
+| `FR-MA-001` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MA-002` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MA-003` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MA-004` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-MA-005` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-AG-001` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-AG-002` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-AG-003` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-AG-004` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 
 ## Non-Functional Requirements
 
 | Requirement ID | Source | Coverage Status | Owner | Primary | Validation | Evidence |
 |---|---|---|---|---|---|---|
-| `NFR-PERF-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-006` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-007` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-008` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-009` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PERF-010` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-006` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-007` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-008` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-009` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-006` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-007` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-008` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-009` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-010` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-011` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-012` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SEC-013` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-010` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-011` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-012` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-REL-013` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-USE-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-USE-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-USE-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-USE-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-USE-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-USE-006` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-MAINT-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-MAINT-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-MAINT-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-MAINT-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-MAINT-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SCALE-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SCALE-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SCALE-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SCALE-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-SCALE-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-COMPAT-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-COMPAT-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-COMPAT-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-COMPAT-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PORT-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-PORT-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-001` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-002` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-003` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-004` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-005` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-006` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
-| `NFR-ENV-007` | `requirements/NFR.md` | UNMAPPED | TBD | TBD | TBD | TBD |
+| `NFR-PERF-001` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-002` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-003` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-004` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-005` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-006` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-007` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-008` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-009` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-PERF-010` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-REL-001` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-002` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-003` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-004` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-005` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-006` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-007` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-008` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-009` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-SEC-001` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-002` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-003` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-004` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-005` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-006` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-007` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-008` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-009` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-010` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-011` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-012` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-013` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-REL-010` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `NFR-REL-011` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `NFR-REL-012` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `NFR-REL-013` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `NFR-USE-001` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-USE-002` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-USE-003` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-USE-004` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-USE-005` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-USE-006` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `NFR-MAINT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-003` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-004` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-005` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-SCALE-001` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-SCALE-002` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-SCALE-003` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-SCALE-004` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-SCALE-005` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-COMPAT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-COMPAT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-COMPAT-003` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-COMPAT-004` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-PORT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `docs/ENVIRONMENT_SETUP.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-PORT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `docs/ENVIRONMENT_SETUP.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-001` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-002` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-003` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-004` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-005` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-006` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-ENV-007` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 
 ## Completion Rule
 
