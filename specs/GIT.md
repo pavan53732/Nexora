@@ -30,7 +30,13 @@ Full Git support inside the sandbox. Every workspace can have a Git repository. 
 | Diff | `git_diff` | View file differences. |
 | Status | `git_status` | Show working tree status. |
 | Stash | `git_stash` | Stash and unstash changes. |
-| Remote | `git_remote` | Manage remotes. |
+| Fetch | `git_fetch` | Download objects and refs from another repository. |
+| Remote | `git_remote` | Manage set of tracked repositories. |
+| Tag | `git_tag` | Create, list, delete or verify a tag object signed with GPG. |
+| Reset | `git_reset` | Reset current HEAD to the specified state. |
+| Revert | `git_revert` | Revert some existing commits. |
+| Clean | `git_clean` | Remove untracked files from the working tree. |
+| Blame | `git_blame` | Show what revision and author last modified each line of a file. |
 
 ## Grounding Rules (anti-hallucination)
 
