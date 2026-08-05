@@ -89,6 +89,7 @@ The engine uses a **directed acyclic graph (DAG)** for step dependencies:
 3. Wait for dependencies before executing dependent steps.
 4. Apply error strategy on failures.
 5. Pause at approval gates.
+6. **File Write Synchronization (Race Mitigation)**: When independent branches execute in parallel lanes, steps are prohibited from conflicting writes. The engine enforces per-file write locks (matching multi-agent SA-3): if a second parallel step attempts to write to a locked file, it suspends until the lock is released, or is assigned a private workspace overlay copy to be merged at join points.
 
 ## Phase Mapping
 

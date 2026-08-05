@@ -116,6 +116,43 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 
 ---
 
+## Comprehensive Security Controls & Threat-to-Test Mapping Ledger
+
+To satisfy High Finding 11 and ensure complete cryptographic, permission, and isolation coverage, every identified STRIDE threat is mapped to its core mitigating control, active enforcement point, expected containment behavior, and validation test case.
+
+| Threat ID | STRIDE Category | Mitigating Control & Specification Source | Platform Enforcement Point | Expected Denial / Containment Behavior | Validation Case ID |
+|---|---|---|---|---|---|
+| **TM-001** | Spoofing | JWK/APK signature check (`PluginLifecycle.md`) | `PluginManager.install` | Block ClassLoader load; raise `NXR-6009`; delete payload | `SEC-PLUGIN-001` |
+| **TM-002** | Spoofing | Keystore AES hardware-backed transience (`ProviderSDK.md` / `SandboxPolicy.md`) | `SecureKeyStore` wrapper | Plaintext keys never persist on disk; unreadable via adb dumps | `SEC-SECRET-001` |
+| **TM-003** | Spoofing | TLS 1.3 pinning (`Provider-API.md`) | `SanitizingHttpClient` | Block socket on certificate mismatch or untrusted root | `SEC-FLOW-001` |
+| **TM-004** | Spoofing | Workspace ID token verification (`MULTI_AGENT_SYSTEM.md`) | `EventBus` boundary | Inter-agent messages outside caller's workspace scope are dropped | `SEC-PERM-001` |
+| **TM-005** | Tampering | Post-install hash checking (`PluginLifecycle.md`) | `PluginManager.load` | Hash mismatch halts load; raise `NXR-6002`; disable plugin | `SEC-PLUGIN-001` |
+| **TM-006** | Tampering | Canonical path validation (`SandboxPolicy.md`) | `SandboxFileSystem.resolve` | Block paths with parent traversal (`../`); throw `NXR-7005` | `SEC-SBX-001` |
+| **TM-007** | Tampering | Private sandbox boundaries (`FULL_ENVIRONMENT.md`) | Android OS File System | Non-root processes or other apps cannot read app-private data | `SEC-SBX-001` |
+| **TM-008** | Tampering | Write-intent verification log (`MEMORY_SYSTEM.md`) | `MemoryManager` WAL | Out-of-order writes are rejected on hash chain validation | `SEC-SECRET-001` |
+| **TM-009** | Repudiation | Mandatory audit logging (`SandboxPolicy.md`) | `ToolManager.execute` | Every tool execution is recorded atomically to immutable Room DB | `SEC-PERM-001` |
+| **TM-010** | Repudiation | Immutable permission grant logs (`PermissionModel.md`) | `PermissionManager.decide` | User grants are written atomically to `permission_audit_log` | `SEC-PERM-002` |
+| **TM-011** | Repudiation | Append-only plugin audit trails (`protocols/Plugin-Protocol.md`) | `PluginManager` | Active operations and DEX execution are written to Room | `SEC-PLUGIN-001` |
+| **TM-012** | Info Disclosure | Isolated bounds and signature perms (`SECURITY_MODEL.md`) | Android IPC boundary | Block external binders; expose only bound services with sig perms | `SEC-SBX-001` |
+| **TM-013** | Info Disclosure | ProGuard/R8 symbol stripping (`standards/Security-Standard.md`) | Build Pipeline | Strip log calls containing sensitive keys in release builds | `SEC-SECRET-001` |
+| **TM-014** | Info Disclosure | Log level gating and prompt sanitization (`ProviderSDK.md`) | `SanitizingHttpClient` | Redact API keys and prompt bodies from standard Logcat | `SEC-SECRET-001` |
+| **TM-015** | Info Disclosure | Disable app backup manifest configuration (`specs/WORKSPACE.md`) | Android Manifest | `allowBackup=false` prevents adb extraction of workspace data | `SEC-SBX-001` |
+| **TM-016** | Info Disclosure | Isolated classloaders per plugin (`PluginSDK.md`) | `DexClassLoader` | Plugins cannot read host memory or sibling workspace handles | `SEC-PLUGIN-001` |
+| **TM-017** | DoS | Process spawn limiting (`SandboxPolicy.md`) | `ProcessManager` | Spawn exceeding 8 concurrent processes returns `NXR-7002` | `SEC-DOS-001` |
+| **TM-018** | DoS | Workspace disk quotas (`SandboxPolicy.md`) | `SandboxFileSystem.write` | Block writes exceeding 500 MB quota; throw `NXR-7003` | `SEC-DOS-002` |
+| **TM-019** | DoS | Aggregate workspace RSS memory monitoring (`SandboxPolicy.md`) | `ProcessManager` watchdog | Kill process tree exceeding 256 MB aggregate limit; raise `NXR-7004` | `SEC-DOS-002` |
+| **TM-020** | DoS | Agent creation rate limits (`MULTI_AGENT_SYSTEM.md`) | `AgentManager` | Block spawns exceeding 5 concurrent agents; drop on bus flood | `SEC-DOS-001` |
+| **TM-021** | DoS | Android Doze & WorkManager handoffs (`specs/BACKGROUND_EXECUTION.md`) | `AgentExecutionService` | Release wake lock on low battery; hand off to WorkManager | `SEC-DOS-001` |
+| **TM-022** | Privilege Elev | Classloader-level file IO blocks (`SandboxPolicy.md`) | `SandboxFileSystem` | Tool/plugin calls to raw `java.io.File` are blocked; require VFS | `SEC-SBX-001` |
+| **TM-023** | Privilege Elev | User-approved scope review at install (`PermissionModel.md`) | `PluginManager.install` | Only user-granted scopes are accessible; others blocked | `SEC-PLUGIN-001` |
+| **TM-024** | Privilege Elev | Per-step individual permission validation (`PermissionModel.md`) | `PermissionManager.check` | No implicit inheritance across tool chains; block with `NXR-2003` | `SEC-PERM-001` |
+| **TM-025** | Privilege Elev | Schema-enforced tool call validation (`Tool-API.md`) | `ToolManager.resolve` | Unregistered tool names are rejected with `NXR-2001` | `SEC-PERM-001` |
+| **TM-026** | Info Disclosure | Active profile tagging and validation (`Provider-API.md`) | `ProviderRouter` | Block completion requests to unassigned profiles; throw `NXR-4010` | `SEC-FLOW-001` |
+| **TM-027** | Info Disclosure | Key alias isolation in Keystore (`ProviderSDK.md`) | `SecureKeyStore` | Provider adapters receive alias tokens; direct key read is denied | `SEC-FLOW-001` |
+| **TM-028** | Privilege Elev | Base URL network confinement (`ProviderSDK.md`) | `PermissionManager` | Intercept calls to unapproved endpoints; throw `NXR-7005` | `SEC-NET-001` |
+
+---
+
 ## Summary
 
 | Category | Total | Mitigated | Partial | Open |

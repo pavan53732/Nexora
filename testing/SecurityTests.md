@@ -24,6 +24,10 @@ Security tests validate permission mediation, sandbox isolation, secret handling
 - `SEC-SECRET-001` secret leakage through provider/plugin boundaries
 - `SEC-PLUGIN-001` permission bypass during plugin activation
 - `SEC-PERM-002` invalid approval or cancellation sequencing
+- `SEC-DOS-001` fork bomb and process limiting
+- `SEC-DOS-002` disk and memory quota exhaustion
+- `SEC-FLOW-001` cross-provider credential leakage
+- `SEC-NET-001` network egress domain bypass
 
 ## Run Schedule
 

@@ -143,6 +143,16 @@ These are **hard platform constraints** for the target stack (minSdk 34):
    **6 hours per 24 h**; agent runs longer than that must hand off to WorkManager
    (chunked execution with checkpoints) or a **user-initiated data transfer job**
    (API 30+, `USER_INITIATED` / expedited work) that the user explicitly starts.
+
+   #### Preemptive Handoff Protocol
+   To prevent Android 15 from forcefully killing the `AgentExecutionService` after its 6-hour runtime cap (which would abort the agent mid-task and risk database corruption), Nexora implements a preemptive **Handoff Protocol** managed by the `BackgroundExecutionWatchdog`:
+   * **Watchdog Timer**: The `BackgroundExecutionWatchdog` tracks the exact elapsed active time of the `AgentExecutionService`.
+   * **Preemptive Suspension (5.5h mark)**: At exactly 5 hours and 30 minutes of continuous runtime, the watchdog triggers a suspension signal.
+   * **Graceful Checkpoint**: The active `AgentLoop` intercepts this signal, completes its current step iteration (planning, tool call, or reasoning pass), and transactionally saves a complete, integrity-verified execution checkpoint.
+   * **Service Teardown**: The watchdog stops `AgentExecutionService` cleanly, releasing its CPU wake locks and removing its persistent notification.
+   * **WorkManager Handoff**: The watchdog immediately schedules a `OneTimeWorkRequest` via `WorkManager` with the constraints: `NetworkType.CONNECTED` and `BatteryNotLow`. It passes the `executionId` and `correlationId` in the input data.
+   * **Task Resumption**: The WorkManager worker loads the checkpoint and resumes execution in a chunked background task, ensuring the agent loop continues without system-enforced interruption or crash events.
+
 3. **Doze / App Standby** — WorkManager defers non-expedited work; expedited jobs are
    used only for genuinely user-visible time-sensitive work; the foreground service
    holds a CPU wake lock only while actively executing (within Android's limits).
