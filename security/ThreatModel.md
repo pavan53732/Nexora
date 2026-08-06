@@ -123,6 +123,21 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-036 | Listener DoS / connection exhaustion on pipe transport ports | Pipe Transport | Medium | Bounded retry (3 attempts, exponential backoff, `NFR-REL-003`); pipe timeout (30 s connect, 120 s task-ack); `Degraded` → `Disconnected` state machine (`specs/PIPES.md` §5, §9; `FR-MI-009`) | Partial |
 | TM-037 | LAN metadata leakage — device names, workspace counts exposed via mDNS | Pipe Discovery | Low | TXT records carry only non-sensitive fields (`instanceId`, `fingerprint`, `minContractVersion`, nonce); no workspace names, tool counts, or provider identifiers advertised (`specs/PIPES.md` §3, §4; `FR-MI-001`) | Open |
 
+### Inference Streaming and Reasoning Artifacts
+
+| ID | Threat | Component | Severity | Mitigation | Status |
+|----|--------|-----------|----------|------------|--------|
+| TM-038 | Forged terminal event marks a partial provider response successful | Provider Stream | Critical | Authenticated stream identity, monotonic sequence, exactly-one terminal state machine | Partial |
+| TM-039 | Sequence replay/gap injects, duplicates, or removes streamed content | Provider Stream | High | `(streamId, sequence)` validation, deduplication, gap recovery/failure | Partial |
+| TM-040 | Tool argument fragments execute before complete validation | Tool/Provider Boundary | Critical | `ToolCallCommitted` barrier; incomplete fragments discarded | Partial |
+| TM-041 | Stream action cannot be attributed after reconnect/failover | Observability | High | request/stream/priorStream/correlation IDs in append-only audit | Partial |
+| TM-042 | Raw reasoning artifact leaks credentials, system prompts, or private reasoning | Context/Memory | Critical | Redacted ReasoningSummary only; raw private trace excluded from persistence/export | Partial |
+| TM-043 | Resume token theft permits stream/session continuation | Provider Stream | High | Opaque short-lived profile-scoped tokens; redacted logs; secure storage | Partial |
+| TM-044 | Cross-provider failover sends context to an ineligible provider | Provider Router | Critical | RoutePlan capability/privacy constraints; new stream lineage; provider isolation | Partial |
+| TM-045 | Oversized/high-frequency chunks exhaust memory or UI | Provider Stream | High | Event-size cap, bounded channel, semantic no-drop policy, overflow failure | Partial |
+| TM-046 | Slow consumer causes unbounded buffering and app failure | Provider Stream | High | High/low watermarks, producer suspension, safe delta coalescing | Partial |
+| TM-047 | Unbounded reasoning/critic loops exhaust cost, battery, or time | Agent Reasoning | High | Persisted ReasoningPolicy budgets and FR-AS-003 escalation | Partial |
+
 ---
 
 ## Comprehensive Security Controls & Threat-to-Test Mapping Ledger
@@ -168,6 +183,16 @@ To satisfy High Finding 11 and ensure complete cryptographic, permission, and is
 | **TM-035** | DoS | Broadcast rate limiting + data-not-instruction rule (`specs/PIPES.md` §7; `FR-MI-007`) | `PipeManager.broadcast` | Rate limit 1/s burst 5; `instance:broadcast` `DENY` default; recipients treat broadcasts as data (`FR-CM-006`) | `SEC-DOS-001` |
 | **TM-036** | DoS | Bounded reconnect + pipe timeout discipline (`specs/PIPES.md` §5, §9; `NFR-REL-003`) | `PipeTransport` | 3 retry attempts with exponential backoff; 30 s connect / 120 s task-ack deadlines; `Degraded` → `Disconnected` state machine | `SEC-DOS-001` |
 | **TM-037** | Info Disclosure | Minimal mDNS TXT record set (`specs/PIPES.md` §3, §4; `FR-MI-001`) | `NsdManager` service record | Non-sensitive fields only (instanceId, fingerprint, contract version, nonce); no workspace names or provider identifiers advertised | `SEC-NET-001` |
+| **TM-038** | Spoofing | ProviderStreamLifecycle terminal invariant | `StreamValidator` | Reject terminal with invalid identity/sequence or second terminal | `SEC-STREAM-001` |
+| **TM-039** | Tampering | Monotonic stream sequence and replay protection | `StreamValidator` | Deduplicate replay; recover/fail on gap | `SEC-STREAM-002` |
+| **TM-040** | Tampering | ToolCallCommitted assembly barrier | `InferenceAssembler` | Discard incomplete/invalid fragments; no Tool invocation | `SEC-STREAM-003` |
+| **TM-041** | Repudiation | Stream/request/lineage/correlation audit fields | `Observability` | Preserve reconnect/failover attribution | `SEC-STREAM-004` |
+| **TM-042** | Info Disclosure | ReasoningSummary redaction and retention | `ContextBuilder` / `MemoryManager` | Reject raw private reasoning persistence/export | `SEC-STREAM-005` |
+| **TM-043** | Info Disclosure | Opaque scoped resume tokens | `ProviderRouter` | Reject expired/mismatched token; redact logs | `SEC-STREAM-006` |
+| **TM-044** | Info Disclosure | ProviderRoutePlan privacy/capability constraints | `ProviderRouter` | Block ineligible failover; new lineage only | `SEC-STREAM-007` |
+| **TM-045** | DoS | Event-size cap and bounded channel | `ProviderAdapter` | Fail `NXR-4013`; no unbounded allocation | `SEC-STREAM-008` |
+| **TM-046** | DoS | Backpressure high/low watermarks | `StreamProcessor` | Suspend/coalesce safe deltas; preserve semantic events | `SEC-STREAM-009` |
+| **TM-047** | DoS | Bounded ReasoningPolicy | `AgentLoop` | Stop/clarify/escalate at call/token/time/cost budget | `SEC-STREAM-010` |
 
 ---
 
@@ -175,10 +200,10 @@ To satisfy High Finding 11 and ensure complete cryptographic, permission, and is
 
 | Category | Total | Mitigated | Partial | Open |
 |----------|-------|-----------|---------|------|
-| Spoofing | 7 | 5 | 2 | 0 |
-| Tampering | 6 | 2 | 2 | 2 |
-| Repudiation | 3 | 2 | 1 | 0 |
-| Information Disclosure | 8 | 4 | 4 | 0 |
-| Denial of Service | 7 | 0 | 7 | 0 |
+| Spoofing | 8 | 3 | 5 | 0 |
+| Tampering | 8 | 1 | 6 | 1 |
+| Repudiation | 4 | 2 | 2 | 0 |
+| Information Disclosure | 11 | 4 | 6 | 1 |
+| Denial of Service | 10 | 0 | 10 | 0 |
 | Elevation of Privilege | 6 | 3 | 3 | 0 |
-| **Total** | **37** | **16** | **19** | **2** |
+| **Total** | **47** | **13** | **32** | **2** |

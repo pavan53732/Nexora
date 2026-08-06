@@ -15,11 +15,15 @@ User Goal (entered in Chat, inside a Workspace)
     ↓
 Planner → Task Decomposition
     ↓
-Context Builder → Assemble Context (memory + files + history + system prompt)
+Context Builder → Compile immutable model-aware ContextSnapshot
     ↓
-AI Provider → Generate Response (with tool calls)
+ReasoningPolicy + ProviderRouter → Select bounded reasoning and route plan
     ↓
-Tool Manager → Validate & Route Tools
+Provider Stream → Validate sequenced typed events and exactly-one terminal
+    ↓
+Inference Assembler → Provisional text/citations/reasoning summary + committed Tool calls
+    ↓
+Tool Manager → Authorize & execute committed Tools only
     ↓
 Permission Manager → Check / Prompt Approval
     ↓

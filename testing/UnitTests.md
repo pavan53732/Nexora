@@ -78,3 +78,10 @@ At minimum, unit suites for contract-sensitive modules SHOULD explicitly assert:
 - canonical error-envelope field preservation
 - pagination cursor behavior where list APIs exist
 - event deduplication by `(entityId, version, transition)`
+
+## Typed Inference and Reasoning (ADR-0008)
+
+- `UT-STREAM-001..004` validate stream ordering, gaps, Tool assembly, and terminal invariants.
+- `UT-REASON-001..003` validate bounded ReasoningPolicy and redacted summaries.
+- `UT-CONTEXT-001..002` validate ContextSnapshot reproducibility and retrieval diversity.
+- `UT-ROUTE-001` validates deterministic capability/budget/privacy-aware routing.

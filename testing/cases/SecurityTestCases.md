@@ -87,3 +87,13 @@
 | SEC-LC-EXEC-004 | SEC-LC | Execution: retry after terminal status creates new executionId | Security + Runtime | Planned | `evidence/security/SEC-LC-EXEC-004/` | 2026-08-06 |
 | SEC-LC-TOOL-001 | SEC-LC | ToolStatus: valid DISCOVERED→REGISTERED→ACTIVE | Security + Tool | Planned | `evidence/security/SEC-LC-TOOL-001/` | 2026-08-06 |
 | SEC-LC-TOOL-002 | SEC-LC | ToolStatus: failed invocation does not change descriptor to DISABLED | Security + Tool | Planned | `evidence/security/SEC-LC-TOOL-002/` | 2026-08-06 |
+| SEC-STREAM-001 | SEC-STREAM | Reject forged or duplicate terminal event | Security + Provider | Planned | `evidence/security/SEC-STREAM-001/` | 2026-08-06 |
+| SEC-STREAM-002 | SEC-STREAM | Detect replay and sequence-gap injection | Security + Provider | Planned | `evidence/security/SEC-STREAM-002/` | 2026-08-06 |
+| SEC-STREAM-003 | SEC-STREAM | Incomplete Tool fragments never execute | Security + Tooling | Planned | `evidence/security/SEC-STREAM-003/` | 2026-08-06 |
+| SEC-STREAM-004 | SEC-STREAM | Reconnect and failover remain attributable in audit | Security + Observability | Planned | `evidence/security/SEC-STREAM-004/` | 2026-08-06 |
+| SEC-STREAM-005 | SEC-STREAM | Raw private reasoning and secrets never persist/export | Security + Context | Planned | `evidence/security/SEC-STREAM-005/` | 2026-08-06 |
+| SEC-STREAM-006 | SEC-STREAM | Resume token is scoped, redacted, and expiry-enforced | Security + Provider | Planned | `evidence/security/SEC-STREAM-006/` | 2026-08-06 |
+| SEC-STREAM-007 | SEC-STREAM | Privacy-constrained routing blocks ineligible failover | Security + Provider | Planned | `evidence/security/SEC-STREAM-007/` | 2026-08-06 |
+| SEC-STREAM-008 | SEC-STREAM | Oversized event fails without unbounded allocation | Security + Provider | Planned | `evidence/security/SEC-STREAM-008/` | 2026-08-06 |
+| SEC-STREAM-009 | SEC-STREAM | Slow consumer preserves semantic events under backpressure | Security + Provider | Planned | `evidence/security/SEC-STREAM-009/` | 2026-08-06 |
+| SEC-STREAM-010 | SEC-STREAM | Reasoning budget exhaustion escalates without runaway | Security + Reasoning | Planned | `evidence/security/SEC-STREAM-010/` | 2026-08-06 |

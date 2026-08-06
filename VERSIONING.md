@@ -81,7 +81,7 @@ The runtime validates `minSdkVersion ≤ currentSdkVersion ≤ maxSdkVersion` on
 
 ## 5. Provider API Versioning
 
-Provider interfaces are treated as **stable contracts**. New capabilities are added via optional interface methods or new provider interfaces — never by modifying existing method signatures. Provider configuration objects carry a `version` field for migration when the config schema evolves.
+Provider interfaces are treated as **stable contracts**. Typed inference streaming (ADR-0008) introduces a new provider stream contract version rather than reinterpreting legacy chunks. Adapters declare `minContractVersion`; legacy complete/non-stream adapters are wrapped into a canonical Started/delta/Terminal sequence, while native typed-stream adapters implement the new interface. Provider configuration objects carry a `version` field for migration when the config schema evolves.
 
 ## 6. Version Format Summary
 

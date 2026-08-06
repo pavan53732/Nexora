@@ -29,3 +29,8 @@
 | RISK-016 | proot ptrace blocked by SELinux or device security software | Low | High | Detect denial, report clearly, and document incompatible device classes; evaluate platform-specific mitigations | Security Lead |
 | RISK-017 | Binary/package compatibility gaps remain despite glibc baseline | Low | Medium | Maintain compatibility matrix, test common packages, and document unsupported cases | Platform Lead |
 | RISK-018 | JIT-dependent guest programs (PyPy, numba, unpatched V8) fail under Android W^X with `targetSdk=36` | Low | Medium | Pre-patch rootfs with `--jitless` Node.js; document unsupported runtimes; detect and report clear error messages when JIT is requested | Platform Lead |
+| RISK-019 | High-frequency or oversized provider stream events exhaust memory/UI capacity | Medium | High | Bounded channels, event-size limits, semantic-event no-drop rules, overflow failure, performance tests | Provider Lead |
+| RISK-020 | Mid-stream provider failover produces duplicated or contradictory output | Medium | High | New stream identity with priorStreamId; prohibit silent output splicing; lineage tests | Runtime Lead |
+| RISK-021 | Stored reasoning artifacts leak secrets, system prompts, or private model reasoning | Medium | Critical | Persist only redacted ReasoningSummary; retention/export controls; security tests | Security Lead |
+| RISK-022 | Tool-call fragments are executed before complete schema validation | Low | Critical | ToolCallCommitted barrier; discard incomplete fragments; protocol/security tests | Tooling Lead |
+| RISK-023 | Excessive reasoning/critic loops cause cost, latency, or battery runaway | Medium | High | Bounded ReasoningPolicy with token/call/time/cost limits and budget escalation | Runtime Lead |

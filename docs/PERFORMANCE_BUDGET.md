@@ -35,6 +35,15 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 | Inter-chunk latency | 100 ms | 300 ms | 1 000 ms | `Flow` timing | Alpha |
 | Provider health check | 2 000 ms | 5 000 ms | 10 000 ms | `HealthCheck` coroutine | Beta |
 | Provider failover time | 3 000 ms | 5 000 ms | — | `ProviderManager` timing | Beta |
+| Stream establishment | 500 ms | 1 000 ms | 2 000 ms | request accepted → `Started` | Beta |
+| Stream queue wait P95 | 100 ms | 250 ms | 500 ms | bounded-channel telemetry | Beta |
+| Stream cancellation propagation P95 | 250 ms | 500 ms | 1 000 ms | UI cancel → adapter cancel | Beta |
+| Stream sequence gaps/duplicates | 0 undetected | any recovered event | any unrecovered gap | stream validator metrics | Beta |
+| Stream resume success (eligible native streams) | 99% | 95% | < 90% | reconnect test matrix | Beta |
+| Usage reconciliation error | 0 tokens | 1 token | > 1 token | terminal vs accumulated usage | Beta |
+| Tool-call assembly after final fragment | 50 ms | 100 ms | 250 ms | fragment commit timing | Beta |
+| Reasoning-policy budget overrun | 0 | any prevented attempt | any committed overrun | policy/audit metrics | Beta |
+| Verifier pass overhead | < 30% of inference time | 50% | 100% | inference trace timing | Beta |
 
 ## Memory & Resources
 

@@ -25,6 +25,8 @@ Log.d(TAG, "Executing tool: $toolId")
 ## Sensitive Data
 - **NEVER** log API keys, tokens, or passwords.
 - **NEVER** log full file contents (log first 200 chars max).
+- **NEVER** log raw private chain-of-thought, hidden system prompts, provider resume tokens, or unredacted stream payloads.
+- Log stream identity/sequence/event type and sanitized ReasoningSummary metadata instead of raw deltas.
 - Use `SecureKeyStore` references, not actual values.
 
 ## Structured Logging

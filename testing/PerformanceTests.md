@@ -43,3 +43,8 @@ Performance validation SHOULD tie back to measurable NFR-style concerns such as:
 - provider stream responsiveness
 - memory retrieval latency
 - background execution stability under load
+
+## Stream, Reasoning, and Context Benchmarks
+
+`PERF-STREAM-001..005`, `PERF-REASON-001..002`, and `PERF-CONTEXT-001` enforce TTFB,
+jitter, queue, cancellation, resume, reasoning budget, verifier, and snapshot budgets.

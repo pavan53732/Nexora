@@ -48,6 +48,9 @@ Nexora remembers everything. The memory system provides persistent, searchable, 
 | User Preferences | DataStore (global + per-workspace) | FR-M013 |
 | Knowledge Graph | Room `graph_entity` + `graph_edge` | FR-M014–015 |
 | Execution History | Room `execution_event` | FR-M005 |
+| Context Snapshots | Room `context_snapshot` + segment references | FR-CM-010..012 |
+| Reasoning Summaries | Room `reasoning_summary` (redacted, retention-scoped) | FR-RN-011/012 |
+| Stream Lineage | Room `inference_stream` + committed sequence/cursor | FR-P014..019 |
 
 Protocol operations and payloads: [protocols/Memory-Protocol.md](../protocols/Memory-Protocol.md).
 
@@ -78,6 +81,15 @@ summaries tagged with EV confidence (DERIVED/ESTIMATED). Seven introspection too
 (`TOOL-410`..`416`, Category 28) implement the readers. The Knowledge Graph is
 queried **after** introspection so entity extraction can reference the fresh
 ProjectContext.
+
+## Inference Artifact Retention
+
+- `ContextSnapshot` is immutable and retained with its task/execution evidence window.
+- `ReasoningSummary` follows workspace execution-history retention; raw private reasoning is not persisted.
+- Stream records persist identity, lineage, last committed sequence, terminal outcome,
+  usage, and sanitized error—not every coalesced UI rendering delta indefinitely.
+- Tool-call fragments are deleted after commit/failure; committed Tool calls remain in Tool History.
+- Export/delete operations preserve workspace scope and redaction rules.
 
 ## Memory Flow
 

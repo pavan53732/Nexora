@@ -46,3 +46,9 @@ Security validation SHOULD explicitly assert:
 - credentials never cross caller-visible boundaries
 - cancellation and retries do not bypass authorization
 - plugin activation rollback preserves isolation guarantees
+
+## Inference Stream and Reasoning Security
+
+`SEC-STREAM-001..010` validate terminal/sequence integrity, Tool fragment isolation,
+audit lineage, reasoning redaction, resume-token security, failover confinement,
+bounded buffering, and reasoning-budget enforcement (TM-038..047).

@@ -113,6 +113,26 @@ Rules:
 - **A profile maps to a `ProviderConfig`** (see [models/Provider.md](../models/Provider.md))
   plus a SecureKeyStore key reference.
 
+## Typed Stream and Reasoning Adapter Requirements (ADR-0008)
+
+Every provider/model profile declares context/output limits, tokenizer, Tool/citation/
+reasoning capabilities, resume mode, data locality, cost, and observed latency/reliability.
+Adapters normalize native events to `StreamEnvelope`; providers without native
+streaming emit a synthetic canonical Started/delta/Terminal sequence.
+
+| Native behavior | Canonical projection |
+|---|---|
+| SSE/WebSocket text delta | `TextDelta` with monotonic sequence |
+| Provider reasoning summary | Redacted `ReasoningSummaryDelta`; raw private reasoning excluded |
+| Function/tool fragments | Started/ArgumentsDelta/Committed assembly contract |
+| Usage update | `UsageDelta`; terminal usage reconciles totals |
+| Native cursor | `NATIVE_CURSOR` same-stream resume |
+| No cursor | `RESTART_WITH_LINEAGE` or explicit partial failure |
+| Socket close without done marker | `NXR-4017`, never success |
+
+Provider-specific reasoning parameters remain adapter-owned, but all adapters enforce the
+resolved `ReasoningPolicy` token/call/cost limits and report supported effort mapping.
+
 ## Phase Mapping
 
 - **Phase 1**: Profile model, configuration UI, encrypted key storage.

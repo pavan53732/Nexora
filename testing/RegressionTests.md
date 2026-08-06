@@ -32,3 +32,8 @@ Plugin compatibility testing SHOULD include activation rollback and exported cap
 ## Run Schedule
 
 Run on release candidates and on any contract-affecting change.
+
+## Typed Inference Compatibility
+
+`RT-STREAM-001..002` and `RT-REASON-001` protect adapter event normalization,
+non-stream fallback adaptation, and reasoning-policy/summary contract compatibility.

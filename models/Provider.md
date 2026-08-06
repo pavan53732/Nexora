@@ -14,12 +14,24 @@ data class Provider(
     val capabilities: List<String>,
     val supportedModels: List<String>,
     val supportsStreaming: Boolean,
-    val supportsResume: Boolean,
+    val streamResumeMode: StreamResumeMode,
+    val contextWindowTokens: Int,
+    val maxOutputTokens: Int,
+    val tokenizerId: String,
+    val reasoningEfforts: Set<String>,
+    val supportsTools: Boolean,
+    val supportsCitations: Boolean,
+    val inputCostPerMillion: Double?,
+    val outputCostPerMillion: Double?,
+    val dataLocality: DataLocality,
     val status: ProviderStatus,
     val health: ProviderHealth,
     val createdAt: Instant,
     val updatedAt: Instant
 )
+
+// StreamResumeMode is defined in models/Inference.md.
+enum class DataLocality { ON_DEVICE, LOCAL_NETWORK, EXTERNAL }
 
 enum class ProviderStatus {
     REGISTERED,

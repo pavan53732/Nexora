@@ -23,7 +23,10 @@
 | `PluginCard` | Plugin info with install/uninstall button. | P1 |
 | `ProviderCard` | Provider config card with health indicator. | P0 |
 | `PermissionDialog` | Permission approval/deny dialog. | P1 |
-| `StreamingText` | Text view that animates token-by-token. | P0 |
+| `StreamingText` | Renders sequenced provisional text separately from committed final output; coalesces UI deltas without changing durable order. | P0 |
+| `StreamStatusCard` | Shows connecting, backpressured, reconnecting, partial failure, cancelled, and committed states with prior-stream lineage. | P0 |
+| `ReasoningSummaryCard` | Collapsible redacted approach/evidence/decision/uncertainty/verification summary; never raw private chain-of-thought. | P1 |
+| `CitationUpdateCard` | Incrementally renders source/citation updates tied to committed evidence references. | P1 |
 | `EmptyState` | Placeholder for empty workspaces, no tasks, etc. | P0 |
 
 All components use Jetpack Compose.

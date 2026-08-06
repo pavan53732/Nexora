@@ -1,53 +1,58 @@
-> **Status: DERIVED** for Provider Streaming Flow visual flow.
-> This diagram illustrates Provider Streaming Flow flow. The canonical definition is in the relevant architecture or state-machine document.
->
-> Depends on: the relevant canonical architecture or state-machine document.
-
+> **Status: DERIVED** typed provider-stream sequence derived from Provider System,
+> Provider Protocol, and ProviderStreamLifecycle.
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
 # Provider Streaming Flow
 
-This diagram shows how the agent requests a streamed LLM response, how chunks flow from the provider API through token tracking, and how the UI renders them incrementally.
-
 ```mermaid
 sequenceDiagram
-    participant Agent
-    participant ProviderManager
-    participant AIProvider
-    participant HTTP
-    participant ProviderAPI
-    participant TokenTracker
-    participant EventBus
-    participant UI
+    participant Agent as Agent Runtime
+    participant Router as ProviderRouter
+    participant Account as Token Accounting
+    participant Adapter as Provider Adapter
+    participant Validate as StreamValidator
+    participant Assemble as InferenceAssembler
+    participant Bus as EventBus/UI
 
-    Agent->>ProviderManager: streamResponse(messages, tools, model)
-    ProviderManager->>ProviderManager: selectProvider(model)
-    ProviderManager->>AIProvider: stream(messages, tools, config)
-    AIProvider->>HTTP: POST /chat/completions (stream: true)
-    HTTP->>ProviderAPI: HTTPS request
+    Agent->>Router: planRoute(ContextSnapshot, ReasoningPolicy)
+    Router->>Account: reserve(requestId, budget)
+    Account-->>Router: validated
+    Router->>Adapter: stream(request, bounded policy)
+    Adapter-->>Validate: native event
+    Validate->>Validate: normalize + identity + sequence + size/schema
+    Validate-->>Assemble: StreamEnvelope
+    Validate-->>Bus: provisional typed event
 
-    loop Stream chunks
-        ProviderAPI-->>HTTP: SSE chunk (data: {...})
-        HTTP-->>AIProvider: ResponseChunk
-        AIProvider->>AIProvider: parse(chunk)
-        AIProvider-->>ProviderManager: Flow<StreamChunk>
-        ProviderManager->>TokenTracker: consume(chunk.tokens)
-
-        alt Budget exceeded
-            TokenTracker-->>ProviderManager: throw InsufficientBudgetException
-            ProviderManager->>HTTP: cancel request
-            ProviderManager-->>Agent: BudgetExceededResult
-        end
-
-        ProviderManager->>EventBus: publish(StreamChunkEvent)
-        EventBus-->>UI: Append chunk to output
+    alt Text/citation/reasoning summary
+        Assemble->>Assemble: append/coalesce in order
+    else Tool-call fragment
+        Assemble->>Assemble: isolate by toolCallId
+        Assemble->>Agent: ToolCallCommitted only after JSON/schema validation
+    else Backpressure
+        Validate->>Adapter: suspend producer / safe coalescing
+    else Transport loss with native resume
+        Router->>Adapter: resume(last sequence, opaque cursor)
+        Adapter-->>Validate: same streamId, next sequence
+    else Failover/restart
+        Router->>Adapter: new request/stream with priorStreamId
+        Bus-->>Agent: prior output remains partial; no splice
+    else Cancel
+        Agent->>Router: cancel(streamId, idempotencyKey)
+        Router->>Adapter: cancel
+        Adapter-->>Validate: Cancelled terminal
     end
 
-    ProviderAPI-->>HTTP: [DONE]
-    HTTP-->>AIProvider: Stream complete
-    AIProvider-->>ProviderManager: StreamCompleted
-    ProviderManager->>TokenTracker: getUsage()
-    TokenTracker-->>ProviderManager: UsageStats(promptTokens, completionTokens)
-    ProviderManager-->>Agent: ProviderResponse(fullText, toolCalls, usage)
+    Adapter-->>Validate: Terminal / Failed / Cancelled
+    Validate->>Account: reconcile authoritative usage
+    Validate-->>Assemble: commit exactly one terminal
+    Assemble-->>Agent: committed response or explicit partial failure
 ```
+
+## Diagram Invariants
+
+- Every durable event is deduplicated by `(streamId, sequence)`.
+- Socket closure without terminal is failure.
+- Tool fragments never execute.
+- Control/semantic events are never dropped by backpressure.
+- Cross-provider continuation always creates new stream lineage.

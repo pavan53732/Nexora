@@ -20,6 +20,8 @@
 | NFR-PERF-008 | Streaming first-token latency | < 1 second | From request to first visible token |
 | NFR-PERF-009 | Search query response | < 200ms | Local search across workspace data |
 | NFR-PERF-010 | Workspace switch time | < 300ms | Full context swap including UI refresh |
+| NFR-PERF-011 | Stream backpressure | P95 queue wait < 100ms; zero dropped semantic/control events | Bounded-channel metrics under slow consumers |
+| NFR-PERF-012 | Cancellation propagation | < 250ms P95 from user cancel to adapter cancellation request | End-to-end stream cancellation benchmark |
 
 ## Reliability
 
@@ -53,10 +55,13 @@
 | NFR-SEC-012 | Provider network confinement | Endpoint allowlist | Provider HTTP clients connect only to their configured baseUrl; TLS 1.3 + certificate pinning |
 | NFR-SEC-013 | Egress data-loss prevention | Outbound body inspection | All sandbox egress scanned for secrets/keys; blocked or warned before transmission (per workspace policy) |
 | NFR-SEC-014 | Pipe channel security | Mutual TLS 1.3 + pinned instance certificates | All inter-instance traffic encrypted and mutually authenticated; payloads schema-validated pre-parse; DLP scan (NFR-SEC-013) applies to outbound pipe bodies; provider credentials never cross pipes |
+| NFR-SEC-015 | Reasoning and stream artifact privacy | Redacted structured artifacts only | Raw private chain-of-thought, credentials, system prompts, and resume tokens are excluded from logs/exports |
 | NFR-REL-010 | Snapshot restore fidelity | 100% state fidelity + integrity | Workspace snapshots hash-verified at restore; tampered snapshots rejected (see [docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md)) |
 | NFR-REL-011 | Context resume fidelity | Structured state + summary + retrieval reconstruct the working context | Resume uses checkpoint + summary + retrieval; never raw history replay; context build < 500 ms after restart (see [specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md)) |
 | NFR-REL-012 | Exactly-once recovery | No double-applied side effects after crash/resume | Idempotency declarations + replay log; non-idempotent calls reconciled from tool history (see [specs/AUTONOMY_STABILITY.md](../specs/AUTONOMY_STABILITY.md)) |
 | NFR-REL-013 | Degradation continuity | App stays usable through provider outage | Degradation ladder (failover → local → offline → read-only), each step announced and logged (NFR-REL-005) |
+| NFR-REL-014 | Ordered stream delivery | No undetected duplicate/gap; exactly one terminal event | Monotonic `(streamId, sequence)` validation and durable terminal commit |
+| NFR-REL-015 | Stream resume/failover lineage | No silent cross-stream/provider splice | Native cursor resume or new stream with `priorStreamId` |
 
 ## Usability
 

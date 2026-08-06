@@ -19,6 +19,7 @@ The Agent API defines the boundary for agent lifecycle, execution startup, assig
 |---|---|---|---|---|---|---|
 | `registerAgent` | Agent `Created → Configured → Ready` | Durable agent projection with version | Duplicate ID, invalid manifest, incompatible SDK/version, storage failure | Duplicate `(agentId, version)` is idempotent | Registration validates capabilities, declared skills, and permission scope before visibility | Registry and SDK conformance tests |
 | `startTask` | Task `Draft/Pending → Queued → Running`; Agent `Ready → Running` | Task projection plus correlation ID | Invalid input, unavailable dependencies, permission/approval, timeout, cancellation, internal fault | Client retries require idempotency key; duplicate key returns original task projection | Workspace authorization checked before side effects; cancellation emits lifecycle event after durable commit | Runtime integration and E2E tests |
+| `streamTaskEvents` | No lifecycle change | Ordered `Flow<AgentInferenceEvent>` ending in terminal | Sequence gap, stream failure, unauthorized subscription | Resume token + `(streamId, sequence)` deduplication | Redacted reasoning summaries; provisional text marked; cancellation propagated | Streaming integration tests |
 | `cancelTask` | Active task/agent → `Cancelled` | Committed cancellation projection | Not found, already terminal, conflict, cleanup failure | Idempotent for same task and cancellation key | Caller must own workspace/task; cancellation propagates to child jobs and delegated work | Lifecycle and cancellation tests |
 | `getTaskStatus` | No lifecycle change | Durable task/execution status, phase, version, latest redacted error | Not found, unauthorized, storage failure | Safe to retry; read is versioned | Sensitive error details are redacted by caller scope | API contract tests |
 | `listAgents` / `getAgent` | No lifecycle change | Stable projection(s), capability metadata, pagination cursor | Not found, invalid filter, unauthorized, storage failure | Safe to retry; reads are side-effect free | Internal-only agents/capabilities MUST be redacted by caller scope | Registry and API contract tests |
@@ -84,6 +85,23 @@ data class AgentLifecycleEvent(
 )
 ```
 
+### Inference Event Projection
+
+```kotlin
+data class AgentInferenceEvent(
+    val requestId: String,
+    val streamId: String,
+    val priorStreamId: String?,
+    val correlationId: String,
+    val taskId: String,
+    val sequence: Long,
+    val kind: String,
+    val provisional: Boolean,
+    val payload: JsonObject,
+    val resumeToken: String?
+)
+```
+
 ### Required Rules
 
 - `taskId` MUST remain stable across retries once assigned.
@@ -103,6 +121,7 @@ package com.nexora.app.runtime.agent
 interface AgentApi {
     suspend fun registerAgent(descriptor: AgentDescriptor): AgentProjection
     suspend fun startTask(request: StartTaskRequest): TaskProjection
+    fun streamTaskEvents(taskId: String, afterSequence: Long?, resumeToken: String?): Flow<AgentInferenceEvent>
     suspend fun cancelTask(taskId: String, correlationId: String, cancellationKey: String?): TaskProjection
     suspend fun getTaskStatus(taskId: String): TaskProjection
     suspend fun getAgent(agentId: String): AgentProjection

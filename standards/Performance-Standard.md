@@ -12,7 +12,9 @@
 | Workspace switch | < 500ms |
 | File read (tool) | < 100ms |
 | Terminal command | < 500ms |
-| First AI token (streaming) | < 500ms (network-dependent) |
+| First AI token (streaming) | < 1 000ms target (canonical per NFR-PERF-008 / PERFORMANCE_BUDGET.md) |
+| Stream cancellation propagation | < 250ms P95 |
+| Stream queue wait | < 100ms P95; no dropped semantic/control events |
 | APK size (base) | < 50 MB |
 | Memory (idle) | < 512 MB RSS (canonical per NFR-PERF-005) |
 | Memory (active agent) | 256 MB target / 384 MB warning / 512 MB critical (canonical per PERFORMANCE_BUDGET.md) |

@@ -64,3 +64,9 @@ Critical E2E journeys SHOULD assert:
 - explicit terminal outcomes for cancellations and streams
 - stable retry behavior for idempotent operations
 - absence of silent success inferred from transport closure
+
+## Typed Inference User Journeys (ADR-0008)
+
+- `E2E-STREAM-001..003` cover committed/provisional UI, reconnect/failure lineage, and cancellation.
+- `E2E-REASON-001..002` cover bounded verification and reasoning-artifact privacy.
+- `E2E-CONTEXT-001` covers reproducible context reconstruction after crash.

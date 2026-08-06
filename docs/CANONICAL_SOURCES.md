@@ -22,7 +22,7 @@
 | Workflow graph progression | `architecture/WORKFLOW_ENGINE.md` | `models/Workflow.md`, `state-machines/WorkflowLifecycle.md`, `docs/api/Runtime-API.md` |
 | Checkpoint, recovery, and resume | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md` (§Checkpoint System), `architecture/AGENT_RUNTIME.md` (saveCheckpoint), `state-machines/TaskLifecycle.md` |
 | Agent lifecycle | `state-machines/AgentLifecycle.md` | `architecture/AGENT_RUNTIME.md`, `docs/LIFECYCLES.md` |
-| Context assembly and builder | `specs/CONTEXT_MANAGEMENT.md` | `architecture/RUNTIME.md` (Context Builder), `architecture/MEMORY_SYSTEM.md` |
+| Context assembly, ReasoningPolicy, ContextSnapshot, grounding, and reasoning-artifact privacy | `specs/CONTEXT_MANAGEMENT.md` | `architecture/RUNTIME.md` (Context Builder), `architecture/AGENT_RUNTIME.md`, `architecture/MEMORY_SYSTEM.md`, `models/Inference.md`, `docs/adr/ADR-0008-Typed-Inference-Streaming.md` |
 | Event bus | `architecture/RUNTIME.md` (§Core Interfaces — EventBus) | `docs/MODULE_BOUNDARIES.md` (shared module) |
 | Observability | `architecture/RUNTIME.md` (§Module Inventory — Observability) | `docs/SYSTEM_DESIGN.md`, `docs/MODULE_BOUNDARIES.md` |
 | Resource management | `architecture/RUNTIME.md` (§Module Inventory — Resource Manager) | `architecture/MULTI_AGENT_SYSTEM.md` (§SA-3), `security/SandboxPolicy.md` |
@@ -32,6 +32,7 @@
 | Memory storage, retention, promotion, summarization | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md` |
 | Read-time context assembly | `specs/CONTEXT_MANAGEMENT.md` | `docs/api/Agent-API.md`, `diagrams/Memory-Store-Flow.md` |
 | Provider architecture and routing | `architecture/PROVIDER_SYSTEM.md` | `models/Provider.md`, `protocols/Provider-Protocol.md`, `docs/api/Provider-API.md`, `sdk/ProviderSDK.md`, `specs/AI_PROVIDERS.md`, `registry/PROVIDERS.md` |
+| Provider inference streaming, routing, ordering, resume, and failover lineage | `architecture/PROVIDER_SYSTEM.md` + `state-machines/ProviderStreamLifecycle.md` | `models/Inference.md`, `models/Provider.md`, `protocols/Provider-Protocol.md`, `docs/api/Provider-API.md`, `sdk/ProviderSDK.md`, `diagrams/Provider-Streaming-Flow.md`, `docs/adr/ADR-0008-Typed-Inference-Streaming.md` |
 | Provider lifecycle, health, and failover | `state-machines/ProviderLifecycle.md` | `docs/LIFECYCLES.md`, `diagrams/Provider-Streaming-Flow.md` |
 | MCP adapter contract (tool source interop) | `architecture/TOOL_SYSTEM.md` (§MCP Client) + `protocols/Tool-Protocol.md` (§MCP Invocation) | `registry/TOOLS.md` (`TOOL-397..402`), `registry/TOOL_MATRIX.md` (MCP capability rows), `specs/AI_PROVIDERS.md` (§Phase 5), `security/PermissionModel.md` (§MCP rules) |
 | Plugin architecture and integration | `architecture/PLUGIN_SYSTEM.md` | `models/Plugin.md`, `protocols/Plugin-Protocol.md`, `docs/api/Plugin-API.md`, `sdk/PluginSDK.md`, `docs/adr/ADR-0002-Plugin-System.md`, `registry/PLUGINS.md` |

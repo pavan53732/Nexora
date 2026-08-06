@@ -96,6 +96,12 @@
 | FR-P011 | Provider profiles — named, switchable configurations (API key, endpoint, model, streaming, params); create, edit, duplicate, delete, switch independently | Must | 1 |
 | FR-P012 | Per-workspace default provider profile — workspace settings bind a profile; agents route through the active profile | Must | 1 |
 | FR-P013 | Provider isolation — provider credentials, configurations, and request data are isolated per provider; no cross-provider access or data flow; provider code cannot read other providers' keys or configs | Must | 5 |
+| FR-P014 | Typed inference stream — closed event envelope with request/stream/correlation/provider/model identity and monotonic sequence | Must | 5 |
+| FR-P015 | Stream integrity — gap/duplicate detection and exactly one committed terminal event; socket close is never success | Must | 5 |
+| FR-P016 | Bounded backpressure and cancellation propagation across Agent, Router, adapter, EventBus, and UI | Must | 5 |
+| FR-P017 | Stream resume/reconnect — native cursor or explicit restart-with-lineage; partial output remains marked | Must | 5 |
+| FR-P018 | Capability/cost/latency/privacy-aware ProviderRoutePlan with persisted selection reason | Should | 5 |
+| FR-P019 | Mid-stream failover creates a new stream with lineage; cross-provider output is never silently spliced | Must | 5 |
 
 ## Memory System
 
@@ -255,6 +261,9 @@
 | FR-CM-007 | Milestone memory curation — agent stores structured facts and lessons at step boundaries and task completion, not raw transcripts | Must | 3 |
 | FR-CM-008 | Context observability — per-layer token usage, summarization/truncation/stale events visible via context_stats and execution history | Should | 4 |
 | FR-CM-009 | Project introspection — pre-flight pass reads API schemas, database schemas, configuration files, build definitions, UI layouts, domain models, and infrastructure files before the Planner creates an ExecutionPlan; populates a lightweight ProjectContext in working memory (Layer 3); Knowledge Graph queried after introspection; all summaries carry EV classification (DERIVED/ESTIMATED) | Must | 2 |
+| FR-CM-010 | Versioned ContextSnapshot — immutable model/tokenizer budget, included/excluded segments, hashes, and output/reasoning reservations per provider request | Must | 2 |
+| FR-CM-011 | Retrieval scoring — relevance, trust, freshness, source diversity, and near-duplicate suppression determine memory inclusion | Must | 4 |
+| FR-CM-012 | Context compaction lineage — every summary/compaction records parent artifact, fidelity result, and reproducible segment references | Must | 3 |
 
 ## Autonomy & Stability
 
@@ -312,10 +321,14 @@
 | FR-RN-002 | Reasoning pipeline — understand, clarify, retrieve evidence first, reason over evidence, draft, verify, answer with citations + confidence | Must | 2 |
 | FR-RN-003 | Deliberation effort levels — six-level reasoning effort scale (OFF / LOW / MEDIUM / HIGH / X_HIGH / MAX), configurable per workspace, agent, and task; effort proportional to stakes (see CONTEXT_MANAGEMENT §6 Reasoning Effort Scale) | Must | 2 |
 | FR-RN-004 | Reasoning-capable models — REASONING provider capability; per-task routing to reasoning models for thorough tasks; fail-fast if unavailable at X_HIGH/MAX; graceful degradation to model maximum at HIGH and below | Should | 5 |
-| FR-RN-005 | Reasoning visibility — collapsible reasoning trace in the activity feed; stored in execution history; token usage tracked | Must | 2 |
+| FR-RN-005 | Reasoning visibility — collapsible redacted ReasoningSummary in activity feed/history with approach, evidence, decisions, uncertainty, verification, and token usage; raw private chain-of-thought excluded | Must | 2 |
 | FR-RN-006 | Answer-quality gates — grounded, complete, consistent, confident before sending; assumptions stated; premise contradictions flagged; self-consistency for critical outputs | Must | 2 |
 | FR-RN-007 | Reasoning disable (OFF) — user can disable reasoning entirely per scope (task/agent/workspace/global); OFF bypasses the deliberation gate to the FAST path, omits reasoning parameters from provider requests, and never selects REASONING models; grounding/evidence gates (RG/EV) remain active under OFF | Must | 2 |
 | FR-RN-008 | Reasoning settings surface — Settings → Model Config → Reasoning: level selector (OFF first), effective-level indicator showing the governing layer (task → agent → workspace → global → default MEDIUM), per-agent/per-workspace overrides; changes apply to new messages immediately; no chat-embedded toggle (ADR-0006) | Must | 2 |
+| FR-RN-009 | Executable ReasoningPolicy — bound provider/tool calls, reasoning tokens, repair cycles, verifier passes, wall time, and optional cost per effort level | Must | 2 |
+| FR-RN-010 | Bounded critic/verifier pipeline — independent critic for high-stakes effort, disagreement-driven repair, then clarification/escalation at budget limit | Must | 4 |
+| FR-RN-011 | Structured ReasoningSummary — persist redacted approach/evidence/decisions/uncertainty/verification, never require raw private chain-of-thought | Must | 2 |
+| FR-RN-012 | Evidence-calibrated confidence — confidence derives from evidence coverage, source quality, contradiction checks, and verifier results rather than model self-report | Must | 2 |
 
 
 ## Evidence & Validation Engine

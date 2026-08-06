@@ -175,7 +175,7 @@ your pocket."*
 | Principle | ADR | Architecture | Spec | Requirements |
 |-----------|-----|--------------|------|--------------|
 | PP-001 Autonomous agents | ADR-0003, ADR-0006 | AGENT_RUNTIME, RUNTIME | — | FR-A001–015 |
-| PP-002 Provider-agnostic | ADR-0005 | PROVIDER_SYSTEM | AI_PROVIDERS | FR-P001–010 |
+| PP-002 Provider-agnostic | ADR-0005, ADR-0008 | PROVIDER_SYSTEM, ProviderStreamLifecycle | AI_PROVIDERS, Provider-Protocol | FR-P001–019 |
 | PP-003 Tool-based execution | — | TOOL_SYSTEM | — | FR-TL001–015 |
 | PP-004 Persistent memory | — | MEMORY_SYSTEM | DATABASE | FR-M001–010 |
 | PP-005 Agent-driven execution | ADR-0006 | SANDBOX | TERMINAL, GIT, FILE_SYSTEM | FR-TE001–005, FR-S001–010 |

@@ -10,10 +10,10 @@
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
 | **Positioning** | **Android AI Agent Platform** |
-| **Spec Version** | 4.5.0 |
+| **Spec Version** | 4.6.0 |
 | **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
-| **Last Updated** | 2026-08-03 (v4.5 — Context pipeline + autonomy & stability specs) |
+| **Last Updated** | 2026-08-06 (v4.6 — typed inference streaming, bounded reasoning, ContextSnapshot) |
 | **Document Owner** | Lead Architect (Super Z) |
 
 ---
@@ -66,6 +66,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 | ADR-0005 | Provider Abstraction Layer | [docs/adr/ADR-0005-Provider-Abstraction.md](docs/adr/ADR-0005-Provider-Abstraction.md) |
 | ADR-0006 | Agent-First Interaction Model (Infrastructure Is Internal) | [docs/adr/ADR-0006-Agent-First-Interaction-Model.md](docs/adr/ADR-0006-Agent-First-Interaction-Model.md) |
 | ADR-0007 | Skills as a First-Class Capability | [docs/adr/ADR-0007-Skills-First-Class.md](docs/adr/ADR-0007-Skills-First-Class.md) |
+| ADR-0008 | Typed Inference Streaming and Structured Reasoning Artifacts | [docs/adr/ADR-0008-Typed-Inference-Streaming.md](docs/adr/ADR-0008-Typed-Inference-Streaming.md) |
 
 ### API Documentation
 
@@ -137,6 +138,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 | **Skill** | [models/Skill.md](models/Skill.md) |
 | **Permission** | [models/Permission.md](models/Permission.md) |
 | **Instance & Pipe** | [models/Instance.md](models/Instance.md) |
+| **Inference Pipeline Artifacts** | [models/Inference.md](models/Inference.md) |
 
 ### Protocols
 
@@ -218,6 +220,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 | **Workflow Lifecycle** | [state-machines/WorkflowLifecycle.md](state-machines/WorkflowLifecycle.md) |
 | **Plugin Lifecycle** | [state-machines/PluginLifecycle.md](state-machines/PluginLifecycle.md) |
 | **Provider Lifecycle** | [state-machines/ProviderLifecycle.md](state-machines/ProviderLifecycle.md) |
+| **Provider Stream Lifecycle** | [state-machines/ProviderStreamLifecycle.md](state-machines/ProviderStreamLifecycle.md) |
 | **Instance & Pipe Lifecycle** | [state-machines/InstanceLifecycle.md](state-machines/InstanceLifecycle.md) |
 
 ### Sequence Diagrams
@@ -404,4 +407,4 @@ Nexora/
 
 ---
 
-*Documentation frozen at v4.1.0. Updates only when driven by implementation. This document is the authoritative index — all implementation decisions must align with the linked specifications.*
+*Documentation baseline v4.6.0. Updates are contract-driven; implementation must align with the linked canonical specifications and migration/versioning rules.*

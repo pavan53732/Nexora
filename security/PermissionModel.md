@@ -74,6 +74,14 @@ data class PendingApproval(
     val source: PolicySource
 )
 
+suspend fun authorizeToolCall(
+    call: ToolCall,
+    state: AgentState
+): PermissionResult {
+    val tool = toolRegistry.requireActive(call.toolId)
+    return checkPermission(tool, state.workspace.id, state.agentId)
+}
+
 suspend fun checkPermission(
     tool: Tool,
     workspaceId: String,

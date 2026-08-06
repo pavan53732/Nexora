@@ -9,7 +9,13 @@
 | `origin` | `built-in` or plugin/provider source |
 | `supportedModels` | Supported model families or identifiers |
 | `supportsStreaming` | Streaming capability flag |
-| `supportsResume` | Resume capability flag |
+| `streamResumeMode` | `NATIVE_CURSOR`, `RESTART_WITH_LINEAGE`, or `NONE` |
+| `contextWindowTokens` / `maxOutputTokens` | Model capacity metadata |
+| `tokenizerId` | Token accounting/compiler identity |
+| `reasoningEfforts` | Supported canonical reasoning effort values |
+| `supportsTools` / `supportsCitations` | Typed event capabilities |
+| `inputCostPerMillion` / `outputCostPerMillion` | Route-planning cost metadata |
+| `dataLocality` | `ON_DEVICE`, `LOCAL_NETWORK`, or `EXTERNAL` |
 | `usageAccountingLevel` | Usage support detail |
 | `minContractVersion` | Minimum compatible API/SDK contract version |
 

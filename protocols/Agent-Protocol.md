@@ -46,3 +46,22 @@ Events are at-least-once and MUST be deduplicated by `(entityId, version, transi
 ## Cancellation
 
 Cancellation MUST propagate from runtime to the active agent loop, child tasks, delegated work, and in-flight tool/provider operations. A cancelled task is terminal only after the durable cancellation state is committed and the terminal lifecycle event is published.
+
+## Inference Stream Events
+
+Agent progress projects provider events without redefining provider wire semantics:
+
+| Event | Meaning |
+|---|---|
+| `InferenceStarted` | Route/context/reasoning policy committed; contains requestId and streamId. |
+| `InferenceDelta` | Provisional text, citation, or redacted reasoning-summary update. |
+| `ToolCallReady` | Fully assembled, schema-valid Tool call is ready for authorization. |
+| `InferenceReconnecting` | Native resume attempt in progress; provisional output remains partial. |
+| `InferenceRestarted` | New stream attempt with priorStreamId lineage; never byte-spliced. |
+| `InferenceTerminal` | Final committed response, usage, evidence, and finish reason. |
+| `InferenceFailed` | Canonical error and explicit partial-output state. |
+| `InferenceCancelled` | Cancellation committed across Agent, Provider, and Tool children. |
+
+Every inference event carries `requestId`, `streamId`, `correlationId`, `taskId`,
+`sequence`, and provisional/terminal status. Agent consumers deduplicate by
+`(streamId, sequence)`; durable task lifecycle events continue using entity version.

@@ -62,6 +62,8 @@ Chats are one artifact within a workspace. This scales much better as the platfo
 - **Sandboxed Execution** — AI never touches the host system directly (internal by design).
 - **Tool System** — 28 tool categories, 300-500 individual tools, all agent-invoked and plugin-based.
 - **Multi-Provider AI** — OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom.
+- **Typed inference streaming** — sequenced events, bounded backpressure, cancellation, resume lineage, committed Tool-call assembly, and exactly-one terminal behavior.
+- **Bounded deep reasoning** — executable ReasoningPolicy, critic/verifier gates, evidence-calibrated confidence, redacted ReasoningSummary, and reproducible ContextSnapshot.
 - **Memory System** — Session, project, and long-term memory with semantic search.
 - **Plugin Marketplace** — Everything (tools, providers, agents) is installable as a plugin.
 - **Multi-Agent Collaboration** — Agents share memory, workspace, and tasks.
@@ -133,6 +135,9 @@ Nexora/
 - [Plugin System](architecture/PLUGIN_SYSTEM.md)
 - [Security Model](architecture/SECURITY_MODEL.md)
 - [Provider System](architecture/PROVIDER_SYSTEM.md)
+- [Provider Stream Lifecycle](state-machines/ProviderStreamLifecycle.md)
+- [Typed Inference Streaming ADR](docs/adr/ADR-0008-Typed-Inference-Streaming.md)
+- [Inference Pipeline Models](models/Inference.md)
 - [Multi-Agent System](architecture/MULTI_AGENT_SYSTEM.md)
 
 ### Component Specifications

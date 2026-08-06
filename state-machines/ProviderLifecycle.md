@@ -11,7 +11,7 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
-A **Provider** in Nexora represents an external AI model endpoint (OpenAI, Anthropic, local Ollama, etc.) that agents use for inference. The Provider Lifecycle manages registration, configuration, health monitoring, and automatic failover — ensuring agents always route requests to a functional backend.
+A **Provider** in Nexora represents an external AI model endpoint (OpenAI, Anthropic, local Ollama, etc.) that agents use for inference. The Provider Lifecycle manages registration, configuration, health monitoring, and routing eligibility. It does not represent an individual inference stream; per-stream state, backpressure, reconnect, cancellation, and terminal behavior are owned by [ProviderStreamLifecycle.md](ProviderStreamLifecycle.md).
 
 ## States
 
@@ -48,7 +48,7 @@ The `HealthMonitor` coroutine runs periodic probes (configurable interval, defau
 - **Degraded**: P95 latency exceeds `warnLatencyMs` or error rate exceeds 5% over the rolling window.
 - **Unhealthy**: Three consecutive probe failures or error rate exceeds 20%.
 
-On **Unhealthy**, the `ProviderRouter` automatically excludes the provider and selects the next highest-priority Healthy provider. If no Healthy provider remains, the router falls back to the highest-priority Degraded provider and emits a `ProviderFallbackWarning` event.
+On **Unhealthy**, the `ProviderRouter` excludes the provider from new routing and selects the next highest-priority eligible Healthy provider. If no Healthy provider remains, it may select the highest-priority Degraded provider and emits `ProviderFallbackWarning`. An already-open stream follows ProviderStreamLifecycle: failover creates a new stream with lineage and never splices replacement output into the prior stream.
 
 ## State Diagram
 

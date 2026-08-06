@@ -16,6 +16,7 @@ Architecture Decision Records (ADRs) document major architectural decisions, the
 | [ADR-0005](ADR-0005-Provider-Abstraction.md) | Provider Abstraction Layer | Accepted | 2026-08-03 |
 | [ADR-0006](ADR-0006-Agent-First-Interaction-Model.md) | Agent-First Interaction Model (Infrastructure Is Internal) | Accepted | 2026-08-03 |
 | [ADR-0007](ADR-0007-Skills-First-Class.md) | Skills as a First-Class Capability | Accepted | 2026-08-03 |
+| [ADR-0008](ADR-0008-Typed-Inference-Streaming.md) | Typed Inference Streaming and Structured Reasoning Artifacts | Accepted | 2026-08-06 |
 
 ## ADR Template
 

@@ -62,3 +62,7 @@
 | FEAT-033 | Stability Hardening (idempotent exactly-once recovery, degradation ladder, fault-injection suite) | 2 | Planned |
 | FEAT-034 | Multi-Instance Pipes (zero-config same-machine + LAN discovery, pairing, cross-instance delegation, broadcast routing — specs/PIPES.md) | 7 | Planned |
 | FEAT-035 | Project Introspection (pre-flight pass reads API/DB/config/build/UI/domain/infrastructure before planning — specs/CONTEXT_MANAGEMENT.md §8, FR-CM-009) | 4 | Planned |
+| FEAT-036 | Typed Inference Streaming (sequenced events, terminal integrity, Tool-call commit barrier) | 5 | Planned |
+| FEAT-037 | Resumable Stream Lineage (native cursor, reconnect, no-silent-splice failover) | 5 | Planned |
+| FEAT-038 | Bounded Deep Reasoning (ReasoningPolicy, critic/verifier, calibrated confidence) | 4 | Planned |
+| FEAT-039 | Reproducible Context Snapshots (model-aware budgets, retrieval diversity, compaction lineage) | 4 | Planned |

@@ -42,3 +42,17 @@
 | IT-LC-018 | IT-LC | RESUME protocol preserves ID and increments version | Runtime | Planned | `evidence/integration/IT-LC-018/` | 2026-08-06 |
 | IT-LC-019 | IT-LC | RETRY_AFTER_TERMINAL protocol creates new ID | Runtime | Planned | `evidence/integration/IT-LC-019/` | 2026-08-06 |
 | IT-LC-020 | IT-LC | WorkManager and BootReceiver both use RESUME semantics | Runtime | Planned | `evidence/integration/IT-LC-020/` | 2026-08-06 |
+| IT-STREAM-001 | IT-STREAM | Provider adapter normalizes native SSE into typed StreamEnvelope | Provider Layer | Planned | `evidence/integration/IT-STREAM-001/` | 2026-08-06 |
+| IT-STREAM-002 | IT-STREAM | Slow UI applies bounded backpressure without semantic-event loss | Provider + UI | Planned | `evidence/integration/IT-STREAM-002/` | 2026-08-06 |
+| IT-STREAM-003 | IT-STREAM | Cancellation propagates Agent to adapter and commits once | Agent + Provider | Planned | `evidence/integration/IT-STREAM-003/` | 2026-08-06 |
+| IT-STREAM-004 | IT-STREAM | Native resume preserves streamId and next sequence | Provider Layer | Planned | `evidence/integration/IT-STREAM-004/` | 2026-08-06 |
+| IT-STREAM-005 | IT-STREAM | Unsupported resume restarts with priorStreamId lineage | Provider + Runtime | Planned | `evidence/integration/IT-STREAM-005/` | 2026-08-06 |
+| IT-STREAM-006 | IT-STREAM | Cross-provider failover never splices output | Provider + Runtime | Planned | `evidence/integration/IT-STREAM-006/` | 2026-08-06 |
+| IT-STREAM-007 | IT-STREAM | Terminal usage reconciles accounting exactly once | Provider + Accounting | Planned | `evidence/integration/IT-STREAM-007/` | 2026-08-06 |
+| IT-STREAM-008 | IT-STREAM | Partial Tool call never crosses authorization gate | Provider + Tooling | Planned | `evidence/integration/IT-STREAM-008/` | 2026-08-06 |
+| IT-REASON-001 | IT-REASON | HIGH effort invokes verifier and bounded repair | Agent + Reasoning | Planned | `evidence/integration/IT-REASON-001/` | 2026-08-06 |
+| IT-REASON-002 | IT-REASON | X_HIGH fails fast without eligible reasoning model | Reasoning + Provider | Planned | `evidence/integration/IT-REASON-002/` | 2026-08-06 |
+| IT-REASON-003 | IT-REASON | OFF skips deliberation but retains grounding/evidence gates | Reasoning + Evidence | Planned | `evidence/integration/IT-REASON-003/` | 2026-08-06 |
+| IT-REASON-004 | IT-REASON | Critic disagreement triggers bounded repair then escalation | Reasoning + Agent | Planned | `evidence/integration/IT-REASON-004/` | 2026-08-06 |
+| IT-CONTEXT-001 | IT-CONTEXT | ContextSnapshot budget accounts for tools/output/reasoning | Context + Provider | Planned | `evidence/integration/IT-CONTEXT-001/` | 2026-08-06 |
+| IT-CONTEXT-002 | IT-CONTEXT | Resume reconstructs identical ContextSnapshot lineage | Context + Memory | Planned | `evidence/integration/IT-CONTEXT-002/` | 2026-08-06 |

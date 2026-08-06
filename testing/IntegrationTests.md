@@ -62,3 +62,9 @@ Integration suites SHOULD explicitly validate:
 - canonical error-envelope preservation across adapters
 - lifecycle event ordering after durable commit
 - event deduplication and replay behavior
+
+## Typed Inference and Reasoning (ADR-0008)
+
+- `IT-STREAM-001..008` validate adapter normalization, backpressure, cancellation, resume, failover lineage, usage, and Tool commit barriers.
+- `IT-REASON-001..004` validate effort routing, verifier/critic, OFF behavior, and bounded repair.
+- `IT-CONTEXT-001..002` validate model-aware ContextSnapshot assembly and resume lineage.

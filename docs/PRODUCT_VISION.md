@@ -41,8 +41,9 @@ They have no primary user-facing screens.
 
 - **Think** — Reason about goals, decompose problems, and form strategies.
 - **Plan** — Create multi-step execution plans with dependencies and ordering.
-- **Reason** — Reflect on intermediate results, self-correct, and adapt strategies.
-- **Execute** — Run tools, invoke runtimes, modify files, and perform real actions.
+- **Reason** — Use bounded, evidence-calibrated ReasoningPolicy with critic/verifier gates and redacted reasoning summaries.
+- **Stream Reliably** — Deliver typed, ordered, cancellable inference events with backpressure, resume lineage, and explicit terminal outcomes.
+- **Execute** — Run tools, invoke runtimes, modify files, and perform real actions only after streamed Tool calls are fully committed and authorized.
 - **Use Tools** — Access 300-500+ individual tool functions across 28 categories.
 - **Build Projects** — Create, scaffold, and manage full software projects inside Android.
 - **Edit Files** — Read, write, modify, refactor, and version-control files.

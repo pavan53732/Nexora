@@ -26,7 +26,7 @@ interface AIProvider {
     val supportedCapabilities: Set<ProviderCapability>
 
     suspend fun complete(request: CompletionRequest): CompletionResponse
-    fun stream(request: CompletionRequest): Flow<StreamChunk>
+    fun stream(request: CompletionRequest): Flow<StreamEnvelope>
     suspend fun embed(request: EmbeddingRequest): EmbeddingResponse
     suspend fun listModels(): List<Model>
     suspend fun healthCheck(): HealthStatus
@@ -51,7 +51,10 @@ enum class ProviderCapability {
     VISION,
     EMBEDDINGS,
     FUNCTION_CALLING,
-    REASONING   // multi-step internal reasoning (e.g. o-series, Claude thinking, Gemini thinking, DeepSeek-R1)
+    REASONING,  // bounded reasoning policy support
+    NATIVE_STREAM_RESUME,
+    CITATIONS,
+    REASONING_SUMMARY_STREAM
 }
 ```
 
@@ -59,13 +62,20 @@ enum class ProviderCapability {
 
 ```kotlin
 data class CompletionRequest(
+    val requestId: String,
+    val correlationId: String,
+    val workspaceId: String,
+    val agentId: String,
+    val contextSnapshotId: String,
     val model: String,
     val messages: List<Message>,
     val tools: List<ToolDefinition>?,
     val temperature: Double = 0.7,
     val maxTokens: Int = 4096,
     val stopSequences: List<String>? = null,
-    val reasoningEffort: ReasoningEffort? = null  // null = omit reasoning params entirely (OFF)
+    val reasoningEffort: ReasoningEffort? = null,
+    val reasoningPolicy: ReasoningPolicy,
+    val idempotencyKey: String
 )
 
 enum class ReasoningEffort { LOW, MEDIUM, HIGH, X_HIGH, MAX }
@@ -78,13 +88,42 @@ data class CompletionResponse(
     val finishReason: FinishReason
 )
 
-data class StreamChunk(
-    val content: String?,
-    val toolCalls: List<ToolCall>?,
-    val usage: TokenUsage?,
-    val finishReason: FinishReason?
-)
+// Defined fully in models/Inference.md and protocols/Provider-Protocol.md.
+typealias ProviderStream = Flow<StreamEnvelope>
 ```
+
+## Model Capability Metadata and Route Planning
+
+Every routable model advertises `contextWindowTokens`, `maxOutputTokens`, tokenizer,
+stream/resume mode, reasoning-effort range, tool/citation/vision support, cost, latency,
+reliability, and data-locality attributes. `ProviderRouter.plan()` filters hard
+requirements first, then ranks eligible candidates by workspace policy, capability fit,
+health, privacy/local-only constraint, latency, cost, and reliability.
+
+A persisted `ProviderRoutePlan` records selected profile/model, ranked candidates,
+required capabilities, budget constraints, fallback policy, and selection reason.
+Routing is deterministic for the same catalog/health/policy snapshot.
+
+## Typed Streaming Contract
+
+`AIProvider.stream()` returns `Flow<StreamEnvelope>`. Every event carries immutable
+stream/request/correlation/provider/model identity and a monotonic sequence. Event types
+are closed and include started, text, redacted reasoning summary, citation, tool-call
+fragments/commit, usage, heartbeat, terminal, failure, and cancellation.
+
+Provider-native events are normalized by adapters. A non-streaming provider emits the
+same canonical event sequence after completion. Exactly one terminal event commits
+success; transport close alone is failure. Per-stream states and reconnect rules are
+owned by `state-machines/ProviderStreamLifecycle.md`.
+
+### Backpressure, Cancellation, Resume, and Failover
+
+- Bounded channels suspend producers or coalesce only text/reasoning-summary deltas.
+- Tool, citation, usage, terminal, failure, and cancellation events are never dropped.
+- Cancellation must reach the adapter within the configured cancellation deadline.
+- Native resume reuses `streamId` and continues after the committed sequence/cursor.
+- Restart or provider failover creates a new `streamId` with `priorStreamId`.
+- Output from different providers is never silently spliced into one stream.
 
 ## Initial Providers
 

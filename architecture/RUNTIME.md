@@ -151,6 +151,14 @@ Event Bus ---publish---> All subscribers notified
 Loop back to Planner (reflect and plan next step)
 ```
 
+## Inference-Turn Composition
+
+Agent Runtime owns turn orchestration; Provider System owns routing/streaming; Context
+Management owns snapshots/reasoning/evidence; Tool System owns authorization/execution.
+Runtime supplies references and EventBus transport only. Typed stream events pass through
+sequence validation before UI, Tool assembly, usage accounting, memory, or checkpoints.
+No new monolithic AI-pipeline owner is introduced (ADR-0008).
+
 ## Background Execution
 
 Long-running tasks use Android's **Foreground Service** to survive app minimization.

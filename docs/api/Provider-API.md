@@ -1,106 +1,120 @@
 > **Status: DERIVED** for Provider API.
-> This document describes the API surface for the AI Provider System. Canonical behavior is defined in the owning state-machine (`state-machines/ProviderLifecycle.md`) and architecture (`architecture/PROVIDER_SYSTEM.md`) documents.
->
-> Depends on: the canonical architecture document for Provider System (`architecture/PROVIDER_SYSTEM.md`).
-> Referenced by: upstream architecture, models, protocols, and registries.
+> Canonical routing/streaming behavior is owned by
+> [Provider System](../../architecture/PROVIDER_SYSTEM.md) and
+> [ProviderStreamLifecycle](../../state-machines/ProviderStreamLifecycle.md).
 
 # Provider API — Nexora
 
-> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md) | See [../../architecture/PROVIDER_SYSTEM.md](../../architecture/PROVIDER_SYSTEM.md)
-
----
+> Back to [PROJECT_SPECIFICATION.md](../../PROJECT_SPECIFICATION.md)
 
 ## Normative Operation Contract
 
-The Provider API governs AI provider registration, model configuration, structured text completion, streaming, embedding generation, and token usage tracking. Sensitive keys are encrypted via Android Keystore-backed transience and are never stored in plain text.
+| Operation | Success | Canonical failures | Retry/idempotency | Security/cancellation | Evidence |
+|---|---|---|---|---|---|
+| `registerProfile` | Provider profile projection | NXR-4011, NXR-1010 | Idempotent | Keys remain in SecureKeyStore | Provider contract tests |
+| `planRoute` | Persistable ranked `ProviderRoutePlan` | No eligible model, budget/privacy conflict | Safe read for same snapshot | Profile isolation; redacted reason | Routing tests |
+| `complete` | Committed completion response | NXR-4002..4006, NXR-4012 | Idempotency key required | Endpoint confinement | Completion tests |
+| `streamComplete` | `Flow<StreamEnvelope>` ending in one terminal | NXR-4007, NXR-4013..4017 | Request/stream IDs and cursor rules | Cancellation propagates; bounded backpressure | Streaming tests |
+| `cancelStream` | Committed Cancelled event | Already terminal, not found | Idempotent | Caller owns workspace/request | Cancellation tests |
+| `resumeStream` | Same-ID native resume or new lineage stream | NXR-4014/4015 | Resume key required | Resume token opaque/redacted | Resume tests |
+| `embed` | Normalized vector | NXR-4008 | Idempotent | Workspace scoped | Vector tests |
+| `checkHealth` | Updated provider health | NXR-4001/4009 | Safe | Does not expose credentials | Health/failover tests |
 
-| Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
-|---|---|---|---|---|---|---|
-| `registerProfile`| Provider `Registered → Configured` | Confirmed provider metadata with encrypted key handle | Invalid key (`NXR-4011`), validation error (`NXR-1010`) | Safe (Idempotent) | Encrypts API keys inside Android Keystore; credentials never logged or leaked in memory dumps | Keystore and configuration tests |
-| `complete` | No lifecycle change | Complete response text + detailed token metadata | Auth failed (`NXR-4003`), rate limit (`NXR-4004`), model not found (`NXR-4005`), malformed JSON (`NXR-4006`) | Safe (Idempotent Key) | Confinements: HTTP clients connect only to configured `baseUrl`; TLS 1.3 with pinned certs | Request routing and accuracy tests |
-| `streamComplete` | No lifecycle change | Real-time text token chunks + final token usage | Network break (`NXR-4007`), timeout (`NXR-4002`), quota exceeded (`NXR-4012`) | Safe (Idempotent Key) | Outbound payload scanned for leak of keys or secrets; cancels stream on backpressure | Streaming and low-latency tests |
-| `embed` | No lifecycle change | Normalized vector array (FloatArray) | Empty vector (`NXR-4008`) | Safe (Idempotent) | Scoped per-workspace; cannot bleed training data cross-workspace | Vector Database and search tests |
-| `checkHealth` | Provider status updates based on health latency | Status updated to `HEALTHY`, `DEGRADED`, or `UNHEALTHY` | Host unreachable (`NXR-4001`), check failed (`NXR-4009`) | Safe to retry | Periodic FixedDelayRouter probes; automatic failover to fallback on Unhealthy | Failover and degradation ladder tests |
+Every request carries `requestId`, `correlationId`, workspace identity, profile/model
+identity, and an idempotency key where the operation can create or resume work.
 
-Every API request MUST carry a `correlationId`.
-
-## Contract Shapes
-
-### Completion Request
+## Request and Routing Shapes
 
 ```kotlin
 data class ProviderCompletionRequest(
+    val requestId: String,
     val correlationId: String,
-    val providerProfileId: String,
-    val modelId: String,
-    val messages: List<ChatMessage>,
-    val temperature: Float = 0.7f,
-    val maxTokens: Int = 4096,
-    val systemPrompt: String? = null,
-    val tools: List<ToolDescriptor> = emptyList()
+    val workspaceId: String,
+    val agentId: String,
+    val providerProfileId: String?,
+    val modelId: String?,
+    val contextSnapshotId: String,
+    val requiredCapabilities: Set<ProviderCapability>,
+    val reasoningPolicy: ReasoningPolicy,
+    val maxTokens: Int,
+    val tools: List<ToolDescriptor> = emptyList(),
+    val idempotencyKey: String
+)
+
+data class RouteConstraints(
+    val requiredCapabilities: Set<ProviderCapability>,
+    val maxLatencyMs: Long?,
+    val maxCostUsd: Double?,
+    val localOnly: Boolean,
+    val fallbackPolicy: StreamFallbackPolicy
 )
 ```
 
-### Chat Message
-
-```kotlin
-data class ChatMessage(
-    val role: MessageRole,
-    val content: String,
-    val toolCalls: List<ToolCall> = emptyList()
-)
-
-enum class MessageRole { SYSTEM, USER, ASSISTANT, TOOL }
-```
-
-### Usage Metadata
-
-```kotlin
-data class TokenUsage(
-    val promptTokens: Int,
-    val completionTokens: Int,
-    val totalTokens: Int,
-    val estimatedCostUsd: Double
-)
-```
-
-### Completion Response
+## Completion Response
 
 ```kotlin
 data class ProviderCompletionResponse(
+    val requestId: String,
     val correlationId: String,
-    val message: ChatMessage,
-    val usage: TokenUsage,
+    val providerProfileId: String,
     val modelId: String,
-    val finishReason: String
+    val content: String,
+    val toolCalls: List<ToolCall>,
+    val usage: TokenUsage,
+    val finishReason: FinishReason
 )
 ```
 
-## Provider API Interface
+## Stream Operations
 
 ```kotlin
-package com.nexora.app.runtime.provider
+data class CancelProviderStreamRequest(
+    val requestId: String,
+    val streamId: String,
+    val correlationId: String,
+    val actor: String,
+    val idempotencyKey: String
+)
+
+data class ResumeProviderStreamRequest(
+    val requestId: String,
+    val streamId: String,
+    val correlationId: String,
+    val lastCommittedSequence: Long,
+    val resumeToken: String,
+    val idempotencyKey: String
+)
 
 interface ProviderApi {
     suspend fun registerProfile(profile: ProviderProfileDescriptor): ProviderProjection
+    suspend fun planRoute(request: ProviderCompletionRequest, constraints: RouteConstraints): ProviderRoutePlan
     suspend fun complete(request: ProviderCompletionRequest): ProviderCompletionResponse
-    suspend fun streamComplete(request: ProviderCompletionRequest): Flow<ProviderCompletionResponse>
+    fun streamComplete(request: ProviderCompletionRequest): Flow<StreamEnvelope>
+    suspend fun cancelStream(request: CancelProviderStreamRequest): StreamEnvelope
+    fun resumeStream(request: ResumeProviderStreamRequest): Flow<StreamEnvelope>
     suspend fun embed(text: String, profileId: String, correlationId: String): FloatArray
     suspend fun checkHealth(profileId: String): ProviderHealth
 }
 ```
 
-## Canonical Error Mapping
+## Stream Rules
 
-| Operation | Canonical `NXR-*` codes | Recovery & Lifecycle Effects |
+- API consumers validate monotonic sequence and deduplicate `(streamId, sequence)`.
+- UI text is provisional until a successful `Terminal` event.
+- `ToolArgumentsDelta` is never executable; only `ToolCallCommitted` crosses to Tool API.
+- `resumeStream` is exposed only for `NATIVE_CURSOR`; emulated restart uses a new request and `priorStreamId`.
+- Mid-stream failover never silently combines provider outputs.
+- Backpressure is bounded; overflow returns `NXR-4013`.
+
+## Error Mapping
+
+| Code | Meaning | API effect |
 |---|---|---|
-| `registerProfile` | `NXR-4011` (Invalid Key) | Block registry write; prompt user for correction. |
-| `complete` / `stream` | `NXR-4003` (Auth Failed) | Prompt user to re-configure key; halt generation. |
-| | `NXR-4004` (Rate Limited) | Parse `Retry-After` header; wait and delay retry. |
-| | `NXR-4005` (Model Not Found) | Suggest alternative model; fallback to default. |
-| | `NXR-4006` (Invalid Response)| Re-prompt or trigger automatic retry. |
-| | `NXR-4002` (Timeout) | Halt execution; try fallback provider; trigger degradation. |
-| | `NXR-4012` (Quota Exceeded) | Pause task; notify user; halt generation. |
-| `embed` | `NXR-4008` (Embedding Failed) | Log failure; try fallback model. |
-| `checkHealth` | `NXR-4001` (Connection Failed) | Log exception; retry with backoff. |
-| | `NXR-4009` (Health Failed) | Transition status to `UNHEALTHY`; exclude from router. |
+| `NXR-4007` | Stream transport failed | Commit Failed with partial-output flag. |
+| `NXR-4013` | Stream backpressure overflow | Cancel transport; commit Failed. |
+| `NXR-4014` | Resume rejected | Preserve partial stream; optionally restart with lineage. |
+| `NXR-4015` | Sequence gap unrecoverable | Commit Failed; never synthesize missing deltas. |
+| `NXR-4016` | Incomplete/invalid streamed Tool call | Discard fragments; no Tool execution. |
+| `NXR-4017` | Missing terminal event | Treat socket close as failure. |
+
+See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for canonical envelopes.

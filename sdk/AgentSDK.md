@@ -51,3 +51,11 @@ Custom agents extending the SDK are bound by the platform's anti-hallucination r
 ## Errors & Watchdog Heartbeats
 
 Agents running autonomous loops MUST report periodic watchdog heartbeats via `context.heartbeat()`. If an agent hangs or fails to iterate for longer than `maxIterationTimeMs`, the platform watchdog traps the freeze, logs `NXR-3004` (Agent Timeout), cancels the coroutine context, and attempts to restart the loop from the last valid checkpoint.
+
+## Typed Inference Consumption
+
+Custom agents consume `Flow<StreamEnvelope>` through SDK collectors that validate
+identity/sequence, expose provisional text separately from committed output, assemble
+only committed Tool calls, and propagate cancellation. SDK callbacks receive redacted
+`ReasoningSummary` artifacts; raw private chain-of-thought is never required. Resume
+uses the provider lifecycle contract and never silently combines distinct stream IDs.

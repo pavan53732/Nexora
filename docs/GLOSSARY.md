@@ -14,6 +14,12 @@
 | Tool Manager | Discovers, validates, authorizes, routes, and executes tool calls through the sandbox boundary. | `architecture/TOOL_SYSTEM.md` |
 | Tool Registry | Catalog of tool identities and metadata. | `registry/TOOLS.md` |
 | Agent Registry | Catalog of agent identities and metadata. | `registry/AGENTS.md` |
+| Inference turn | One bounded message-to-committed-answer cycle spanning context, reasoning, routing, typed streaming, Tools, verification, and checkpointing. | `architecture/AGENT_RUNTIME.md` |
+| StreamEnvelope | Provider-neutral, sequenced event envelope with immutable request/stream/provider/model identity. | `architecture/PROVIDER_SYSTEM.md` |
+| ProviderStreamLifecycle | State machine for an individual inference stream; separate from provider administrative health. | `state-machines/ProviderStreamLifecycle.md` |
+| ReasoningPolicy | Bounded per-task provider/tool/token/repair/verifier/time/cost policy derived from reasoning effort. | `specs/CONTEXT_MANAGEMENT.md` |
+| ReasoningSummary | Redacted durable reasoning artifact containing approach, evidence, decisions, uncertainty, and verification—not raw private chain-of-thought. | `specs/CONTEXT_MANAGEMENT.md` |
+| ContextSnapshot | Immutable, model/tokenizer-aware record of included/excluded context segments and token reservations. | `specs/CONTEXT_MANAGEMENT.md` |
 | Background Runtime | Runtime coordination for long-running work while the app is backgrounded. | `specs/BACKGROUND_EXECUTION.md` |
 | `AgentExecutionService` | Android foreground-service host used to keep eligible agent execution alive in the background. | `specs/BACKGROUND_EXECUTION.md` |
 | Full Environment | The single supported bundled Debian-slim guest rootfs with glibc and `apt`, extracted from APK assets and run through proot. | `specs/FULL_ENVIRONMENT.md` |

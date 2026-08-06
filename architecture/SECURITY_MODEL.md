@@ -31,6 +31,8 @@ Nexora enforces strict security boundaries. The AI never touches the host system
 | **Plugin permissions** | Plugins declare required permissions at install. User approves. |
 | **Audit logs** | Every action logged with timestamp, agent, tool, parameters, result. |
 | **Provider isolation** | Provider configs, API keys, and request data are isolated per provider; provider code cannot access other providers' credentials or data. |
+| **Inference stream integrity** | Typed events are authenticated to stream identity, schema/size checked, sequence validated, and terminal committed exactly once. |
+| **Reasoning artifact privacy** | Only redacted ReasoningSummary artifacts persist; raw private chain-of-thought, hidden prompts, credentials, and resume tokens are excluded from logs/exports. |
 
 ## Permission Scopes
 
@@ -102,6 +104,15 @@ The following guarantees apply to every provider and provider profile:
 | **Network confinement** | Provider HTTP clients connect only to their configured `baseUrl` (defaults per PROV-001…009). No arbitrary outbound connections from provider code without an explicit `network:*` grant. TLS 1.3 + certificate pinning (NFR-SEC-004). |
 | **Crash isolation** | A provider failure, timeout, or OOM cannot take down the host app or other providers — bounded retries with backoff and health-based routing (see ProviderLifecycle: Healthy → Degraded → Unhealthy → failover). |
 | **Auditability** | Every provider call is recorded: profile, workspace, agent, model, token usage (observability, FR-P009). |
+
+## Inference Stream Trust Boundary
+
+Provider bytes are untrusted until the adapter maps them to the closed canonical event
+set and the router validates event size, schema, stream/request/profile identity, and
+monotonic sequence. Tool-call fragments cannot cross into Tool authorization before a
+schema-valid `ToolCallCommitted` event. Resume tokens are opaque secrets. Cross-provider
+failover creates a new stream lineage; output is never silently spliced. Stream and
+reasoning artifacts follow NFR-SEC-015 redaction/retention rules.
 
 Design rule (unchanged): the runtime sees only the `AIProvider` interface; all
 provider-specific logic lives in provider plugins

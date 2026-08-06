@@ -21,7 +21,7 @@ The Agent Runtime defines how individual AI agents behave autonomously. Each age
 ## Capabilities
 
 | Capability | Description | Phase |
------------|-------------|-------|
+|---|---|---|
 | **Goal-based execution** | Agent receives a high-level goal and autonomously determines steps. | 2 |
 | **Task planning** | Breaks goals into ordered subtasks with dependencies. | 2 |
 | **Reflection** | After each step, evaluates whether the goal is being achieved. | 2 |
@@ -44,74 +44,96 @@ The Agent Runtime defines how individual AI agents behave autonomously. Each age
 | **Grounded responses** | Claims trace to tool results or context segments; citations and uncertainty disclosure (RG-1..RG-6, FR-GND). | 2 |
 | **Code-claim verification** | Codebase claims verified via code-intelligence tools before being stated (RG-5). | 4 |
 | **Deliberate-then-answer** | Classification gate (answer now / reasoning pass / clarify first) with effort levels fast/balanced/thorough (RB-1..RB-3). | 2 |
-| **Reasoning-capable routing** | Per-task selection of REASONING-capable models (RB-4, FR-EL-005); reasoning traces in the activity feed (RB-5). | 5 |
+| **Reasoning-capable routing** | Per-task selection of REASONING-capable models under bounded ReasoningPolicy; redacted ReasoningSummary in the activity feed. | 5 |
 | **Answer-quality gates** | Grounded/complete/consistent/confident checks before sending; self-consistency for critical answers (RB-6). | 2 |
 | **Automatic workflow generation** | Complex goals auto-generate multi-step workflows. | 6 |
 | **Context management** | Intelligent context window management with summarization. | 2 |
 | **Token budgeting** | Tracks token usage per request and per session. | 2 |
 | **Execution history** | Full history of every action, persisted across sessions. | 6 |
 
+## Agent Inference-Turn Pipeline
+
+The canonical provider path is typed streaming. Providers without native streaming are
+adapted into `Started → TextDelta/ToolCallCommitted → Terminal` events. One turn runs:
+
+```text
+Inbound message
+→ Deliberation/clarification gate
+→ Freshness + project introspection
+→ Evidence retrieval plan
+→ immutable ContextSnapshot
+→ bounded ReasoningPolicy
+→ ProviderRoutePlan
+→ typed ProviderStreamLifecycle
+→ text/citation/reasoning-summary/tool-call assembly
+→ complete Tool authorization and execution
+→ critic/verifier pass
+→ bounded repair or re-plan
+→ answer synthesis + claim/evidence validation
+→ completion gate
+→ checkpoint + memory curation
+```
+
+A partial `ToolArgumentsDelta` is data, never executable. Only a schema-valid
+`ToolCallCommitted` enters the Tool authorization gate. Stream failure leaves displayed
+text marked partial; failover starts a new stream identity with lineage.
+
 ## Agent Loop
 
 ```kotlin
-class AgentLoop(
-    private val planner: Planner,
-    private val executor: Executor,
-    private val contextBuilder: ContextBuilder,
-    private val memoryManager: MemoryManager,
-    private val eventBus: EventBus,
-    private val permissionManager: PermissionManager
-) {
-    suspend fun run(goal: String, workspace: Workspace) {
-        var state = AgentState(goal = goal, workspace = workspace)
+suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
+    val deliberation = deliberationGate.classify(message, state)
+    if (deliberation.requiresClarification) return askForClarification(deliberation)
 
-        while (!state.isComplete) {
-            // 1. Reflect on current state
-            val reflection = planner.reflect(state)
+    val projectContext = projectIntrospector.inspect(state.workspace)
+    val evidencePlan = evidenceEngine.planRetrieval(message, projectContext)
+    val snapshot = contextBuilder.compileSnapshot(state, evidencePlan)
+    val reasoningPolicy = reasoningPolicyResolver.resolve(state, deliberation)
+    val routePlan = providerRouter.plan(snapshot, reasoningPolicy)
 
-            // 2. Plan next actions
-            val plan = planner.planNext(state, reflection)
-
-            // 3. Build context for AI
-            val context = contextBuilder.build(state, plan)
-
-            // 4. Call AI provider
-            val response = state.provider.complete(context)
-
-            // 5. Parse response (text + tool calls)
-            val parsed = parseResponse(response)
-
-            // 6. Execute each tool call
-            for (toolCall in parsed.toolCalls) {
-                // Check permissions
-                val approved = permissionManager.check(toolCall, state)
-                if (!approved) continue
-
-                // Execute in sandbox
-                val result = executor.execute(toolCall, workspace.sandbox)
-
-                // Store in memory
-                memoryManager.storeToolResult(toolCall, result, state)
-
-                // Publish event
-                eventBus.publish(ToolExecuted(toolCall, result))
+    val assembler = InferenceAssembler(snapshot, reasoningPolicy)
+    providerRouter.stream(routePlan, snapshot).collect { envelope ->
+        streamValidator.accept(envelope) // identity, sequence, terminal, size
+        eventBus.publish(InferenceStreamEvent(envelope))
+        when (val event = envelope.event) {
+            is StreamEvent.TextDelta -> assembler.appendText(event)
+            is StreamEvent.ReasoningSummaryDelta -> assembler.appendReasoningSummary(event)
+            is StreamEvent.CitationDelta -> assembler.appendCitations(event)
+            is StreamEvent.ToolCallStarted,
+            is StreamEvent.ToolArgumentsDelta -> assembler.appendToolFragment(event)
+            is StreamEvent.ToolCallCommitted -> {
+                val authorization = permissionManager.authorizeToolCall(event.toolCall, state)
+                if (authorization is PermissionResult.Allowed) {
+                    val result = executor.execute(event.toolCall, state.workspace.sandbox)
+                    memoryManager.storeToolResult(event.toolCall, result, state)
+                    assembler.observe(result)
+                }
             }
-
-            // 7. Evaluate completion
-            state = state.copy(
-                history = state.history + parsed,
-                isComplete = plan.isComplete(parsed)
-            )
-
-            // 8. Save checkpoint
-            saveCheckpoint(state)
-
-            // 9. Notify user
-            eventBus.publish(TaskProgress(state))
+            is StreamEvent.Terminal -> assembler.commit(event)
+            is StreamEvent.Failed -> assembler.failPartial(event)
+            is StreamEvent.Cancelled -> assembler.cancel(event)
+            else -> assembler.observeStreamControl(event)
         }
+        saveStreamCheckpoint(state, envelope, assembler.snapshot())
     }
+
+    val draft = assembler.requireCommittedDraft()
+    val verified = evidenceEngine.verify(draft, reasoningPolicy)
+    val repaired = boundedRepairIfNeeded(verified, reasoningPolicy)
+    val answer = answerSynthesizer.create(repaired)
+    completionGate.requireSatisfied(answer)
+    saveCheckpoint(state.withTurn(answer))
+    return TurnResult(answer)
 }
 ```
+
+### Turn Invariants
+
+- Cancellation propagates Agent → ProviderRouter → adapter → Tool children.
+- Exactly one terminal stream outcome is accepted per `streamId`.
+- Provider failover never silently concatenates output from distinct streams.
+- Reasoning and repair remain inside explicit token/call/time/cost budgets.
+- Durable reasoning output is a redacted `ReasoningSummary`, not unrestricted private chain-of-thought.
 
 ## Agent State
 
@@ -122,6 +144,10 @@ data class AgentState(
     val provider: AIProvider,
     val history: List<AgentStep>,
     val tokenBudget: TokenBudget,
+    val activeContextSnapshotId: String?,
+    val activeStreamId: String?,
+    val lastCommittedStreamSequence: Long?,
+    val reasoningPolicy: ReasoningPolicy?,
     val checkpoint: AgentCheckpoint?,
     val isComplete: Boolean = false,
     val startedAt: Instant = Clock.System.now()

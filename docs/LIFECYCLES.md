@@ -70,6 +70,8 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Use & Removal.** Runtime code calls `ProviderManager.getActiveProvider()` to route completion and streaming requests while monitoring latency and errors. Removing a provider deletes its config and clears the key from the keystore.
 
+**Per-stream lifecycle.** Provider administrative health is separate from each inference stream. `state-machines/ProviderStreamLifecycle.md` canonically governs Created/Connecting/Open/Backpressured/Reconnecting and terminal Completed/Failed/Cancelled states, sequence validation, resume, and failover lineage.
+
 ---
 
 ## 6. Runtime Lifecycle

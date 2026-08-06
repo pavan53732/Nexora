@@ -8,6 +8,12 @@
 
 # Agent Execution Flow
 
+> **Typed inference amendment (ADR-0008):** The provider call is a
+> `ProviderStreamLifecycle`, not a single opaque response. Agent Runtime validates
+> sequenced stream events, assembles only committed Tool calls, applies bounded
+> ReasoningPolicy and verifier/repair gates, then commits the final answer. A failed or
+> replacement stream remains a distinct lineage and is never silently spliced.
+
 This diagram illustrates the full lifecycle of a user goal from submission through the agent loop to UI update. The agent iterates — planning, calling the provider, executing tools, and storing results — until the task is complete.
 
 > **Guard conditions:** every transition shown here is enforced by the
