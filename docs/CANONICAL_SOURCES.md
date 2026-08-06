@@ -52,7 +52,7 @@
 | Background execution | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md`, `docs/LIFECYCLES.md`, `testing/IntegrationTests.md` |
 | Multi-instance pipes (discovery, pairing, transport, cross-instance delegation) | `specs/PIPES.md` | `architecture/MULTI_AGENT_SYSTEM.md` (§Cross-Instance Extension), `models/Instance.md`, `registry/TOOLS.md` (`TOOL-405..408`), `security/PermissionModel.md` (`instance:*` scopes) |
 | Instance/pipe lifecycle | `state-machines/InstanceLifecycle.md` | `models/Instance.md`, `specs/PIPES.md` |
-| Application database and persistence | `specs/DATABASE.md` | `architecture/RUNTIME.md` (§Persistence), `architecture/MEMORY_SYSTEM.md` (§Memory Backing Stores), `architecture/SECURITY_MODEL.md` (§Encryption) |
+| Application database and persistence | `specs/DATABASE_SCHEMA.md` | `architecture/RUNTIME.md` (§Persistence), `architecture/MEMORY_SYSTEM.md` (§Memory Backing Stores), `architecture/SECURITY_MODEL.md` (§Encryption), `specs/DATABASE.md` (sandbox user-facing SQLite) |
 | Per-stream inference lifecycle | `state-machines/ProviderStreamLifecycle.md` | `architecture/PROVIDER_SYSTEM.md`, `models/Inference.md`, `protocols/Provider-Protocol.md`, `diagrams/Provider-Streaming-Flow.md` |
 | ContextSnapshot retention | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md` (§Inference Artifact Retention), `models/Inference.md` |
 | ReasoningSummary retention | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md` (§Inference Artifact Retention), `models/Inference.md` |

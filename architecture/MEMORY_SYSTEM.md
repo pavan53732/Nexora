@@ -52,7 +52,7 @@ Nexora remembers everything. The memory system provides persistent, searchable, 
 | File History | Room `file_version` + sandbox `files/.history/` blobs | FR-M012, [specs/FILE_SYSTEM.md](../specs/FILE_SYSTEM.md) |
 | User Preferences | DataStore (global + per-workspace) | FR-M013 |
 | Knowledge Graph | Room `graph_entity` + `graph_edge` | FR-M014–015 |
-| Execution History | Room `execution_event` | FR-M005 |
+| Execution History | Room `tool_call` (correlationId, executionId) + `permission_audit_log` | FR-M005 |
 | Context Snapshots | Room `context_snapshot` + segment references | FR-CM-010..012 |
 | Reasoning Summaries | Room `reasoning_summary` (redacted, retention-scoped) | FR-RN-011/012 |
 | Stream Lineage | Room `inference_stream` + committed sequence/cursor | FR-P014..019 |
