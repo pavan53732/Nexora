@@ -133,7 +133,14 @@ Resuming after a crash must never double-apply side effects.
 | **Transactionality** | File/DB mutations use write-new + atomic swap; WAL for Room (NFR-REL-001) |
 
 Outcome: after any crash/restart, the workspace state is identical to exactly-once
-execution of the completed steps.
+execution — no duplicate mutation, no lost progress, no stale result injection.
+
+Recoverable interruptions before a terminal state resume the same `executionId` with
+`version` incremented and `correlationId` stable. A terminal Execution is never
+returned to `RUNNING`. Explicit retry after terminal status creates a new `executionId`
+with `priorExecutionId` linking the terminal predecessor. Non-idempotent in-flight
+calls are reconciled from durable history; idempotent incomplete calls may replay
+safely under the replay policy (see [../architecture/RUNTIME.md](../architecture/RUNTIME.md) §ExecutionStatus Lifecycle).
 
 ## 8. Degradation Ladder (FR-AS-008)
 

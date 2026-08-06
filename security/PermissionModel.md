@@ -81,9 +81,22 @@ suspend fun checkPermission(
 ): PermissionResult {
     val scopeIds = tool.requiredPermissions
 
-    // Empty permission list — allowed by default
+    // Validate: no duplicate scope declarations
+    if (scopeIds.size != scopeIds.toSet().size) {
+        auditDuplicateScopes(tool, workspaceId, agentId, scopeIds)
+        return PermissionResult.Denied(
+            scopeId = "declaration",
+            reason = DenialReason.MALFORMED_APPROVAL,
+            errorCode = "NXR-2003"
+        )
+    }
+
+    // Empty permission list — scopes pass; classifier may still apply
     if (scopeIds.isEmpty()) {
-        return PermissionResult.Allowed
+        return finalizeAuthorizationAfterScopes(
+            tool, workspaceId, agentId,
+            resolvedPermissions = emptyList()
+        )
     }
 
     val pendingApprovals = mutableListOf<PendingApproval>()
@@ -141,6 +154,7 @@ suspend fun checkPermission(
                 )
                 resolvedPermissions.add(ResolvedPermission(
                     scopeId = scope.id,
+                    declaredDefault = scope.defaultDecision,
                     preliminaryDecision = PermissionDecision.ALLOW,
                     source = resolved.source,
                     finalOutcome = FinalPermissionOutcome.ALLOWED_BY_POLICY
@@ -196,7 +210,18 @@ suspend fun checkPermission(
         // Approved ASK scopes — continue to classifier evaluation
     }
 
-    // All permission scopes passed — optional classifier evaluation
+    return finalizeAuthorizationAfterScopes(
+        tool = tool, workspaceId = workspaceId, agentId = agentId,
+        resolvedPermissions = resolvedPermissions
+    )
+}
+
+private suspend fun finalizeAuthorizationAfterScopes(
+    tool: Tool,
+    workspaceId: String,
+    agentId: String?,
+    resolvedPermissions: List<ResolvedPermission>
+): PermissionResult {
     val classifierSelection = if (classifierEnabled) {
         classifierPolicy.shouldEvaluate(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
@@ -207,13 +232,17 @@ suspend fun checkPermission(
     }
 
     if (classifierSelection.evaluate) {
-        val classifierResult = classifier.evaluate(tool, workspaceId, agentId)
+        val eval = classifier.evaluate(tool, workspaceId, agentId)
         auditClassifierEvaluation(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
-            result = classifierResult, reason = classifierSelection.reason
+            evaluation = eval, reason = classifierSelection.reason
         )
-        if (classifierResult is PermissionResult.Denied) {
-            return classifierResult
+        if (eval.decision == ClassifierDecision.DENY) {
+            return PermissionResult.Denied(
+                scopeId = eval.primaryScopeId ?: "classifier",
+                reason = DenialReason.CLASSIFIER_DENIAL,
+                errorCode = "NXR-2003"
+            )
         }
     } else {
         auditClassifierSkipped(
@@ -342,6 +371,7 @@ enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, MALFORMED_A
 
 data class ResolvedPermission(
     val scopeId: String,
+    val declaredDefault: PermissionDecision,
     val preliminaryDecision: PermissionDecision,
     val source: PolicySource,
     val finalOutcome: FinalPermissionOutcome
@@ -350,8 +380,18 @@ data class ResolvedPermission(
 enum class FinalPermissionOutcome {
     ALLOWED_BY_POLICY,
     APPROVED_BY_USER,
-    DENIED_BY_USER
+    DENIED_BY_USER  // present in audit; classifier never receives denied outcomes
 }
+
+data class ClassifierEvaluation(
+    val decision: ClassifierDecision,
+    val modelVersion: String,
+    val riskScore: Float?,
+    val reasonCodes: List<String>,
+    val primaryScopeId: String?
+)
+
+enum class ClassifierDecision { ALLOW, DENY }
 
 interface ClassifierPolicy {
     fun shouldEvaluate(
@@ -371,7 +411,6 @@ enum class ClassifierSelectionReason {
     WORKSPACE_OPT_IN,
     SCOPE_RISK_POLICY,
     TOOL_RISK_POLICY,
-    AUTONOMY_MODE_POLICY,
     CLASSIFIER_DISABLED,
     NOT_SELECTED
 }

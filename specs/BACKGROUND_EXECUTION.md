@@ -88,6 +88,13 @@ surfaces in the workflow engine (Phase 8 plugin scheduling).
 - On app kill or device restart, `BootReceiver` checks for incomplete executions,
   restarts `AgentExecutionService`, and agents **resume from their last checkpoint**
   with 100% state fidelity (NFR-REL-002, FR-A011).
+- Checkpoint resume retains the same `executionId` and `correlationId`; `version`
+  increments for every committed checkpoint/resume transition (see
+  [../architecture/RUNTIME.md](../architecture/RUNTIME.md) §ExecutionStatus Lifecycle).
+- A terminal Execution (`FAILED`, `CANCELLED`, `COMPLETED`) is never mutated back to
+  `RUNNING`. Explicit retry after a terminal state creates a new `executionId`
+  with `priorExecutionId` referencing the terminal predecessor.
+- WorkManager handoff and BootReceiver resume are checkpoint resumes, not retries.
 - Cancellation and failure both preserve partial results and checkpoints for
   inspection or manual retry.
 - Checkpoints are stored per workspace (`sandbox/workspaces/{id}/tasks/`) with WAL

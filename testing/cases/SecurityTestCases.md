@@ -32,6 +32,36 @@
 | SEC-PERM-021 | SEC-PERM | TOOL-408: only one scope approved → tool denied | Security + Pipes | Planned | `evidence/security/SEC-PERM-021/` | 2026-08-06 |
 | SEC-PERM-022 | SEC-PERM | TOOL-408: reversed scope order, same result | Security + Pipes | Planned | `evidence/security/SEC-PERM-022/` | 2026-08-06 |
 | SEC-PERM-023 | SEC-PERM | Multi-scope audit: every preliminary and final scope result recorded | Security | Planned | `evidence/security/SEC-PERM-023/` | 2026-08-06 |
+
+| SEC-PERM-024 | SEC-PERM | Duplicate required scope ID rejected | Security | Planned | `evidence/security/SEC-PERM-024/` | 2026-08-06 |
+| SEC-PERM-025 | SEC-PERM | Duplicate pending approval scope rejected | Security | Planned | `evidence/security/SEC-PERM-025/` | 2026-08-06 |
+| SEC-PERM-026 | SEC-PERM | Duplicate approval outcome rejected | Security | Planned | `evidence/security/SEC-PERM-026/` | 2026-08-06 |
+| SEC-PERM-027 | SEC-PERM | Missing approval outcome rejected | Security | Planned | `evidence/security/SEC-PERM-027/` | 2026-08-06 |
+| SEC-PERM-028 | SEC-PERM | Unexpected extra outcome rejected | Security | Planned | `evidence/security/SEC-PERM-028/` | 2026-08-06 |
+| SEC-PERM-029 | SEC-PERM | Empty approval result rejected | Security | Planned | `evidence/security/SEC-PERM-029/` | 2026-08-06 |
+| SEC-PERM-030 | SEC-PERM | Transaction ID mismatch rejected | Security | Planned | `evidence/security/SEC-PERM-030/` | 2026-08-06 |
+| SEC-PERM-031 | SEC-PERM | Valid exact one-to-one approval accepted | Security | Planned | `evidence/security/SEC-PERM-031/` | 2026-08-06 |
+| SEC-PERM-032 | SEC-PERM | Malformed result returns MALFORMED_APPROVAL | Security | Planned | `evidence/security/SEC-PERM-032/` | 2026-08-06 |
+| SEC-PERM-033 | SEC-PERM | Malformed result never invokes classifier | Security | Planned | `evidence/security/SEC-PERM-033/` | 2026-08-06 |
+| SEC-PERM-034 | SEC-PERM | Malformed result never executes tool | Security | Planned | `evidence/security/SEC-PERM-034/` | 2026-08-06 |
+| SEC-PERM-035 | SEC-PERM | resolvedPermissions includes all policy-allowed scopes | Security | Planned | `evidence/security/SEC-PERM-035/` | 2026-08-06 |
+| SEC-PERM-036 | SEC-PERM | resolvedPermissions includes approved ASK scopes | Security | Planned | `evidence/security/SEC-PERM-036/` | 2026-08-06 |
+| SEC-PERM-037 | SEC-PERM | Denied scopes never enter classifier input | Security | Planned | `evidence/security/SEC-PERM-037/` | 2026-08-06 |
+| SEC-PERM-038 | SEC-PERM | Empty permission list follows classifier-selection policy | Security | Planned | `evidence/security/SEC-PERM-038/` | 2026-08-06 |
+| SEC-PERM-039 | SEC-PERM | Classifier selected by workspace scope opt-in | Security | Planned | `evidence/security/SEC-PERM-039/` | 2026-08-06 |
+| SEC-PERM-040 | SEC-PERM | Classifier selected by workspace tool opt-in | Security | Planned | `evidence/security/SEC-PERM-040/` | 2026-08-06 |
+| SEC-PERM-041 | SEC-PERM | ASK/DENY-default satisfied scope triggers SCOPE_RISK_POLICY | Security | Planned | `evidence/security/SEC-PERM-041/` | 2026-08-06 |
+| SEC-PERM-042 | SEC-PERM | All low-risk ALLOW scopes produce NOT_SELECTED | Security | Planned | `evidence/security/SEC-PERM-042/` | 2026-08-06 |
+| SEC-PERM-043 | SEC-PERM | Classifier disabled produces CLASSIFIER_DISABLED skip | Security | Planned | `evidence/security/SEC-PERM-043/` | 2026-08-06 |
+| SEC-PERM-044 | SEC-PERM | Classifier skip is audited | Security | Planned | `evidence/security/SEC-PERM-044/` | 2026-08-06 |
+| SEC-PERM-045 | SEC-PERM | Classifier ALLOW produces no-objection audit | Security | Planned | `evidence/security/SEC-PERM-045/` | 2026-08-06 |
+| SEC-PERM-046 | SEC-PERM | Classifier DENY returns CLASSIFIER_DENIAL | Security | Planned | `evidence/security/SEC-PERM-046/` | 2026-08-06 |
+| SEC-PERM-047 | SEC-PERM | Classifier DENY is final for current call | Security | Planned | `evidence/security/SEC-PERM-047/` | 2026-08-06 |
+| SEC-PERM-048 | SEC-PERM | Approved ASK then classifier DENY blocks execution | Security | Planned | `evidence/security/SEC-PERM-048/` | 2026-08-06 |
+| SEC-PERM-049 | SEC-PERM | Rejected ASK never invokes classifier | Security | Planned | `evidence/security/SEC-PERM-049/` | 2026-08-06 |
+| SEC-PERM-050 | SEC-PERM | Policy DENY never invokes classifier | Security | Planned | `evidence/security/SEC-PERM-050/` | 2026-08-06 |
+| SEC-PERM-051 | SEC-PERM | Classifier selection is order-independent | Security | Planned | `evidence/security/SEC-PERM-051/` | 2026-08-06 |
+| SEC-PERM-052 | SEC-PERM | Classifier audit redacts sensitive inputs | Security | Planned | `evidence/security/SEC-PERM-052/` | 2026-08-06 |
 | SEC-LC-SESSION-001 | SEC-LC | Session: valid CREATED→ACTIVE transition | Security + Runtime | Planned | `evidence/security/SEC-LC-SESSION-001/` | 2026-08-06 |
 | SEC-LC-SESSION-002 | SEC-LC | Session: valid ACTIVE→IDLE→ACTIVE cycle | Security + Runtime | Planned | `evidence/security/SEC-LC-SESSION-002/` | 2026-08-06 |
 | SEC-LC-SESSION-003 | SEC-LC | Session: CLOSED is terminal, no further transitions | Security + Runtime | Planned | `evidence/security/SEC-LC-SESSION-003/` | 2026-08-06 |

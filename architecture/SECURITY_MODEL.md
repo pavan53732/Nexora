@@ -57,49 +57,21 @@ Nexora enforces strict security boundaries. The AI never touches the host system
 
 ## Permission Flow
 
-> **Note:** The following summarizes the canonical permission evaluation algorithm.
-> `security/PermissionModel.md` owns the complete algorithm, multi-scope evaluation,
-> and aggregated-approval semantics. This document projects the same behavior for
-> the security-architecture view. Any divergence from PermissionModel is documentation
-> drift — PermissionModel is authoritative.
+> **Note:** PermissionModel (`security/PermissionModel.md`) owns authorization semantics,
+> including multi-scope evaluation, aggregated ASK approval, classifier policy, and
+> complete audit. This document projects the canonical behavior for the security-architecture
+> view only. Any divergence is documentation drift — PermissionModel is authoritative.
 
-```kotlin
-enum class PermissionDecision { ALLOW, ASK, DENY }
+Tool authorization, in order:
 
-class PermissionManager(
-    private val globalPolicy: Map<PermissionScope, PermissionDecision>,
-    private val workspaceOverrides: Map<String, Map<PermissionScope, PermissionDecision>>,
-    private val agentOverrides: Map<String, Map<PermissionScope, PermissionDecision>>
-) {
-    suspend fun check(tool: Tool, workspaceId: String, agentId: String?): PermissionResult {
-        val scopes = tool.requiredPermissions
-        if (scopes.isEmpty()) return PermissionResult.Allowed
-
-        val askScopes = mutableListOf<PermissionScope>()
-
-        for (s in scopes) {
-            // Agent override → Workspace override → Global policy → scope default → DENY
-            val decision = agentOverrides[agentId]?.get(s)
-                ?: workspaceOverrides[workspaceId]?.get(s)
-                ?: globalPolicy[s]
-                ?: s.default
-                ?: PermissionDecision.DENY
-
-            when (decision) {
-                PermissionDecision.DENY -> return PermissionResult.Denied(s)
-                PermissionDecision.ASK -> askScopes.add(s)
-                PermissionDecision.ALLOW -> continue // evaluate remaining scopes
-            }
-        }
-
-        if (askScopes.isNotEmpty()) {
-            return askUser(tool, askScopes) // aggregated approval
-        }
-
-        return PermissionResult.Allowed
-    }
-}
-```
+1. Resolves every declared required-permission scope against the canonical registry.
+2. Denies unknown or effective-DENY scopes immediately (classifier not invoked).
+3. Aggregates ASK scopes into one approval transaction.
+4. Validates exact one-to-one approval outcomes (duplicate, missing, extra, or
+   transaction-ID mismatch returns MALFORMED_APPROVAL).
+5. If all scopes pass, applies ClassifierPolicy selection.
+6. If selected, executes classifier; classifier DENY is final for the call.
+7. Returns Allowed only after every gate passes; tool execution begins only then.
 
 ## API Key Encryption
 
