@@ -20,7 +20,7 @@ data class TerminalSession(
     val workingDirBoundary: String? = null,     // workspace root or sandbox overlay (S4)
     val outputCapBytes: Long = 262_144,         // default 256 KB (subprocess) / 1 MB (PTY interactive) (S4)
     val timeoutMs: Long = 60_000,              // 60s (subprocess) / 300s (PTY) default (S4)
-    val restoreCheckpoint: String? = null,     // checkpoint ID for FR-AS-013 restore (S4)
+    val restoreCheckpoint: String? = null,     // checkpoint ID for FR-AS-007 restore (S4)
     val sessionBufferReplay: Boolean = false  // replay input after restore (S4)
 )
 

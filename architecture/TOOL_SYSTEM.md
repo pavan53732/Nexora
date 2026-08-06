@@ -77,6 +77,8 @@ data class ToolMetadata(
 | 16 | **Memory** | store_memory, recall_memory, search_memory, list_memories | 6 |
 | 17 | **AI** | complete, embed, image_generate, image_analyze | 5 |
 | 18 | **Android Device** | read_contacts, send_notification, access_camera, device_audio_stream, device_camera_stream | Later (G5 — optional: real-time streaming `device_camera_stream` `TOOL-403`, `device_audio_stream` `TOOL-404`; default `DENY`; `Streaming` flag `✓`; `FR-S016` `Manual`/`Assisted` mode required) |
+
+> **Reserved tool IDs:** `TOOL-403` (`device_camera_stream`) and `TOOL-404` (`device_audio_stream`) are reserved for real-time device streaming (G5 research); they must not be reused for other tools. Registry skips `TOOL-403` and `TOOL-404` pending implementation.
 | 19 | **Project Management** | create_task, update_task, list_tasks, track_progress | Later |
 | 20 | **Security** | check_permissions, encrypt_file, decrypt_file, scan_vulnerabilities | Later |
 | 21 | **Observability** | get_logs, get_metrics, get_trace, export_diagnostics | Later |
@@ -88,8 +90,8 @@ data class ToolMetadata(
 | 27 | **MCP Integration** | mcp_connect_stdio, mcp_connect_http, mcp_list_caps, mcp_call_tool, mcp_read_resource, mcp_get_prompt | 5 |
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
-> registry of every tool — **333 tools** with stable `TOOL-###` IDs, descriptions, and
-> phases across the 26 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
+> registry of every tool — **343 tools** with stable `TOOL-###` IDs, descriptions, and
+> phases across the 27 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.
 

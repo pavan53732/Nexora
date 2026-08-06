@@ -101,7 +101,7 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-017 | Fork bomb inside sandbox exhausts device processes | Sandbox | Critical | Max 8 concurrent processes per workspace; `RLIMIT_NPROC` enforced | Partial |
 | TM-018 | Agent fills sandbox disk, starving other workspaces | Sandbox | High | Per-workspace disk quotas (default 500 MB); alerts at 80 %/90 %/100 %; auto-cleanup of temp files | Partial |
 | TM-019 | Memory pressure from large context or embeddings | Runtime | High | Per-workspace memory cap (default 256 MB); LRU eviction in memory store; OOM protection via `onTrimMemory` | Partial |
-| TM-020 | Rapid agent spawning floods the event bus | Agent System | Medium | Max 5 concurrent agents globally; agent creation rate limit (10/min) | Partial |
+| TM-020 | Rapid agent spawning floods the event bus | Agent System | Medium | Dynamic concurrency cap per SA-3 (`min(memory_budget/per_agent_est, cpu_cores, configurable_max)`; default 3, high-end 8–16 — see `architecture/MULTI_AGENT_SYSTEM.md` §SA-3, `ResourceManager`, `FR-MA-003`); agent creation rate limit (10/min) preserved independently | Partial |
 | TM-021 | Background agent drains battery | Runtime | Medium | Foreground service with notification; Android Doze awareness; `JobScheduler` for non-urgent tasks | Partial |
 
 ### Elevation of Privilege
@@ -113,6 +113,15 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-024 | Agent exceeds granted permissions via tool chaining | Agent System | High | Permission check on every individual tool call, not just the first; no implicit permission inheritance across chain steps | Mitigated |
 | TM-025 | Malicious provider response injects tool invocations | Provider System | Medium | Provider output is treated as data, not code; tool calls validated against registry before execution | Mitigated |
 | TM-028 | Provider plugin performs arbitrary network calls to exfiltrate data | Provider System | High | Provider HTTP clients confined to their configured `baseUrl`; `network:*` grants enforced by `PermissionManager`; no raw sockets exposed to provider code | Partial |
+| TM-029 | Rogue mDNS advertisement impersonates a legitimate Nexora instance | Pipe Discovery | High | Pairing requires user-confirmed fingerprint match (Ed25519 public key, QR or 6-word code); discovery is listener-only — no trust is derived from TXT record content before pairing (`specs/PIPES.md` §3, §4) | Partial |
+| TM-030 | Unauthorized pairing to a hostile instance via spoofed fingerprint | Pipe Pairing | Critical | Fingerprint confirmed on both ends; `instance:pair` is `ASK` by default; pairing record binds fingerprint + alias + workspace set; `NXR-6009` on mismatch (`specs/PIPES.md` §3; `FR-MI-004`, `FR-MI-008`) | Partial |
+| TM-031 | TLS identity substitution (MITM between paired instances) | Pipe Transport | Critical | Mutual TLS 1.3 using pinned `pipeKey` certificates — no CA, no self-signed prompts; `instance:connect` is `ASK` by default; DLP scan on outbound bodies per `NFR-SEC-013` (`specs/PIPES.md` §5, §8; `NFR-SEC-014`) | Partial |
+| TM-032 | Malformed/forged pipe payload triggers parser exploitation | Pipe Transport | High | Closed payload type set; schema-validated pre-parse; 3 violations → auto-`Revoked`; audit `CRITICAL` per `FR-T015` (`specs/PIPES.md` §5, §9; `FR-MI-008`) | Partial |
+| TM-033 | Replay attack on pipe messages (duplicate delegation) | Pipe Transport | Medium | Every payload carries a monotonically increasing `pipeSeq`; receiver deduplicates by `(pipeId, pipeSeq)`; matches `NFR-REL-012` exactly-once discipline (`specs/PIPES.md` §5; `FR-MI-006`) | Partial |
+| TM-034 | Cross-workspace privilege escalation via pipe routing misconfiguration | Pipe Delegation | Critical | A pipe is bound to exactly one exposed workspace; cross-workspace routing is rejected (`NXR-1002` variant); `FR-MI-008` gates enforced by `PermissionManager` (`specs/PIPES.md` §8; `NFR-SEC-012` network confinement) | Partial |
+| TM-035 | Broadcast abuse — attacker floods workspace with broadcast messages | Pipe Broadcast | Medium | `instance:broadcast` is `DENY` by default; rate-limited (1/s, burst 5); recipients treat broadcasts as data, not instructions (`FR-CM-006`); `TM-020` analog applies (`specs/PIPES.md` §7; `FR-MI-007`) | Partial |
+| TM-036 | Listener DoS / connection exhaustion on pipe transport ports | Pipe Transport | Medium | Bounded retry (3 attempts, exponential backoff, `NFR-REL-003`); pipe timeout (30 s connect, 120 s task-ack); `Degraded` → `Disconnected` state machine (`specs/PIPES.md` §5, §9; `FR-MI-009`) | Partial |
+| TM-037 | LAN metadata leakage — device names, workspace counts exposed via mDNS | Pipe Discovery | Low | TXT records carry only non-sensitive fields (`instanceId`, `fingerprint`, `minContractVersion`, nonce); no workspace names, tool counts, or provider identifiers advertised (`specs/PIPES.md` §3, §4; `FR-MI-001`) | Open |
 
 ---
 
@@ -141,7 +150,7 @@ To satisfy High Finding 11 and ensure complete cryptographic, permission, and is
 | **TM-017** | DoS | Process spawn limiting (`SandboxPolicy.md`) | `ProcessManager` | Spawn exceeding 8 concurrent processes returns `NXR-7002` | `SEC-DOS-001` |
 | **TM-018** | DoS | Workspace disk quotas (`SandboxPolicy.md`) | `SandboxFileSystem.write` | Block writes exceeding 500 MB quota; throw `NXR-7003` | `SEC-DOS-002` |
 | **TM-019** | DoS | Aggregate workspace RSS memory monitoring (`SandboxPolicy.md`) | `ProcessManager` watchdog | Kill process tree exceeding 256 MB aggregate limit; raise `NXR-7004` | `SEC-DOS-002` |
-| **TM-020** | DoS | Agent creation rate limits (`MULTI_AGENT_SYSTEM.md`) | `AgentManager` | Block spawns exceeding 5 concurrent agents; drop on bus flood | `SEC-DOS-001` |
+| **TM-020** | DoS | Dynamic concurrency cap SA-3 (`MULTI_AGENT_SYSTEM.md` §SA-3, `ResourceManager`); 10/min creation rate | `AgentManager` | Block spawns exceeding dynamic cap (default 3, high-end 8–16); drop on bus flood | `SEC-DOS-001` |
 | **TM-021** | DoS | Android Doze & WorkManager handoffs (`specs/BACKGROUND_EXECUTION.md`) | `AgentExecutionService` | Release wake lock on low battery; hand off to WorkManager | `SEC-DOS-001` |
 | **TM-022** | Privilege Elev | Classloader-level file IO blocks (`SandboxPolicy.md`) | `SandboxFileSystem` | Tool/plugin calls to raw `java.io.File` are blocked; require VFS | `SEC-SBX-001` |
 | **TM-023** | Privilege Elev | User-approved scope review at install (`PermissionModel.md`) | `PluginManager.install` | Only user-granted scopes are accessible; others blocked | `SEC-PLUGIN-001` |
@@ -150,6 +159,15 @@ To satisfy High Finding 11 and ensure complete cryptographic, permission, and is
 | **TM-026** | Info Disclosure | Active profile tagging and validation (`Provider-API.md`) | `ProviderRouter` | Block completion requests to unassigned profiles; throw `NXR-4010` | `SEC-FLOW-001` |
 | **TM-027** | Info Disclosure | Key alias isolation in Keystore (`ProviderSDK.md`) | `SecureKeyStore` | Provider adapters receive alias tokens; direct key read is denied | `SEC-FLOW-001` |
 | **TM-028** | Privilege Elev | Base URL network confinement (`ProviderSDK.md`) | `PermissionManager` | Intercept calls to unapproved endpoints; throw `NXR-7005` | `SEC-NET-001` |
+| **TM-029** | Spoofing | Ed25519 fingerprint pairing + user confirmation (`specs/PIPES.md` §3-4) | `PipeManager.pair` | mDNS TXT records are listener-only; trust established only on confirmed fingerprint match; reject with `NXR-6009` on mismatch | `SEC-NET-001` |
+| **TM-030** | Spoofing | Pairing record validation + instance:pair ASK gate (`specs/PIPES.md` §3; `FR-MI-004`) | `PipeManager.pair` | Unauthorized pairing blocked; `instance:pair` `ASK` keeps gate explicit; pairing binds fingerprint+alias+workspace set per-revocation | `SEC-PERM-001` |
+| **TM-031** | Spoofing | Mutual TLS 1.3 with pinned pipeKey certificates + DLP egress scan (`specs/PIPES.md` §5, §8; `NFR-SEC-014`) | `PipeTransport` | No CA or self-signed fallback; identity mismatch drops connection; outbound body DLP scan blocks credential leak (`NFR-SEC-013`) | `SEC-NET-001` |
+| **TM-032** | Tampering | Closed payload type set + schema validation pre-parse (`specs/PIPES.md` §5; `FR-MI-008`) | `PipeTransport` | Malformed/forged payloads rejected before parse; 3 violations auto-revoke pipe; audit `CRITICAL` (`FR-T015`) | `SEC-NET-001` |
+| **TM-033** | Tampering | PipeSeq deduplication + NFR-REL-012 exactly-once (`specs/PIPES.md` §5; `FR-MI-006`) | `PipeTransport` | Duplicate `(pipeId, pipeSeq)` dropped; replay of delegation payloads harmless (idempotent-safe target) | `SEC-NET-001` |
+| **TM-034** | Elevation | Per-pipe workspace scoping + PermissionManager routing (`specs/PIPES.md` §8; `NFR-SEC-012`) | `PipeManager.route` | Cross-workspace routing rejected (`NXR-1002` variant); pipe bound to exactly one workspace | `SEC-PERM-001` |
+| **TM-035** | DoS | Broadcast rate limiting + data-not-instruction rule (`specs/PIPES.md` §7; `FR-MI-007`) | `PipeManager.broadcast` | Rate limit 1/s burst 5; `instance:broadcast` `DENY` default; recipients treat broadcasts as data (`FR-CM-006`) | `SEC-DOS-001` |
+| **TM-036** | DoS | Bounded reconnect + pipe timeout discipline (`specs/PIPES.md` §5, §9; `NFR-REL-003`) | `PipeTransport` | 3 retry attempts with exponential backoff; 30 s connect / 120 s task-ack deadlines; `Degraded` → `Disconnected` state machine | `SEC-DOS-001` |
+| **TM-037** | Info Disclosure | Minimal mDNS TXT record set (`specs/PIPES.md` §3, §4; `FR-MI-001`) | `NsdManager` service record | Non-sensitive fields only (instanceId, fingerprint, contract version, nonce); no workspace names or provider identifiers advertised | `SEC-NET-001` |
 
 ---
 
@@ -157,10 +175,10 @@ To satisfy High Finding 11 and ensure complete cryptographic, permission, and is
 
 | Category | Total | Mitigated | Partial | Open |
 |----------|-------|-----------|---------|------|
-| Spoofing | 4 | 3 | 1 | 0 |
-| Tampering | 4 | 2 | 1 | 1 |
+| Spoofing | 7 | 5 | 2 | 0 |
+| Tampering | 6 | 2 | 2 | 2 |
 | Repudiation | 3 | 2 | 1 | 0 |
-| Information Disclosure | 7 | 4 | 3 | 0 |
-| Denial of Service | 5 | 0 | 5 | 0 |
-| Elevation of Privilege | 5 | 3 | 2 | 0 |
-| **Total** | **28** | **14** | **13** | **1** |
+| Information Disclosure | 8 | 4 | 4 | 0 |
+| Denial of Service | 7 | 0 | 7 | 0 |
+| Elevation of Privilege | 6 | 3 | 3 | 0 |
+| **Total** | **37** | **16** | **19** | **2** |

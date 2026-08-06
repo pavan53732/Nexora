@@ -166,7 +166,7 @@ Scripted chaos scenarios, runnable in CI and locally:
 
 | Scenario | Verifies |
 |----------|----------|
-| Kill app mid-task → restart | Resume reconstruction (CONTEXT_MANAGEMENT §4) + checkpoint fidelity |
+| Kill app mid-task → restart | Resume reconstruction (CONTEXT_MANAGEMENT §3) + checkpoint fidelity |
 | Kill during a non-idempotent tool call → restart | Exactly-once recovery (no double side-effect) |
 | Network loss mid-task | Degradation ladder descent + graceful notification |
 | Provider 500s / rate-limit storm | Failover + retry backoff (ProviderLifecycle) |

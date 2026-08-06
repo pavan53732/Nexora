@@ -21,7 +21,7 @@ Terminal execution operates within the sandboxed runtime (`security/SandboxPolic
 | Mode | Use case | Isolation | Working-dir boundary | Restore behavior |
 |------|----------|-----------|----------------------|-------------------|
 | **Subprocess** (`run_command`, `run_script`) | Short-lived commands, scripts | Full sandbox isolation (`FR-S002`); inherits workspace limits (`FR-S018`) | Confined to workspace root; `sandbox_limits.workingDir` applies (`models/Workspace.md`); `chdir` outside workspace is denied (`security/SandboxPolicy.md`) | Not restorable (stateless); checkpoint only if `run_background` (`FR-T011`) |
-| **PTY** (`terminal_run` interactive, `terminal_session_create`) | Interactive terminal sessions, long-running background tasks (`run_background`) | Process-level isolation (`FR-S002`); session-level isolation (`FR-S018`); PTY master/slave pair isolated per session | Workspace root bound (`workspace.getWorkingDirectory()`); relative paths resolved against workspace; absolute path access (`/etc`, `/home/user`) blocked by sandbox policy (`FR-S014` network egress + `FR-S015` quarantine rules applied to file-system access) | Full session restore (`FR-AS-013` exactly-once recovery): session state snapshot (`lifecycle/TerminalSessionLifecycle.md` `Restored` state) + process restart + working-dir reconstruction + input buffer replay (if `sessionRestoreBuffer` enabled) |
+| **PTY** (`terminal_run` interactive, `terminal_session_create`) | Interactive terminal sessions, long-running background tasks (`run_background`) | Process-level isolation (`FR-S002`); session-level isolation (`FR-S018`); PTY master/slave pair isolated per session | Workspace root bound (`workspace.getWorkingDirectory()`); relative paths resolved against workspace; absolute path access (`/etc`, `/home/user`) blocked by sandbox policy (`FR-S014` network egress + `FR-S015` quarantine rules applied to file-system access) | Full session restore (`FR-AS-007` idempotent recovery + `NFR-REL-012` exactly-once): session state snapshot (`lifecycle/TerminalSessionLifecycle.md` `Restored` state) + process restart + working-dir reconstruction + input buffer replay (if `sessionRestoreBuffer` enabled) |
 
 ### Session State Machine (S3 — filled lifecycle authority)
 
@@ -43,7 +43,7 @@ data class TerminalSession(
     val startedAt: Instant,
     val updatedAt: Instant,
     val endedAt: Instant? = null,
-    val restoreCheckpoint: String? = null,  // checkpoint reference for FR-AS-013 restore (S4 — new field)
+    val restoreCheckpoint: String? = null,  // checkpoint reference for FR-AS-007 restore (S4 — new field)
     val sessionBufferReplay: Boolean = false  // input replay after restore (S4 — new field)
 )
 ```
@@ -69,14 +69,14 @@ Every terminal session applies an output cap (`FR-AS-003` budget escalation mech
 
 Every terminal session applies timeout rules (`FR-AS-002` heartbeat + `FR-AS-009` degradation ladder):
 
-- **Interactive PTY (`terminal_run`)**: `timeoutMs = 300_000` (5 minutes) default; configurable per workspace (`models/Workspace.md` `sandboxLimits.sessionTimeoutMs`). If timeout reached, session state changes to `SUSPENDED` (`lifecycle/TerminalSessionLifecycle.md`); checkpoint saved (`FR-AS-013`); user may resume (`Restored` state) or terminate (`Terminated`).
+- **Interactive PTY (`terminal_run`)**: `timeoutMs = 300_000` (5 minutes) default; configurable per workspace (`models/Workspace.md` `sandboxLimits.sessionTimeoutMs`). If timeout reached, session state changes to `SUSPENDED` (`lifecycle/TerminalSessionLifecycle.md`); checkpoint saved (`FR-AS-007`); user may resume (`Restored` state) or terminate (`Terminated`).
 - **Subprocess (`run_command`)**: `timeoutMs = 60_000` (60 seconds) default; non-configurable for security (`FR-S016` autonomy modes: `Manual` requires shorter timeout; `Assisted` allows longer with user confirmation). Timeout triggers bounded repair (`FR-AS-001`): process killed (`FR-TE004` `terminal_kill`); error returned (`NXR-*`); user notified (`FR-U011` chat feed).
 - **Background (`run_background`)**: no interactive timeout; background session lives until process exits or workspace shutdown (`FR-AS-003` budget exhaustion kills background tasks with checkpoint restart).
 - **Timeout audit**: timeout events logged (`FR-T015`); timeout-triggered kills recorded as `FR-AS-003` budget events (`FR-A010` real-time monitoring shows budget usage per request/session/provider/model).
 
 ### Restore Behavior (S4 — fully specified)
 
-Session restore aligns with `FR-AS-013` (exactly-once recovery) + `FR-M013` (user preferences for session persistence):
+Session restore aligns with `FR-AS-007` (idempotent recovery) + `NFR-REL-012` (exactly-once) + `FR-M013` (user preferences for session persistence):
 
 - **Checkpoint capture** (`SUSPENDED` transition): session state (`TerminalSession.status`, `restoreCheckpoint`, process snapshot) saved to workspace snapshot (`FR-S013` workspace snapshots); working-dir state preserved; input buffer preserved (`sessionBufferReplay` flag set if replay enabled).
 - **Checkpoint storage**: checkpoint stored in workspace snapshot directory (`FR-M012` file history + `FR-S013` workspace snapshots); retention follows workspace retention policy (`FR-M012` retention rules; `FR-S013` snapshot lifecycle).
@@ -89,7 +89,7 @@ Session restore aligns with `FR-AS-013` (exactly-once recovery) + `FR-M013` (use
 ## Security & Isolation (S4 — terminal model aligns with sandbox)
 
 - **Process isolation**: terminal process spawned as child of sandbox runtime (`FR-S002` process isolation; `FR-S018` workspace isolation; `FULL_ENVIRONMENT.md` `proot` isolation); process group isolated (`FR-S003` resource quotas apply to terminal process group).
-- **Sandbox policy**: terminal execution governed by `security/SandboxPolicy.md` (§sandbox isolation); terminal-specific rules include: working-dir boundary enforcement (`models/Workspace.md`); output cap enforcement (`FR-AS-003`); timeout enforcement (`FR-AS-002`); session restore audit (`FR-AS-013`).
+- **Sandbox policy**: terminal execution governed by `security/SandboxPolicy.md` (§sandbox isolation); terminal-specific rules include: working-dir boundary enforcement (`models/Workspace.md`); output cap enforcement (`FR-AS-003`); timeout enforcement (`FR-AS-002`); session restore audit (`FR-AS-007`).
 - **Permission scopes**: terminal execution requires `device:*` scopes (`FR-S001` sandbox security; `security/PermissionModel.md`): `device:terminal` (default `ASK` for interactive; `ALLOW` for background when workspace policy permits), `device:microphone` (for voice input — links `S2` MCP + `G5` real-time voice), `device:storage` (`DENY` default; `ASK` for workspace file access; terminal working-dir access inherits workspace settings).
 - **Audit trail**: every terminal session event (start, background, suspend, restore, terminate, timeout, cap reached) logged via `FR-T015` execution audit + `FR-EV-002` structured confidence; audit log entry includes session ID, workspace ID, correlation ID, checkpoint reference (for restore), permission scope, output cap status, timeout status.
 
@@ -109,7 +109,7 @@ Session restore aligns with `FR-AS-013` (exactly-once recovery) + `FR-M013` (use
 - `docs/MODULE_BOUNDARIES.md` (§runtime terminal execution boundary — updated S3).
 - `docs/DECISION_LOG.md` (`DL-028` — S4 terminal specification; `DL-025` — S1 concurrency cap; `DL-027` — S3 lifecycle; `DL-026` — S2 MCP canonical).
 - `docs/CHANGELOG.md` (updated: S4 terminal spec note + S3 lifecycle note + S2 MCP note + S1 concurrency cap note).
-- `docs/FR_NFR_MAPPING.md` (updated: S4 references — `FR-TE001`..`005`, `FR-S002`/`003`/`018`, `FR-AS-002`/`003`/`009`/`013`, `FR-T015`, `FR-EV-002`/`006`, `FR-M012`/`013`, `FR-A010`, `FR-U005`).
+- `docs/FR_NFR_MAPPING.md` (updated: S4 references — `FR-TE001`..`005`, `FR-S002`/`003`/`018`, `FR-AS-002`/`003`/`007`/`009`, `FR-T015`, `FR-EV-002`/`006`, `FR-M012`/`013`, `FR-A010`, `FR-U005`).
 
 ---
 

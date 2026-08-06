@@ -26,11 +26,11 @@ Transitions SHOULD emit session identity, workspace identity, prior state, new s
 
 ### Transitions
 - `Initiated → Active`: User or agent starts session; workspace context loaded.
-- `Active → Paused`: User pauses; checkpoint saved (`FR-AS-001`, `FR-AS-002`).
-- `Paused → Active`: User resumes; checkpoint restored (`FR-AS-013` exactly-once recovery).
+- `Active → Paused`: User pauses; checkpoint saved (`FR-AS-002` heartbeat + `FR-AS-007` replay log).
+- `Paused → Active`: User resumes; checkpoint restored (`FR-AS-007` idempotent recovery + `NFR-REL-012` exactly-once).
 - `Active → Completed`: Session goal achieved; results aggregated; evidence validated (`FR-EV-006`).
 - `Active → Failed`: Unrecoverable error; error strategy applied (`FR-EL-007`); audit logged.
-- `Failed/Completed → Restored`: Session state reconstructed from checkpoint + memory (`FR-AS-013`).
+- `Failed/Completed → Restored`: Session state reconstructed from checkpoint + memory (`FR-AS-007` + `NFR-REL-012`).
 
 ### Dependencies
 - `docs/LIFECYCLES.md` — session lifecycle overview.

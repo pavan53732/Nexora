@@ -8,13 +8,13 @@
 
 | Metric | Target |
 |--------|--------|
-| Cold start (app launch) | < 3 seconds |
+| Cold start (app launch) | < 2 seconds (canonical per NFR-PERF-001) |
 | Workspace switch | < 500ms |
 | File read (tool) | < 100ms |
 | Terminal command | < 500ms |
 | First AI token (streaming) | < 500ms (network-dependent) |
 | APK size (base) | < 50 MB |
-| Memory (idle) | < 256 MB |
+| Memory (idle) | < 512 MB RSS (canonical per NFR-PERF-005) |
 | Memory (active agent) | < 1 GB |
 | ANR rate | < 0.05% |
 | Crash rate | < 0.1% |

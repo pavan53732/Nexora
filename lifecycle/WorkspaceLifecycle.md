@@ -32,7 +32,7 @@ Every durable transition SHOULD emit workspace identity, prior state, new state,
 - `Created → Active`: First agent/task/background execution starts.
 - `Active → Suspended`: User suspends; budget limit reached (`FR-AS-003`); heartbeat failure (`FR-AS-002`).
 - `Suspended → Active`: User resumes; budget restored.
-- `Active/Active → Archived`: User archives; automatic archive after inactivity period (`PERFORMANCE_BUDGET.md`).
+- `Active/Active → Archived`: User archives; automatic archive after user-initiated action or inactivity policy (see WorkspaceLifecycle state machine).
 - `Archived → Deleted`: User deletes; automatic deletion after retention period expires.
 
 ### Lifecycle Authorities

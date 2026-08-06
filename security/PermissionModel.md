@@ -17,7 +17,7 @@
 
 ## Overview
 
-Every action in Nexora—tool invocation, network call, device access—requires a permission. The model defines **14 scopes**, three decision levels, a layered override hierarchy, and full auditability.
+Every action in Nexora—tool invocation, network call, device access—requires a permission. The model defines **17 scopes**, three decision levels, a layered override hierarchy, and full auditability.
 
 ## Permission Scopes
 
@@ -49,14 +49,14 @@ Every action in Nexora—tool invocation, network call, device access—requires
 | `ASK` | Suspend execution; show a system dialog to the user; proceed only on approval |
 | `DENY` | Block immediately; return `NXR-2003` to the agent |
 
-## Hierarchy: Global → Workspace → Agent → Tool
+## Hierarchy: Agent → Workspace → Global → scope default
 
 Resolution order — first match wins:
 
-1. **Global policy** — defined in app Settings, applies to all workspaces.
-2. **Workspace override** — per-workscope policy stored in `workspace.json`.
-3. **Agent override** — agent-level restrictions (e.g., a "read-only" research agent).
-4. **Tool declared scopes** — the tool's own `requiredPermissions` list.
+1. **Agent override** — agent-level restrictions (e.g., a "read-only" research agent).
+2. **Workspace override** — per-workspace policy stored in `workspace.json`.
+3. **Global policy** — defined in app Settings, applies to all workspaces.
+4. **Scope default** — the scope's own `default` from the table above (no tool-level policy layer exists; tools declare required scopes which feed into the agent/workspace/global resolution).
 
 If no layer defines a decision, the scope's **default** (table above) is used.
 
@@ -156,7 +156,7 @@ At install time, the user reviews the full manifest. Missing scopes are **not** 
 
 > **Status:** CANONICAL security principle (added G2 — 2026-08-06).  
 > **Verified research reference:** `bitdoze.com` 2026-07-24; `blog.4sapi.com` 2026-07-07 (`~93%` approval-fatigue finding from Claude research).  
-> **Principle statement:** The riskiest scopes (`sandbox:execute`, `plugin:install`, `device:*`, `network:websocket`, `agent:create`) are **explicitly deny-by-default** (`DENY`) rather than `ASK` or `ALLOW`. No agent action proceeds on these scopes unless the user has explicitly granted `ALLOW` through the layered hierarchy (`Global` → `Workspace` → `Agent` → `Tool`); the default (`DENY`) acts as the ultimate safety floor if any layer is undefined or if the user has never made an explicit decision.
+> **Principle statement:** The riskiest scopes (`sandbox:execute`, `plugin:install`, `device:*`, `network:websocket`, `agent:create`) are **explicitly deny-by-default** (`DENY`) rather than `ASK` or `ALLOW`. No agent action proceeds on these scopes unless the user has explicitly granted `ALLOW` through the layered hierarchy (`Agent` → `Workspace` → `Global` → scope `default`); the default (`DENY`) acts as the ultimate safety floor if any layer is undefined or if the user has never made an explicit decision.
 
 **Evidence classification:**
 - `VERIFIED`: `security/SECURITY_MODEL.md` (§Permission Scopes — `sandbox:execute` `ALLOW`, `plugin:install` `ASK`, `device:*` `DENY`); `FR.md` (`FR-S001`..`FR-S028`); `security/PermissionModel.md` (default table — `DENY` for `device:*` and `plugin:install`; `ALLOW` for `sandbox:execute` — the principle strengthens the existing `ALLOW` for `sandbox:execute` to `DENY` for high-risk scenarios — see `AutoApprovalClassifier` below for clarification). Actually, `sandbox:execute` remains `ALLOW` for trusted workspace execution (`FR-S001`); the deny-by-default strengthens the **absence** of grant (`DENY` when no layer defines a decision, vs previous implicit `ALLOW` through tool default). Confirmed: if no `Global`/`Workspace`/`Agent` decision exists, the scope's `default` applies (`DENY` for riskiest scopes; `ALLOW` only for low-risk scopes like `sandbox:read`, `memory:read` — unchanged).
