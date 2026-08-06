@@ -16,7 +16,7 @@
 | `FR-TL-404` | `FR-TL004` | Tooling (MCP lifecycle) | Tooling | `architecture/TOOL_SYSTEM.md` (§Lifecycle) | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` | MAPPED |
 | `FR-TL-405` | `FR-TL005` | Tooling (MCP security) | Tooling | `security/PermissionModel.md` (§MCP rules) | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` | MAPPED |
 | `FR-TL-406` | `FR-TL006` | Tooling (MCP phase mapping) | Tooling | `specs/AI_PROVIDERS.md` (§Phase 5) | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` | MAPPED |
-| `NFR-SEC-021` | `NFR-SEC-001` | Security (deny-by-default) | Security | `security/PermissionModel.md` (§Deny-by-Default) | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` | MAPPED |
+| `NFR-SEC-021` | `NFR-SEC-001` | Security (deny-by-default) | Security | `security/PermissionModel.md` (§Explicit Risk-Based Scope Defaults) | `SEC-PERM-001` |
 
 ---
 

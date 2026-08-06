@@ -39,12 +39,14 @@ EXPIRED
 | `start` | `CREATED` | `ACTIVE` | Workspace context loaded |
 | `start` | `IDLE` | `ACTIVE` | Checkpoint restored |
 | `close` | `CREATED` | `CLOSED` | None |
-| `close` | `ACTIVE` | `CLOSED` | Active tasks detached or completed |
+| `close` | `ACTIVE` | `CLOSED` | Active Tasks detached or completed; active Executions drained or cancelled |
 | `close` | `IDLE` | `CLOSED` | None |
 | `idleTimeout` | `CREATED` | `EXPIRED` | No activity within TTL |
 | `idleTimeout` | `ACTIVE` | `IDLE` | No active task; configured idle TTL elapsed |
 | `idleTimeout` | `IDLE` | `EXPIRED` | Configured retention TTL elapsed |
-| `expireNow` | Any non-terminal | `EXPIRED` | Admin/system override |
+| `expireNow` | `CREATED` | `EXPIRED` | Authorized admin/system actor |
+| `expireNow` | `IDLE` | `EXPIRED` | Authorized admin/system actor |
+| `expireNow` | `ACTIVE` | `EXPIRED` | Authorized actor AND no active nonterminal Task/Execution; otherwise cancel or detach first |
 
 ## Terminal States
 

@@ -69,43 +69,75 @@ suspend fun checkPermission(
     workspaceId: String,
     agentId: String?
 ): PermissionResult {
-    val scopes = tool.requiredPermissions
+    val scopeIds = tool.requiredPermissions
 
     // Empty permission list — allowed by default
-    if (scopes.isEmpty()) {
+    if (scopeIds.isEmpty()) {
         return PermissionResult.Allowed
     }
 
     val askScopes = mutableListOf<PermissionScope>()
 
-    for (scope in scopes) {
+    for (scopeId in scopeIds) {
+        // Resolve scope ID through the canonical registry
+        val scope = permissionScopeRegistry.resolve(scopeId)
+            ?: run {
+                auditDenial(
+                    tool = tool, workspaceId = workspaceId, agentId = agentId,
+                    scopeId = scopeId, reason = PolicySource.UNKNOWN_SCOPE
+                )
+                return PermissionResult.DeniedUnknownScope(scopeId)
+            }
+
         val decision = resolveDecision(
             scope = scope,
             workspaceId = workspaceId,
             agentId = agentId
         )
 
-        // Audit every resolution
-        auditResolution(tool, workspaceId, agentId, scope, decision)
+        // Audit preliminary resolution (records policy source + prelim decision)
+        auditPreliminaryResolution(
+            tool = tool, workspaceId = workspaceId, agentId = agentId,
+            scope = scope, decision = decision
+        )
 
         when (decision) {
-            PermissionDecision.DENY ->
+            PermissionDecision.DENY -> {
+                auditFinalDenial(
+                    tool = tool, workspaceId = workspaceId, agentId = agentId,
+                    scope = scope, reason = PolicySource.OVERRIDE_DENIAL
+                )
                 return PermissionResult.Denied(scope)
-            PermissionDecision.ASK ->
+            }
+            PermissionDecision.ASK -> {
                 askScopes.add(scope)
-            PermissionDecision.ALLOW ->
+            }
+            PermissionDecision.ALLOW -> {
+                auditFinalAllow(
+                    tool = tool, workspaceId = workspaceId, agentId = agentId,
+                    scope = scope
+                )
                 continue // evaluate remaining scopes
+            }
         }
     }
 
-    // Present ASK scopes in one aggregated approval transaction
+    // Aggregated approval — present all ASK scopes in one transaction
     if (askScopes.isNotEmpty()) {
-        return requestApprovalForScopes(
-            tool = tool,
-            workspaceId = workspaceId,
-            agentId = agentId,
-            scopes = askScopes
+        val txnId = generateApprovalTransactionId()
+        val result = requestApprovalForScopes(
+            tool = tool, workspaceId = workspaceId, agentId = agentId,
+            scopes = askScopes, transactionId = txnId
         )
+        // Audit final outcome per scope
+        for (scope in askScopes) {
+            auditFinalAskOutcome(
+                tool = tool, workspaceId = workspaceId, agentId = agentId,
+                scope = scope, transactionId = txnId,
+                approved = result is PermissionResult.Allowed
+            )
+        }
+        return result
     }
 
     return PermissionResult.Allowed
@@ -113,7 +145,7 @@ suspend fun checkPermission(
 
 /**
  * Resolves a single scope through the override hierarchy.
- * Unknown / undeclared scope identifiers resolve to DENY.
+ * Returns the effective decision from: Agent → Workspace → Global → scope default.
  */
 private fun resolveDecision(
     scope: PermissionScope,
@@ -122,53 +154,42 @@ private fun resolveDecision(
 ): PermissionDecision {
     // 1. Agent-level override
     if (agentId != null) {
-        val agentDecision = agentPermissionStore.get(agentId, scope)
+        val agentDecision = agentPermissionStore.get(agentId, scope.id)
         if (agentDecision != null) return agentDecision
     }
 
     // 2. Workspace override
-    val wsDecision = workspacePermissionStore.get(workspaceId, scope)
+    val wsDecision = workspacePermissionStore.get(workspaceId, scope.id)
     if (wsDecision != null) return wsDecision
 
     // 3. Global policy
-    val globalDecision = globalPermissionStore.get(scope)
+    val globalDecision = globalPermissionStore.get(scope.id)
     if (globalDecision != null) return globalDecision
 
-    // 4. Scope default (falls back to DENY for unknown scopes)
-    return scope.default
+    // 4. Scope default
+    return scope.defaultDecision
 }
 
 /**
  * Aggregated approval: presents all ASK scopes in one transaction.
  * Returns Allowed only if every scope is user-approved.
- * Any denial returns Denied for that scope.
+ * Any denial returns Denied for the first denied scope.
  */
 private suspend fun requestApprovalForScopes(
     tool: Tool,
     workspaceId: String,
     agentId: String?,
-    scopes: List<PermissionScope>
+    scopes: List<PermissionScope>,
+    transactionId: String
 ): PermissionResult {
-    val result = askUser(tool, scopes) // suspends; presents all scopes together
+    val result = askUser(tool, scopes, transactionId) // suspends; presents all scopes together
     return when (result) {
         is PermissionResult.Allowed -> PermissionResult.Allowed
         is PermissionResult.Denied -> result
     }
 }
 
-/**
- * Records the resolved decision for the permission audit trail
- * (immutable room table `permission_audit_log`).
- */
-private fun auditResolution(
-    tool: Tool,
-    workspaceId: String,
-    agentId: String?,
-    scope: PermissionScope,
-    decision: PermissionDecision
-) {
-    // Append-only entry: scope, decision, agentId, workspaceId, timestamp
-}
+enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCOPE_DEFAULT, UNKNOWN_SCOPE, OVERRIDE_DENIAL }
 ```
 
 ## Persistence (DataStore)
@@ -286,35 +307,54 @@ If the optional on-device classifier (see §Optional On-Device Auto-Approval Cla
 ## Optional On-Device Auto-Approval Classifier (TFLite)
 
 > **Status:** CANONICAL specification for independent safety layer (added G2 — 2026-08-06).  
-> **Verified research reference:** `bitdoze.com` 2026-07-24 (`~93%` approval-fatigue); `aihackers.net` 2026-07-03; `blog.4sapi.com` 2026-07-07.  
 > **Purpose:** User vigilance (`FR-S016` `Manual`/`Assisted` mode) cannot be the only safety mechanism — `~93%` of approvals become automatic (`approval fatigue`). The classifier provides an independent, non-user-dependent layer that can `DENY` obviously risky calls, reducing dependence on user attention.
 
 ### Design Constraints
 
 - **Independent layer:** The classifier operates **after** the `Permission Manager` (`checkPermission()`) but **before** `execute()` (`protocols/Tool-Protocol.md` — Authorization Gate). It does **NOT** replace user approval (`FR-S016`); it is an additional `DENY` gate.
-- **Optional:** User can disable the classifier in `Workspace Settings` (`FR-W005`); default is `ENABLED` (safety-by-default, aligned with deny-by-default principle above).
-- **On-device (`TFLite`)**: No network dependency; no external service; classifier runs locally within the app process (`security/SandboxPolicy.md` — same process isolation rules apply). No `network:http` scope required for classifier operation (it uses the tool call parameters, not external data).
-- **Scoping:** Only applies to scopes where `default` is `DENY` or `ASK` (`plugin:install`, `agent:create`, `device:*`, `sandbox:execute` when workspace override is `ALLOW` — the classifier can override to `DENY` if the call matches risky patterns). It does **not** apply to `ALLOW` scopes (`sandbox:read`, `memory:read`, `ai:complete`) unless explicitly configured by user (`Workspace Settings` — optional scope override for classifier sensitivity).
-- **No redesign:** Uses existing `PermissionResult` enum (`Allowed` / `Denied` / `Ask`) — classifier produces `Denied` (not a new result type); `ToolResult.NeedsApproval` unchanged; `ToolResult.Success` unchanged; `ToolResult.Error` (`NXR-2003`) used for classifier denial (same error code as permission denial — no new error taxonomy).
+- **Optional:** User can disable the classifier in `Workspace Settings` (`FR-W005`); default is `ENABLED` (safety-by-default).
+- **On-device (`TFLite`)**: No network dependency; no external service.
+
+### Scope Selection
+
+The classifier evaluates tool calls based on their effective permission decision and risk class, not on whether the scope default is ALLOW/ASK/DENY. The selection is:
+
+| Condition | Classifier evaluates? |
+|---|---|
+| Any scope resolved to `ASK` or `DENY` | Yes — assesses risk patterns |
+| All scopes resolved to `ALLOW` | No — unless workspace config explicitly opts in |
+| Workspace config enables classifier for a specific scope | Yes — regardless of default |
+
+This means the classifier **may** evaluate a call that includes `sandbox:execute` (default ALLOW) if the workspace configuration opts it in or if other scopes in the call are ASK/DENY. But the classifier does **not** imply that `sandbox:execute`'s default is DENY — the default remains ALLOW per the scope table.
 
 ### Classifier Behavior
 
 - **Input**: `Tool` (`requiredPermissions`, `parameters` JSON Schema), `context` (`workspaceId`, `agentId`, `executionHistory` — `FR-T015` audit trail), `userAutonomyMode` (`FR-S016`: `Manual`/`Assisted`/`Autopilot`).
-- **Output**: `PermissionResult.Denied` (auto-deny) or `PermissionResult.Allowed` (pass through to execution or user approval, depending on `FR-S016` mode).
-- **Risk patterns** (verified by `FR-EV-002` structured confidence + `FR-EV-003` zero-assumption mode):
-  - `plugin:install` + `network:http` + `sandbox:execute` combined = high risk (`plugin` installation with network access and sandbox execution — requires user review; classifier auto-denies if no explicit `ALLOW` workspace override exists).
-  - `agent:create` + `network:http` + `device:*` = high risk (new agent with network + device access; classifier denies in `Manual` mode unless workspace override is `ALLOW`).
-  - `sandbox:execute` + `device:*` + `plugin:install` = extreme risk (execution + device + plugin — never allowed by classifier; must be explicitly granted per scope by user through workspace/agent settings).
-- **Evidence classification:** `VERIFIED` (research finding — approval fatigue); `ENGINEERING INFERENCE` (TFLite classifier design — standard on-device ML technique; no new architecture; uses existing `PermissionResult` and `ToolContext`); `UNKNOWN` (exact classifier model accuracy — not specified; the design specifies the mechanism, not the model weights; training/evaluation is future work — `Phase 5` or later).
+- **Output**: `PermissionResult.Denied` (auto-deny) or `PermissionResult.Allowed` (pass through — does not bypass ASK or DENY scopes).
+- Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
+- Classifier `DENY` cannot be overridden by user approval alone unless the workspace policy explicitly permits classifier override.
+- The classifier does **not** change the declared scope default in the scope table.
 
-### Traceability (G2 — Documentation Updates Only)
+### Relationship to Permission Resolution
 
-- `security/PermissionModel.md`: Updated (§Deny-By-Default + §Auto-Approval Classifier — see above).
-- `specs/CONTEXT_MANAGEMENT.md`: Referenced (`FR-EV-002` structured confidence — `LOW` triggers `ASK`, which aligns with classifier behavior; `FR-EV-003` zero-assumption mode — classifier enforces zero-assumption by denying unverified high-risk calls).
+```
+checkPermission()  →  resolved scopes (ALLOW / ASK / DENY)
+                         │
+                         ▼
+                   Classifier evaluation (independent DENY gate)
+                         │
+                         ▼
+                   execute() or return Denied
+```
+
+The classifier reads the resolved permission decisions and the tool parameters. It operates after `checkPermission()` has resolved all scopes through the override hierarchy. It cannot bypass `ASK` or `DENY` scopes — those must still be approved per the normal permission flow.
+
+### Traceability
+
+- `security/PermissionModel.md`: Updated (§Explicit Risk-Based Scope Defaults + §Classifier).
+- `specs/CONTEXT_MANAGEMENT.md`: `FR-EV-002` structured confidence — `LOW` triggers `ASK`, which aligns with classifier behavior; `FR-EV-003` zero-assumption mode — classifier enforces zero-assumption by denying unverified high-risk calls.
 - `FR.md`: References preserved (`FR-S016` autonomy modes; `FR-S001`..`FR-S028` sandbox isolation; `FR-EV-001`..`FR-EV-006` evidence engine).
-- `docs/DECISION_LOG.md`: `DL-022` (see above) logs the decision.
-- `docs/REQUIREMENT_COVERAGE_LEDGER.md`: No new requirement IDs added (G2 is documentation clarification of existing security posture — `FR-S016`, `FR-EV-001`..`FR-EV-006` already mapped; no new `FR-` or `NFR-` required since no new architecture or feature added).
-- `docs/TRACEABILITY.md`: Not updated (no new contract or validation case — documentation clarification only).
+- `docs/DECISION_LOG.md`: `DL-022` logs the original decision (superseded by DL-034 for scope defaults).
 
 ---
 
