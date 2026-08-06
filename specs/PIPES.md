@@ -29,7 +29,7 @@ What pipes are:
 What pipes are NOT:
 
 - Not a network share or remote terminal (pipe messages carry typed protocol payloads, never raw command streams — TOOL-405 executes nothing by itself).
-- Not an open listener for arbitrary clients (pairing is explicit, pinned, and revocable; `DENY`-by-default per [../security/PermissionModel.md](../security/PermissionModel.md) §Deny-By-Default).
+- Not an open listener for arbitrary clients (pairing is explicit, pinned, revocable, and permission-gated. Unknown scopes and unauthorized operations are denied. See [../security/PermissionModel.md](../security/PermissionModel.md) §Explicit Risk-Based Scope Defaults).
 - Not a bypass of sandbox, permission, or evidence rules (every cross-instance delegation inherits SA-4 policies and FR-S016 autonomy gates).
 
 ## 2. Design Rules (aligned to existing architecture)

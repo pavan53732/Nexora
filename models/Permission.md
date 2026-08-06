@@ -1,12 +1,13 @@
 > **Status: DERIVED** for Permission entity shape.
-> This document defines the data model for Permission. Canonical lifecycle and behavior are defined in the owning architecture and state-machine documents.
+> This model projects canonical permission semantics from `security/PermissionModel.md`.
+> The canonical scope defaults and permission evaluation algorithm are authoritative there.
 >
-> Depends on: the canonical architecture and lifecycle sources for Permission.
+> Depends on: `security/PermissionModel.md` for scope defaults and semantics.
 > Referenced by: APIs, SDKs, protocols, and tests that consume Permission.
 
 # Domain Model: Permission
 
-> Canonical domain model. See [architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md).
+> This model projects canonical permission semantics. See [architecture/SECURITY_MODEL.md](../architecture/SECURITY_MODEL.md) for security architecture and [security/PermissionModel.md](../security/PermissionModel.md) for the canonical scope table and evaluation algorithm.
 > Canonical scope defaults are authoritative in [security/PermissionModel.md](../security/PermissionModel.md).
 
 ```kotlin

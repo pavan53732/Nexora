@@ -64,6 +64,11 @@ If no layer defines a decision, the scope's **default** (table above) is used.
 ## Runtime Permission Request Flow
 
 ```kotlin
+data class ResolvedPermissionDecision(
+    val decision: PermissionDecision,
+    val source: PolicySource
+)
+
 suspend fun checkPermission(
     tool: Tool,
     workspaceId: String,
@@ -84,30 +89,38 @@ suspend fun checkPermission(
             ?: run {
                 auditDenial(
                     tool = tool, workspaceId = workspaceId, agentId = agentId,
-                    scopeId = scopeId, reason = PolicySource.UNKNOWN_SCOPE
+                    scopeId = scopeId, source = PolicySource.UNKNOWN_SCOPE
                 )
-                return PermissionResult.DeniedUnknownScope(scopeId)
+                return PermissionResult.Denied(
+                    scopeId = scopeId,
+                    reason = DenialReason.UNKNOWN_SCOPE,
+                    errorCode = "NXR-2003"
+                )
             }
 
-        val decision = resolveDecision(
+        val resolved = resolveDecision(
             scope = scope,
             workspaceId = workspaceId,
             agentId = agentId
         )
 
-        // Audit preliminary resolution (records policy source + prelim decision)
+        // Audit preliminary resolution (policy source + prelim decision)
         auditPreliminaryResolution(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
-            scope = scope, decision = decision
+            scope = scope, resolved = resolved
         )
 
-        when (decision) {
+        when (resolved.decision) {
             PermissionDecision.DENY -> {
                 auditFinalDenial(
                     tool = tool, workspaceId = workspaceId, agentId = agentId,
-                    scope = scope, reason = PolicySource.OVERRIDE_DENIAL
+                    scope = scope, source = resolved.source
                 )
-                return PermissionResult.Denied(scope)
+                return PermissionResult.Denied(
+                    scopeId = scope.id,
+                    reason = DenialReason.POLICY_DENIAL,
+                    errorCode = "NXR-2003"
+                )
             }
             PermissionDecision.ASK -> {
                 askScopes.add(scope)
@@ -115,7 +128,7 @@ suspend fun checkPermission(
             PermissionDecision.ALLOW -> {
                 auditFinalAllow(
                     tool = tool, workspaceId = workspaceId, agentId = agentId,
-                    scope = scope
+                    scope = scope, source = resolved.source
                 )
                 continue // evaluate remaining scopes
             }
@@ -125,19 +138,37 @@ suspend fun checkPermission(
     // Aggregated approval — present all ASK scopes in one transaction
     if (askScopes.isNotEmpty()) {
         val txnId = generateApprovalTransactionId()
-        val result = requestApprovalForScopes(
+        val txnResult = requestApprovalForScopes(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
             scopes = askScopes, transactionId = txnId
         )
-        // Audit final outcome per scope
-        for (scope in askScopes) {
+        // Audit final outcome per scope individually
+        for (outcome in txnResult.outcomes) {
             auditFinalAskOutcome(
                 tool = tool, workspaceId = workspaceId, agentId = agentId,
-                scope = scope, transactionId = txnId,
-                approved = result is PermissionResult.Allowed
+                scopeId = outcome.scopeId, transactionId = txnId,
+                approved = outcome.approved
             )
         }
-        return result
+        // Tool executes only if every scope is approved
+        return if (txnResult.allApproved) {
+            PermissionResult.Allowed
+        } else {
+            val firstDenied = txnResult.outcomes.first { !it.approved }
+            PermissionResult.Denied(
+                scopeId = firstDenied.scopeId,
+                reason = DenialReason.USER_DENIED,
+                errorCode = "NXR-2003"
+            )
+        }
+    }
+
+    // All scopes passed — classifier evaluation (optional, independent gate)
+    if (classifierEnabled) {
+        val classifierResult = classifier.evaluate(tool, workspaceId, agentId)
+        if (classifierResult is PermissionResult.Denied) {
+            return classifierResult
+        }
     }
 
     return PermissionResult.Allowed
@@ -145,35 +176,48 @@ suspend fun checkPermission(
 
 /**
  * Resolves a single scope through the override hierarchy.
- * Returns the effective decision from: Agent → Workspace → Global → scope default.
+ * Returns both the effective decision and the policy source.
  */
 private fun resolveDecision(
     scope: PermissionScope,
     workspaceId: String,
     agentId: String?
-): PermissionDecision {
+): ResolvedPermissionDecision {
     // 1. Agent-level override
     if (agentId != null) {
         val agentDecision = agentPermissionStore.get(agentId, scope.id)
-        if (agentDecision != null) return agentDecision
+        if (agentDecision != null) return ResolvedPermissionDecision(agentDecision, PolicySource.AGENT_OVERRIDE)
     }
 
     // 2. Workspace override
     val wsDecision = workspacePermissionStore.get(workspaceId, scope.id)
-    if (wsDecision != null) return wsDecision
+    if (wsDecision != null) return ResolvedPermissionDecision(wsDecision, PolicySource.WORKSPACE_OVERRIDE)
 
     // 3. Global policy
     val globalDecision = globalPermissionStore.get(scope.id)
-    if (globalDecision != null) return globalDecision
+    if (globalDecision != null) return ResolvedPermissionDecision(globalDecision, PolicySource.GLOBAL_POLICY)
 
     // 4. Scope default
-    return scope.defaultDecision
+    return ResolvedPermissionDecision(scope.defaultDecision, PolicySource.SCOPE_DEFAULT)
 }
 
 /**
+ * Aggregated approval result — per-scope outcome.
+ */
+data class ScopeApprovalOutcome(
+    val scopeId: String,
+    val approved: Boolean
+)
+
+data class ApprovalTransactionResult(
+    val transactionId: String,
+    val outcomes: List<ScopeApprovalOutcome>,
+    val allApproved: Boolean
+)
+
+/**
  * Aggregated approval: presents all ASK scopes in one transaction.
- * Returns Allowed only if every scope is user-approved.
- * Any denial returns Denied for the first denied scope.
+ * Returns per-scope outcomes; tool executes only if every scope is approved.
  */
 private suspend fun requestApprovalForScopes(
     tool: Tool,
@@ -181,15 +225,13 @@ private suspend fun requestApprovalForScopes(
     agentId: String?,
     scopes: List<PermissionScope>,
     transactionId: String
-): PermissionResult {
-    val result = askUser(tool, scopes, transactionId) // suspends; presents all scopes together
-    return when (result) {
-        is PermissionResult.Allowed -> PermissionResult.Allowed
-        is PermissionResult.Denied -> result
-    }
+): ApprovalTransactionResult {
+    return askUserForScopes(tool, scopes, transactionId) // suspends; presents all scopes together
 }
 
-enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCOPE_DEFAULT, UNKNOWN_SCOPE, OVERRIDE_DENIAL }
+enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCOPE_DEFAULT, UNKNOWN_SCOPE }
+
+enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, CLASSIFIER_DENIAL }
 ```
 
 ## Persistence (DataStore)

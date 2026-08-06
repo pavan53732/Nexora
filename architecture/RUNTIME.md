@@ -211,7 +211,9 @@ defined in `models/Execution.md`:
 
 ### Failure Recovery
 
-Whether a failure recovers by resuming the same `RUNNING` execution, creating a new Execution, or remaining terminal `FAILED` is defined by the canonical recovery policy in `specs/AUTONOMY_STABILITY.md` and `specs/BACKGROUND_EXECUTION.md`. The Executor enforces the policy; it does not define recovery rules independently.
+- **Recoverable interruption before a terminal state:** retain the same `executionId`; increment `version`; retain `correlationId`; resume `RUNNING` from checkpoint.
+- **Committed terminal `FAILED`/`CANCELLED`/`COMPLETED`:** never transition back to `RUNNING`. Explicit retry/restart creates a new `executionId`; parent/prior execution linkage and correlation policy preserved.
+- **Unrecoverable failure:** commit `FAILED`; no same-identity resume.
 
 ### Phase Mapping
 
