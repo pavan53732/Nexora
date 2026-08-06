@@ -19,8 +19,12 @@ plugins, providers, dependencies, permissions, ordering, parallelism, files, ext
 resources, validation criteria, error recovery, verification, and follow-up.
 
 This spec defines that complete lifecycle and the software-engineering pipeline.
+Before the Planner creates an ExecutionPlan, a pre-flight Project Introspection
+pass (see [CONTEXT_MANAGEMENT.md](CONTEXT_MANAGEMENT.md) §8, FR-CM-009) reads
+the workspace structure and populates a ProjectContext in working memory. The
+Knowledge Graph is queried after introspection to retrieve relevant past entities.
 
-> **Status: SUPPORTING.** Task state names referenced in this document (e.g. `RetryPending`, `WaitingApproval`) are defined canonically in [../state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). This document describes lifecycle *behavior and pipeline resolution*, not state ownership.
+> **Status: SUPPORTING.** Task state names referenced in this document (e.g. `RetryPending`, `WaitingApproval`) are defined canonically in [../state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). This document describes lifecycle *behavior and pipeline resolution*, not state ownership. The canonical execution flow at the runtime level is defined in [../architecture/RUNTIME.md](../architecture/RUNTIME.md) §Execution Flow — this document expands on the planning, dependency resolution, and validation stages within that flow.
 
 ## 1. The Complete Execution Lifecycle
 

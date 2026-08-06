@@ -27,7 +27,11 @@ logic of any subsystem. Service boundaries:
 | Memory/context | [MEMORY_SYSTEM.md](MEMORY_SYSTEM.md) | Runtime requests memory services |
 | Provider routing | [PROVIDER_SYSTEM.md](PROVIDER_SYSTEM.md) | Runtime holds the provider registry |
 
-It consists of 17 tightly coordinated modules.
+It consists of 17 tightly coordinated modules (counted as internal sub-components of the
+`com.nexora.app.runtime` package — for the 14 top-level module boundaries, see
+[MODULE_BOUNDARIES.md](../docs/MODULE_BOUNDARIES.md)). The Workflow Engine is listed
+here as a runtime service but is owned canonically by
+[WORKFLOW_ENGINE.md](WORKFLOW_ENGINE.md) as a separate module boundary.
 
 ## Module Inventory
 

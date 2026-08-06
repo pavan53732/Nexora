@@ -36,4 +36,8 @@
 - **`PermissionManager` (runtime enforcement)** — `com.nexora.app.runtime.permissions`. Evaluates each tool call against the policy hierarchy (global → workspace → agent → tool, see [PermissionModel](../security/PermissionModel.md)), prompts the user for `ASK` decisions, and returns `PermissionResult`. This is the runtime's per-call gate and is exercised on every tool invocation.
 - **`security` module (security services)** — `com.nexora.app.security`. Provides `SecureKeyStore` (Keystore-backed encryption of API keys/secrets), `AuditLogger` (tamper-evident, append-only audit trail), and `PermissionPolicyStore` (persistence of permission decisions). It defines the `PermissionScope`/`PermissionDecision` types and persists policy, but it **does not gate tool execution** — enforcement lives exclusively in the runtime's `PermissionManager`.
 
-> **S3 — Lifecycle specification (Option A):** Lifecycle modules (`Workspace`, `Session`, `Memory`, `TerminalSession`) now have expanded canonical specifications. Module boundaries unchanged; ownership preserved per `docs/CANONICAL_SOURCES.md`.
+> **S5 — Workflow Engine module boundary**: The Workflow Engine is a standalone module
+> (`com.nexora.app.workflows`) with its own canonical document
+> (`architecture/WORKFLOW_ENGINE.md`). It is listed in RUNTIME.md as a coordinated
+> service but is not owned by the runtime — the runtime invokes it; the engine owns
+> workflow graph progression. This document's module row reflects that separation.

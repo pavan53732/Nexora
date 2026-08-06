@@ -146,3 +146,14 @@ An invalid transition MUST return a canonical error without changing persisted s
 ## Implementation Notes
 
 The lifecycle is enforced by `AgentStateMachine` in the core module. Every state transition fires an `AgentStateEvent` onto the shared event bus, enabling logging, metrics, and UI reactivity. Guards are evaluated synchronously on the caller thread; async validation should complete before invoking the trigger.
+
+### Delegation and Sub-Agent State
+
+Sub-agents spawned by the Workflow Coordinator (MULTI_AGENT_SYSTEM.md SA-1..SA-5)
+use the **same** AgentLifecycle state machine as primary agents. There is no
+separate `Delegated` or `SubAgent` state — the delegation relationship is tracked
+in Task state (`state-machines/TaskLifecycle.md`), not Agent state. A sub-agent
+transitions through `Created → Configured → Ready → Running` identically to a
+primary agent; the coordinator tracks delegation via `Task.childTaskIds` and
+`Task.delegatedAgentIds` (see `architecture/RUNTIME.md` §Core Interfaces — Task).
+This avoids duplicating delegation semantics across two state machines.

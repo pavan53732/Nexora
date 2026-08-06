@@ -17,7 +17,7 @@
 
 ## Overview
 
-Every action in Nexora—tool invocation, network call, device access—requires a permission. The model defines **17 scopes**, three decision levels, a layered override hierarchy, and full auditability.
+Every action in Nexora—tool invocation, network call, device access—requires a permission. The model defines **18 scopes**, three decision levels, a layered override hierarchy, and full auditability.
 
 ## Permission Scopes
 
@@ -40,6 +40,7 @@ Every action in Nexora—tool invocation, network call, device access—requires
 | `instance:pair` | Pair with a peer Nexora instance (fingerprint confirmation) | `ASK` | N/A (internal) |
 | `instance:connect` | Open a pipe to a paired instance | `ASK` | `INTERNET` (LAN pipes) |
 | `instance:broadcast` | Broadcast a typed message to connected pipes | `DENY` | N/A (internal) |
+| `instance:delegate` | Delegate a task to a remote instance through a pipe (TOOL-408) | `ASK` | `INTERNET` (LAN pipes) |
 
 ## Decision Levels
 
