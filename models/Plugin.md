@@ -17,6 +17,8 @@ data class Plugin(
     val exportedTools: List<String>,
     val exportedProviders: List<String>,
     val exportedSkills: List<String>,
+    val exportedUiScreens: List<String>,
+    val exportedMemoryBackends: List<String>,
     val integrityState: IntegrityState,
     val status: PluginStatus,
     val createdAt: Instant,

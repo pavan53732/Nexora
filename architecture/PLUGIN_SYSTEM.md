@@ -18,13 +18,22 @@ Every capability in Nexora should be installable as a plugin. The core runtime i
 
 ## Plugin Architecture
 
-Plugins can register:
+Plugins can register the following capability kinds. Each kind corresponds to one
+`exported*` field in [../models/Plugin.md](../models/Plugin.md) and one `register*`
+method in [../sdk/PluginSDK.md](../sdk/PluginSDK.md) `CapabilityRegistrar`:
 
-- **Tools** — New tool implementations added to the Tool Registry.
-- **Agents** — New agent types added to the Agent Registry.
-- **AI Providers** — New provider implementations.
-- **UI Screens** — Custom screens embedded in the app.
-- **Memory Backends** — Alternative memory storage.
+| Capability | Model field | SDK method | Description |
+|---|---|---|---|
+| **Tools** | `exportedTools` | `registerTool` | New tool implementations added to the Tool Registry. |
+| **Agents** | `exportedAgents` | `registerAgent` | New agent types added to the Agent Registry. |
+| **AI Providers** | `exportedProviders` | `registerProvider` | New provider implementations. |
+| **Skills** | `exportedSkills` | `registerSkill` | New first-class expertise units (ADR-0007). |
+| **UI Screens** | `exportedUiScreens` | `registerUiScreen` | Custom screens embedded in the app. |
+| **Memory Backends** | `exportedMemoryBackends` | `registerMemoryBackend` | Alternative memory storage. |
+
+Registration is transactional across all exported capabilities: partial registration
+is not a valid durable state, and failed activation rolls back to the prior committed
+plugin state.
 
 ## Plugin Interface
 

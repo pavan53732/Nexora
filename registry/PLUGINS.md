@@ -9,7 +9,7 @@
 | `origin` | Built-in or external source |
 | `compatibilityRange` | Compatible runtime/API range |
 | `dependencyRanges` | Dependency version constraints |
-| `exportedCapabilities` | Exported agent/tool/provider/skill references |
+| `exportedCapabilities` | Exported agent/tool/provider/skill/UI-screen/memory-backend references (one list per `exported*` field in [../models/Plugin.md](../models/Plugin.md)) |
 | `integrityState` | Signature/integrity state |
 | `minContractVersion` | Minimum compatible API/SDK contract version |
 | `manifestVersion` | Manifest/schema version |

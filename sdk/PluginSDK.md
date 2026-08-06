@@ -36,8 +36,17 @@ interface CapabilityRegistrar {
     fun registerTool(descriptor: ToolDescriptor, tool: BaseTool)
     fun registerProvider(descriptor: ProviderDescriptor, adapter: BaseProviderAdapter)
     fun registerAgent(descriptor: AgentDescriptor, factory: BaseAgentFactory)
+    fun registerSkill(descriptor: SkillDescriptor, skill: BaseSkill)
+    fun registerUiScreen(descriptor: UiScreenDescriptor, screen: BaseUiScreen)
+    fun registerMemoryBackend(descriptor: MemoryBackendDescriptor, backend: BaseMemoryBackend)
 }
 ```
+
+Every `register*` call corresponds to one `exported*` field in
+[../models/Plugin.md](../models/Plugin.md) and to one capability kind in
+[../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md) §Plugin Architecture.
+Registration is transactional: partial registration is not a valid durable state and
+failed activation rolls back to the prior committed plugin state.
 
 ## Security & Permission Model
 
