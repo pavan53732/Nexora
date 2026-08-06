@@ -3,6 +3,8 @@
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [TOOLS.md](./TOOLS.md)
 >
 Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOLS.md)) to its supported capabilities. Used by the sandbox controller, permission system, and agent scheduler to determine which tools an agent may invoke. Generated from the tool catalog; hand-tuned rows are preserved.
+>
+This matrix is a derived capability view; the canonical tool identity catalog is [TOOLS.md](./TOOLS.md) and the tool model is [../models/Tool.md](../models/Tool.md). It stays aligned with [../standards/Registry-Standard.md](../standards/Registry-Standard.md).
 
 ## Legend
 

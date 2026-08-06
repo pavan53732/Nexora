@@ -4,6 +4,18 @@
 >
 > **Authoritative catalog of every registered tool.** Stable IDs per [DL-017](../docs/DECISION_LOG.md).
 > Canonical tool names live here; [TOOL_MATRIX.md](./TOOL_MATRIX.md) maps capabilities per tool.
+> Tool descriptor lifecycle is owned by [../architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md) (§ToolStatus Lifecycle); the model shape is [../models/Tool.md](../models/Tool.md).
+> This registry stays aligned with the compatibility expectations in [../standards/Registry-Standard.md](../standards/Registry-Standard.md).
+
+## Standard Fields
+
+| Field | Meaning |
+|---|---|
+| `toolId` | Stable tool identifier (TOOL-###) |
+| `name` | Canonical tool name (stable; aliases discouraged) |
+| `category` | Category index number |
+| `phase` | Implementation phase |
+| `status` | Registry status (Planned / Implemented) |
 
 ## Category Index
 
