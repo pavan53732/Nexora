@@ -34,7 +34,10 @@ enum class MemoryKind {
     FILE_HISTORY,
     USER_PREFERENCE,
     KNOWLEDGE_GRAPH,
-    EXECUTION_HISTORY
+    EXECUTION_HISTORY,
+    CONTEXT_SNAPSHOT,
+    REASONING_SUMMARY,
+    STREAM_LINEAGE
 }
 
 enum class MemoryStatus {

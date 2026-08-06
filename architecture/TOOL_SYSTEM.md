@@ -193,9 +193,17 @@ States are defined in `models/Tool.md`:
 | Trigger | From | To | Guard |
 |---|---|---|---|
 | `register` | `DISCOVERED` | `REGISTERED` | Descriptor passes schema, risk-level, stable-ID, and unique known permission-scope validation |
-| `activate` | `REGISTERED` | `ACTIVE` | Plugin loaded; all required dependencies available |
+| `activate` | `REGISTERED` | `ACTIVE` | Plugin loaded; all required dependencies available; health != UNHEALTHY |
 | `deactivate` | `ACTIVE` | `DISABLED` | Plugin health failure, admin action, or explicit deactivation |
 | `re-activate` | `DISABLED` | `ACTIVE` | Health restored or admin re-activation |
+
+### Health-Status Interaction
+
+`Tool.health` (`UNKNOWN`, `HEALTHY`, `DEGRADED`, `UNHEALTHY`) is evaluated by the background `HealthMonitor` and influences transitions:
+- `UNHEALTHY` blocks `REGISTERED → ACTIVE`.
+- `UNHEALTHY` triggers `ACTIVE → DISABLED`.
+- `DEGRADED` allows activation but emits warning.
+- `HEALTHY` satisfies all health guards.
 
 ### Distinction from Tool Execution
 
@@ -206,8 +214,8 @@ States are defined in `models/Tool.md`:
 
 ### Transition Guard Rules
 
-- `DISCOVERED → REGISTERED`: descriptor validation must pass; `TOOL-ID` must be unique in the registry.
-- `REGISTERED → ACTIVE`: owning plugin or source must be loaded and pass health checks.
+- `DISCOVERED → REGISTERED`: descriptor validation must pass; `TOOL-ID` must be unique in the registry; health != UNHEALTHY.
+- `REGISTERED → ACTIVE`: owning plugin or source must be loaded and pass health checks (health != UNHEALTHY).
 - `ACTIVE → DISABLED`: administrative deactivation, plugin unloading, or health-policy threshold exceeded.
 - `DISABLED → ACTIVE`: re-activation requires passing all `REGISTERED → ACTIVE` guards.
 

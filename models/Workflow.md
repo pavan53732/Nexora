@@ -74,6 +74,15 @@ sealed class WorkflowStep {
         override val status: StepStatus,
         val message: String
     ) : WorkflowStep()
+
+    data class Iterative(
+        override val id: String,
+        override val dependsOn: List<String>,
+        override val status: StepStatus,
+        val bodySteps: List<String>,
+        val maxIterations: Int,
+        val convergenceCondition: String?
+    ) : WorkflowStep()
 }
 
 enum class StepStatus {

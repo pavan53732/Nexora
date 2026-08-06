@@ -52,6 +52,17 @@
 | Background execution | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md`, `docs/LIFECYCLES.md`, `testing/IntegrationTests.md` |
 | Multi-instance pipes (discovery, pairing, transport, cross-instance delegation) | `specs/PIPES.md` | `architecture/MULTI_AGENT_SYSTEM.md` (§Cross-Instance Extension), `models/Instance.md`, `registry/TOOLS.md` (`TOOL-405..408`), `security/PermissionModel.md` (`instance:*` scopes) |
 | Instance/pipe lifecycle | `state-machines/InstanceLifecycle.md` | `models/Instance.md`, `specs/PIPES.md` |
+| Application database and persistence | `specs/DATABASE.md` | `architecture/RUNTIME.md` (§Persistence), `architecture/MEMORY_SYSTEM.md` (§Memory Backing Stores), `architecture/SECURITY_MODEL.md` (§Encryption) |
+| Per-stream inference lifecycle | `state-machines/ProviderStreamLifecycle.md` | `architecture/PROVIDER_SYSTEM.md`, `models/Inference.md`, `protocols/Provider-Protocol.md`, `diagrams/Provider-Streaming-Flow.md` |
+| ContextSnapshot retention | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md` (§Inference Artifact Retention), `models/Inference.md` |
+| ReasoningSummary retention | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md` (§Inference Artifact Retention), `models/Inference.md` |
+| Stream lineage persistence | `state-machines/ProviderStreamLifecycle.md` | `architecture/PROVIDER_SYSTEM.md`, `models/Inference.md`, `architecture/MEMORY_SYSTEM.md` (§Inference Artifact Retention) |
+| Tool invocation lifecycle | `protocols/Tool-Protocol.md` | `architecture/TOOL_SYSTEM.md` (§Tool Execution Flow), `docs/api/Tool-API.md`, `sdk/ToolSDK.md` |
+| Workflow-step lifecycle | `state-machines/WorkflowLifecycle.md` | `architecture/WORKFLOW_ENGINE.md`, `models/Workflow.md`, `docs/api/Runtime-API.md` |
+| Multi-agent delegation ownership | `architecture/MULTI_AGENT_SYSTEM.md` | `protocols/Agent-Protocol.md`, `registry/AGENTS.md`, `registry/AGENT_MATRIX.md` |
+| Concurrent file-lock ownership | `architecture/WORKFLOW_ENGINE.md` (§Execution Model) | `architecture/RUNTIME.md` (§Resource Manager), `architecture/MULTI_AGENT_SYSTEM.md` (§SA-3) |
+| Plugin trust and revocation | `architecture/PLUGIN_SYSTEM.md` | `state-machines/PluginLifecycle.md`, `registry/PLUGINS.md`, `sdk/PluginSDK.md` |
+| Browser page/action state | `specs/BROWSER.md` | `specs/BACKGROUND_EXECUTION.md`, `architecture/TOOL_SYSTEM.md` (§Browser tools) |
 
 ## Contract Derivation
 

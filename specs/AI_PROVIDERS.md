@@ -97,7 +97,7 @@ switchable provider configuration:
 | **API key** | Per-profile key, stored encrypted via `SecureKeyStore` (never plaintext, never logged — NFR-SEC-005). |
 | **Endpoint** | Configurable base URL (defaults per provider; required for custom endpoints). |
 | **Model** | Default model for the profile; selectable from the provider model catalog (FR-P006). |
-| **Streaming** | Per-profile streaming toggle (FR-P004); streamed via `Flow<StreamChunk>`. |
+| **Streaming** | Per-profile streaming toggle (FR-P004); streamed via `Flow<StreamEnvelope>` (FR-P014, see [../models/Inference.md](../models/Inference.md)). |
 | **Parameters** | Temperature, max tokens, stop sequences, and other provider params. |
 | **Capabilities** | The profile's declared `ProviderCapability` set (chat, streaming, tool calling, vision, embeddings). |
 

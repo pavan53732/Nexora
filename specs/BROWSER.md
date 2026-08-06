@@ -54,12 +54,12 @@ Browser automation is exposed to the agent loop via specialized tools (`TOOL-2xx
 
 | Operation | Tool ID | Description | Parameters | Host JVM Action |
 |---|---|---|---|---|
-| `browser_navigate` | `TOOL-201` | Loads a URL in the headless WebView and waits for `DOM_CONTENT_LOADED` | `url`, `timeoutMs` | Invokes `WebView.loadUrl()`; injects standard User-Agent |
-| `browser_screenshot`| `TOOL-202` | Captures a high-resolution PNG of the active page | `outputFilename` | Draws the WebView canvas onto an Android Bitmap; saves to workspace `/files/` |
-| `browser_extract` | `TOOL-203` | Extracts text, links, headings, or metadata | `selector`, `mode` | Executes host-side JavaScript to parse DOM; returns JSON structure |
-| `browser_click` | `TOOL-204` | Performs a click event on an element matching a CSS selector | `selector` | Dispatches simulated touch events to WebView coordinates |
-| `browser_fill` | `TOOL-205` | Injects text into an input field or form element | `selector`, `value`| Focuses element and programmatically changes the value attribute |
-| `browser_execute` | `TOOL-206` | Runs raw JavaScript inside the page context and returns serializable output | `script` | Invokes `WebView.evaluateJavascript()` with callback |
+| `browser_open` | `TOOL-245` | Loads a URL in the headless WebView and waits for `DOM_CONTENT_LOADED` | `url`, `timeoutMs` | Invokes `WebView.loadUrl()`; injects standard User-Agent |
+| `browser_screenshot`| `TOOL-248` | Captures a high-resolution PNG of the active page | `outputFilename` | Draws the WebView canvas onto an Android Bitmap; saves to workspace `/files/` |
+| `browser_extract` | `TOOL-247` | Extracts text, links, headings, or metadata | `selector`, `mode` | Executes host-side JavaScript to parse DOM; returns JSON structure |
+| `browser_click` | `TOOL-249` | Performs a click event on an element matching a CSS selector | `selector` | Dispatches simulated touch events to WebView coordinates |
+| `browser_fill` | `TOOL-250` | Injects text into an input field or form element | `selector`, `value`| Focuses element and programmatically changes the value attribute |
+| `browser_evaluate` | `TOOL-256` | Runs raw JavaScript inside the page context and returns serializable output | `script` | Invokes `WebView.evaluateJavascript()` with callback |
 
 ---
 
@@ -122,7 +122,7 @@ When `AgentType.BROWSER` (`architecture/MULTI_AGENT_SYSTEM.md`) attempts interac
 
 ### Blocked High-Risk Domains (Browser Navigation)
 
-When `browser_navigate` (`TOOL-201`) or `browser_open` (legacy name mapping — `LEGACY` table in `generate_tool_catalog.py`: `"browser_navigate"` → `"browser_open"`) attempts to load a blocked domain (`*.bank*`, `*.pay*`, `*.crypto*`, `*.insurance*` — see `security/SandboxPolicy.md` §Blocked Domains):
+When `browser_open` (`TOOL-245`) attempts to load a blocked domain (`*.bank*`, `*.pay*`, `*.crypto*`, `*.insurance*` — see `security/SandboxPolicy.md` §Blocked Domains):
 
 - `WebView.loadUrl()` is intercepted by the sandbox manager (`ToolManager` — `executeTool()`); the URL is checked against the blocked-list (`security/SandboxPolicy.md` §Blocked Domains); if blocked, `execute()` returns `ToolResult.Error` (`NXR-2003`) immediately (before `WebView.loadUrl()` is called); the `EventBus` publishes `AgentError` (`protocols/Agent-Protocol.md` — `AgentError` event); the agent loop pauses (`Blocked`); the audit log records `CRITICAL` severity; the user receives `agent_error` notification with isolation instruction.
 

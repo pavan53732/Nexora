@@ -28,7 +28,7 @@ Engine itself.
 | **Linear** | Sequential steps executed one after another. |
 | **Parallel** | Independent steps executed simultaneously. |
 | **Branching** | Steps chosen based on conditions (if/else). |
-| **Looping** | Steps repeated until a condition is met. |
+| **Iterative** | Steps repeated with a bounded iteration count or convergence condition; modeled as a cycle in the step graph with explicit iteration metadata. |
 | **Error Recovery** | Retry with fallback strategies on failure. |
 | **Human-in-the-Loop** | Steps that pause for user approval before continuing. |
 | **Multi-Agent Step** | Steps delegated to the Multi-Agent Coordinator for parallel agent execution. |
@@ -75,6 +75,14 @@ sealed class WorkflowStep {
         override val dependsOn: List<String>,
         val message: String
     ) : WorkflowStep()
+
+    data class Iterative(
+        override val id: String,
+        override val dependsOn: List<String>,
+        val bodySteps: List<String>,  // step IDs forming the loop body
+        val maxIterations: Int,
+        val convergenceCondition: String?
+    ) : WorkflowStep()
 }
 
 enum class ErrorStrategy { RETRY, SKIP, ABORT, FALLBACK }
@@ -82,14 +90,15 @@ enum class ErrorStrategy { RETRY, SKIP, ABORT, FALLBACK }
 
 ## Execution Model
 
-The engine uses a **directed acyclic graph (DAG)** for step dependencies:
+The engine uses a **step dependency graph** that supports bounded cycles for iterative workflows:
 
-1. Topologically sort steps based on dependencies.
+1. Topologically sort steps based on dependencies (treating iteration edges specially).
 2. Execute independent steps in parallel.
 3. Wait for dependencies before executing dependent steps.
 4. Apply error strategy on failures.
 5. Pause at approval gates.
-6. **File Write Synchronization (Race Mitigation)**: When independent branches execute in parallel lanes, steps are prohibited from conflicting writes. The engine enforces per-file write locks (matching multi-agent SA-3): if a second parallel step attempts to write to a locked file, it suspends until the lock is released, or is assigned a private workspace overlay copy to be merged at join points.
+6. **Iteration control**: `Iterative` steps carry `maxIterations` and optional `convergenceCondition`. The engine increments the counter and re-evaluates downstream readiness only when the convergence condition is met or the iteration limit is reached.
+7. **File Write Synchronization (Race Mitigation)**: When independent branches execute in parallel lanes, steps are prohibited from conflicting writes. The engine enforces per-file write locks (matching multi-agent SA-3): if a second parallel step attempts to write to a locked file, it suspends until the lock is released, or is assigned a private workspace overlay copy to be merged at join points.
 
 > **Concurrency cap inheritance:** Parallel lanes inherit the dynamic resource-budgeted cap defined in `MULTI_AGENT_SYSTEM.md` SA-3 (`min(memory_budget/per_agent_est, cpu_cores, configurable_max)`, default 3, high-end 8–16). The Workflow Engine does not enforce the cap directly; it relies on the `ResourceManager` (`RUNTIME.md`) and the Multi-Agent Coordinator (`MULTI_AGENT_SYSTEM.md`) to limit active sub-agent count per workspace.
 

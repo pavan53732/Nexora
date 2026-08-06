@@ -9,14 +9,14 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
-A **Workflow** in Nexora is a directed acyclic graph (DAG) of steps that orchestrates multi-stage agent operations. The workflow-level lifecycle tracks overall progress, while each step maintains its own sub-state internally. Workflows support pause/resume semantics and propagate cancellation across all constituent steps.
+A **Workflow** in Nexora is a step dependency graph that supports bounded cycles for iterative workflows. The workflow-level lifecycle tracks overall progress, while each step maintains its own sub-state internally. Workflows support pause/resume semantics and propagate cancellation across all constituent steps.
 
 ## States
 
 | State | Description |
 |-------|-------------|
-| **Defined** | Workflow DAG structure authored; steps and edges declared. |
-| **Validated** | DAG has no cycles, all step inputs/outputs type-checked. |
+| **Defined** | Workflow graph structure authored; steps and edges declared. |
+| **Validated** | Graph has no invalid cycles, all step inputs/outputs type-checked. |
 | **Running** | At least one step is actively executing. |
 | **Paused** | No steps executing; can be resumed from pause point. |
 | **StepPending** | Next step(s) ready to execute but not yet started. |
@@ -31,7 +31,7 @@ A **Workflow** in Nexora is a directed acyclic graph (DAG) of steps that orchest
 | Trigger | From | To | Guard |
 |---------|------|----|-------|
 | `define()` | [*] | Defined | — |
-| `validate()` | Defined | Validated | DAG is acyclic |
+| `validate()` | Defined | Validated | Graph has no invalid cycles |
 | `start()` | Validated | Running | — |
 | `pause()` | Running | Paused | — |
 | `resume()` | Paused | Running | Pending steps exist |
@@ -40,11 +40,13 @@ A **Workflow** in Nexora is a directed acyclic graph (DAG) of steps that orchest
 | `complete()` | StepCompleted | Completed | No pending steps remain |
 | `stepStart()` | StepCompleted | StepRunning | Downstream step eligible |
 | `fail(error)` | StepRunning | Failed | No error-handler edge |
+| `fallback(error)` | StepRunning | StepRunning | FALLBACK edge exists; alternates available |
+| `iterate()` | StepCompleted | StepRunning | Iterative step has remaining iterations |
 | `cancel()` | * | Cancelled | — |
 
 ### Step Sub-States
 
-Each step internally tracks: **Pending → Running → Completed / Failed / Skipped**. The workflow engine evaluates step readiness after every `stepComplete()` by walking the DAG for steps whose all upstream dependencies are in the Completed state.
+Each step internally tracks: **Pending → Running → Completed / Failed / Skipped**. The workflow engine evaluates step readiness after every `stepComplete()` by walking the graph for steps whose all upstream dependencies are in the Completed state. Iterative steps re-enter StepRunning until `maxIterations` or `convergenceCondition` is met.
 
 ## State Diagram
 
@@ -62,9 +64,8 @@ stateDiagram-v2
     StepCompleted --> StepPending : evaluateSteps()
     StepCompleted --> Completed : complete()
     StepRunning --> Failed : fail(error)
-    Failed --> [*]
-    Completed --> [*]
-
+    StepRunning --> StepRunning : fallback(error)
+    StepCompleted --> StepRunning : iterate()
     Running --> Cancelled : cancel()
     Paused --> Cancelled : cancel()
     StepPending --> Cancelled : cancel()
@@ -99,4 +100,4 @@ An invalid transition MUST return a canonical error without changing persisted s
 
 ## Implementation Notes
 
-The `WorkflowEngine` class manages the DAG traversal and step dispatching. It uses a topological sort to determine execution order and maintains an in-memory `StepStatusMap`. Workflow state is persisted to the `workflow` table in Room; step sub-states are stored in the `workflow_step` table. The engine is coroutine-based — each `stepStart()` launches a child job so that independent parallel branches execute concurrently, with structured concurrency ensuring cancellation propagates to all children.
+The `WorkflowEngine` class manages the graph traversal and step dispatching. It uses a topological sort to determine execution order (treating iteration edges specially) and maintains an in-memory `StepStatusMap`. Workflow state is persisted to the `workflow` table in Room; step sub-states are stored in the `workflow_step` table. The engine is coroutine-based — each `stepStart()` launches a child job so that independent parallel branches execute concurrently, with structured concurrency ensuring cancellation propagates to all children.

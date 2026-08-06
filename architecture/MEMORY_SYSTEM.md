@@ -18,25 +18,30 @@ Nexora remembers everything. The memory system provides persistent, searchable, 
 
 ## Memory Tiers
 
-| Tier | Scope | Lifetime | Phase |
-|------|-------|----------|-------|
-| **Session Memory** | Single conversation | Cleared on session end (configurable) | 6 |
-| **Project Memory** | Single workspace | Persists across sessions, tied to workspace | 6 |
-| **Long-Term Memory** | Global | Survives app reinstalls (cloud backup optional) | 6 |
-| **Knowledge Graph** | Global | Structured entities, relationships, facts | 4 |
-| **Execution History** | Per task | Full audit trail of every action | 6 |
+| Tier | Scope | MemoryKind(s) | Lifetime | Phase |
+|------|-------|---------------|----------|-------|
+| **Session Memory** | Single conversation | `CONVERSATION` | Cleared on session end (configurable) | 6 |
+| **Project Memory** | Single workspace | `CONVERSATION`, `TOOL_HISTORY`, `FILE_HISTORY`, `USER_PREFERENCE`, `EXECUTION_HISTORY` | Persists across sessions, tied to workspace | 6 |
+| **Long-Term Memory** | Global | `CONVERSATION`, `USER_PREFERENCE`, `KNOWLEDGE_GRAPH` | Survives app reinstalls (cloud backup optional) | 6 |
+| **Knowledge Graph** | Global | `KNOWLEDGE_GRAPH` | Structured entities, relationships, facts | 4 |
+| **Execution History** | Per task | `EXECUTION_HISTORY`, `CONTEXT_SNAPSHOT`, `REASONING_SUMMARY`, `STREAM_LINEAGE` | Full audit trail of every action | 6 |
 
 ## Memory Components
 
-| Component | Description |
-|-----------|-------------|
-| **Embeddings** | Vector embeddings of conversations, files, and documents. |
-| **Vector Database** | Local vector DB for storing and querying embeddings. |
-| **Semantic Search** | Find relevant past information using natural language queries. |
-| **Semantic Recall** | Automatically recall relevant past context for new tasks. |
-| **Tool History** | Record of every tool invocation with parameters and results. |
-| **File History** | Version history of files modified by agents. |
-| **User Preferences** | Learned preferences: coding style, preferred tools, patterns. |
+| Component | Description | MemoryKind |
+|-----------|-------------|------------|
+| **Embeddings** | Vector embeddings of conversations, files, and documents. | `CONVERSATION`, `FILE_HISTORY` |
+| **Vector Database** | Local vector DB for storing and querying embeddings. | — |
+| **Semantic Search** | Find relevant past information using natural language queries. | — |
+| **Semantic Recall** | Automatically recall relevant past context for new tasks. | — |
+| **Tool History** | Record of every tool invocation with parameters and results. | `TOOL_HISTORY` |
+| **File History** | Version history of files modified by agents. | `FILE_HISTORY` |
+| **User Preferences** | Learned preferences: coding style, preferred tools, patterns. | `USER_PREFERENCE` |
+| **Knowledge Graph** | Structured entities, relationships, and facts. | `KNOWLEDGE_GRAPH` |
+| **Execution History** | Full audit trail of every action. | `EXECUTION_HISTORY` |
+| **Context Snapshots** | Versioned context with included/excluded segments. | `CONTEXT_SNAPSHOT` |
+| **Reasoning Summaries** | Redacted structured reasoning artifacts. | `REASONING_SUMMARY` |
+| **Stream Lineage** | Stream identity, committed sequence, terminal outcome. | `STREAM_LINEAGE` |
 
 ## Memory Backing Stores
 

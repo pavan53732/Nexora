@@ -34,7 +34,7 @@ interface NexoraPlugin {
     val name: String
     val version: String
     val description: String
-    val requiredPermissions: List<PermissionScope>
+    val requiredPermissions: List<String>
     val dependencies: List<String>  // Other plugin IDs
 
     fun onInstall(context: PluginContext)

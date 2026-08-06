@@ -141,11 +141,6 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | NXR-4015 | Stream sequence gap | Server | Missing sequence cannot be recovered | Fail stream; never synthesize missing content |
 | NXR-4016 | Incomplete streamed Tool call | Client | Tool fragments ended before schema-valid commit | Discard fragments; never execute |
 | NXR-4017 | Stream terminal missing | Infrastructure | Transport closed without canonical terminal event | Commit failure and reconcile usage; never report success |
-| NXR-4013 | Stream backpressure overflow | Infrastructure | Bounded stream queue remained above capacity beyond deadline | Cancel transport, retain partial output, tune consumer/buffer policy |
-| NXR-4014 | Stream resume rejected | Infrastructure | Resume token/cursor is invalid, expired, or unsupported | Keep prior stream partial; restart with lineage only when policy permits |
-| NXR-4015 | Stream sequence gap | Server | Missing sequence could not be recovered | Fail stream; never synthesize or reorder missing content |
-| NXR-4016 | Incomplete streamed Tool call | Client | Tool-call fragments ended before schema-valid commit | Discard fragments; never execute; retry generation if policy permits |
-| NXR-4017 | Stream terminal missing | Infrastructure | Transport closed without Terminal/Failed/Cancelled event | Treat as failure and reconcile usage; never report success |
 
 ---
 

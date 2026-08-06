@@ -21,10 +21,16 @@ data class Tool(
     val supportsStreaming: Boolean,
     val supportsCancellation: Boolean,
     val isIdempotent: Boolean,
+    val cacheTtlMs: Long,
+    val configSchemaRef: String?,
+    val health: ToolHealth,
+    val isFavorite: Boolean,
     val status: ToolStatus
 )
 
 enum class ToolRiskLevel { LOW, MEDIUM, HIGH, CRITICAL }
+
+enum class ToolHealth { UNKNOWN, HEALTHY, DEGRADED, UNHEALTHY }
 
 enum class ToolStatus {
     DISCOVERED,

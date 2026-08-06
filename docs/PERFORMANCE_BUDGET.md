@@ -31,7 +31,7 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 
 | Metric | Target | Warning | Critical | Measurement Method | Phase |
 |---|---|---|---|---|---|
-| Streaming first token (TTFB) | 1 000 ms | 2 000 ms | 5 000 ms | `Flow<StreamChunk>` timing | Alpha |
+| Streaming first token (TTFB) | 1 000 ms | 2 000 ms | 5 000 ms | `Flow<StreamEnvelope>` timing | Alpha |
 | Inter-chunk latency | 100 ms | 300 ms | 1 000 ms | `Flow` timing | Alpha |
 | Provider health check | 2 000 ms | 5 000 ms | 10 000 ms | `HealthCheck` coroutine | Beta |
 | Provider failover time | 3 000 ms | 5 000 ms | — | `ProviderManager` timing | Beta |
