@@ -77,7 +77,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 |------|------|----------|-------------|----------|
 | NXR-2001 | Tool not found | Client | Agent requested a tool name not present in the registry | Return error to agent so it can retry with a valid tool |
 | NXR-2002 | Tool timeout | Infrastructure | Tool execution exceeded the configured timeout | Kill tool process; report partial output if available |
-| NXR-2003 | Tool permission denied | Client | Current permission policy denies access to this tool | Prompt user for one-time or permanent grant |
+| NXR-2003 | Tool permission denied | Client | Current permission policy denies access. Subreasons: `UNKNOWN_SCOPE` (repair declaration; do not prompt), `POLICY_DENIAL` (authorized change only), `USER_DENIED` (stop; new user action required), `MALFORMED_APPROVAL` (reject transaction, audit, never execute), `CLASSIFIER_DENIAL` (final for current call), `INVALID_SCOPE_DECLARATION` (reject registration). | Check scope, prompt user for ASK scopes, check global/workspace/agent overrides |
 | NXR-2004 | Tool execution failed | Server | Tool threw an unhandled exception during execution | Log stack trace; return structured error to agent |
 | NXR-2005 | Tool invalid parameters | Client | Parameters supplied by the agent fail schema validation | Return validation errors to agent for self-correction |
 | NXR-2006 | Tool not registered | Client | Tool class exists but was not registered in `ToolRegistry` | Register tool at startup; check module initialisation order |

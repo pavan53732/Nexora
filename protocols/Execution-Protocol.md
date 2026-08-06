@@ -10,7 +10,7 @@
 
 ## Execution Lifecycle Flow
 
-```text
+```
 Orchestration Engine         CheckpointManager          TaskScheduler
          │                           │                        │
          ├─────── start() ──────────>│                        │
@@ -22,10 +22,30 @@ Orchestration Engine         CheckpointManager          TaskScheduler
          ├────────────────── complete() ─────────────────────>│
 ```
 
-1. **Instantiation**: The Orchestration Engine initializes a new `Execution` session, assigns a stable `correlationId`, and requests a CPU wake lock from the Android OS.
-2. **Periodic Checkpointing**: During the running loop, the engine serializes execution frames every 30s. The `CheckpointManager` commits these frames using ACID SQLite writes, returning a `CheckpointCommitted` event.
-3. **Automatic Re-scheduling**: If the device loses network or runs low on battery, the `TaskScheduler` registers a WorkManager job, suspends FGS execution, and waits for charging/wifi constraints before re-triggering resume.
-4. **Outcome Roll-up**: Upon final step validation, the engine commits terminal outcomes (`COMPLETED` or `FAILED`) and publishes the final event.
+1. **Instantiation**: Creates a new `Execution` with stable `correlationId`.
+2. **Periodic Checkpointing**: Every 30s, serializes execution frames; `CheckpointManager` commits via ACID SQLite.
+3. **RESUME**: Recoverable interruption resumes same `executionId` with `correlationId` unchanged and `version` incremented.
+4. **RETRY_AFTER_TERMINAL**: Explicit retry after terminal (`FAILED`/`CANCELLED`/`COMPLETED`) creates new `executionId` with `priorExecutionId` linking the terminal predecessor.
+5. **Outcome Roll-up**: Terminal outcomes (`COMPLETED`, `FAILED`, `CANCELLED`) are committed and final; no terminal-to-RUNNING transition.
+
+### Recovery Operations
+
+```kotlin
+enum class ExecutionRecoveryOperation { RESUME, RETRY_AFTER_TERMINAL }
+
+data class ExecutionRecoveryCommand(
+    val operation: ExecutionRecoveryOperation,
+    val executionId: String,
+    val priorExecutionId: String?,
+    val checkpointId: String?,
+    val correlationId: String,
+    val expectedVersion: Long,
+    val idempotencyKey: String
+)
+```
+
+RESUME: same `executionId`, `priorExecutionId` unchanged, `correlationId` unchanged, `version` increases.
+RETRY_AFTER_TERMINAL: new `executionId`, `priorExecutionId` = terminal predecessor, predecessor remains terminal, lineage acyclic.
 
 ## Protocol Messages
 

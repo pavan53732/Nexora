@@ -102,13 +102,17 @@ data class ToolMetadata(
 AI Response contains tool_call
     |
     v
-Tool Manager -> Look up tool by name
+Tool Manager -> Look up tool by name, validate descriptor
     |
     v
-Permission Manager -> Check if tool is allowed
-    |
-    v
-[If approval needed] -> Prompt user -> Wait for response
+Complete Authorization Gate (see security/PermissionModel.md)
+  → Validate required-scope declaration (reject duplicates)
+  → Resolve every scope through policy hierarchy
+  → Deny unknown or effective-DENY scopes
+  → Aggregate ASK scopes, validate approval transaction
+  → Build ResolvedPermission projections
+  → ClassifierPolicy selection and optional Classifier evaluation
+  → Return Allowed only after every gate passes
     |
     v
 Parameter Validator -> Validate input against JSON Schema
@@ -128,6 +132,11 @@ Event Bus -> Publish tool execution event
     v
 Return result to AI for next step
 ```
+
+Authorization denial returns `NXR-2003` with subreason (`POLICY_DENIAL`, `USER_DENIED`,
+`MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`, `INVALID_SCOPE_DECLARATION`). No Tool side
+effect occurs before complete authorization. Authorization denial does not change
+ToolStatus. Classifier DENY is final for the current call.
 
 ## Tool Registration
 
