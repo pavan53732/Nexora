@@ -18,7 +18,7 @@ It goes beyond chat. AI agents autonomously perform real tasks using files, code
 - A **multi-agent execution environment** — specialized agents collaborating.
 - An **agent-first AI workspace** — you talk to agents; they do the work for you.
 - A **project workspace** — manage files, code, and tasks inside the app.
-- A **tool execution platform** — 300-500+ tools across 26 categories, invoked by agents.
+- A **tool execution platform** — 300-500+ tools across 28 categories, invoked by agents.
 - A **plugin-based AI ecosystem** — extensible through community plugins.
 
 ### What Nexora Is Not
@@ -60,7 +60,7 @@ Chats are one artifact within a workspace. This scales much better as the platfo
 - **Agent-First Chat** — you give the agent a goal; everything else happens automatically.
 - **Agent-Driven Execution** — agents automatically use the terminal, runtimes (Python/Node), Git, and SQLite inside an isolated sandbox — no infrastructure UI.
 - **Sandboxed Execution** — AI never touches the host system directly (internal by design).
-- **Tool System** — 26 tool categories, 300-500 individual tools, all agent-invoked and plugin-based.
+- **Tool System** — 28 tool categories, 300-500 individual tools, all agent-invoked and plugin-based.
 - **Multi-Provider AI** — OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom.
 - **Memory System** — Session, project, and long-term memory with semantic search.
 - **Plugin Marketplace** — Everything (tools, providers, agents) is installable as a plugin.

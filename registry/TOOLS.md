@@ -36,8 +36,9 @@
 | 25 | Workflow | WF | 10 | 6 |
 | 26 | Skills | SKL | 2 | 4 |
 | 27 | MCP Integration | MCP | 6 | 5 |
+| 28 | Project Introspection | INTRO | 7 | 4 |
 
-**Total registered tools: 343** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 350** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
 
 ## File System (FILE)
 
@@ -516,3 +517,15 @@
 | TOOL-400 | mcp_call_tool | Invoke an MCP-discovered tool | 5 | Planned |
 | TOOL-401 | mcp_read_resource | Read a resource from an MCP server | 5 | Planned |
 | TOOL-402 | mcp_get_prompt | Retrieve a prompt definition | 5 | Planned |
+
+## Project Introspection (INTRO)
+
+| ID | Tool | Description | Phase | Status |
+|----|------|-------------|-------|--------|
+| TOOL-410 | introspect_api | Read and parse API schema files (OpenAPI, Swagger, GraphQL, gRPC protos) into structured summaries | 4 | Planned |
+| TOOL-411 | introspect_database | Read and parse database schema files (SQL, migrations, Room entities) into table/column/index summaries | 4 | Planned |
+| TOOL-412 | introspect_config | Read and parse configuration files (YAML, JSON, TOML, .env, .properties) | 4 | Planned |
+| TOOL-413 | introspect_build | Read and parse build system files (Gradle, Maven, Make, CMake) | 4 | Planned |
+| TOOL-414 | introspect_ui | Read and parse UI definition files (Compose, XML layouts, theme definitions) | 4 | Planned |
+| TOOL-415 | introspect_domain | Read and parse domain model classes (data classes, interfaces, enums, sealed classes) | 4 | Planned |
+| TOOL-416 | introspect_infrastructure | Read and parse infrastructure files (Dockerfile, docker-compose, CI configs, deploy scripts) | 4 | Planned |

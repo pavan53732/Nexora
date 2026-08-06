@@ -81,7 +81,7 @@ referencing the underlying canonical documents throughout.
 | **Agent** | A specialized role (Planner, Coder, Researcher, etc.) that receives goals, plans steps, invokes tools, and produces results; the Workflow Coordinator (AGT-015) is the Master Agent |
 | **Task** | A unit of work with goal, acceptance criteria, dependencies, priority, lifecycle state, and assignee |
 | **Execution** | The active agent loop: plan → execute → reflect → repeat, with checkpoints, token budgets, and progress events |
-| **Tool** | A capability registered in the tool catalog (27 categories, 343 tools) with a stable `TOOL-###` ID, permission scopes, and schema-validated parameters |
+| **Tool** | A capability registered in the tool catalog (28 categories, 350 tools) with a stable `TOOL-###` ID, permission scopes, and schema-validated parameters |
 | **Provider** | An external AI model service (OpenAI, Anthropic, Gemini, etc.) behind the `AIProvider` abstraction; the runtime routes requests, tracks health, and handles failover |
 | **Plugin** | An installable extension that registers tools, providers, agents, or skills; loaded in isolated classloaders with explicit permission review at install |
 | **Terminal session** | An internal, agent-invoked shell session (subprocess or PTY) with working-dir boundaries, output caps, timeout disciplines, and session restore |
@@ -459,7 +459,7 @@ properties:
 ### Tools
 
 The tool system ([`architecture/TOOL_SYSTEM.md`](../../architecture/TOOL_SYSTEM.md),
-[`registry/TOOLS.md`](../../registry/TOOLS.md)) manages 343 tools across 27 categories:
+[`registry/TOOLS.md`](../../registry/TOOLS.md)) manages 350 tools across 28 categories:
 
 - **Stable registration**: every tool has a `TOOL-###` ID, parameter schema, required
   permissions, and lifecycle phase
@@ -623,7 +623,7 @@ When this document disagrees with a canonical source, the canonical source wins.
 | Embedded runtime boundary | Documented/canonical | RUNTIME.md, MODULE_BOUNDARIES.md, EXECUTION_LIFECYCLE.md |
 | Workspace sandbox | Documented/canonical | SandboxPolicy.md, FULL_ENVIRONMENT.md; perf budgets defined |
 | Provider abstraction | Documented/canonical | PROVIDER_SYSTEM.md; 9 providers specified; health/failover defined |
-| Tool registry | Documented/canonical | TOOLS.md (343 tools, 27 categories); TOOL_MATRIX.md |
+| Tool registry | Documented/canonical | TOOLS.md (350 tools, 28 categories); TOOL_MATRIX.md |
 | Background execution | Documented/canonical | BACKGROUND_EXECUTION.md; foreground service, WorkManager handoff |
 | Checkpoint/recovery | Documented/canonical | WAL journaling, 30 s interval, 100% fidelity, exactly-once |
 | Evidence/validation | Documented/canonical | 5-way classification, structured confidence, zero-assumption mode |

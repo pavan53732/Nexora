@@ -37,7 +37,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 - **Architecture**: Workspace-first (Workspace > Chat).
 - **Interaction**: Agent-first — users chat with agents; the sandbox, internal terminal, runtimes, and execution engine are internal implementation details (ADR-0006).
 - **Principles**: 15 codified product principles (PP-001–015) — autonomous agents, provider-agnostic, tool-based execution, persistent memory, agent-driven execution, plugins, background execution, multi-agent orchestration, dashboards, sandboxing, observability, and more.
-- **Scale**: 17+ modules, 26 tool categories, 300-500 tools, 10-20 agents.
+- **Scale**: 17+ modules, 28 tool categories, 300-500 tools, 10-20 agents.
 - **Phases**: 8 development phases (Foundation through Plugin Marketplace).
 
 ---

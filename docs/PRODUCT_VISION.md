@@ -20,7 +20,7 @@
 - **An agent-first AI workspace** — The user interacts with AI agents; infrastructure stays hidden.
 - **A sandboxed AI runtime** — Internal secure execution environment isolated from the host system; the agent uses it automatically, the user never touches it.
 - **A project workspace** — Manage files, code, and tasks inside the app.
-- **A tool execution platform** — 300-500+ tools across 26 categories, invoked by agents on the user's behalf.
+- **A tool execution platform** — 300-500+ tools across 28 categories, invoked by agents on the user's behalf.
 - **A plugin-based AI ecosystem** — Extensible through plugins and community contributions.
 
 ## Interaction Model
@@ -43,7 +43,7 @@ They have no primary user-facing screens.
 - **Plan** — Create multi-step execution plans with dependencies and ordering.
 - **Reason** — Reflect on intermediate results, self-correct, and adapt strategies.
 - **Execute** — Run tools, invoke runtimes, modify files, and perform real actions.
-- **Use Tools** — Access 300-500+ individual tool functions across 26 categories.
+- **Use Tools** — Access 300-500+ individual tool functions across 28 categories.
 - **Build Projects** — Create, scaffold, and manage full software projects inside Android.
 - **Edit Files** — Read, write, modify, refactor, and version-control files.
 - **Run Code** — Execute Python, Node.js, JavaScript, and shell commands in a sandbox.
@@ -96,7 +96,7 @@ Alternative phrasings:
 | Component | Estimated Count |
 |-----------|----------------|
 | Core Platform Modules | 17+ |
-| Tool Categories | 26 |
+| Tool Categories | 28 |
 | Individual Tool Functions | 300-500 |
 | Built-in Agent Types | 10-20 |
 | AI Providers | Unlimited |
