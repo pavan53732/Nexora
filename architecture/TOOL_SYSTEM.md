@@ -53,9 +53,9 @@ data class ToolMetadata(
 )
 ```
 
-## Tool Categories (27)
+## Tool Categories (28)
 
-> **Note:** Category 27 (MCP Integration) added via G4 hardening (2026-08-06). MCP servers are an additional tool SOURCE alongside built-in and plugin tools — not a replacement. See [MCP Client](#mcp-client-model-context-protocol-client) below.
+> **Note:** Category 27 (MCP Integration) added via G4 hardening (2026-08-06). Category 28 (Project Introspection) added via S10 Path C (2026-08-06).
 
 | # | Category | Example Tools | Phase |
 |---|----------|--------------|-------|
@@ -88,10 +88,11 @@ data class ToolMetadata(
 | 25 | **Workflow** | create_workflow, run_workflow, schedule_workflow | 6 |
 | 26 | **Skills** | skill_list, skill_acquire (skills are first-class expertise units — ADR-0007; these tools manage them) | 4 |
 | 27 | **MCP Integration** | mcp_connect_stdio, mcp_connect_http, mcp_list_caps, mcp_call_tool, mcp_read_resource, mcp_get_prompt | 5 |
+| 28 | **Project Introspection** | introspect_api, introspect_database, introspect_config, introspect_build, introspect_ui, introspect_domain, introspect_infrastructure — pre-flight readers that scan the workspace and populate ProjectContext before planning (FR-CM-009, Path C) | 4 |
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
-> registry of every tool — **343 tools** with stable `TOOL-###` IDs, descriptions, and
-> phases across the 27 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
+> registry of every tool — **350 tools** with stable `TOOL-###` IDs, descriptions, and
+> phases across the 28 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.
 

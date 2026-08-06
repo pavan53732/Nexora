@@ -23,7 +23,7 @@ Nexora remembers everything. The memory system provides persistent, searchable, 
 | **Session Memory** | Single conversation | Cleared on session end (configurable) | 6 |
 | **Project Memory** | Single workspace | Persists across sessions, tied to workspace | 6 |
 | **Long-Term Memory** | Global | Survives app reinstalls (cloud backup optional) | 6 |
-| **Knowledge Graph** | Global | Structured entities, relationships, facts | Later |
+| **Knowledge Graph** | Global | Structured entities, relationships, facts | 4 |
 | **Execution History** | Per task | Full audit trail of every action | 6 |
 
 ## Memory Components
@@ -67,6 +67,17 @@ extracted from conversations, tool results, and files (FR-M014):
 - **Storage** — Room `graph_entity` / `graph_edge` tables; indexes on entity name and
   embedding vector.
 - **Tools** — `memory_graph_query` (TOOL-385), `memory_graph_build` (TOOL-386).
+
+### Project Context
+
+The `ProjectIntrospector` (specified in `specs/CONTEXT_MANAGEMENT.md` §8, FR-CM-009)
+populates a lightweight ProjectContext in working memory before the Planner runs.
+It reads API schemas, database schemas, configuration files, build definitions,
+UI layouts, domain models, and infrastructure files — producing structured
+summaries tagged with EV confidence (DERIVED/ESTIMATED). Seven introspection tools
+(`TOOL-410`..`416`, Category 28) implement the readers. The Knowledge Graph is
+queried **after** introspection so entity extraction can reference the fresh
+ProjectContext.
 
 ## Memory Flow
 

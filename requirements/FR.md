@@ -254,6 +254,7 @@
 | FR-CM-006 | Context tagging & trust — every chunk labeled (source, timestamp, trust level, scope); untrusted content isolated in labeled segments | Must | 3 |
 | FR-CM-007 | Milestone memory curation — agent stores structured facts and lessons at step boundaries and task completion, not raw transcripts | Must | 3 |
 | FR-CM-008 | Context observability — per-layer token usage, summarization/truncation/stale events visible via context_stats and execution history | Should | 4 |
+| FR-CM-009 | Project introspection — pre-flight pass reads API schemas, database schemas, configuration files, build definitions, UI layouts, domain models, and infrastructure files before the Planner creates an ExecutionPlan; populates a lightweight ProjectContext in working memory (Layer 3); Knowledge Graph queried after introspection; all summaries carry EV classification (DERIVED/ESTIMATED) | Must | 2 |
 
 ## Autonomy & Stability
 

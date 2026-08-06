@@ -172,3 +172,100 @@ The Evidence & Validation Engine assigns a structured confidence and verificatio
 - **Structured Confidence (FR-EV-002)**: Claims carry confidence scores (`HIGH` / `MEDIUM` / `LOW`). Any score of `LOW` automatically triggers an `ASK` approval prompt or a clarification gate.
 - **Zero-Assumption Mode (FR-EV-003)**: The engine blocks the agent from filling in missing specifications with assumed values. If the goal lacks clarity, the engine halts the loop, states the ambiguity, and prompts the user for instructions.
 - **Completion Validation (FR-EV-006)**: Before a task is marked completed, the `Reviewer` agent evaluates the evidence log against the task's initial validation criteria. If important, a manual or separate `Reviewer` pass is a hard gate before the user-facing completion notification is unlocked.
+
+---
+
+## 8. Project Introspection (Pre-Flight Pass) (FR-CM-009)
+
+Before the Planner creates an ExecutionPlan, the runtime runs a **pre-flight
+introspection pass** over the workspace. The `ProjectIntrospector` is an
+enhancement of the Context Builder — not a separate pipeline stage — that reads
+the project's structure and populates a lightweight `ProjectContext` in working
+memory. This gives the Planner richer initial context without changing the
+existing agent-first loop.
+
+### Introspection Flow
+
+```
+User Goal (from Chat inside Workspace)
+    │
+    ▼
+ProjectIntrospector ──reads──> API schemas, DB schemas, configs,
+                               build files, UI layouts, domain models,
+                               infrastructure files
+    │
+    ▼
+ProjectContext populated in working memory (Layer 3 — Active Working Set)
+    │
+    ▼
+Knowledge Graph query ──retrieves──> relevant past entities, relationships,
+                                      and facts (FR-M014/M015, Phase 4)
+    │
+    ▼
+Planner (now has richer context) ──creates──> ExecutionPlan
+    │
+    ▼
+  [existing agent loop continues — Coordinator → Coder → Tester → Reviewer]
+```
+
+### ProjectContext Shape
+
+```kotlin
+data class ProjectContext(
+    val workspaceId: String,
+    val apiSchemas: List<ApiSchemaSummary>,       // OpenAPI, GraphQL, gRPC
+    val databaseSchemas: List<DbSchemaSummary>,   // table/column/index info
+    val configFiles: List<ConfigFileSummary>,     // YAML, JSON, TOML, .env
+    val buildFiles: List<BuildFileSummary>,       // Gradle, Make, CMake
+    val uiLayouts: List<UiLayoutSummary>,         // Compose, XML layouts
+    val domainModels: List<DomainModelSummary>,   // entity classes, interfaces
+    val infrastructureFiles: List<InfraFileSummary>, // Docker, CI/CD, deploy configs
+    val populatedAt: Instant
+)
+```
+
+Each summary type carries the file path, parsed structure, and a confidence
+score — `DERIVED` (structured format, machine-parsed) or `ESTIMATED`
+(heuristic interpretation). The Evidence & Validation Engine (§7) applies
+the same classification rules.
+
+### Introspection Tools (Category 28 — Project Introspection)
+
+Seven tools invoke the readers. Each tool is a standard `Tool` implementation
+executing in the sandbox with `sandbox:read` permission:
+
+| ID | Tool | Reads | Phase |
+|----|------|-------|-------|
+| TOOL-410 | `introspect_api` | OpenAPI, Swagger, GraphQL schemas, gRPC protos | 4 |
+| TOOL-411 | `introspect_database` | SQL schema files, migration files, Room entities | 4 |
+| TOOL-412 | `introspect_config` | YAML, JSON, TOML, .env, .properties files | 4 |
+| TOOL-413 | `introspect_build` | build.gradle.kts, pom.xml, Makefile, CMakeLists.txt | 4 |
+| TOOL-414 | `introspect_ui` | Compose @Composable, XML layout files, theme definitions | 4 |
+| TOOL-415 | `introspect_domain` | Kotlin/Java data classes, interfaces, enums, sealed classes | 4 |
+| TOOL-416 | `introspect_infrastructure` | Dockerfile, docker-compose.yml, CI configs, deploy scripts | 4 |
+
+All seven tools return structured JSON with `filePath`, `parsedStructure`,
+`confidence` (DERIVED/ESTIMATED), and `warnings`. They run in parallel during
+introspection — no ordering dependency between readers.
+
+### Phase Mapping
+
+- **Phase 2**: ProjectIntrospector interface defined (FR-CM-009).
+- **Phase 4**: All 7 introspection tools implemented; Knowledge Graph retrieval
+  integrated; ProjectContext populated before planning.
+
+### Design Rules
+
+1. **Not a separate pipeline stage.** The ProjectIntrospector is part of the
+   Context Builder — it enriches Layer 3 (Active Working Set) before the
+   Planner runs. It does not alter the agent-first loop or the Coordinator role.
+2. **Read-only.** Introspection tools require only `sandbox:read`. No file
+   mutations, no tool chaining, no provider calls during introspection.
+3. **Best-effort.** If a workspace has no API schemas, that reader returns an
+   empty list — introspection never blocks. Missing readers are not errors.
+4. **Evidence-tagged.** Every summary carries the EV classification (DERIVED
+   or ESTIMATED); the Planner treats ESTIMATED fields as advisory, not
+   authoritative.
+5. **KG query after introspection.** The Knowledge Graph is queried AFTER the
+   ProjectContext is populated, so entity extraction can reference the fresh
+   file paths and schema names.
