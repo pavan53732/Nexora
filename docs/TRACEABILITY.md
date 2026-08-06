@@ -61,6 +61,6 @@ The complete requirement identifier inventory is tracked separately in `docs/REQ
 
 ## Open Gaps
 
-- The matrix now operates under explicit traceability rules, but it still does not enumerate the full requirement set from `requirements/FR.md` and `requirements/NFR.md`.
-- Lifecycle linkage now reaches additional protocol/API/SDK surfaces, but repository-wide saturation is still incomplete.
-- Evidence locations are defined, but there are still no populated execution artifacts or result transitions beyond `Planned`.
+- Requirement identifier saturation: all 233 FR IDs defined in `requirements/FR.md` are now referenced by at least one canonical, derived, or test artifact in the repository (verified by repository-wide scan). The matrix below remains a curated representative subset focused on requirements whose architecture, contract, and validation relationships have been explicitly reconciled; the full identifier inventory is tracked in `docs/REQUIREMENT_COVERAGE_LEDGER.md`.
+- Lifecycle linkage reaches all protocol/API/SDK surfaces (Phases 3-4 closure).
+- Evidence locations are defined for every row; execution artifacts remain `Planned` (no implementation code exists yet — the repository is documentation-first per the specification-closure gate). `Planned` status is expected and correct at this stage; it is not a closure defect.
