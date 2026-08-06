@@ -62,7 +62,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-TL012` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
 | `FR-TL013` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
 | `FR-TL014` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
-| `FR-TL015` | `requirements/FR.md` | MAPPED | Tooling | `architecture/TOOL_SYSTEM.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-TL015` | `requirements/FR.md` | MAPPED | Security + Tooling | `security/PermissionModel.md` | `IT-TOOL-014` | `evidence/integration/IT-TOOL-014/` |
 | `FR-P001` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P002` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P003` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
@@ -106,7 +106,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-S013` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S014` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S015` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
-| `FR-S016` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S016` | `requirements/FR.md` | MAPPED | Security | `security/PermissionModel.md` | `SEC-PERM-005` | `evidence/security/SEC-PERM-005/` |
 | `FR-S017` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S018` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-PL001` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
@@ -182,7 +182,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-AS-004` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-005` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
-| `FR-AS-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `IT-LC-011` | `evidence/integration/IT-LC-011/` |
 | `FR-AS-008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-009` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-GT-001` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |
@@ -245,8 +245,8 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-PERF-008` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-PERF-009` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-PERF-010` | `requirements/NFR.md` | MAPPED | Performance | `docs/PERFORMANCE_BUDGET.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
-| `NFR-REL-001` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
-| `NFR-REL-002` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
+| `NFR-REL-001` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/BACKGROUND_EXECUTION.md` | `IT-LC-002` | `evidence/integration/IT-LC-002/` |
+| `NFR-REL-002` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/BACKGROUND_EXECUTION.md` | `IT-LC-001` | `evidence/integration/IT-LC-001/` |
 | `NFR-REL-003` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
 | `NFR-REL-004` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
 | `NFR-REL-005` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
@@ -270,7 +270,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-SEC-014` | `requirements/NFR.md` | MAPPED | Security | `specs/PIPES.md` | `SEC-NET-001` | `evidence/security/SEC-NET-001/` |
 | `NFR-REL-010` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-REL-011` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
-| `NFR-REL-012` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `NFR-REL-012` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `IT-LC-011` | `evidence/integration/IT-LC-011/` |
 | `NFR-REL-013` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-USE-001` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-002` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |

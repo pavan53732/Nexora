@@ -19,13 +19,16 @@ Every capability in Nexora is implemented as a tool. Tools are modular, plugin-b
 ## Tool Interface
 
 ```kotlin
+enum class ToolRiskLevel { LOW, MEDIUM, HIGH, CRITICAL }
+
 interface Tool {
     val id: String
     val name: String
     val description: String
     val category: ToolCategory
+    val riskLevel: ToolRiskLevel
     val parameters: JsonSchema
-    val requiredPermissions: List<PermissionScope>
+    val requiredPermissions: List<String> // canonical PermissionScope IDs
     val timeout: Duration
     val requiresSandbox: Boolean
     val version: String
@@ -102,7 +105,7 @@ data class ToolMetadata(
 AI Response contains tool_call
     |
     v
-Tool Manager -> Look up tool by name, validate descriptor
+Tool Manager -> Look up tool by name; validate ID, schema, riskLevel, and unique known scope IDs
     |
     v
 Complete Authorization Gate (see security/PermissionModel.md)
@@ -133,10 +136,16 @@ Event Bus -> Publish tool execution event
 Return result to AI for next step
 ```
 
-Authorization denial returns `NXR-2003` with subreason (`POLICY_DENIAL`, `USER_DENIED`,
-`MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`, `INVALID_SCOPE_DECLARATION`). No Tool side
-effect occurs before complete authorization. Authorization denial does not change
-ToolStatus. Classifier DENY is final for the current call.
+Authorization denial returns `NXR-2003` with subreason (`UNKNOWN_SCOPE`,
+`POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`). Invalid
+Tool descriptors, including duplicate/unknown scope declarations or missing risk metadata,
+are rejected with `NXR-2005` before `REGISTERED`. No Tool side effect occurs before
+complete authorization. Authorization denial does not change ToolStatus. Classifier
+`DENY` is final for the current call.
+
+Risk levels are canonical Tool metadata: `LOW` is read-only/local, `MEDIUM` is bounded
+workspace mutation, `HIGH` covers network/process/plugin/remote/destructive operations,
+and `CRITICAL` covers device-sensitive or security-critical irreversible operations.
 
 ## Tool Registration
 
@@ -183,7 +192,7 @@ States are defined in `models/Tool.md`:
 
 | Trigger | From | To | Guard |
 |---|---|---|---|
-| `register` | `DISCOVERED` | `REGISTERED` | Descriptor passes validation; no duplicate TOOL-ID |
+| `register` | `DISCOVERED` | `REGISTERED` | Descriptor passes schema, risk-level, stable-ID, and unique known permission-scope validation |
 | `activate` | `REGISTERED` | `ACTIVE` | Plugin loaded; all required dependencies available |
 | `deactivate` | `ACTIVE` | `DISABLED` | Plugin health failure, admin action, or explicit deactivation |
 | `re-activate` | `DISABLED` | `ACTIVE` | Health restored or admin re-activation |

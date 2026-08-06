@@ -77,15 +77,28 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 |------|------|----------|-------------|----------|
 | NXR-2001 | Tool not found | Client | Agent requested a tool name not present in the registry | Return error to agent so it can retry with a valid tool |
 | NXR-2002 | Tool timeout | Infrastructure | Tool execution exceeded the configured timeout | Kill tool process; report partial output if available |
-| NXR-2003 | Tool permission denied | Client | Current permission policy denies access. Subreasons: `UNKNOWN_SCOPE` (repair declaration; do not prompt), `POLICY_DENIAL` (authorized change only), `USER_DENIED` (stop; new user action required), `MALFORMED_APPROVAL` (reject transaction, audit, never execute), `CLASSIFIER_DENIAL` (final for current call), `INVALID_SCOPE_DECLARATION` (reject registration). | Check scope, prompt user for ASK scopes, check global/workspace/agent overrides |
+| NXR-2003 | Tool authorization denied | Client | A valid Tool call failed a permission, approval, or classifier gate; see subreason table below | Recover according to subreason; never execute before authorization succeeds |
 | NXR-2004 | Tool execution failed | Server | Tool threw an unhandled exception during execution | Log stack trace; return structured error to agent |
-| NXR-2005 | Tool invalid parameters | Client | Parameters supplied by the agent fail schema validation | Return validation errors to agent for self-correction |
+| NXR-2005 | Tool validation failed | Client | Tool descriptor or invocation parameters fail canonical schema/semantic validation | Repair descriptor before registration, or return parameter validation details to the caller |
 | NXR-2006 | Tool not registered | Client | Tool class exists but was not registered in `ToolRegistry` | Register tool at startup; check module initialisation order |
 | NXR-2007 | Tool chain broken | Server | Output of tool N does not match expected input schema of tool N+1 | Abort chain; report schema mismatch details |
 | NXR-2008 | Tool result too large | Client | Tool returned data exceeding the max result size (default 1 MB) | Truncate or summarise result; log truncation |
 | NXR-2009 | Tool sandbox error | Server | Tool violated sandbox policy during execution | Terminate tool; record policy violation in audit log |
 | NXR-2010 | Tool version incompatible | Client | Installed tool version conflicts with the current runtime API version | Prompt user to update tool or runtime |
 | NXR-2011 | Tool already executing | Client | A stateful tool was invoked while a prior invocation is still running | Queue or reject; prevent concurrent mutable access |
+
+### NXR-2003 Authorization Subreasons
+
+| Subreason | Meaning | Prompt? | Recovery |
+|---|---|---|---|
+| `UNKNOWN_SCOPE` | Tool declares an unregistered scope ID | No | Repair descriptor; reject registration/invocation |
+| `POLICY_DENIAL` | Effective Agent/Workspace/Global/default policy is `DENY` | No automatic prompt | Change policy only through authorized settings |
+| `USER_DENIED` | User rejected an `ASK` approval | No | Stop; retry only through a new user action |
+| `MALFORMED_APPROVAL` | Approval transaction is missing, duplicate, extra, empty, or mismatched | No | Reject, security-audit, never execute |
+| `CLASSIFIER_DENIAL` | Selected classifier denied the authorized call | No | Final for this attempt; a later attempt re-runs authorization |
+
+`INVALID_SCOPE_DECLARATION` is descriptor validation, not NXR-2003: it maps to
+`NXR-2005`, prevents `DISCOVERED → REGISTERED`, and is never user-prompted.
 
 ---
 
@@ -205,9 +218,10 @@ To eliminate responsibility gaps and satisfy Critical Finding 2, every public in
 | | `startTask` | `NXR-7001` | Server | Unsafe | Conditional (storage-full) | Transition to `FAILED` | Sandbox: wipe temp / clean up workspace caches, retry sandbox creation |
 | | `cancelTask` | `NXR-3010` | Client | Safe (Idempotent) | Safe | Transition to `CANCELLED` | Orchestration: commit cancel projection, release CPU wake lock & child tasks |
 | | `getTaskStatus`| `NXR-1009` | Client | Safe | Safe | `NO_CHANGE` | Storage: return standard empty/404 projection |
+| **`ToolManager`** | `registerTool` | `NXR-2005` | Client | Safe | Never until descriptor repaired | Remains `DISCOVERED` | Tool Registry: reject duplicate/unknown scope IDs, invalid risk level, or invalid schema before registration |
 | **`ToolManager`** | `executeTool` | `NXR-2001` | Client | Safe | Never | `NO_CHANGE` | Agent Runtime: report tool not found so agent can self-correct parameters |
 | | `executeTool` | `NXR-2002` | Infrastructure | Safe (Idempotent Key) | Conditional (retry counts) | `NO_CHANGE` | Sandbox: kill process, return partial result or trigger exponential backoff |
-| | `executeTool` | `NXR-2003` | Client | Safe (Idempotent Key) | Conditional (User consent)| Transition to `WAITING_APPROVAL` | Security: prompt user for approval gate, resume on approve, deny on deny |
+| | `executeTool` | `NXR-2003` | Client | Safe only with operation idempotency key | Conditional by subreason | `WAITING_APPROVAL` only while an `ASK` transaction is open; otherwise `NO_CHANGE` | Security: follow NXR-2003 subreason table; never execute on denial |
 | | `executeTool` | `NXR-2004` | Server | Unsafe | Conditional (retries) | `NO_CHANGE` | Developer Action: log stack trace, run agent bounded self-correction loop |
 | | `executeTool` | `NXR-7004` | Infrastructure | Unsafe | Never | Transition to `FAILED` | Sandbox: terminate offending process, record policy breach in audit |
 | **`ProviderManager`**| `complete` / `stream` | `NXR-4003` | Client | Safe | Never | `NO_CHANGE` | User Action: prompt to update API credentials in settings |

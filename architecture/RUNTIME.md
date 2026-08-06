@@ -133,13 +133,13 @@ Context Builder ---assemble---> AI Request (system + history + files + memory)
 AI Provider ---complete---> AI Response (text + tool_calls)
     |
     v
-Tool Manager ---route---> Tool Execution
+Tool Manager ---route---> Complete Authorization Gate
     |
     v
-Permission Manager ---check---> Approved/Denied
+Permission Manager + ASK Approval + Classifier Policy ---authorize---> Allowed/Denied
     |
     v
-Executor ---execute in sandbox---> Tool Result
+Executor ---execute only after Allowed---> Tool Result
     |
     v
 Memory Manager ---store---> Persisted

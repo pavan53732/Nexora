@@ -13,6 +13,7 @@ data class Tool(
     val name: String,
     val description: String,
     val category: String,
+    val riskLevel: ToolRiskLevel,
     val parametersSchemaRef: String,
     val requiredPermissions: List<String>,
     val timeoutMs: Long,
@@ -22,6 +23,8 @@ data class Tool(
     val isIdempotent: Boolean,
     val status: ToolStatus
 )
+
+enum class ToolRiskLevel { LOW, MEDIUM, HIGH, CRITICAL }
 
 enum class ToolStatus {
     DISCOVERED,

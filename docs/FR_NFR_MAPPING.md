@@ -16,7 +16,7 @@
 | `FR-TL-404` | `FR-TL004` | Tooling (MCP lifecycle) | Tooling | `architecture/TOOL_SYSTEM.md` (§Lifecycle) | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` | MAPPED |
 | `FR-TL-405` | `FR-TL005` | Tooling (MCP security) | Tooling | `security/PermissionModel.md` (§MCP rules) | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` | MAPPED |
 | `FR-TL-406` | `FR-TL006` | Tooling (MCP phase mapping) | Tooling | `specs/AI_PROVIDERS.md` (§Phase 5) | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` | MAPPED |
-| `NFR-SEC-021` | `NFR-SEC-001` | Security (deny-by-default) | Security | `security/PermissionModel.md` (§Explicit Risk-Based Scope Defaults) | `SEC-PERM-001` |
+| `NFR-SEC-021` | `NFR-SEC-001` | Security (explicit risk-based defaults) | Security | `security/PermissionModel.md` (§Explicit Risk-Based Scope Defaults) | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` | MAPPED |
 
 ---
 
@@ -82,3 +82,13 @@
 - `FEAT-035` (Project Introspection) → `registry/FEATURES.md`.
 - Knowledge Graph phase Later→4 → `architecture/MEMORY_SYSTEM.md`.
 - Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, `docs/research/EMBEDDED_RUNTIME_STRATEGY.md`.
+
+
+## S13 — Authorization and Execution Recovery Contract Synchronization
+
+- `FR-S016` → `security/PermissionModel.md` complete multi-scope approval/classifier authorization; validation `SEC-PERM-003..066`, `IT-TOOL-002..014` (Planned).
+- `FR-TL015` → Permission Audit Schema + Tool Protocol/API correlation; validation `SEC-PERM-023/044/045/052/062..065`, `IT-TOOL-008/009/014` (Planned).
+- `FR-TL001`..`015` → `architecture/TOOL_SYSTEM.md`, `models/Tool.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md`, `errors/ERROR_CODES.md`; validation `IT-TOOL-001..014` (Planned).
+- `FR-AS-007` → same-ID `RESUME`, new-ID `RETRY_AFTER_TERMINAL`, `priorExecutionId`, and reconciliation in Runtime/Background/Autonomy/Execution Protocol/Runtime API; validation `SEC-LC-EXEC-002..004`, `IT-LC-001..013/016..020` (Planned).
+- `NFR-REL-001`/`002`/`012` → durable checkpoint, resume fidelity, and exactly-once lineage/replay rules; validation `IT-LC-001..013/016..020` (Planned).
+- No S13 case is `VERIFIED`; all evidence paths are placeholders for `Planned` execution.

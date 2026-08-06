@@ -46,7 +46,7 @@
 | Terminal session lifecycle | `state-machines/TerminalSessionLifecycle.md` | `lifecycle/TerminalSessionLifecycle.md`, `models/TerminalSession.md`, `specs/TERMINAL.md` |
 | Task lifecycle | `state-machines/TaskLifecycle.md` | `models/Task.md`, `specs/EXECUTION_LIFECYCLE.md`, `docs/LIFECYCLES.md`, `protocols/Execution-Protocol.md` |
 | Session lifecycle | `state-machines/SessionLifecycle.md` | `lifecycle/SessionLifecycle.md`, `models/Session.md`, `docs/LIFECYCLES.md` |
-| Execution lifecycle | `architecture/RUNTIME.md` (§ExecutionStatus Lifecycle) | `models/Execution.md`, `protocols/Execution-Protocol.md`, `specs/EXECUTION_LIFECYCLE.md` |
+| Execution lifecycle | `architecture/RUNTIME.md` (§ExecutionStatus Lifecycle) | `models/Execution.md`, `protocols/Execution-Protocol.md`, `docs/api/Runtime-API.md`, `specs/EXECUTION_LIFECYCLE.md` |
 | Tool descriptor lifecycle | `architecture/TOOL_SYSTEM.md` (§ToolStatus Lifecycle) | `models/Tool.md`, `docs/api/Tool-API.md`, `protocols/Tool-Protocol.md`, `sdk/ToolSDK.md` |
 | Background execution | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md`, `docs/LIFECYCLES.md`, `testing/IntegrationTests.md` |
 | Multi-instance pipes (discovery, pairing, transport, cross-instance delegation) | `specs/PIPES.md` | `architecture/MULTI_AGENT_SYSTEM.md` (§Cross-Instance Extension), `models/Instance.md`, `registry/TOOLS.md` (`TOOL-405..408`), `security/PermissionModel.md` (`instance:*` scopes) |

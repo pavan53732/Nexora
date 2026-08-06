@@ -87,7 +87,7 @@ suspend fun checkPermission(
         return PermissionResult.Denied(
             scopeId = "declaration",
             reason = DenialReason.INVALID_SCOPE_DECLARATION,
-            errorCode = "NXR-2003"
+            errorCode = "NXR-2005"
         )
     }
 
@@ -202,7 +202,7 @@ suspend fun checkPermission(
         if (!allApproved) {
             val firstDenied = validated.first { !it.approved }
             return PermissionResult.Denied(
-                scopeId = firstDenied.scopeId,
+                scopeId = firstDenied.scope.id,
                 reason = DenialReason.USER_DENIED,
                 errorCode = "NXR-2003"
             )
@@ -344,7 +344,7 @@ fun validateApprovalTransaction(
     return requested.map { pending ->
         val outcome = result.outcomes.first { it.scopeId == pending.scope.id }
         ValidatedApproval(
-            scopeId = pending.scope.id,
+            scope = pending.scope,
             source = pending.source,
             approved = outcome.approved
         )
@@ -374,6 +374,10 @@ data class ClassifierWorkspacePolicy(
     val includedToolIds: Set<String> = emptySet(),
     val includedScopeIds: Set<String> = emptySet()
 )
+
+interface ClassifierWorkspacePolicyStore {
+    fun get(workspaceId: String): ClassifierWorkspacePolicy
+}
 
 data class ResolvedPermission(
     val scopeId: String,
@@ -407,6 +411,34 @@ interface ClassifierPolicy {
     ): ClassifierSelection
 }
 
+class DefaultClassifierPolicy(
+    private val workspacePolicies: ClassifierWorkspacePolicyStore
+) : ClassifierPolicy {
+    override fun shouldEvaluate(
+        tool: Tool,
+        workspaceId: String,
+        agentId: String?,
+        resolvedPermissions: List<ResolvedPermission>
+    ): ClassifierSelection {
+        val policy = workspacePolicies.get(workspaceId)
+        if (!policy.enabled) return ClassifierSelection(false, ClassifierSelectionReason.CLASSIFIER_DISABLED)
+        if (tool.id in policy.includedToolIds) return ClassifierSelection(true, ClassifierSelectionReason.WORKSPACE_TOOL_OPT_IN)
+        if (resolvedPermissions.any { it.scopeId in policy.includedScopeIds }) {
+            return ClassifierSelection(true, ClassifierSelectionReason.WORKSPACE_SCOPE_OPT_IN)
+        }
+        if (resolvedPermissions.any {
+                it.declaredDefault == PermissionDecision.ASK ||
+                it.declaredDefault == PermissionDecision.DENY
+            }) {
+            return ClassifierSelection(true, ClassifierSelectionReason.SCOPE_RISK_POLICY)
+        }
+        if (tool.riskLevel in setOf(ToolRiskLevel.HIGH, ToolRiskLevel.CRITICAL)) {
+            return ClassifierSelection(true, ClassifierSelectionReason.TOOL_RISK_POLICY)
+        }
+        return ClassifierSelection(false, ClassifierSelectionReason.NOT_SELECTED)
+    }
+}
+
 data class ClassifierSelection(
     val evaluate: Boolean,
     val reason: ClassifierSelectionReason
@@ -430,7 +462,7 @@ Room table. Every authorization event records:
 | Field | Description |
 |---|---|
 | `auditEventId` | Unique event identity |
-| `eventType` | One of: `SCOPE_RESOLVED`, `SCOPE_ALLOWED`, `SCOPE_DENIED`, `APPROVAL_REQUESTED`, `APPROVAL_APPROVED`, `APPROVAL_DENIED`, `APPROVAL_MALFORMED`, `CLASSIFIER_SELECTED`, `CLASSIFIER_SKIPPED`, `CLASSIFIER_ALLOWED`, `CLASSIFIER_DENIED`, `AUTHORIZATION_ALLOWED`, `AUTHORIZATION_DENIED` |
+| `eventType` | One of: `SCOPE_RESOLVED`, `SCOPE_ALLOWED`, `SCOPE_DENIED`, `APPROVAL_REQUESTED`, `APPROVAL_APPROVED`, `APPROVAL_DENIED`, `APPROVAL_MALFORMED`, `CLASSIFIER_SELECTED`, `CLASSIFIER_SKIPPED`, `CLASSIFIER_ALLOWED`, `CLASSIFIER_DENIED`, `AUTHORIZATION_ALLOWED`, `AUTHORIZATION_DENIED`, `INVALID_TOOL_DESCRIPTOR` |
 | `toolId` | Tool descriptor ID |
 | `toolCallId` | Per-call identity |
 | `correlationId` | Cross-system correlation |
@@ -473,19 +505,13 @@ val workspacePermissionStore = PermissionDataStore(
 )
 ```
 
-Each grant/deny decision is an append-only entry:
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `scope` | `String` | Permission scope identifier |
-| `decision` | `Enum` | ALLOW / DENY |
-| `grantedAt` | `Instant` | Timestamp of the decision |
-| `grantedTo` | `String` | Agent or tool that triggered the request |
-| `workspaceId` | `String` | Active workspace at time of decision |
+Policy stores contain mutable authorization configuration. They are distinct from the
+append-only `permission_audit_log`, whose canonical event schema is defined above.
 
 ## Permission Audit Trail
 
-All permission decisions are written to an immutable Room table (`permission_audit_log`). This log cannot be edited or deleted by agents, tools, or plugins. It supports:
+All permission and authorization-gate events are written to `permission_audit_log`.
+This log cannot be edited or deleted by agents, tools, or plugins. It supports:
 
 - Filtering by workspace, agent, or time range.
 - Export for compliance review.
@@ -567,7 +593,7 @@ If the optional on-device classifier (see §Optional On-Device Auto-Approval Cla
 - It does **not** change the declared scope default.
 - Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
 - The classifier cannot bypass `ASK` or `DENY` scopes.
-- Classifier denial cannot be overridden by user approval alone unless the workspace policy explicitly permits override.
+- Classifier `DENY` is final for the current authorization attempt and cannot be overridden by ordinary approval. A durable, authorized, audited policy change applies only to a new authorization attempt.
 
 ## Optional On-Device Auto-Approval Classifier (TFLite)
 
@@ -576,7 +602,7 @@ If the optional on-device classifier (see §Optional On-Device Auto-Approval Cla
 
 ### Design Constraints
 
-- **Independent layer:** The classifier operates **after** the `Permission Manager` (`checkPermission()`) but **before** `execute()` (`protocols/Tool-Protocol.md` — Authorization Gate). It does **NOT** replace user approval (`FR-S016`); it is an additional `DENY` gate.
+- **Authorization-gate layer:** Scope resolution and ASK approval run first; classifier selection/evaluation runs next; `ToolExecutor.execute()` runs only after both stages allow the call. The classifier does **not** replace user approval (`FR-S016`).
 - **Optional:** User can disable the classifier in `Workspace Settings` (`FR-W005`); default is `ENABLED` (safety-by-default).
 - **On-device (`TFLite`)**: No network dependency; no external service.
 
@@ -613,9 +639,15 @@ Classifier ALLOW? → execute
 | All scopes ALLOW | Classifier evaluates only if risk policy/config selects the call |
 | Classifier disabled | Skip classifier after permissions pass |
 
+Selection precedence is deterministic: disabled → workspace Tool opt-in → workspace
+scope opt-in → satisfied scope with canonical `ASK`/`DENY` default → Tool
+`HIGH`/`CRITICAL` risk level → not selected. Scope ordering does not affect the result.
+Changing classifier configuration is a separate durable, authorized, audited settings
+operation and affects only a new authorization attempt.
+
 ### Classifier Behavior
 
-- **Input**: `Tool` (`requiredPermissions`, `parameters` JSON Schema), `context` (`workspaceId`, `agentId`, `executionHistory` — `FR-T015` audit trail), `userAutonomyMode` (`FR-S016`: `Manual`/`Assisted`/`Autopilot`).
+- **Input**: `Tool` (`requiredPermissions`, `parameters` JSON Schema), `context` (`workspaceId`, `agentId`, `executionHistory` — `FR-TL015` audit trail), `userAutonomyMode` (`FR-S016`: `Manual`/`Assisted`/`Autopilot`).
 - **Output**: `PermissionResult.Denied` (auto-deny) or `PermissionResult.Allowed` (pass through — does not bypass ASK or DENY scopes).
 - Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
 - Classifier `DENY` is final for the current tool call and cannot be overridden by ordinary user approval.

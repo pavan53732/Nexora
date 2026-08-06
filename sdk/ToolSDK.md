@@ -6,7 +6,7 @@ The Tool SDK provides standard base classes, dependency injection utilities, and
 
 ## SDK Architecture
 
-All developer-defined tools MUST extend the standard `BaseTool` class provided by the SDK. This guarantees that parameters schema validation, permission checks, timeouts, and execution logs are consistently structured and handled without boilerplate.
+All developer-defined tools MUST extend the standard `BaseTool` class provided by the SDK. This guarantees that parameter-schema validation, risk classification, permission-scope ID validation, timeouts, and execution logs are consistently structured and handled without boilerplate. A descriptor MUST declare `riskLevel: ToolRiskLevel` and unique `requiredPermissions: List<String>` IDs; invalid or unknown declarations are rejected before registration (`NXR-2005`). Tool calls still pass through the complete authorization gate before any side effect.
 
 ```kotlin
 package com.nexora.app.sdk.tool
@@ -49,5 +49,5 @@ When writing custom tools, authors MUST respect the platform's lifecycle boundar
 
 Custom tools MUST NOT leak raw Java/Kotlin exceptions (like `FileNotFoundException` or `IOException`) across the SDK boundaries. The SDK wrapper automatically catches all exceptions and wraps them into:
 - `NXR-2004` (Execution Failed) — for unhandled tool exceptions.
-- `NXR-2005` (Invalid Parameters) — for parameters violating the tool's JSON schema.
+- `NXR-2005` (Tool Validation Failed) — for invalid descriptor metadata (including risk/scope declarations) or invocation parameters violating the tool's JSON schema.
 - `NXR-2002` (Timeout) — when execution exceeds the declared `timeoutMs` threshold.

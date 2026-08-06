@@ -32,7 +32,6 @@
 | IT-LC-013 | IT-LC | Duplicate resume event deduplicated | Runtime | Planned | `evidence/integration/IT-LC-013/` | 2026-08-06 |
 | IT-LC-014 | IT-LC | Session close drains/detaches active execution | Runtime + Session | Planned | `evidence/integration/IT-LC-014/` | 2026-08-06 |
 | IT-LC-015 | IT-LC | ToolStatus transition and tool-call execution remain separate | Tool | Planned | `evidence/integration/IT-LC-015/` | 2026-08-06 |
-
 | IT-TOOL-010 | IT-TOOL | Invalid permission declaration rejected during registration | Tool + Security | Planned | `evidence/integration/IT-TOOL-010/` | 2026-08-06 |
 | IT-TOOL-011 | IT-TOOL | Classifier policy selects workspace-opted tool | Tool + Security | Planned | `evidence/integration/IT-TOOL-011/` | 2026-08-06 |
 | IT-TOOL-012 | IT-TOOL | Approved ASK creates complete ResolvedPermission projection | Tool + Security | Planned | `evidence/integration/IT-TOOL-012/` | 2026-08-06 |

@@ -11,23 +11,40 @@
 ## Execution Flow
 
 ```text
-Runtime Executor         Security Engine           Sandbox Runner
-       │                         │                        │
-       ├─────── check() ────────>│                        │
-       │                         │                        │
-       │<──── ALLOW / ASK ───────┤                        │
-       │                                                  │
-       ├───────────────── execute() ─────────────────────>│
-       │                                                  │
-       │<─────────────── ToolExecuted ────────────────────┤
+Runtime Executor          Authorization Gate          Sandbox Runner
+       │                          │                          │
+       ├── authorizeToolCall ────>│                          │
+       │                          ├─ validate descriptor     │
+       │                          ├─ resolve every scope     │
+       │                          ├─ validate ASK transaction│
+       │                          ├─ select classifier policy│
+       │                          └─ evaluate if selected    │
+       │<── ALLOWED / DENIED ─────┤                          │
+       │                                                     │
+       ├── execute ─────────────────────────────────────────>│
+       │<── ToolExecuted / Error ────────────────────────────┤
 ```
 
-1. **Authorization Gate**: The complete authorization gate (see `security/PermissionModel.md`) validates the Tool descriptor, resolves every required scope through PermissionScopeRegistry, denies unknown/effective-DENY scopes, aggregates ASK into validated approval transaction, applies ClassifierPolicy, and optionally evaluates the Classifier. Denial returns `NXR-2003` with authoritative subreason (`POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`, `INVALID_SCOPE_DECLARATION`). No Tool side effect occurs before complete authorization.
+1. **Authorization Gate**: The complete authorization gate (see `security/PermissionModel.md`) validates the Tool descriptor, resolves every required scope through PermissionScopeRegistry, denies unknown/effective-DENY scopes, aggregates ASK into validated approval transaction, applies ClassifierPolicy, and optionally evaluates the Classifier. Authorization denial returns `NXR-2003` with authoritative subreason (`UNKNOWN_SCOPE`, `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`). Invalid descriptors return `NXR-2005` with `INVALID_SCOPE_DECLARATION`. No Tool side effect occurs before complete authorization.
 2. **Process Spawn**: The sandbox manager allocations sandbox memory/disk slices and spawns the tool runner inside proot.
 3. **Execution & Stream**: The tool runs, streams real-time stdout/stderr into the activity feed (for long-running terminal scripts), and commits file snapshot modifications.
 4. **Outcome Publication**: The sandbox manager collects exit codes, transforms exceptions into `CanonicalErrorEnvelope` records, and dispatches the `ToolExecuted` event onto the Event Bus.
 
 ## Message Shapes
+
+### Authorization Denial
+
+```kotlin
+data class ToolAuthorizationDenied(
+    val code: String,
+    val subreason: String,
+    val toolCallId: String,
+    val correlationId: String,
+    val scopeId: String? = null,
+    val approvalTransactionId: String? = null,
+    val sanitizedDetails: JsonObject? = null
+)
+```
 
 ### Tool Execution Command
 

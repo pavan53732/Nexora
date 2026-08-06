@@ -130,7 +130,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 | Class | Example Apps / Services | Block Action | Evidence Classification |
 |-------|------------------------|--------------|------------------------|
-| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | `NXR-7005` (sandbox path/network denial) + audit log (`FR-T015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`) | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
+| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | `NXR-7005` (sandbox path/network denial) + audit log (`FR-TL015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`) | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
 | Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Same (`NXR-7005` + audit + isolation warning) | `VERIFIED` (same sources) |
 | Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Same (`NXR-7005` + audit + isolation warning) | `VERIFIED` (same sources) |
 | Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Same (`NXR-7005` + audit + isolation warning) | `VERIFIED` (same sources) |
@@ -139,7 +139,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 | Domain Pattern | Category | Block Action | Evidence Classification |
 |---------------|----------|------------|------------------------|
-| `*.bank*`, `*.banking*`, `*.pay*` (subdomain-level) | Banking / Payment | Network connection denied (`NXR-2003`) + sandbox audit (`FR-T015`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`) | `ENGINEERING INFERENCE` (domain-pattern blocklists — standard web-security practice; `security/SandboxPolicy.md` §Network Policy already defines `DENY` default for `network:http` unless granted; blocking specific domains is a documentation-level extension, not a new mechanism) |
+| `*.bank*`, `*.banking*`, `*.pay*` (subdomain-level) | Banking / Payment | Network connection denied (`NXR-2003`) + sandbox audit (`FR-TL015`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`) | `ENGINEERING INFERENCE` (domain-pattern blocklists — standard web-security practice; `security/SandboxPolicy.md` §Network Policy already defines `DENY` default for `network:http` unless granted; blocking specific domains is a documentation-level extension, not a new mechanism) |
 | `*.crypto*`, `*.bitcoin*`, `*.blockchain*` | Cryptocurrency / High-risk trading | Same (`NXR-2003` + audit + isolation warning) | `ENGINEERING INFERENCE` (same rationale) |
 | `*.insurance*`, `*.claims*` | Insurance | Same (`NXR-2003` + audit + isolation warning) | `ENGINEERING INFERENCE` (same rationale) |
 
@@ -148,16 +148,16 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked domain or interact with a blocked app class:
 
 1. **Sandbox denies** (`NXR-7005` for filesystem/network escape attempts; `NXR-2003` for network connections to blocked domains).
-2. **Audit log entry** (`FR-T015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
+2. **Audit log entry** (`FR-TL015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
 3. **User notification** (`agent_error` — `NotificationHelper`) with isolation instruction: "Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."
 4. **Agent loop stops** (`AgentLoop` pauses at `Blocked` state — `state-machines/TaskLifecycle.md` `Blocked` — until user explicitly resolves isolation via workspace settings or provides explicit `ALLOW` for the specific scope + domain combination — `security/PermissionModel.md` `Workspace override` layer).
 
 **Traceability (G3 — Documentation Updates Only):**
 - `security/SandboxPolicy.md`: Updated (§Blocked Domains and Sensitive Apps — above).
 - `specs/BROWSER.md`: Updated (`BlockedListWarning` section — isolation instruction + audit + notification reference).
-- `FR.md`: References preserved (`FR-S014` network egress policy; `FR-S015` quarantine; `FR-T015` audit trail; `FR-W001` workspace isolation; `FR-P011` provider profile isolation).
+- `FR.md`: References preserved (`FR-S014` network egress policy; `FR-S015` quarantine; `FR-TL015` audit trail; `FR-W001` workspace isolation; `FR-P011` provider profile isolation).
 - `docs/DECISION_LOG.md`: `DL-023` (see above) logs the decision with evidence (`Kimi Claw` pattern — `VERIFIED` research; domain-pattern blocklist — `ENGINEERING INFERENCE`).
-- `docs/REQUIREMENT_COVERAGE_LEDGER.md`: No new `FR-` / `NFR-` IDs added (G3 extends existing `FR-S014`, `FR-S015`, `FR-T015` — no new architecture; documentation clarification of existing sandbox/network rules).
+- `docs/REQUIREMENT_COVERAGE_LEDGER.md`: No new `FR-` / `NFR-` IDs added (G3 extends existing `FR-S014`, `FR-S015`, `FR-TL015` — no new architecture; documentation clarification of existing sandbox/network rules).
 - `docs/TRACEABILITY.md`: Not updated (no new contract — existing `SandboxPolicy.md` and `BROWSER.md` contracts extended with blocked-list; no new validation case needed — `SEC-SBX-001` covers sandbox violations; blocked-list is a documentation-level specification of existing denial behavior).
 
 **Phase mapping:** `Phase 3` (`security/SandboxPolicy.md` — sandbox security is Phase 3 per `docs/ROADMAP.md`); `Phase 4` (`specs/BROWSER.md` — browser automation is Phase 4); no phase change required (documentation update to existing specs).

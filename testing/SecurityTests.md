@@ -6,7 +6,10 @@ Security tests validate permission mediation, sandbox isolation, secret handling
 
 ## Suite IDs
 
-- `SEC-PERM-*` — permission enforcement (including multi-scope evaluation SEC-PERM-003..023, TOOL-408 regression SEC-PERM-018..022, audit trail SEC-PERM-023)
+- `SEC-PERM-001..023` — foundational permission, multi-scope, TOOL-408, and audit behavior
+- `SEC-PERM-024..034` — malformed/duplicate declaration and approval validation
+- `SEC-PERM-035..052` — ResolvedPermission and classifier behavior
+- `SEC-PERM-053..066` — declared defaults, classifier precedence, descriptor activation, and final audit rules
 - `SEC-SBX-*` — sandbox isolation
 - `SEC-SECRET-*` — secret handling and redaction
 - `SEC-PLUGIN-*` — plugin integrity and rollback

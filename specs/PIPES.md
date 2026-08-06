@@ -37,7 +37,7 @@ What pipes are NOT:
 1. **Coordinator-extends, never forks.** Cross-instance delegation is SA-1..SA-5 with a transport boundary inserted. The coordinator role stays single (FR-AG-001); a remote sub-agent reports to the same Master Agent. No peer-to-peer agent calls (FR-AG-002 preserved: messages flow coordinator → pipe → remote coordinator → remote sub-agent, never agent → agent).
 2. **No new trust domain without a gate.** Every pipe is workspace-scoped and profile-tagged (FR-P011): a pipe carries the delegating workspace's ID and provider profile tag; credentials never traverse a pipe (NFR-SEC-011/012 provider isolation extended — a delegated task needing a remote provider call uses the remote instance's own provider profiles, never the coordinator's keys).
 3. **Deny-by-default, quarantine-in.** Incoming delegation payloads are untrusted context segments (FR-CM-006) and land in the receiving workspace's quarantine flow (FR-S015) when they carry files; acceptance requires the pipe acceptance mode to permit it (§6).
-4. **Auditable end-to-end.** Every pipe event (discovery, pairing, connect, delegate, result, revoke, error) enters the append-only audit trail (FR-T015) with a stable `pipeId`, `instanceId`, and `correlationId`.
+4. **Auditable end-to-end.** Every pipe event (discovery, pairing, connect, delegate, result, revoke, error) enters the append-only audit trail (FR-TL015) with a stable `pipeId`, `instanceId`, and `correlationId`.
 
 ## 3. Instance Identity & Pairing (FR-MI-004, FR-MI-008)
 
@@ -134,7 +134,7 @@ Broadcast is a coordinator-only operation for fan-out announcements (e.g., "work
 | Untrusted payloads | All inbound payloads wrapped as untrusted context segments (FR-CM-006); tool calls inside payloads validated against the registry before execution (TM-025) |
 | Auto-approval classifier | The optional TFLite classifier (PermissionModel §Auto-Approval Classifier) can `DENY` a pipe delegation even when the acceptance mode would allow it |
 | Egress confinement | Pipe sockets connect only to the paired endpoint (NFR-SEC-012 network confinement applied to pipe clients); discovery sockets are mDNS-only |
-| Audit | Every pipe event → `permission_audit_log`-adjacent pipe audit stream (FR-T015), 90-day retention |
+| Audit | Every pipe event → `permission_audit_log`-adjacent pipe audit stream (FR-TL015), 90-day retention |
 
 ## 9. Failure Handling (FR-MI-009)
 

@@ -31,6 +31,14 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-PROVIDER-001` provider streaming returns ordered terminal semantics
 - `IT-PLUGIN-001` plugin activation registers capabilities transactionally
 - `IT-CONTRACT-001` runtime replay or retry preserves correlation and durable versions
+- `IT-TOOL-002..014` complete authorization, classifier ordering, error mapping, and correlation preservation
+- `IT-LC-001..020` Session/Execution/ToolStatus integration, same-ID resume, terminal retry lineage, and replay safety
+
+## S13 Traceability
+
+- `IT-TOOL-002..014` map to PermissionModel, Tool System, Tool Protocol, Tool API, `FR-S016`, and `FR-TL015`.
+- `IT-LC-001..020` map to Runtime ExecutionStatus, Background Execution, Autonomy Stability, Execution Protocol, Runtime API, `FR-AS-007`, `NFR-REL-001`, `NFR-REL-002`, and `NFR-REL-012`.
+- All listed cases are `Planned`; evidence paths are declared in the case inventory.
 
 ## Naming Convention
 

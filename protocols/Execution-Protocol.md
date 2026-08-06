@@ -42,10 +42,25 @@ data class ExecutionRecoveryCommand(
     val expectedVersion: Long,
     val idempotencyKey: String
 )
+
+data class ExecutionRecoveryCommitted(
+    val operation: ExecutionRecoveryOperation,
+    val executionId: String,
+    val priorExecutionId: String?,
+    val checkpointId: String?,
+    val correlationId: String,
+    val previousVersion: Long,
+    val committedVersion: Long,
+    val status: ExecutionStatus,
+    val occurredAt: Instant
+)
 ```
 
-RESUME: same `executionId`, `priorExecutionId` unchanged, `correlationId` unchanged, `version` increases.
-RETRY_AFTER_TERMINAL: new `executionId`, `priorExecutionId` = terminal predecessor, predecessor remains terminal, lineage acyclic.
+`RESUME` targets an existing interrupted nonterminal Execution: `executionId`,
+`correlationId`, and lineage remain stable; `checkpointId` and `expectedVersion` are
+required; the committed version increases. `RETRY_AFTER_TERMINAL` carries a new
+`executionId`, requires `priorExecutionId` to reference the immediate terminal
+predecessor, leaves that predecessor terminal, and preserves acyclic lineage.
 
 ## Protocol Messages
 
@@ -82,4 +97,6 @@ data class ExecutionStatusChangedEvent(
 
 - **ACID Integrity**: A checkpoint write MUST complete transactionally. Partial or fragmented checkpoint frames are invalid; any serialization exception MUST throw `NXR-1003` and preserve the prior valid checkpoint intact on disk.
 - **Deduplication**: Execution events MUST be deduplicated by consumers using `(executionId, version, transition)`.
-- **Idempotency Replay**: Checkpoints MUST store whether in-progress tool executions were declared idempotent. Non-idempotent tool calls in progress MUST NOT be replayed on resume; they must be reconciled using their stored transaction histories.
+- **Idempotency Replay**: Checkpoints MUST store whether in-progress tool executions were declared idempotent. Non-idempotent calls MUST be reconciled from durable transaction history; safe incomplete idempotent calls MAY replay.
+- **Recovery guards**: Reject terminal `RESUME`, nonterminal retry predecessors, missing checkpoint/prior ID, cyclic lineage, stale `expectedVersion`, and idempotency conflicts.
+- **Versioning**: A successful recovery commit has `committedVersion > previousVersion`; consumers deduplicate by `(executionId, committedVersion, operation)`.

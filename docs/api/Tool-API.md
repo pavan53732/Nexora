@@ -16,8 +16,8 @@ The Tool API defines the boundaries for registering tools, executing tools in th
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `registerTool` | Tool `Discovered → Registered` | Stable tool descriptor with version | Duplicate ID, invalid schema, storage failure (`NXR-2006`) | Safe (Idempotent) | Registration validates required permissions and schema before registry exposure | Registry and SDK conformance tests |
-| `executeTool` | Terminal Session `Created → Running` if backed by shell | Standardized tool output envelope | Tool not found (`NXR-2001`), timeout (`NXR-2002`), permission denied (`NXR-2003`), exception (`NXR-2004`), validation error (`NXR-2005`), OOM (`NXR-7004`) | Safe (Idempotent Key) | Evaluates least-privilege permission policy before invocation; cancellation kills process and releases CPU wake locks | Integration and sandbox containment tests |
+| `registerTool` | Tool `Discovered → Registered` | Stable validated descriptor | Duplicate ID (`NXR-2006`), invalid schema/risk/scope declaration (`NXR-2005`), storage failure | Safe (Idempotent) | Validates unique known permission IDs and risk level before registry exposure | `SEC-PERM-055/066`, `IT-TOOL-010` |
+| `executeTool` | No ToolStatus change; backing terminal may run | Standardized output envelope | Not found (`NXR-2001`), timeout (`NXR-2002`), authorization denied (`NXR-2003`), exception (`NXR-2004`), validation (`NXR-2005`), OOM (`NXR-7004`) | Idempotency key required for retry-sensitive calls | Runs the complete PermissionModel authorization gate before any side effect; preserves denial subreason, toolCallId, and correlationId | `SEC-PERM-001..066`, `IT-TOOL-001..014` |
 | `getToolDescriptor`| No lifecycle change | Dynamic tool schema and metadata | Not found (`NXR-2001`) | Safe to retry; side-effect free | Open access; sanitizes internal implementation details | API contract tests |
 | `listTools` | No lifecycle change | Paged list of registered tool descriptors | Storage failure, invalid page parameters | Safe to retry; side-effect free | Filters out internal-only tools based on client credentials | API contract tests |
 
@@ -58,12 +58,15 @@ data class ToolOutputEnvelope(
 ### Tool Descriptor
 
 ```kotlin
+enum class ToolRiskLevel { LOW, MEDIUM, HIGH, CRITICAL }
+
 data class ToolDescriptor(
     val toolId: String,
     val version: String,
     val name: String,
     val description: String,
     val category: String,
+    val riskLevel: ToolRiskLevel,
     val parameterSchema: JsonObject,
     val requiredPermissions: List<String>,
     val requiresSandbox: Boolean,
@@ -89,10 +92,10 @@ interface ToolApi {
 
 | Operation | Canonical `NXR-*` codes | Recovery & Lifecycle Effects |
 |---|---|---|
-| `registerTool` | `NXR-2006` (Not Registered), `NXR-2010` (Incompatible) | Reject registration; state remains `Discovered`. |
+| `registerTool` | `NXR-2005` (Invalid descriptor), `NXR-2006` (Not Registered), `NXR-2010` (Incompatible) | Reject registration; state remains `DISCOVERED`; never prompt for descriptor repair. |
 | `executeTool` | `NXR-2001` (Not Found) | Reject call; no lifecycle change. |
 | | `NXR-2002` (Timeout) | Kill process; return partial outputs; trigger exponential backoff retry. |
-| | `NXR-2003` (Permission Denied) | Suspend loop; transition task to `WaitingApproval`. |
+| | `NXR-2003` (Authorization Denied) | Enter `WaitingApproval` only for effective `ASK`; unknown, policy, malformed, user, or classifier denial returns without side effects according to the canonical subreason. |
 | | `NXR-2004` (Execution Failed) | Log exception; run agent bounded self-correction loop. |
 | | `NXR-2005` (Invalid Parameters) | Return schema validation errors back to agent for repair. |
 | | `NXR-7004` (OOM) | Terminate sandbox process; transition task status to `FAILED`. |

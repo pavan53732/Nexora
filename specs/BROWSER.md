@@ -116,7 +116,7 @@ To prevent prompt-injection attacks, data exfiltration, or sandbox escapes throu
 When `AgentType.BROWSER` (`architecture/MULTI_AGENT_SYSTEM.md`) attempts interaction with a blocked app class (`banking`, `payment`, `trading`, `insurance` — see `security/SandboxPolicy.md` §Blocked App Classes), the following isolation flow activates:
 
 1. **Sandbox denial** (`security/SandboxPolicy.md`): `NXR-7005` (filesystem/network escape) or `NXR-2003` (network connection denied) returned; agent loop pauses at `Blocked` state (`state-machines/TaskLifecycle.md` — `Blocked` state definition).
-2. **Audit entry** (`FR-T015`): Severity `CRITICAL`; fields: `workspaceId`, `agentId`, `blockedAppClass`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), `isolationWarning` (`true`), `userActionRequired` (`true`).
+2. **Audit entry** (`FR-TL015`): Severity `CRITICAL`; fields: `workspaceId`, `agentId`, `blockedAppClass`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), `isolationWarning` (`true`), `userActionRequired` (`true`).
 3. **User notification** (`specs/BACKGROUND_EXECUTION.md` §4 — `agent_error` notification type; `NotificationHelper` — `agent_error` channel): Message includes isolation instruction (`"Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."`).
 4. **Agent loop behavior**: The agent remains in `Blocked` (`TaskLifecycle` — `Blocked` state: waiting on unresolved dependency or resource lock) until the user either (a) resolves isolation (separate workspace + separate profile — `FR-W001` workspace isolation + `FR-P011` profile isolation) or (b) provides explicit `ALLOW` for the specific scope + domain/app combination through `Workspace Settings` (`security/PermissionModel.md` — `Workspace override` layer can override `DENY` with `ALLOW` for specific domains after user confirmation).
 
@@ -130,7 +130,7 @@ When `browser_navigate` (`TOOL-201`) or `browser_open` (legacy name mapping — 
 
 - `VERIFIED` (`Kimi Claw` / `MiniMax Hailuo`): Sensitive account isolation required; verified by public sources (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03).
 - `ENGINEERING INFERENCE` (Domain-pattern blocklist): Standard web-security practice; `security/SandboxPolicy.md` §Network Policy already defines `DENY` default; blocked-list extends existing denial mechanism (`NXR-2003`) — no new mechanism.
-- `UNKNOWN` (None for G3 — all elements supported by existing architecture: `SandboxPolicy.md` denial, `TaskLifecycle.md` `Blocked`, `NotificationHelper`, `FR-T015` audit, `FR-W005` settings).
+- `UNKNOWN` (None for G3 — all elements supported by existing architecture: `SandboxPolicy.md` denial, `TaskLifecycle.md` `Blocked`, `NotificationHelper`, `FR-TL015` audit, `FR-W005` settings).
 
 ---
 
