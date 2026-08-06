@@ -69,6 +69,11 @@ data class ResolvedPermissionDecision(
     val source: PolicySource
 )
 
+data class PendingApproval(
+    val scope: PermissionScope,
+    val source: PolicySource
+)
+
 suspend fun checkPermission(
     tool: Tool,
     workspaceId: String,
@@ -81,7 +86,7 @@ suspend fun checkPermission(
         return PermissionResult.Allowed
     }
 
-    val askScopes = mutableListOf<PermissionScope>()
+    val pendingApprovals = mutableListOf<PendingApproval>()
 
     for (scopeId in scopeIds) {
         // Resolve scope ID through the canonical registry
@@ -123,7 +128,10 @@ suspend fun checkPermission(
                 )
             }
             PermissionDecision.ASK -> {
-                askScopes.add(scope)
+                pendingApprovals.add(PendingApproval(
+                    scope = scope,
+                    source = resolved.source
+                ))
             }
             PermissionDecision.ALLOW -> {
                 auditFinalAllow(
@@ -136,36 +144,43 @@ suspend fun checkPermission(
     }
 
     // Aggregated approval — present all ASK scopes in one transaction
-    if (askScopes.isNotEmpty()) {
+    if (pendingApprovals.isNotEmpty()) {
         val txnId = generateApprovalTransactionId()
         val txnResult = requestApprovalForScopes(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
-            scopes = askScopes, transactionId = txnId
+            approvals = pendingApprovals, transactionId = txnId
         )
-        // Audit final outcome per scope individually
+        // Audit final outcome per scope individually, with PolicySource retained
         for (outcome in txnResult.outcomes) {
             auditFinalAskOutcome(
                 tool = tool, workspaceId = workspaceId, agentId = agentId,
-                scopeId = outcome.scopeId, transactionId = txnId,
-                approved = outcome.approved
+                scopeId = outcome.scopeId, source = outcome.source,
+                transactionId = txnId, approved = outcome.approved
             )
         }
-        // Tool executes only if every scope is approved
-        return if (txnResult.allApproved) {
-            PermissionResult.Allowed
-        } else {
-            val firstDenied = txnResult.outcomes.first { !it.approved }
-            PermissionResult.Denied(
+        if (!txnResult.allApproved) {
+            val firstDenied = txnResult.outcomes.firstOrNull { !it.approved }
+                ?: return PermissionResult.Denied(
+                    scopeId = "transaction",
+                    reason = DenialReason.USER_DENIED,
+                    errorCode = "NXR-2003"
+                )
+            return PermissionResult.Denied(
                 scopeId = firstDenied.scopeId,
                 reason = DenialReason.USER_DENIED,
                 errorCode = "NXR-2003"
             )
         }
+        // Approved ASK scopes — continue to classifier evaluation
     }
 
-    // All scopes passed — classifier evaluation (optional, independent gate)
+    // All permission scopes passed — optional classifier evaluation
     if (classifierEnabled) {
         val classifierResult = classifier.evaluate(tool, workspaceId, agentId)
+        auditClassifierEvaluation(
+            tool = tool, workspaceId = workspaceId, agentId = agentId,
+            result = classifierResult
+        )
         if (classifierResult is PermissionResult.Denied) {
             return classifierResult
         }
@@ -206,14 +221,17 @@ private fun resolveDecision(
  */
 data class ScopeApprovalOutcome(
     val scopeId: String,
+    val source: PolicySource,
     val approved: Boolean
 )
 
 data class ApprovalTransactionResult(
     val transactionId: String,
-    val outcomes: List<ScopeApprovalOutcome>,
+    val outcomes: List<ScopeApprovalOutcome>
+) {
     val allApproved: Boolean
-)
+        get() = outcomes.isNotEmpty() && outcomes.all { it.approved }
+}
 
 /**
  * Aggregated approval: presents all ASK scopes in one transaction.
@@ -223,10 +241,10 @@ private suspend fun requestApprovalForScopes(
     tool: Tool,
     workspaceId: String,
     agentId: String?,
-    scopes: List<PermissionScope>,
+    approvals: List<PendingApproval>,
     transactionId: String
 ): ApprovalTransactionResult {
-    return askUserForScopes(tool, scopes, transactionId) // suspends; presents all scopes together
+    return askUserForScopes(tool, approvals, transactionId)
 }
 
 enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCOPE_DEFAULT, UNKNOWN_SCOPE }
@@ -357,17 +375,38 @@ If the optional on-device classifier (see §Optional On-Device Auto-Approval Cla
 - **Optional:** User can disable the classifier in `Workspace Settings` (`FR-W005`); default is `ENABLED` (safety-by-default).
 - **On-device (`TFLite`)**: No network dependency; no external service.
 
+### Classifier Pipeline Position
+
+The classifier evaluates **after** all permission scopes are satisfied — never after a canonical denial:
+
+```
+Resolve all scopes
+    ↓
+Unknown scope? → return Denied (classifier not invoked)
+    ↓
+Any policy DENY? → return Denied (classifier not invoked)
+    ↓
+Collect and resolve ASK approvals
+    ↓
+Any ASK rejected? → return Denied (classifier not invoked)
+    ↓
+All scopes satisfied → optional classifier evaluation
+    ↓
+Classifier DENY? → audit + return Denied
+    ↓
+Classifier ALLOW? → execute
+```
+
 ### Scope Selection
 
-The classifier evaluates tool calls based on their effective permission decision and risk class, not on whether the scope default is ALLOW/ASK/DENY. The selection is:
-
-| Condition | Classifier evaluates? |
+| Condition | Classifier behavior |
 |---|---|
-| Any scope resolved to `ASK` or `DENY` | Yes — assesses risk patterns |
-| All scopes resolved to `ALLOW` | No — unless workspace config explicitly opts in |
-| Workspace config enables classifier for a specific scope | Yes — regardless of default |
-
-This means the classifier **may** evaluate a call that includes `sandbox:execute` (default ALLOW) if the workspace configuration opts it in or if other scopes in the call are ASK/DENY. But the classifier does **not** imply that `sandbox:execute`'s default is DENY — the default remains ALLOW per the scope table.
+| Unknown scope | Permission denial; classifier not invoked |
+| Any effective policy decision is DENY | Permission denial; classifier not invoked |
+| Any ASK scope is rejected | Permission denial; classifier not invoked |
+| All ASK scopes approved | Classifier evaluates if risk policy/config selects the call |
+| All scopes ALLOW | Classifier evaluates only if risk policy/config selects the call |
+| Classifier disabled | Skip classifier after permissions pass |
 
 ### Classifier Behavior
 

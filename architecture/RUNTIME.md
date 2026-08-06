@@ -202,7 +202,7 @@ defined in `models/Execution.md`:
 
 1. ExecutionStatus is separate from TaskStatus. Task state tracks work progress; ExecutionStatus tracks the runtime execution context.
 2. ExecutionPhase (`REQUIREMENT_ANALYSIS`…`COMPLETION_REPORTING`) is a transient activity label, not a lifecycle state. Phase changes do not change ExecutionStatus.
-3. Checkpointing does not create a new Execution identity unless the canonical background-execution policy defines it as a new execution.
+3. Checkpointing never creates a new Execution identity. A recoverable checkpoint resume retains `executionId` and `correlationId` and increments `version`. A new `executionId` is created only for an explicit retry/restart after a committed terminal state.
 4. Resume from checkpoint retains the same `executionId` with `version` incremented. `ExecutionStatus` returns to `RUNNING` (from RUNNING) or transitions `CREATED → RUNNING` if the execution was created but not yet started. A new Execution identity is created only for an explicit retry/restart operation after a terminal status (`COMPLETED`, `FAILED`, `CANCELLED`). A terminal Execution is never mutated back to `RUNNING` — retry creates a new `executionId`. Correlation ID remains stable across same-identity resumes.
 5. Terminal state commit precedes terminal event publication.
 6. Cancellation is idempotent; cancelling an already-cancelled execution is a no-op.

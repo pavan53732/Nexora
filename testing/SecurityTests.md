@@ -6,10 +6,11 @@ Security tests validate permission mediation, sandbox isolation, secret handling
 
 ## Suite IDs
 
-- `SEC-PERM-*` — permission enforcement
+- `SEC-PERM-*` — permission enforcement (including multi-scope evaluation SEC-PERM-003..023, TOOL-408 regression SEC-PERM-018..022, audit trail SEC-PERM-023)
 - `SEC-SBX-*` — sandbox isolation
 - `SEC-SECRET-*` — secret handling and redaction
 - `SEC-PLUGIN-*` — plugin integrity and rollback
+- `SEC-LC-*` — lifecycle enforcement (Session SEC-LC-SESSION-001..006, Execution SEC-LC-EXEC-001..004, ToolStatus SEC-LC-TOOL-001..002)
 
 ## Framework Stack
 
