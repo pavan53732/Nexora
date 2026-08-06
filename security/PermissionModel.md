@@ -87,6 +87,7 @@ suspend fun checkPermission(
     }
 
     val pendingApprovals = mutableListOf<PendingApproval>()
+    val resolvedPermissions = mutableListOf<ResolvedPermission>()
 
     for (scopeId in scopeIds) {
         // Resolve scope ID through the canonical registry
@@ -138,6 +139,12 @@ suspend fun checkPermission(
                     tool = tool, workspaceId = workspaceId, agentId = agentId,
                     scope = scope, source = resolved.source
                 )
+                resolvedPermissions.add(ResolvedPermission(
+                    scopeId = scope.id,
+                    preliminaryDecision = PermissionDecision.ALLOW,
+                    source = resolved.source,
+                    finalOutcome = FinalPermissionOutcome.ALLOWED_BY_POLICY
+                ))
                 continue // evaluate remaining scopes
             }
         }
@@ -151,12 +158,12 @@ suspend fun checkPermission(
             approvals = pendingApprovals, transactionId = txnId
         )
         val validated = try {
-            validateApprovalTransaction(pendingApprovals, txnResult)
+            validateApprovalTransaction(pendingApprovals, txnId, txnResult)
         } catch (e: SecurityException) {
             auditMalformedApproval(tool, workspaceId, agentId, txnId, e)
             return PermissionResult.Denied(
                 scopeId = "transaction",
-                reason = DenialReason.USER_DENIED,
+                reason = DenialReason.MALFORMED_APPROVAL,
                 errorCode = "NXR-2003"
             )
         }
@@ -167,6 +174,15 @@ suspend fun checkPermission(
                 scopeId = v.scopeId, source = v.source,
                 transactionId = txnId, approved = v.approved
             )
+            resolvedPermissions.add(ResolvedPermission(
+                scopeId = v.scopeId,
+                preliminaryDecision = PermissionDecision.ASK,
+                source = v.source,
+                finalOutcome = if (v.approved)
+                    FinalPermissionOutcome.APPROVED_BY_USER
+                else
+                    FinalPermissionOutcome.DENIED_BY_USER
+            ))
         }
         val allApproved = validated.all { it.approved }
         if (!allApproved) {
@@ -181,18 +197,30 @@ suspend fun checkPermission(
     }
 
     // All permission scopes passed — optional classifier evaluation
-    if (classifierEnabled && classifierPolicy.shouldEvaluate(
+    val classifierSelection = if (classifierEnabled) {
+        classifierPolicy.shouldEvaluate(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
             resolvedPermissions = resolvedPermissions
-        )) {
+        )
+    } else {
+        ClassifierSelection(evaluate = false, reason = ClassifierSelectionReason.CLASSIFIER_DISABLED)
+    }
+
+    if (classifierSelection.evaluate) {
         val classifierResult = classifier.evaluate(tool, workspaceId, agentId)
         auditClassifierEvaluation(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
-            result = classifierResult
+            result = classifierResult, reason = classifierSelection.reason
         )
         if (classifierResult is PermissionResult.Denied) {
             return classifierResult
         }
+    } else {
+        auditClassifierSkipped(
+            tool = tool, workspaceId = workspaceId, agentId = agentId,
+            reason = classifierSelection.reason,
+            resolvedPermissions = resolvedPermissions
+        )
     }
 
     return PermissionResult.Allowed
@@ -252,22 +280,43 @@ data class ValidatedApproval(
 
 fun validateApprovalTransaction(
     requested: List<PendingApproval>,
+    expectedTransactionId: String,
     result: ApprovalTransactionResult
 ): List<ValidatedApproval> {
-    val requestedScopeIds = requested.map { it.scope.id }.toSet()
-    val resultScopeIds = result.outcomes.map { it.scopeId }.toSet()
+    if (result.transactionId != expectedTransactionId) {
+        throw SecurityException("Approval transaction ID mismatch: " +
+            "expected=$expectedTransactionId actual=${result.transactionId}")
+    }
 
-    // Exact coverage required
-    if (requestedScopeIds != resultScopeIds) {
+    val requestedIds = requested.map { it.scope.id }
+    val outcomeIds = result.outcomes.map { it.scopeId }
+
+    // No duplicate requested scopes
+    if (requestedIds.size != requestedIds.toSet().size) {
+        throw SecurityException("Duplicate requested scope in approval batch")
+    }
+
+    // No duplicate outcomes
+    if (outcomeIds.size != outcomeIds.toSet().size) {
+        throw SecurityException("Duplicate approval outcome")
+    }
+
+    // Empty result when approvals requested is invalid
+    if (result.outcomes.isEmpty() && requested.isNotEmpty()) {
+        throw SecurityException("Empty approval result for non-empty request")
+    }
+
+    // Exact one-to-one coverage
+    if (requestedIds.toSet() != outcomeIds.toSet()) {
         throw SecurityException("Approval coverage mismatch: " +
-            "requested=$requestedScopeIds result=$resultScopeIds")
+            "requested=${requestedIds.toSet()} result=${outcomeIds.toSet()}")
     }
 
     return requested.map { pending ->
         val outcome = result.outcomes.first { it.scopeId == pending.scope.id }
         ValidatedApproval(
             scopeId = pending.scope.id,
-            source = pending.source,  // authoritative source from resolver
+            source = pending.source,
             approved = outcome.approved
         )
     }
@@ -289,7 +338,43 @@ private suspend fun requestApprovalForScopes(
 
 enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCOPE_DEFAULT, UNKNOWN_SCOPE }
 
-enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, CLASSIFIER_DENIAL }
+enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, MALFORMED_APPROVAL, CLASSIFIER_DENIAL }
+
+data class ResolvedPermission(
+    val scopeId: String,
+    val preliminaryDecision: PermissionDecision,
+    val source: PolicySource,
+    val finalOutcome: FinalPermissionOutcome
+)
+
+enum class FinalPermissionOutcome {
+    ALLOWED_BY_POLICY,
+    APPROVED_BY_USER,
+    DENIED_BY_USER
+}
+
+interface ClassifierPolicy {
+    fun shouldEvaluate(
+        tool: Tool,
+        workspaceId: String,
+        agentId: String?,
+        resolvedPermissions: List<ResolvedPermission>
+    ): ClassifierSelection
+}
+
+data class ClassifierSelection(
+    val evaluate: Boolean,
+    val reason: ClassifierSelectionReason
+)
+
+enum class ClassifierSelectionReason {
+    WORKSPACE_OPT_IN,
+    SCOPE_RISK_POLICY,
+    TOOL_RISK_POLICY,
+    AUTONOMY_MODE_POLICY,
+    CLASSIFIER_DISABLED,
+    NOT_SELECTED
+}
 ```
 
 ## Persistence (DataStore)
@@ -458,17 +543,22 @@ Classifier ALLOW? → execute
 
 ### Relationship to Permission Resolution
 
+The classifier is invoked **after** the complete permission authorization flow
+(`checkPermission` in this document), but before `ToolExecutor.execute()`.
+Conceptually:
+
 ```
-checkPermission()  →  resolved scopes (ALLOW / ASK / DENY)
-                         │
-                         ▼
-                   Classifier evaluation (independent DENY gate)
-                         │
-                         ▼
-                   execute() or return Denied
+authorizeToolCall()
+  = permission resolution (checkPermission)
+  + ASK approval
+  + optional classifier (ClassifierPolicy.shouldEvaluate → Classifier.evaluate)
+
+ToolExecutor.execute() runs only after authorizeToolCall() returns Allowed.
 ```
 
-The classifier reads the resolved permission decisions and the tool parameters. It operates after `checkPermission()` has resolved all scopes through the override hierarchy. It cannot bypass `ASK` or `DENY` scopes — those must still be approved per the normal permission flow.
+The classifier is part of the authorization gate, not a separate module boundary.
+It operates on the resolved permission state and cannot retroactively change
+permission decisions.
 
 ### Traceability
 
