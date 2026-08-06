@@ -35,7 +35,7 @@
 - Diagrams: `Agent-Execution-Flow.md`, `Tool-Execution-Flow.md`, `Plugin-Lifecycle-Flow.md`, `Provider-Streaming-Flow.md`, `Memory-Store-Flow.md`
 - UI specs: `Navigation.md`, `Theme.md`, `Components.md`, `Typography.md`, `Spacing.md`, `Icons.md`, `Animations.md`
 - Standards: `Coding-Standard.md`, `Documentation-Standard.md`, `Testing-Standard.md`, `Logging-Standard.md`, `Security-Standard.md`, `Performance-Standard.md`, `Naming-Standard.md`
-- (Embedded runtime strategy was planned as a separate file but never committed — the strategy summary lives in `docs/ENVIRONMENT_SETUP.md` §13.)
+- `docs/research/EMBEDDED_RUNTIME_STRATEGY.md` (embedded runtime strategy — reconstructed S9, 2026-08-06)
 - `docs/ENVIRONMENT_SETUP.md` (environment documentation produced during Phase 0)
 
 ### Verification rules applied
