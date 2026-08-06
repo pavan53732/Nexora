@@ -8,10 +8,11 @@ Integration tests validate subsystem interactions and cross-layer contract prese
 
 - `IT-CONTRACT-*` — cross-layer envelope and lifecycle preservation
 - `IT-AGENT-*` — agent/runtime/task integration
-- `IT-TOOL-*` — tool, sandbox, and permission integration
+- `IT-TOOL-*` — tool, sandbox, and permission integration (including multi-scope TOOL-408 enforcement, classifier gate ordering)
 - `IT-PROVIDER-*` — provider completion and streaming
 - `IT-PLUGIN-*` — plugin lifecycle and rollback
 - `IT-MEMORY-*` — memory persistence and retrieval
+- `IT-LC-*` — lifecycle integration (Session transitions, checkpoint resume identity, terminal retry identity, ToolStatus integration)
 
 ## Framework Stack
 

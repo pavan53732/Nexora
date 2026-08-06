@@ -150,21 +150,27 @@ suspend fun checkPermission(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
             approvals = pendingApprovals, transactionId = txnId
         )
-        // Audit final outcome per scope individually, with PolicySource retained
-        for (outcome in txnResult.outcomes) {
-            auditFinalAskOutcome(
-                tool = tool, workspaceId = workspaceId, agentId = agentId,
-                scopeId = outcome.scopeId, source = outcome.source,
-                transactionId = txnId, approved = outcome.approved
+        val validated = try {
+            validateApprovalTransaction(pendingApprovals, txnResult)
+        } catch (e: SecurityException) {
+            auditMalformedApproval(tool, workspaceId, agentId, txnId, e)
+            return PermissionResult.Denied(
+                scopeId = "transaction",
+                reason = DenialReason.USER_DENIED,
+                errorCode = "NXR-2003"
             )
         }
-        if (!txnResult.allApproved) {
-            val firstDenied = txnResult.outcomes.firstOrNull { !it.approved }
-                ?: return PermissionResult.Denied(
-                    scopeId = "transaction",
-                    reason = DenialReason.USER_DENIED,
-                    errorCode = "NXR-2003"
-                )
+        // Audit final outcome per scope with authoritative PolicySource
+        for (v in validated) {
+            auditFinalAskOutcome(
+                tool = tool, workspaceId = workspaceId, agentId = agentId,
+                scopeId = v.scopeId, source = v.source,
+                transactionId = txnId, approved = v.approved
+            )
+        }
+        val allApproved = validated.all { it.approved }
+        if (!allApproved) {
+            val firstDenied = validated.first { !it.approved }
             return PermissionResult.Denied(
                 scopeId = firstDenied.scopeId,
                 reason = DenialReason.USER_DENIED,
@@ -175,7 +181,10 @@ suspend fun checkPermission(
     }
 
     // All permission scopes passed — optional classifier evaluation
-    if (classifierEnabled) {
+    if (classifierEnabled && classifierPolicy.shouldEvaluate(
+            tool = tool, workspaceId = workspaceId, agentId = agentId,
+            resolvedPermissions = resolvedPermissions
+        )) {
         val classifierResult = classifier.evaluate(tool, workspaceId, agentId)
         auditClassifierEvaluation(
             tool = tool, workspaceId = workspaceId, agentId = agentId,
@@ -218,19 +227,50 @@ private fun resolveDecision(
 
 /**
  * Aggregated approval result — per-scope outcome.
+ * source is NOT stored in ScopeApprovalOutcome; it is derived from PendingApproval.
  */
 data class ScopeApprovalOutcome(
     val scopeId: String,
-    val source: PolicySource,
     val approved: Boolean
 )
 
 data class ApprovalTransactionResult(
     val transactionId: String,
     val outcomes: List<ScopeApprovalOutcome>
-) {
-    val allApproved: Boolean
-        get() = outcomes.isNotEmpty() && outcomes.all { it.approved }
+)
+
+/**
+ * Validates that the approval result exactly matches requested approvals.
+ * Returns validated outcomes (with authoritative PolicySource from PendingApproval)
+ * or denies the call if incomplete/malformed.
+ */
+data class ValidatedApproval(
+    val scopeId: String,
+    val source: PolicySource,
+    val approved: Boolean
+)
+
+fun validateApprovalTransaction(
+    requested: List<PendingApproval>,
+    result: ApprovalTransactionResult
+): List<ValidatedApproval> {
+    val requestedScopeIds = requested.map { it.scope.id }.toSet()
+    val resultScopeIds = result.outcomes.map { it.scopeId }.toSet()
+
+    // Exact coverage required
+    if (requestedScopeIds != resultScopeIds) {
+        throw SecurityException("Approval coverage mismatch: " +
+            "requested=$requestedScopeIds result=$resultScopeIds")
+    }
+
+    return requested.map { pending ->
+        val outcome = result.outcomes.first { it.scopeId == pending.scope.id }
+        ValidatedApproval(
+            scopeId = pending.scope.id,
+            source = pending.source,  // authoritative source from resolver
+            approved = outcome.approved
+        )
+    }
 }
 
 /**
@@ -413,7 +453,7 @@ Classifier ALLOW? → execute
 - **Input**: `Tool` (`requiredPermissions`, `parameters` JSON Schema), `context` (`workspaceId`, `agentId`, `executionHistory` — `FR-T015` audit trail), `userAutonomyMode` (`FR-S016`: `Manual`/`Assisted`/`Autopilot`).
 - **Output**: `PermissionResult.Denied` (auto-deny) or `PermissionResult.Allowed` (pass through — does not bypass ASK or DENY scopes).
 - Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
-- Classifier `DENY` cannot be overridden by user approval alone unless the workspace policy explicitly permits classifier override.
+- Classifier `DENY` is final for the current tool call and cannot be overridden by ordinary user approval.
 - The classifier does **not** change the declared scope default in the scope table.
 
 ### Relationship to Permission Resolution
