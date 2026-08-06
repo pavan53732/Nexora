@@ -81,12 +81,12 @@ suspend fun checkPermission(
 ): PermissionResult {
     val scopeIds = tool.requiredPermissions
 
-    // Validate: no duplicate scope declarations
+    // Validate: no duplicate scope declarations (invalid Tool descriptor)
     if (scopeIds.size != scopeIds.toSet().size) {
-        auditDuplicateScopes(tool, workspaceId, agentId, scopeIds)
+        auditInvalidDescriptor(tool, workspaceId, agentId, scopeIds)
         return PermissionResult.Denied(
             scopeId = "declaration",
-            reason = DenialReason.MALFORMED_APPROVAL,
+            reason = DenialReason.INVALID_SCOPE_DECLARATION,
             errorCode = "NXR-2003"
         )
     }
@@ -185,18 +185,18 @@ suspend fun checkPermission(
         for (v in validated) {
             auditFinalAskOutcome(
                 tool = tool, workspaceId = workspaceId, agentId = agentId,
-                scopeId = v.scopeId, source = v.source,
+                scopeId = v.scope.id, source = v.source,
                 transactionId = txnId, approved = v.approved
             )
-            resolvedPermissions.add(ResolvedPermission(
-                scopeId = v.scopeId,
-                preliminaryDecision = PermissionDecision.ASK,
-                source = v.source,
-                finalOutcome = if (v.approved)
-                    FinalPermissionOutcome.APPROVED_BY_USER
-                else
-                    FinalPermissionOutcome.DENIED_BY_USER
-            ))
+            if (v.approved) {
+                resolvedPermissions.add(ResolvedPermission(
+                    scopeId = v.scope.id,
+                    declaredDefault = v.scope.defaultDecision,
+                    preliminaryDecision = PermissionDecision.ASK,
+                    source = v.source,
+                    finalOutcome = FinalPermissionOutcome.APPROVED_BY_USER
+                ))
+            }
         }
         val allApproved = validated.all { it.approved }
         if (!allApproved) {
@@ -302,7 +302,7 @@ data class ApprovalTransactionResult(
  * or denies the call if incomplete/malformed.
  */
 data class ValidatedApproval(
-    val scopeId: String,
+    val scope: PermissionScope,
     val source: PolicySource,
     val approved: Boolean
 )
@@ -367,7 +367,13 @@ private suspend fun requestApprovalForScopes(
 
 enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCOPE_DEFAULT, UNKNOWN_SCOPE }
 
-enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, MALFORMED_APPROVAL, CLASSIFIER_DENIAL }
+enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, MALFORMED_APPROVAL, CLASSIFIER_DENIAL, INVALID_SCOPE_DECLARATION }
+
+data class ClassifierWorkspacePolicy(
+    val enabled: Boolean = true,
+    val includedToolIds: Set<String> = emptySet(),
+    val includedScopeIds: Set<String> = emptySet()
+)
 
 data class ResolvedPermission(
     val scopeId: String,
@@ -379,8 +385,7 @@ data class ResolvedPermission(
 
 enum class FinalPermissionOutcome {
     ALLOWED_BY_POLICY,
-    APPROVED_BY_USER,
-    DENIED_BY_USER  // present in audit; classifier never receives denied outcomes
+    APPROVED_BY_USER
 }
 
 data class ClassifierEvaluation(
@@ -408,13 +413,49 @@ data class ClassifierSelection(
 )
 
 enum class ClassifierSelectionReason {
-    WORKSPACE_OPT_IN,
+    CLASSIFIER_DISABLED,
+    WORKSPACE_TOOL_OPT_IN,
+    WORKSPACE_SCOPE_OPT_IN,
     SCOPE_RISK_POLICY,
     TOOL_RISK_POLICY,
-    CLASSIFIER_DISABLED,
     NOT_SELECTED
 }
 ```
+
+## Permission Audit Schema
+
+The permission audit log (`permission_audit_log`) is an append-only, agent/plugin-immutable
+Room table. Every authorization event records:
+
+| Field | Description |
+|---|---|
+| `auditEventId` | Unique event identity |
+| `eventType` | One of: `SCOPE_RESOLVED`, `SCOPE_ALLOWED`, `SCOPE_DENIED`, `APPROVAL_REQUESTED`, `APPROVAL_APPROVED`, `APPROVAL_DENIED`, `APPROVAL_MALFORMED`, `CLASSIFIER_SELECTED`, `CLASSIFIER_SKIPPED`, `CLASSIFIER_ALLOWED`, `CLASSIFIER_DENIED`, `AUTHORIZATION_ALLOWED`, `AUTHORIZATION_DENIED` |
+| `toolId` | Tool descriptor ID |
+| `toolCallId` | Per-call identity |
+| `correlationId` | Cross-system correlation |
+| `workspaceId` | Active workspace |
+| `agentId` | Active agent (nullable) |
+| `scopeId` | Permission scope ID (nullable for non-scope events) |
+| `declaredDefault` | Canonical scope default |
+| `preliminaryDecision` | Effective policy decision |
+| `policySource` | `AGENT_OVERRIDE`, `WORKSPACE_OVERRIDE`, `GLOBAL_POLICY`, `SCOPE_DEFAULT`, `UNKNOWN_SCOPE` |
+| `finalOutcome` | `ALLOWED_BY_POLICY`, `APPROVED_BY_USER` |
+| `denialReason` | `UNKNOWN_SCOPE`, `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`, `INVALID_SCOPE_DECLARATION` |
+| `approvalTransactionId` | ASK transaction ID when applicable |
+| `classifierSelectionReason` | `CLASSIFIER_DISABLED`, `WORKSPACE_TOOL_OPT_IN`, `WORKSPACE_SCOPE_OPT_IN`, `SCOPE_RISK_POLICY`, `TOOL_RISK_POLICY`, `NOT_SELECTED` |
+| `classifierModelVersion` | Classifier model version |
+| `classifierDecision` | `ALLOW`, `DENY` |
+| `riskScore` | Optional classifier risk score |
+| `occurredAt` | Timestamp |
+| `sanitizedDetails` | Redacted additional context |
+
+Rules:
+- Agents, tools, and plugins cannot mutate audit records.
+- Authorized retention purge is a system maintenance operation.
+- Sensitive inputs and secrets are redacted in `sanitizedDetails`.
+- `toolCallId` and `correlationId` are preserved across all related events.
+
 
 ## Persistence (DataStore)
 

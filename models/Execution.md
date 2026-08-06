@@ -16,6 +16,7 @@ data class Execution(
     val phase: ExecutionPhase,
     val version: Long,
     val checkpointId: String?,
+    val priorExecutionId: String? = null,
     val latestError: CanonicalErrorEnvelope? = null,
     val createdAt: Instant,
     val updatedAt: Instant,
@@ -58,6 +59,14 @@ data class CanonicalErrorEnvelope(
     val details: JsonObject? = null
 )
 ```
+
+
+## Retry Lineage
+
+`priorExecutionId` is `null` for the original execution. It is set only for an
+explicit retry/restart after a committed terminal state (`FAILED`, `CANCELLED`,
+`COMPLETED`). It points to the immediate terminal predecessor; the chain is acyclic.
+It does not replace `correlationId`.
 
 ## Execution Phase Semantics
 
