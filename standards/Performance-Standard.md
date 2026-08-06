@@ -15,7 +15,7 @@
 | First AI token (streaming) | < 500ms (network-dependent) |
 | APK size (base) | < 50 MB |
 | Memory (idle) | < 512 MB RSS (canonical per NFR-PERF-005) |
-| Memory (active agent) | < 1 GB |
+| Memory (active agent) | 256 MB target / 384 MB warning / 512 MB critical (canonical per PERFORMANCE_BUDGET.md) |
 | ANR rate | < 0.05% |
 | Crash rate | < 0.1% |
 

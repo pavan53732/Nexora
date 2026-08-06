@@ -35,7 +35,7 @@
 - Diagrams: `Agent-Execution-Flow.md`, `Tool-Execution-Flow.md`, `Plugin-Lifecycle-Flow.md`, `Provider-Streaming-Flow.md`, `Memory-Store-Flow.md`
 - UI specs: `Navigation.md`, `Theme.md`, `Components.md`, `Typography.md`, `Spacing.md`, `Icons.md`, `Animations.md`
 - Standards: `Coding-Standard.md`, `Documentation-Standard.md`, `Testing-Standard.md`, `Logging-Standard.md`, `Security-Standard.md`, `Performance-Standard.md`, `Naming-Standard.md`
-- `docs/research/EMBEDDED_RUNTIME_STRATEGY.md` (embedded runtime comparison produced during Phase 0)
+- (Embedded runtime strategy was planned as a separate file but never committed — the strategy summary lives in `docs/ENVIRONMENT_SETUP.md` §13.)
 - `docs/ENVIRONMENT_SETUP.md` (environment documentation produced during Phase 0)
 
 ### Verification rules applied
@@ -478,7 +478,7 @@ To satisfy the user's instruction ("Do not report something as missing unless yo
 4. **One genuinely missing scheduling trigger:** Idle-time task scheduling (`idle-state` trigger) — a scheduling feature, not a core agent/runtime capability.
 5. **Nexora more comprehensively specified than the documented ZCode capability in depth across all core categories:** The repository demonstrates deeper specification (more lines of canonical spec, more detailed interfaces, more granular requirements) for workspace architecture, agent runtime, sandbox security, multi-agent orchestration, memory tiers, plugin SDK isolation, provider isolation, evidence validation, response grounding, reasoning pipeline, git grounding, and software engineering pipeline.
 6. **Terminology differences explained:** Where ZCode and Nexora use different terms for the same concept (`Goal Mode` vs `AgentLoop`, `MCP` vs `Provider Protocol`, `Commands` vs `Agent-Driven Tool Selection`, `Hooks` vs `EventBus` + `PluginLifecycle`), this analysis reports them as equivalents rather than missing.
-7. **Environment documentation committed:** The Phase 0 environment documentation (`docs/ENVIRONMENT_SETUP.md`, `docs/research/EMBEDDED_RUNTIME_STRATEGY.md`) is committed (`commit d7b670d`) and contains no application source code — confirming this analysis is strictly comparison/research, not feature implementation.
+7. **Environment documentation committed:** The Phase 0 environment documentation (`docs/ENVIRONMENT_SETUP.md`) is committed. The embedded runtime strategy document was planned but the standalone file never reached a commit; the strategy content is preserved inline in ENVIRONMENT_SETUP.md — confirming this analysis is strictly comparison/research, not feature implementation.
 
 ---
 
