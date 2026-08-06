@@ -61,3 +61,4 @@
 | FEAT-032 | Autonomy Hardening (plan repair, heartbeat/watchdog, budget escalation, closed-loop learning, trust growth, verification gates) | 2 | Planned |
 | FEAT-033 | Stability Hardening (idempotent exactly-once recovery, degradation ladder, fault-injection suite) | 2 | Planned |
 | FEAT-034 | Multi-Instance Pipes (zero-config same-machine + LAN discovery, pairing, cross-instance delegation, broadcast routing — specs/PIPES.md) | 7 | Planned |
+| FEAT-035 | Project Introspection (pre-flight pass reads API/DB/config/build/UI/domain/infrastructure before planning — specs/CONTEXT_MANAGEMENT.md §8, FR-CM-009) | 4 | Planned |

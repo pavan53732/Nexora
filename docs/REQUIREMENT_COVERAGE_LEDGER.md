@@ -175,6 +175,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-CM-006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
 | `FR-CM-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
 | `FR-CM-008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-GND-001` | `evidence/unit/UT-GND-001/` |
+| `FR-CM-009` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-CONTRACT-001` | `evidence/unit/UT-CONTRACT-001/` |
 | `FR-AS-001` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-002` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-003` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |

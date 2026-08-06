@@ -75,3 +75,10 @@
 - `FR-RN-007` (reasoning disable OFF) → `specs/CONTEXT_MANAGEMENT.md` §6 (OFF semantics: gate bypass, params omitted, RG/EV gates unaffected).
 - `FR-RN-008` (settings surface + override hierarchy) → `specs/CONTEXT_MANAGEMENT.md` §6 (task→agent→workspace→global→default MEDIUM; Settings → Model Config → Reasoning).
 - Wire contract → `architecture/PROVIDER_SYSTEM.md` (`CompletionRequest.reasoningEffort: ReasoningEffort?`, OFF = null/omitted; per-model mapping owned by adapters).
+
+## S10 — Project Introspection (Path C)
+- `FR-CM-009` (project introspection) → `specs/CONTEXT_MANAGEMENT.md` §8: ProjectIntrospector, ProjectContext, 7 tools.
+- `TOOL-410`..`416` (introspect_*) → `registry/TOOLS.md` (Category 28 — Project Introspection, INTRO prefix), `registry/TOOL_MATRIX.md`.
+- `FEAT-035` (Project Introspection) → `registry/FEATURES.md`.
+- Knowledge Graph phase Later→4 → `architecture/MEMORY_SYSTEM.md`.
+- Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, `docs/research/EMBEDDED_RUNTIME_STRATEGY.md`.

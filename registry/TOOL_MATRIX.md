@@ -358,6 +358,13 @@ Authoritative reference mapping **every registered tool** (see [TOOLS.md](./TOOL
 | `mcp_call_tool` | Mcp Call Tool | MCP Integration | ✓ | ✓ | — | — | — | High | ✓ | ✓ | — | 5 |
 | `mcp_read_resource` | Mcp Read Resource | MCP Integration | ✓ | — | — | — | — | Medium | ✓ | — | — | 5 |
 | `mcp_get_prompt` | Mcp Get Prompt | MCP Integration | ✓ | — | — | — | — | Low | ✓ | — | — | 5 |
+| `introspect_api` | Introspect Api | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `introspect_database` | Introspect Database | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `introspect_config` | Introspect Config | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `introspect_build` | Introspect Build | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `introspect_ui` | Introspect Ui | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `introspect_domain` | Introspect Domain | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
+| `introspect_infrastructure` | Introspect Infrastructure | Project Introspection | ✓ | — | — | — | — | Low | ✓ | — | — | 4 |
 
 ## Permission Levels
 
