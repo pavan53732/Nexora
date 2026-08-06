@@ -30,4 +30,11 @@ enum class SessionStatus {
 
 ## Lifecycle and Session Semantics
 
-Session lifecycle authority is defined in [lifecycle/SessionLifecycle.md](../lifecycle/SessionLifecycle.md). Session state is durable runtime context, not a substitute for task or execution lifecycle state. When a session is associated with a live execution, it SHOULD retain the active `correlationId` for observability and replay alignment.
+Session lifecycle authority is defined in the canonical state machine
+[../state-machines/SessionLifecycle.md](../state-machines/SessionLifecycle.md).
+The prose lifecycle narrative in [../lifecycle/SessionLifecycle.md](../lifecycle/SessionLifecycle.md)
+is SUPPORTING and must not contradict the state machine.
+
+Session state is durable runtime context, not a substitute for task or execution
+lifecycle state. When a session is associated with a live execution, it SHOULD
+retain the active `correlationId` for observability and replay alignment.

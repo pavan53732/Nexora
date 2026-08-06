@@ -71,34 +71,103 @@ suspend fun checkPermission(
 ): PermissionResult {
     val scopes = tool.requiredPermissions
 
-    for (scope in scopes) {
-        // 1. Agent-level override
-        if (agentId != null) {
-            val agentDecision = agentPermissionStore.get(agentId, scope)
-            if (agentDecision != null) return decide(agentDecision, scope)
-        }
-
-        // 2. Workspace override
-        val wsDecision = workspacePermissionStore.get(workspaceId, scope)
-        if (wsDecision != null) return decide(wsDecision, scope)
-
-        // 3. Global policy
-        val globalDecision = globalPermissionStore.get(scope)
-        if (globalDecision != null) return decide(globalDecision, scope)
-
-        // 4. Scope default
-        return decide(scope.default, scope)
+    // Empty permission list — allowed by default
+    if (scopes.isEmpty()) {
+        return PermissionResult.Allowed
     }
+
+    val askScopes = mutableListOf<PermissionScope>()
+
+    for (scope in scopes) {
+        val decision = resolveDecision(
+            scope = scope,
+            workspaceId = workspaceId,
+            agentId = agentId
+        )
+
+        // Audit every resolution
+        auditResolution(tool, workspaceId, agentId, scope, decision)
+
+        when (decision) {
+            PermissionDecision.DENY ->
+                return PermissionResult.Denied(scope)
+            PermissionDecision.ASK ->
+                askScopes.add(scope)
+            PermissionDecision.ALLOW ->
+                continue // evaluate remaining scopes
+        }
+    }
+
+    // Present ASK scopes in one aggregated approval transaction
+    if (askScopes.isNotEmpty()) {
+        return requestApprovalForScopes(
+            tool = tool,
+            workspaceId = workspaceId,
+            agentId = agentId,
+            scopes = askScopes
+        )
+    }
+
     return PermissionResult.Allowed
 }
 
-private fun decide(
-    decision: PermissionDecision,
-    scope: PermissionScope
-): PermissionResult = when (decision) {
-    PermissionDecision.ALLOW -> PermissionResult.Allowed
-    PermissionDecision.DENY -> PermissionResult.Denied(scope)
-    PermissionDecision.ASK -> askUser(scope) // suspends until user responds
+/**
+ * Resolves a single scope through the override hierarchy.
+ * Unknown / undeclared scope identifiers resolve to DENY.
+ */
+private fun resolveDecision(
+    scope: PermissionScope,
+    workspaceId: String,
+    agentId: String?
+): PermissionDecision {
+    // 1. Agent-level override
+    if (agentId != null) {
+        val agentDecision = agentPermissionStore.get(agentId, scope)
+        if (agentDecision != null) return agentDecision
+    }
+
+    // 2. Workspace override
+    val wsDecision = workspacePermissionStore.get(workspaceId, scope)
+    if (wsDecision != null) return wsDecision
+
+    // 3. Global policy
+    val globalDecision = globalPermissionStore.get(scope)
+    if (globalDecision != null) return globalDecision
+
+    // 4. Scope default (falls back to DENY for unknown scopes)
+    return scope.default
+}
+
+/**
+ * Aggregated approval: presents all ASK scopes in one transaction.
+ * Returns Allowed only if every scope is user-approved.
+ * Any denial returns Denied for that scope.
+ */
+private suspend fun requestApprovalForScopes(
+    tool: Tool,
+    workspaceId: String,
+    agentId: String?,
+    scopes: List<PermissionScope>
+): PermissionResult {
+    val result = askUser(tool, scopes) // suspends; presents all scopes together
+    return when (result) {
+        is PermissionResult.Allowed -> PermissionResult.Allowed
+        is PermissionResult.Denied -> result
+    }
+}
+
+/**
+ * Records the resolved decision for the permission audit trail
+ * (immutable room table `permission_audit_log`).
+ */
+private fun auditResolution(
+    tool: Tool,
+    workspaceId: String,
+    agentId: String?,
+    scope: PermissionScope,
+    decision: PermissionDecision
+) {
+    // Append-only entry: scope, decision, agentId, workspaceId, timestamp
 }
 ```
 
@@ -153,29 +222,66 @@ Every plugin declares its required scopes in `plugin.json`:
 
 At install time, the user reviews the full manifest. Missing scopes are **not** auto-granted.
 
-## Deny-By-Default Principle (G2 — Added 2026-08-06)
+## Explicit Risk-Based Scope Defaults
 
-> **Status:** CANONICAL security principle (added G2 — 2026-08-06).  
-> **Verified research reference:** `bitdoze.com` 2026-07-24; `blog.4sapi.com` 2026-07-07 (`~93%` approval-fatigue finding from Claude research).  
-> **Principle statement:** The riskiest scopes (`sandbox:execute`, `plugin:install`, `device:*`, `network:websocket`, `agent:create`) are **explicitly deny-by-default** (`DENY`) rather than `ASK` or `ALLOW`. No agent action proceeds on these scopes unless the user has explicitly granted `ALLOW` through the layered hierarchy (`Agent` → `Workspace` → `Global` → scope `default`); the default (`DENY`) acts as the ultimate safety floor if any layer is undefined or if the user has never made an explicit decision.
+> **Status:** CANONICAL policy (revised 2026-08-06 — resolves deny-by-default contradictions).
 
-**Evidence classification:**
-- `VERIFIED`: `security/SECURITY_MODEL.md` (§Permission Scopes — `sandbox:execute` `ALLOW`, `plugin:install` `ASK`, `device:*` `DENY`); `FR.md` (`FR-S001`..`FR-S028`); `security/PermissionModel.md` (default table — `DENY` for `device:*` and `plugin:install`; `ALLOW` for `sandbox:execute` — the principle strengthens the existing `ALLOW` for `sandbox:execute` to `DENY` for high-risk scenarios — see `AutoApprovalClassifier` below for clarification). Actually, `sandbox:execute` remains `ALLOW` for trusted workspace execution (`FR-S001`); the deny-by-default strengthens the **absence** of grant (`DENY` when no layer defines a decision, vs previous implicit `ALLOW` through tool default). Confirmed: if no `Global`/`Workspace`/`Agent` decision exists, the scope's `default` applies (`DENY` for riskiest scopes; `ALLOW` only for low-risk scopes like `sandbox:read`, `memory:read` — unchanged).
-- `ENGINEERING INFERENCE`: The principle is documented as a clarification (`DENY` is the default for undefined layers for high-risk scopes) — not a new mechanism. The `PermissionModel.md` resolution hierarchy (line 69–83) already uses `scope.default`; the principle only makes the `DENY` default explicit for the riskiest scopes.
-- `UNKNOWN`: None — principle fully supported by existing hierarchy and default table.
+The scope default table in §Permission Scopes (lines 24-43) is the authoritative,
+deterministic default for every declared Nexora permission scope. No prose overlay
+reinterprets an `ALLOW` or `ASK` table value as `DENY`.
 
-### Impact on existing scopes:
+### Default Semantics
 
-| Scope | Previous Default | Updated Default (G2) | Rationale |
-|-------|-----------------|---------------------|-----------|
-| `sandbox:execute` | `ALLOW` | `ALLOW` (unchanged — workspace execution is trusted; deny-by-default applies when no workspace/agent override exists — `DENY` only for undefined layers on this scope; but the principle clarifies that `sandbox:execute` remains `ALLOW` for trusted workspace agents, with `DENY` as fallback) | Actually, the principle clarifies: `sandbox:execute` stays `ALLOW` (workspace execution is core to agent functionality); the deny-by-default applies to **undefined layers** (`DENY` if no `Global`/`Workspace`/`Agent` decision exists). The table remains unchanged; the principle is the **explicit statement** of the existing behavior for high-risk scopes. Confirmed — no table change needed; only the principle section added. |
-| `plugin:install` | `ASK` | `DENY` (updated) — plugin installation is irreversible (`FR-PL003`) and requires user review (`FR-PL001`); the principle strengthens the default from `ASK` to `DENY` to prevent accidental installation | Confirmed: `FR-PL001` (`Plugin System` — install requires user review); `FR-PL003` (`Plugin Lifecycle` — `Install` state requires explicit activation); the principle aligns with existing lifecycle (`Install` → `Load` → `Register` → `Activate` — user must explicitly approve at install time). No behavior change — `DENY` reinforces the existing user-review requirement. |
-| `device:*` | `DENY` | `DENY` (unchanged — already deny-by-default) | Confirmed — principle confirms existing behavior. |
-| `agent:create` | `ASK` | `DENY` (updated) — spawning a new agent is a high-risk action (resource consumption — `FR-S018` sandbox budget split, `FR-MA-001` delegation); deny-by-default requires explicit user approval (`FR-S016` `Manual` or `Assisted` mode for `agent:create`) | Confirmed: `FR-A005` (`AgentType` — 16 roles); `FR-MA-001` (`Sub-agent autonomous completion` — delegation requires explicit handoff); `FR-S018` (`Sandbox budget split` — sub-agent consumes workspace budget). `DENY` aligns with `Manual` mode requirement for agent creation. |
-| `sandbox:read` | `ALLOW` | `ALLOW` (unchanged) | Confirmed — low-risk scope; deny-by-default does not apply. |
-| `memory:read` | `ALLOW` | `ALLOW` (unchanged) | Confirmed — low-risk scope; deny-by-default does not apply. |
+| Table default | Meaning |
+|---|---:|
+| `ALLOW` | Proceed unless an applicable higher-priority policy (Agent, Workspace, or Global) explicitly restricts the scope. |
+| `ASK` | Explicit user approval is required unless a higher-priority policy already resolves the scope to `ALLOW` or `DENY`. |
+| `DENY` | Blocked unless a higher-priority policy explicitly grants `ALLOW`. |
 
-**Note:** The principle does **not** change the `default` values in the scope table above; it clarifies the **resolution behavior**: if no `Global`/`Workspace`/`Agent` layer defines a decision for a scope, the `default` applies; for high-risk scopes (`plugin:install`, `agent:create`, `sandbox:execute` when no workspace override exists), the `default` is interpreted as `DENY` (deny-by-default) rather than implicit `ALLOW`. This is a documentation clarification (`DENY` as safety floor) — the `PermissionModel.md` `decide()` function (`line 89`) already applies `scope.default`; the principle only makes the safety intent explicit.
+### Resolution Chain
+
+The runtime resolves every scope independently:
+```
+Agent override
+  → Workspace override
+  → Global policy
+  → declared scope default (from the scope table)
+  → DENY (for unknown or undeclared scope identifiers)
+```
+
+- A Tool with multiple required permissions must satisfy **every** scope.
+- Order of `requiredPermissions` does not affect the authorization result.
+- An `ALLOW` for one scope does not implicitly authorize other scopes.
+- Absence of an override is not the same as absence of a scope default — the table default always applies for known scopes.
+
+### Scope Default Table Reference
+
+The following defaults are the single authoritative values:
+
+| Scope | Default | Notes |
+|---|---|---|
+| `sandbox:read`, `sandbox:write`, `sandbox:execute` | `ALLOW` | Trusted workspace execution |
+| `network:http`, `network:websocket` | `ASK` | Outbound network |
+| `device:camera`, `device:storage` | `DENY` | Hardware access |
+| `device:notifications` | `ASK` | User-visible |
+| `ai:complete`, `ai:embed` | `ALLOW` | AI provider calls |
+| `memory:read`, `memory:write` | `ALLOW` | Memory store access |
+| `plugin:install` | `ASK` | Irreversible; user review required |
+| `agent:create` | `ASK` | Resource allocation; user approval required |
+| `instance:pair`, `instance:connect` | `ASK` | Pipe discovery + connection |
+| `instance:broadcast` | `DENY` | Broadcast requires explicit grant |
+| `instance:delegate` | `ASK` | Cross-instance task delegation (TOOL-408) |
+| Any undeclared scope | `DENY` | Unknown scopes denied unconditionally |
+
+### Relationship to the Classifier
+
+If the optional on-device classifier (see §Optional On-Device Auto-Approval Classifier) is enabled:
+
+- The classifier may add an independent `DENY` gate after scope resolution.
+- It does **not** change the declared scope default.
+- Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
+- The classifier cannot bypass `ASK` or `DENY` scopes.
+- Classifier denial cannot be overridden by user approval alone unless the workspace policy explicitly permits override.
 
 ## Optional On-Device Auto-Approval Classifier (TFLite)
 

@@ -1,38 +1,63 @@
-> **Status: DERIVED** for session lifecycle narrative.
-> This document describes session lifecycle in prose. No standalone state-machine
-> companion exists for Session — session state is tracked inline through the
-> runtime module. Any state names used below are descriptive prose, not formal enums.
+> **Status: SUPPORTING** for session lifecycle narrative.
+> This document describes session lifecycle in prose. The canonical Session state
+> machine is [../state-machines/SessionLifecycle.md](../state-machines/SessionLifecycle.md).
+> All Session state names and transitions defined here are projections of the
+> canonical state machine; the state machine is authoritative.
 >
-> Depends on: [../architecture/RUNTIME.md](../architecture/RUNTIME.md).
+> Depends on: [../state-machines/SessionLifecycle.md](../state-machines/SessionLifecycle.md),
+> [../architecture/RUNTIME.md](../architecture/RUNTIME.md).
 
-# Session Lifecycle Authority — Nexora
+# Session Lifecycle Narrative — Nexora
 
-## States
+## Canonical States
 
-`Created`, `Active`, `Idle`, `Closed`, `Expired`
+The canonical Session states are defined by `state-machines/SessionLifecycle.md`:
 
-## Rules
+`CREATED`, `ACTIVE`, `IDLE`, `CLOSED`, `EXPIRED`
 
-Session lifecycle is the durable authority for session context availability. Active task or agent references are subordinate runtime associations and MUST NOT replace session lifecycle state.
+## Behavior Narrative
 
-## Transition Minimums
+### Created → Active
 
-Transitions SHOULD emit session identity, workspace identity, prior state, new state, version, and timestamp.
+A Session is created with a durable identity in Room. When a user or agent first attaches context (workspace loaded, goal set), the Session transitions to `ACTIVE`. The Session is the durable context container, not a substitute for Task or Execution state.
 
-## Expanded Lifecycle Specification (S3 — Option A)
+### Active ↔ Idle
 
-### States
-`Initiated`, `Active`, `Paused`, `Completed`, `Failed`, `Restored`
+When no active Task or agent interaction exists within the configured idle timeout, the Session transitions to `IDLE`. Context is retained — memory, workspace state, and checkpoint remain available. Resuming the Session (user returns, agent starts a new Task) transitions back to `ACTIVE`.
 
-### Transitions
-- `Initiated → Active`: User or agent starts session; workspace context loaded.
-- `Active → Paused`: User pauses; checkpoint saved (`FR-AS-002` heartbeat + `FR-AS-007` replay log).
-- `Paused → Active`: User resumes; checkpoint restored (`FR-AS-007` idempotent recovery + `NFR-REL-012` exactly-once).
-- `Active → Completed`: Session goal achieved; results aggregated; evidence validated (`FR-EV-006`).
-- `Active → Failed`: Unrecoverable error; error strategy applied (`FR-EL-007`); audit logged.
-- `Failed/Completed → Restored`: Session state reconstructed from checkpoint + memory (`FR-AS-007` + `NFR-REL-012`).
+### Active → Closed
 
-### Dependencies
+When the user explicitly closes the Session, active Tasks are detached or completed per Task lifecycle rules. The Session transitions to `CLOSED` and is terminal.
+
+### Idle → Closed
+
+An idle Session may be explicitly closed without Task interaction. Transition to `CLOSED` is terminal.
+
+### Idle → Active
+
+A user returning to an idle Session triggers checkpoint restoration and transition to `ACTIVE`.
+
+### Expiration
+
+- `CREATED → EXPIRED`: Sessions with no activity within the initial TTL expire.
+- `ACTIVE → IDLE`: Idle timeout expires while no Task is active.
+- `IDLE → EXPIRED`: Retention TTL expires for idle Sessions.
+- A pending non-terminal Task blocks `ACTIVE → EXPIRED` unless cancelled first.
+
+### Terminal States
+
+`CLOSED` and `EXPIRED` are terminal. Reopening creates a new Session identity.
+
+## Invariants
+
+1. Session state never replaces Task or Execution state.
+2. Task completion does not imply Session closure.
+3. Task failure does not create a Session `FAILED` state — Task failure is tracked in Task lifecycle, not Session lifecycle.
+4. Every transition emits session identity, workspace identity, prior state, new state, version, and timestamp.
+
+## Dependencies
+
+- `state-machines/SessionLifecycle.md` — canonical state machine.
+- `models/Session.md` — Session domain model.
 - `docs/LIFECYCLES.md` — session lifecycle overview.
-- `models/Session.md` — session model.
-- `protocols/Agent-Protocol.md` — session context in protocol.
+- `docs/CANONICAL_SOURCES.md` — ownership declaration.

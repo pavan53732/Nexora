@@ -50,28 +50,52 @@ Nexora enforces strict security boundaries. The AI never touches the host system
 | `memory:write` | Write to memory stores | allow |
 | `plugin:install` | Install new plugins | ask |
 | `agent:create` | Create new agent instances | ask |
+| `instance:pair` | Pair with a peer Nexora instance | ask |
+| `instance:connect` | Open a pipe to a paired instance | ask |
+| `instance:broadcast` | Broadcast to connected pipes | deny |
+| `instance:delegate` | Delegate a task to a remote instance | ask |
 
 ## Permission Flow
+
+> **Note:** The following summarizes the canonical permission evaluation algorithm.
+> `security/PermissionModel.md` owns the complete algorithm, multi-scope evaluation,
+> and aggregated-approval semantics. This document projects the same behavior for
+> the security-architecture view. Any divergence from PermissionModel is documentation
+> drift — PermissionModel is authoritative.
 
 ```kotlin
 enum class PermissionDecision { ALLOW, ASK, DENY }
 
 class PermissionManager(
     private val globalPolicy: Map<PermissionScope, PermissionDecision>,
-    private val workspaceOverrides: Map<String, Map<PermissionScope, PermissionDecision>>
+    private val workspaceOverrides: Map<String, Map<PermissionScope, PermissionDecision>>,
+    private val agentOverrides: Map<String, Map<PermissionScope, PermissionDecision>>
 ) {
-    suspend fun check(tool: Tool, workspaceId: String): PermissionResult {
-        val scope = tool.requiredPermissions
-        val workspacePolicy = workspaceOverrides[workspaceId] ?: emptyMap()
+    suspend fun check(tool: Tool, workspaceId: String, agentId: String?): PermissionResult {
+        val scopes = tool.requiredPermissions
+        if (scopes.isEmpty()) return PermissionResult.Allowed
 
-        for (s in scope) {
-            val decision = workspacePolicy[s] ?: globalPolicy[s] ?: PermissionDecision.DENY
+        val askScopes = mutableListOf<PermissionScope>()
+
+        for (s in scopes) {
+            // Agent override → Workspace override → Global policy → scope default → DENY
+            val decision = agentOverrides[agentId]?.get(s)
+                ?: workspaceOverrides[workspaceId]?.get(s)
+                ?: globalPolicy[s]
+                ?: s.default
+                ?: PermissionDecision.DENY
+
             when (decision) {
                 PermissionDecision.DENY -> return PermissionResult.Denied(s)
-                PermissionDecision.ASK -> return askUser(tool, s)
-                PermissionDecision.ALLOW -> continue
+                PermissionDecision.ASK -> askScopes.add(s)
+                PermissionDecision.ALLOW -> continue // evaluate remaining scopes
             }
         }
+
+        if (askScopes.isNotEmpty()) {
+            return askUser(tool, askScopes) // aggregated approval
+        }
+
         return PermissionResult.Allowed
     }
 }

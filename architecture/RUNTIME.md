@@ -177,7 +177,43 @@ data class AgentCheckpoint(
 )
 ```
 
-## Phase Mapping
+## ExecutionStatus Lifecycle
+
+The Executor owns ExecutionStatus lifecycle semantics. The canonical state set is
+defined in `models/Execution.md`:
+
+- `CREATED` — execution record exists, not yet started.
+- `RUNNING` — actively executing a task.
+- `COMPLETED` — execution finished successfully; terminal.
+- `FAILED` — execution terminated with an unrecoverable error; terminal.
+- `CANCELLED` — execution was cancelled; terminal.
+
+### Authoritative Transitions
+
+| Trigger | From | To | Guard |
+|---|---|---|---|
+| `start` | `CREATED` | `RUNNING` | Task assigned; agent ready |
+| `cancel` | `CREATED` | `CANCELLED` | None |
+| `cancel` | `RUNNING` | `CANCELLED` | Active steps drained or interrupted |
+| `complete` | `RUNNING` | `COMPLETED` | All acceptance criteria met; reviewer gate passed if required |
+| `fail` | `RUNNING` | `FAILED` | Unrecoverable error; error strategy exhausted |
+
+### Rules
+
+1. ExecutionStatus is separate from TaskStatus. Task state tracks work progress; ExecutionStatus tracks the runtime execution context.
+2. ExecutionPhase (`REQUIREMENT_ANALYSIS`…`COMPLETION_REPORTING`) is a transient activity label, not a lifecycle state. Phase changes do not change ExecutionStatus.
+3. Checkpointing does not create a new Execution identity unless the canonical background-execution policy defines it as a new execution.
+4. Resume from checkpoint may keep the same `RUNNING` execution or create a new one — the owning background execution specification defines the policy.
+5. Terminal state commit precedes terminal event publication.
+6. Cancellation is idempotent; cancelling an already-cancelled execution is a no-op.
+7. Completion after committed cancellation is invalid and returns a canonical error.
+8. Duplicate transition events are deduplicated by `(executionId, version)`.
+
+### Failure Recovery
+
+Whether a failure recovers by resuming the same `RUNNING` execution, creating a new Execution, or remaining terminal `FAILED` is defined by the canonical recovery policy in `specs/AUTONOMY_STABILITY.md` and `specs/BACKGROUND_EXECUTION.md`. The Executor enforces the policy; it does not define recovery rules independently.
+
+### Phase Mapping
 
 - **Phase 1**: Define interfaces only (Task, ExecutionPlan, EventBus, NexoraEvent).
 - **Phase 2**: Implement Planner, Executor, Context Builder, Event Bus, Token Budget Manager.

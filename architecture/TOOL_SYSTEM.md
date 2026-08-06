@@ -160,7 +160,40 @@ class ToolRegistry {
 >
 > References: `FR-TL001`..`FR-TL015` (tool interface contract); `FR-P001`..`FR-P013` (provider isolation rules extended to MCP servers); `FR-S016` (autonomy modes control approval gates for MCP-discovered tools); `FR-S001`..`FR-S028` (sandbox rules apply to MCP client process); `security/PermissionModel.md` (§Permission Scopes — `plugin:install`, `network:http`); `protocols/Tool-Protocol.md` (§Execution Flow — authorization gate + sandbox runner); `registry/TOOLS.md` (`TOOL-397`..`TOOL-402` — MCP integration category); `docs/DECISION_LOG.md` (`DL-020` — see below).
 
-## Phase Mapping
+## ToolStatus Lifecycle
+
+The canonical Tool descriptor lifecycle is owned by this document.
+States are defined in `models/Tool.md`:
+
+- `DISCOVERED` — tool descriptor found (plugin manifest, MCP handshake, built-in catalog) but not yet registered.
+- `REGISTERED` — tool descriptor validated and recorded in the tool registry; not yet available for execution.
+- `ACTIVE` — tool is registered and available for agent invocation.
+- `DISABLED` — tool is registered but blocked from execution (administrative action, plugin deactivation, health failure).
+
+### Authoritative Transitions
+
+| Trigger | From | To | Guard |
+|---|---|---|---|
+| `register` | `DISCOVERED` | `REGISTERED` | Descriptor passes validation; no duplicate TOOL-ID |
+| `activate` | `REGISTERED` | `ACTIVE` | Plugin loaded; all required dependencies available |
+| `deactivate` | `ACTIVE` | `DISABLED` | Plugin health failure, admin action, or explicit deactivation |
+| `re-activate` | `DISABLED` | `ACTIVE` | Health restored or admin re-activation |
+
+### Distinction from Tool Execution
+
+- ToolStatus describes the **registry availability** of a Tool descriptor — whether an agent CAN invoke it.
+- Individual tool calls use `ToolExecution` / `ToolResult` with correlation IDs — whether a specific call SUCCEEDED.
+- A failed tool invocation (`ToolResult.Error`) does **not** change the Tool descriptor to `DISABLED` unless a canonical health or administrative policy explicitly triggers that transition.
+- Tool descriptor lifecycle events are separate from per-call execution events.
+
+### Transition Guard Rules
+
+- `DISCOVERED → REGISTERED`: descriptor validation must pass; `TOOL-ID` must be unique in the registry.
+- `REGISTERED → ACTIVE`: owning plugin or source must be loaded and pass health checks.
+- `ACTIVE → DISABLED`: administrative deactivation, plugin unloading, or health-policy threshold exceeded.
+- `DISABLED → ACTIVE`: re-activation requires passing all `REGISTERED → ACTIVE` guards.
+
+### Phase Mapping
 
 - **Phase 1**: Define `Tool` interface, `ToolRegistry`, `ToolResult`.
 - **Phase 4**: Implement File System, Terminal, Search, Workspace, Git, Network, Package Manager, Memory tools.
