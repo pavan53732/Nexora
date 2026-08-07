@@ -64,10 +64,36 @@ enum class AgentType {
 Agents within a workspace share:
 
 - **Memory** — Access to same memory stores (scoped permissions).
-- **Workspace** — Same project files and directories.
+- **Workspace** — Same project files and directories (read access to the shared base; writes go through the file-sharing model below).
 - **Tasks** — Shared task queue for delegation and handoff.
 - **Execution Context** — Can see each other's recent activity.
 - **Artifacts** — Can produce and consume shared artifacts.
+
+## File Sharing & Isolation Model (resolves sandbox/sandbox-depth wording)
+
+FR-S018 grants each sub-agent an **isolated sandbox** for *process, network, quota, and
+permission* boundaries — it does NOT mean the sub-agent cannot see the workspace files.
+The consistent model is a **shared read-only base + private writable overlay + merge**:
+
+- **Shared base snapshot**: at delegation time the coordinator exposes a read-only view of
+  the current committed workspace (files, `tasks/` checkpoints, `env/`). All sub-agents
+  read the same base; no sub-agent can mutate another's in-flight state.
+- **Private overlay**: each sub-agent writes into its own copy-on-write overlay. Its
+  `run_background`/terminal work and generated files land in the overlay, not directly in
+  the coordinator's tree, so a compromised or failing sub-agent cannot corrupt siblings.
+- **Shared-file writes**: when a subtask must modify a shared file, it takes a **per-file
+  write-lock** (SA-3). A second writer waits, or the coordinator assigns a copy and merges
+  at the end. This is the only path that mutates the shared base.
+- **Result promotion**: completed outputs are promoted from the overlay to the shared
+  workspace as **artifacts** (SA-5), never via raw cross-sandbox file access. Promotion is
+  permissioned (the `artifact:read` scope planned in SANDBOX_DEPTH §3.2).
+- **Merge ownership**: the coordinator merges outputs + execution histories in dependency
+  order (SA-3); conflicts surface as review findings, not silent overwrites.
+
+This reconciles "same project files" (read base) with "separate sandbox instances" (process
++ overlay isolation) and "promoted via artifacts" (merge path). SANDBOX_DEPTH §3.2's
+"files... not shared with the coordinator" is corrected to "files are not *directly*
+shared — they are read from the base snapshot and promoted as artifacts."
 
 ## Communication Flow
 

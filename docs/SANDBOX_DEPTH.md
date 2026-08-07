@@ -132,11 +132,14 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
   with the coordinator; results promoted via artifacts, never raw access.
 - **Why:** True collaboration without cross-contamination; a compromised sub-agent
   cannot read the coordinator's or siblings' state.
-- **Enforcement:** sub-sandboxes inherit workspace limits split evenly; artifact
-  promotion is permissioned (extend PermissionModel with `artifact:read` scope in
-  Phase 5). All decisions append-only to `permission_audit_log` (non-evictable canonical
-  trail; a derived 90-day operational view is permitted for UX filtering — see
-  `security/PermissionModel.md` §Permission Audit Trail).
+- **Enforcement:** sub-sandboxes inherit workspace limits split evenly; each sub-agent gets
+  an isolated process/network/quota boundary (FR-S018) **plus a private copy-on-write
+  overlay** over the shared workspace base. Files are **not directly shared** between
+  sub-agents: a sub-agent reads the shared base snapshot and writes only into its overlay;
+  completed outputs are **promoted as artifacts** to the shared workspace (SA-5), never via
+  raw cross-sandbox access. Shared-file mutations take a per-file write-lock (SA-3).
+  Artifact promotion is permissioned (extend PermissionModel with `artifact:read` scope in
+  Phase 5). See `architecture/MULTI_AGENT_SYSTEM.md` §File Sharing & Isolation Model.
 
 ### 3.3 Prompt-Injection Containment
 - **What:** Untrusted content (web pages, downloaded files, user-provided docs) is
