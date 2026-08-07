@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora Context Management</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono',monospace;display:flex;justify-content:center;padding:24px 16px}
+.container{max-width:1100px;width:100%}
+.header{margin-bottom:20px}
+.header h1{font-size:16px;font-weight:700;color:#f8fafc;margin-bottom:4px}
+.header .dot{display:inline-block;width:7px;height:7px;background:#a78bfa;border-radius:50%;margin-right:7px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.header .badge{display:inline-block;background:rgba(167,139,250,0.15);color:#a78bfa;font-size:9px;padding:2px 8px;border-radius:3px;margin-left:8px;font-weight:600}
+.header .meta{font-size:9px;color:#475569;margin-top:6px;line-height:1.6}
+.header .meta b{color:#64748b;font-weight:600}
+svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1><span class="dot"></span>Context Management<span class="badge">DERIVED</span></h1>
+<div class="meta">
+<b>Canonical:</b> specs/CONTEXT_MANAGEMENT.md<br>
+<b>Supporting:</b> architecture/MEMORY_SYSTEM.md · architecture/AGENT_RUNTIME.md · specs/EXECUTION_LIFECYCLE.md<br>
+<b>Requirements:</b> FR-CM-001–012 · FR-RN-001–012 · FR-EV-001–006 · FR-GND-001–006 · <b>Date:</b> 2026-08-07<br>
+<b>Introduces no new terminology, ownership, execution paths, or inferred behavior.</b>
+</div>
+</div>
+<svg viewBox="0 0 1080 880" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+<marker id="a" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#94a3b8"/></marker>
+<marker id="aViolet" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#a78bfa"/></marker>
+<marker id="aCyan" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#22d3ee"/></marker>
+<marker id="aEmerald" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#34d399"/></marker>
+<marker id="aAmber" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#fbbf24"/></marker>
+<marker id="aRose" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#fb7185"/></marker>
+</defs>
+<rect width="1080" height="880" fill="url(#g)"/>
+
+<text x="30" y="28" fill="#a78bfa" font-size="8" font-weight="700">DELIBERATION GATE (§6, FR-RN-001–008)</text>
+
+<rect x="340" y="42" width="200" height="36" rx="6" fill="#0f172a" stroke="#94a3b8" stroke-width="1.5"/>
+<rect x="340" y="42" width="200" height="36" rx="6" fill="rgba(148,163,184,0.12)"/>
+<text x="440" y="64" fill="#e2e8f0" font-size="10" text-anchor="middle" font-weight="600">Inbound User Message</text>
+
+<line x1="440" y1="78" x2="440" y2="105" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#aViolet)"/>
+
+<rect x="310" y="110" width="260" height="38" rx="6" fill="#0f172a" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="310" y="110" width="260" height="38" rx="6" fill="rgba(76,29,149,0.3)"/>
+<text x="440" y="133" fill="#a78bfa" font-size="10" text-anchor="middle" font-weight="600">Deliberation Gate (Classification)</text>
+
+<path d="M370 148 L370 175 L180 175 L180 195" fill="none" stroke="#22d3ee" stroke-width="1.2" marker-end="url(#aCyan)"/>
+<path d="M440 148 L440 195" fill="none" stroke="#34d399" stroke-width="1.2" marker-end="url(#aEmerald)"/>
+<path d="M510 148 L510 175 L700 175 L700 195" fill="none" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#aAmber)"/>
+
+<rect x="80" y="200" width="200" height="42" rx="6" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="80" y="200" width="200" height="42" rx="6" fill="rgba(8,51,68,0.35)"/>
+<text x="180" y="218" fill="#22d3ee" font-size="10" text-anchor="middle" font-weight="600">FAST</text>
+<text x="180" y="234" fill="#64748b" font-size="8" text-anchor="middle">Answer immediately, no tools</text>
+
+<rect x="340" y="200" width="200" height="42" rx="6" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="340" y="200" width="200" height="42" rx="6" fill="rgba(6,78,59,0.35)"/>
+<text x="440" y="218" fill="#34d399" font-size="10" text-anchor="middle" font-weight="600">BALANCED (default)</text>
+<text x="440" y="234" fill="#64748b" font-size="8" text-anchor="middle">Plan to Execute Tool Loop to Verify to Answer</text>
+
+<rect x="600" y="200" width="200" height="42" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+<rect x="600" y="200" width="200" height="42" rx="6" fill="rgba(120,53,15,0.35)"/>
+<text x="700" y="218" fill="#fbbf24" font-size="10" text-anchor="middle" font-weight="600">THOROUGH</text>
+<text x="700" y="234" fill="#64748b" font-size="8" text-anchor="middle">REASONING model + Reviewer pass</text>
+
+<text x="30" y="275" fill="#64748b" font-size="7" font-weight="600">Effort scale:</text>
+<rect x="130" y="264" width="55" height="20" rx="3" fill="rgba(148,163,184,0.1)" stroke="#475569" stroke-width="0.5"/>
+<text x="157" y="278" fill="#94a3b8" font-size="7" text-anchor="middle">OFF</text>
+<rect x="195" y="264" width="55" height="20" rx="3" fill="rgba(34,211,238,0.1)" stroke="#22d3ee" stroke-width="0.5"/>
+<text x="222" y="278" fill="#22d3ee" font-size="7" text-anchor="middle">LOW</text>
+<rect x="260" y="264" width="70" height="20" rx="3" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="1"/>
+<text x="295" y="278" fill="#34d399" font-size="7" text-anchor="middle" font-weight="600">MEDIUM</text>
+<rect x="340" y="264" width="60" height="20" rx="3" fill="rgba(251,191,36,0.1)" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="370" y="278" fill="#fbbf24" font-size="7" text-anchor="middle">HIGH</text>
+<rect x="410" y="264" width="75" height="20" rx="3" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="447" y="278" fill="#fbbf24" font-size="7" text-anchor="middle">X_HIGH</text>
+<rect x="495" y="264" width="60" height="20" rx="3" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="525" y="278" fill="#fbbf24" font-size="7" text-anchor="middle">MAX</text>
+<text x="570" y="278" fill="#475569" font-size="6">default: MEDIUM | override: task to agent to workspace to global</text>
+
+<text x="30" y="320" fill="#22d3ee" font-size="8" font-weight="700">CONTEXT WINDOW — 5-LAYER BUDGET (§2, FR-CM-001/002)</text>
+
+<rect x="40" y="332" width="1000" height="195" rx="6" fill="none" stroke="#1e293b" stroke-width="1" stroke-dasharray="5,3"/>
+
+<rect x="55" y="342" width="970" height="28" rx="4" fill="rgba(8,51,68,0.25)" stroke="#22d3ee" stroke-width="0.5"/>
+<text x="70" y="360" fill="#22d3ee" font-size="8" font-weight="600">L1</text>
+<text x="95" y="360" fill="#e2e8f0" font-size="8">System Prompt &amp; Hard Constraints</text>
+<text x="380" y="360" fill="#475569" font-size="7">100% uncompressible - safety instructions, STRIDE mitigations, tool registry</text>
+
+<rect x="55" y="376" width="970" height="28" rx="4" fill="rgba(8,51,68,0.2)" stroke="#22d3ee" stroke-width="0.5"/>
+<text x="70" y="394" fill="#22d3ee" font-size="8" font-weight="600">L2</text>
+<text x="95" y="394" fill="#e2e8f0" font-size="8">Current Goal, Plan &amp; Step Status</text>
+<text x="380" y="394" fill="#475569" font-size="7">100% uncompressible (FR-CM-001) - execution plan, checkpoints</text>
+
+<rect x="55" y="410" width="970" height="28" rx="4" fill="rgba(8,51,68,0.15)" stroke="#22d3ee" stroke-width="0.5"/>
+<text x="70" y="428" fill="#22d3ee" font-size="8" font-weight="600">L3</text>
+<text x="95" y="428" fill="#e2e8f0" font-size="8">Active Working Set</text>
+<text x="380" y="428" fill="#475569" font-size="7">file buffers, directory lists, preceding step output, ProjectContext (FR-CM-009)</text>
+
+<rect x="55" y="444" width="970" height="28" rx="4" fill="rgba(52,211,153,0.12)" stroke="#34d399" stroke-width="0.5"/>
+<text x="70" y="462" fill="#34d399" font-size="8" font-weight="600">L4</text>
+<text x="95" y="462" fill="#e2e8f0" font-size="8">Semantic Memory Retrieval (Recall Segment)</text>
+<text x="380" y="462" fill="#475569" font-size="7">capped 20% of context window - workspace memory entries (FR-M002)</text>
+
+<rect x="55" y="478" width="970" height="28" rx="4" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="70" y="496" fill="#fbbf24" font-size="8" font-weight="600">L5</text>
+<text x="95" y="496" fill="#e2e8f0" font-size="8">Progressive Rolling Summary (older history)</text>
+<text x="380" y="496" fill="#475569" font-size="7">only layer eligible for truncation - compressed when total over 75% of model max</text>
+
+<text x="55" y="520" fill="#fb7185" font-size="7">UNTRUSTED content (web scrapes, downloads, third-party repos) wrapped in untrusted_content blocks - treated as passive data, never instructions - freshness validated before every loop iteration (FR-CM-005)</text>
+
+<line x1="440" y1="530" x2="440" y2="555" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#aAmber)"/>
+
+<text x="30" y="575" fill="#fbbf24" font-size="8" font-weight="700">PROGRESSIVE SUMMARIZATION (§3, FR-CM-003/004)</text>
+
+<rect x="130" y="585" width="200" height="34" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="130" y="585" width="200" height="34" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="230" y="606" fill="#fbbf24" font-size="9" text-anchor="middle">Trigger: context over 75% model max</text>
+
+<rect x="360" y="585" width="190" height="34" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="360" y="585" width="190" height="34" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="455" y="606" fill="#fbbf24" font-size="9" text-anchor="middle">Rolling Compactor</text>
+
+<rect x="580" y="585" width="200" height="34" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="580" y="585" width="200" height="34" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="680" y="606" fill="#fbbf24" font-size="9" text-anchor="middle">Fidelity Check</text>
+
+<line x1="330" y1="602" x2="355" y2="602" stroke="#fbbf24" stroke-width="1"/>
+<line x1="550" y1="602" x2="575" y2="602" stroke="#fbbf24" stroke-width="1"/>
+
+<rect x="560" y="628" width="120" height="24" rx="4" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="620" y="644" fill="#34d399" font-size="7" text-anchor="middle">Pass then persist</text>
+<rect x="692" y="628" width="120" height="24" rx="4" fill="rgba(251,113,133,0.15)" stroke="#fb7185" stroke-width="0.5"/>
+<text x="752" y="644" fill="#fb7185" font-size="7" text-anchor="middle">Drift then rollback</text>
+
+<text x="55" y="668" fill="#475569" font-size="7">Resume from crash reconstructs context from Checkpoint + Summary + semantic memories - raw unsummarized history never replayed (FR-CM-004)</text>
+
+<text x="30" y="700" fill="#34d399" font-size="8" font-weight="700">EVIDENCE AND VALIDATION ENGINE (§7, FR-EV-001–006)</text>
+
+<rect x="55" y="712" width="140" height="42" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="55" y="712" width="140" height="42" rx="5" fill="rgba(6,78,59,0.3)"/>
+<text x="125" y="730" fill="#34d399" font-size="9" text-anchor="middle" font-weight="600">VERIFIED</text>
+<text x="125" y="746" fill="#64748b" font-size="7" text-anchor="middle">executable proof</text>
+
+<rect x="210" y="712" width="140" height="42" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="210" y="712" width="140" height="42" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="280" y="730" fill="#a78bfa" font-size="9" text-anchor="middle" font-weight="600">DERIVED</text>
+<text x="280" y="746" fill="#64748b" font-size="7" text-anchor="middle">logical inference</text>
+
+<rect x="365" y="712" width="140" height="42" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+<rect x="365" y="712" width="140" height="42" rx="5" fill="rgba(120,53,15,0.25)"/>
+<text x="435" y="730" fill="#fbbf24" font-size="9" text-anchor="middle" font-weight="600">ESTIMATED</text>
+<text x="435" y="746" fill="#64748b" font-size="7" text-anchor="middle">heuristic/trend</text>
+
+<rect x="520" y="712" width="140" height="42" rx="5" fill="#0f172a" stroke="#fb7185" stroke-width="1.5"/>
+<rect x="520" y="712" width="140" height="42" rx="5" fill="rgba(136,19,55,0.3)"/>
+<text x="590" y="730" fill="#fb7185" font-size="9" text-anchor="middle" font-weight="600">UNKNOWN</text>
+<text x="590" y="746" fill="#64748b" font-size="7" text-anchor="middle">blocked from output</text>
+
+<text x="55" y="775" fill="#64748b" font-size="7">Confidence: HIGH/MEDIUM/LOW - LOW triggers ASK approval - Zero-assumption mode blocks inferred values (FR-EV-003) - Completion: Reviewer evaluates evidence against acceptance criteria before notification (FR-EV-006)</text>
+
+<rect x="55" y="787" width="970" height="24" rx="4" fill="rgba(34,211,238,0.08)" stroke="#22d3ee" stroke-width="0.5" stroke-dasharray="2,2"/>
+<text x="540" y="803" fill="#22d3ee" font-size="7" text-anchor="middle">Tool-before-Claim (FR-GND-001) - Structured Citations (FR-GND-002) - Uncertainty Disclosure (FR-GND-003) - Plan-vs-Actual: DONE-VERIFIED / DONE-UNVERIFIED / ATTEMPTED-FAILED / NOT-ATTEMPTED (FR-GND-006)</text>
+
+<text x="30" y="840" fill="#94a3b8" font-size="8" font-weight="700">IMMUTABLE ContextSnapshot then AI Provider request (§6.3, FR-CM-010–012)</text>
+
+<text x="540" y="870" fill="#475569" font-size="8" text-anchor="middle">DERIVED from specs/CONTEXT_MANAGEMENT.md - all elements traceable to canonical source and supporting documents</text>
+</svg>
+</div>
+</body>
+</html>

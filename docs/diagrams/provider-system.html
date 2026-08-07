@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora Provider System</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono',monospace;display:flex;justify-content:center;padding:24px 16px}
+.container{max-width:1100px;width:100%}
+.header{margin-bottom:20px}
+.header h1{font-size:16px;font-weight:700;color:#f8fafc;margin-bottom:4px}
+.header .dot{display:inline-block;width:7px;height:7px;background:#fbbf24;border-radius:50%;margin-right:7px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.header .badge{display:inline-block;background:rgba(251,191,36,0.15);color:#fbbf24;font-size:9px;padding:2px 8px;border-radius:3px;margin-left:8px;font-weight:600}
+.header .meta{font-size:9px;color:#475569;margin-top:6px;line-height:1.6}
+.header .meta b{color:#64748b;font-weight:600}
+.header .meta a{color:#38bdf8;text-decoration:none}
+svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1><span class="dot"></span>Provider System<span class="badge">DERIVED</span></h1>
+<div class="meta">
+<b>Canonical:</b> architecture/PROVIDER_SYSTEM.md<br>
+<b>Supporting:</b> specs/AI_PROVIDERS.md · models/Provider.md · models/Inference.md · protocols/Provider-Protocol.md · state-machines/ProviderLifecycle.md · state-machines/ProviderStreamLifecycle.md · docs/api/Provider-API.md<br>
+<b>Requirements:</b> FR-P001–019 · <b>Date:</b> 2026-08-07<br>
+<b>Introduces no new terminology, ownership, execution paths, or inferred behavior.</b>
+</div>
+</div>
+<svg viewBox="0 0 1080 820" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+<marker id="a" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#94a3b8"/></marker>
+<marker id="aAmber" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#fbbf24"/></marker>
+<marker id="aEmerald" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#34d399"/></marker>
+<marker id="aCyan" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#22d3ee"/></marker>
+<marker id="aRose" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#fb7185"/></marker>
+</defs>
+<rect width="1080" height="820" fill="url(#g)"/>
+
+<!-- === ROW 1: Agent Runtime → AIProvider interface → 9 providers === -->
+<text x="30" y="28" fill="#64748b" font-size="8" font-weight="700">PROVIDER ABSTRACTION LAYER</text>
+
+<!-- Agent Runtime (cyan) -->
+<rect x="40" y="42" width="150" height="42" rx="6" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="40" y="42" width="150" height="42" rx="6" fill="rgba(8,51,68,0.4)"/>
+<text x="115" y="60" fill="#22d3ee" font-size="10" text-anchor="middle" font-weight="600">Agent Runtime</text>
+<text x="115" y="76" fill="#64748b" font-size="8" text-anchor="middle">never depends on provider</text>
+
+<!-- AIProvider interface -->
+<rect x="250" y="38" width="180" height="50" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="4,2"/>
+<rect x="250" y="38" width="180" height="50" rx="6" fill="rgba(120,53,15,0.2)"/>
+<text x="340" y="56" fill="#fbbf24" font-size="9" text-anchor="middle" font-weight="600">AIProvider (interface)</text>
+<text x="340" y="70" fill="#64748b" font-size="7" text-anchor="middle">complete()  stream()  embed()</text>
+<text x="340" y="82" fill="#64748b" font-size="7" text-anchor="middle">healthCheck()  listModels()</text>
+
+<line x1="190" y1="63" x2="245" y2="63" stroke="#22d3ee" stroke-width="1.2" marker-end="url(#aCyan)"/>
+
+<!-- 9 providers row 1 -->
+<rect x="490" y="40" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="490" y="40" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="546" y="62" fill="#fbbf24" font-size="8" text-anchor="middle">OpenAI</text>
+
+<rect x="612" y="40" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="612" y="40" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="668" y="62" fill="#fbbf24" font-size="8" text-anchor="middle">Anthropic</text>
+
+<rect x="734" y="40" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="734" y="40" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="790" y="62" fill="#fbbf24" font-size="8" text-anchor="middle">Gemini</text>
+
+<!-- Row 2 -->
+<rect x="490" y="84" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="490" y="84" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="546" y="106" fill="#fbbf24" font-size="8" text-anchor="middle">Groq</text>
+
+<rect x="612" y="84" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="612" y="84" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="668" y="106" fill="#fbbf24" font-size="8" text-anchor="middle">OpenRouter</text>
+
+<rect x="734" y="84" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="734" y="84" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="790" y="106" fill="#fbbf24" font-size="8" text-anchor="middle">Ollama</text>
+
+<!-- Row 3 -->
+<rect x="490" y="128" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="490" y="128" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="546" y="150" fill="#fbbf24" font-size="8" text-anchor="middle">LM Studio</text>
+
+<rect x="612" y="128" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="612" y="128" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="668" y="150" fill="#fbbf24" font-size="8" text-anchor="middle">Local GGUF</text>
+
+<rect x="734" y="128" width="112" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="734" y="128" width="112" height="36" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="790" y="150" fill="#fbbf24" font-size="8" text-anchor="middle">Custom</text>
+
+<line x1="430" y1="58" x2="485" y2="58" stroke="#fbbf24" stroke-width="1" marker-end="url(#aAmber)"/>
+
+<!-- Provider count label -->
+<text x="546" y="182" fill="#475569" font-size="7" text-anchor="middle">9 provider types — runtime never depends on any specific one</text>
+
+<!-- === ROW 2: ProviderRouter + Route Planning === -->
+<text x="30" y="220" fill="#64748b" font-size="8" font-weight="700">ROUTING</text>
+
+<rect x="40" y="232" width="180" height="44" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+<rect x="40" y="232" width="180" height="44" rx="6" fill="rgba(120,53,15,0.25)"/>
+<text x="130" y="250" fill="#fbbf24" font-size="10" text-anchor="middle" font-weight="600">ProviderRouter</text>
+<text x="130" y="266" fill="#64748b" font-size="8" text-anchor="middle">capability-aware routing</text>
+
+<!-- Route plan steps -->
+<rect x="270" y="232" width="155" height="44" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="270" y="232" width="155" height="44" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="347" y="248" fill="#fbbf24" font-size="9" text-anchor="middle">1. Filter by capability</text>
+<text x="347" y="262" fill="#64748b" font-size="7" text-anchor="middle">hard requirements first</text>
+
+<rect x="440" y="232" width="155" height="44" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="440" y="232" width="155" height="44" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="517" y="248" fill="#fbbf24" font-size="9" text-anchor="middle">2. Rank candidates</text>
+<text x="517" y="262" fill="#64748b" font-size="7" text-anchor="middle">policy, health, cost, latency</text>
+
+<rect x="610" y="232" width="155" height="44" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="610" y="232" width="155" height="44" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="687" y="248" fill="#fbbf24" font-size="9" text-anchor="middle">3. Persist RoutePlan</text>
+<text x="687" y="262" fill="#64748b" font-size="7" text-anchor="middle">deterministic for same snapshot</text>
+
+<line x1="220" y1="254" x2="265" y2="254" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#aAmber)"/>
+<line x1="425" y1="254" x2="435" y2="254" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#aAmber)"/>
+<line x1="595" y1="254" x2="605" y2="254" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#aAmber)"/>
+
+<!-- Routing eligibility note -->
+<rect x="810" y="232" width="230" height="44" rx="5" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+<text x="925" y="248" fill="#94a3b8" font-size="8" text-anchor="middle">Routing eligibility</text>
+<text x="925" y="262" fill="#64748b" font-size="7" text-anchor="middle">status=ACTIVE AND health=HEALTHY</text>
+
+<!-- === ROW 3: Typed Streaming === -->
+<text x="30" y="305" fill="#64748b" font-size="8" font-weight="700">TYPED STREAMING (StreamEnvelope via Flow)</text>
+
+<!-- Stream events -->
+<rect x="40" y="316" width="95" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="40" y="316" width="95" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="87" y="336" fill="#34d399" font-size="7" text-anchor="middle">Started</text>
+
+<rect x="143" y="316" width="95" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="143" y="316" width="95" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="190" y="336" fill="#34d399" font-size="7" text-anchor="middle">TextDelta</text>
+
+<rect x="246" y="316" width="115" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="246" y="316" width="115" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="303" y="336" fill="#34d399" font-size="7" text-anchor="middle">ReasoningDelta</text>
+
+<rect x="369" y="316" width="95" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="369" y="316" width="95" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="416" y="336" fill="#34d399" font-size="7" text-anchor="middle">CitationDelta</text>
+
+<rect x="472" y="316" width="110" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="472" y="316" width="110" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="527" y="336" fill="#34d399" font-size="7" text-anchor="middle">ToolStarted</text>
+
+<rect x="590" y="316" width="125" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="590" y="316" width="125" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="652" y="336" fill="#34d399" font-size="7" text-anchor="middle">ToolArgsDelta</text>
+
+<rect x="723" y="316" width="130" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="723" y="316" width="130" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="788" y="336" fill="#34d399" font-size="7" text-anchor="middle">ToolCommitted</text>
+
+<rect x="861" y="316" width="85" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="861" y="316" width="85" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="903" y="336" fill="#34d399" font-size="7" text-anchor="middle">UsageDelta</text>
+
+<rect x="954" y="316" width="80" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="954" y="316" width="80" height="32" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="994" y="336" fill="#34d399" font-size="7" text-anchor="middle">Heartbeat</text>
+
+<!-- Row 2 of stream events -->
+<rect x="40" y="355" width="105" height="32" rx="4" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="40" y="355" width="105" height="32" rx="4" fill="rgba(8,51,68,0.35)"/>
+<text x="92" y="375" fill="#22d3ee" font-size="7" text-anchor="middle" font-weight="600">Terminal</text>
+
+<rect x="153" y="355" width="105" height="32" rx="4" fill="#0f172a" stroke="#fb7185" stroke-width="1"/>
+<rect x="153" y="355" width="105" height="32" rx="4" fill="rgba(136,19,55,0.3)"/>
+<text x="205" y="375" fill="#fb7185" font-size="7" text-anchor="middle">Failed</text>
+
+<rect x="266" y="355" width="105" height="32" rx="4" fill="#0f172a" stroke="#fb7185" stroke-width="1"/>
+<rect x="266" y="355" width="105" height="32" rx="4" fill="rgba(136,19,55,0.3)"/>
+<text x="318" y="375" fill="#fb7185" font-size="7" text-anchor="middle">Cancelled</text>
+
+<text x="390" y="375" fill="#475569" font-size="7">exactly one terminal event commits; socket close alone is failure (NXR-4017)</text>
+
+<!-- Stream invariants -->
+<rect x="40" y="398" width="600" height="36" rx="5" fill="none" stroke="#475569" stroke-width="0.5" stroke-dasharray="3,2"/>
+<text x="340" y="412" fill="#64748b" font-size="7" text-anchor="middle">sequence monotonic from zero · gaps block terminal · backpressure bounded · ToolArgumentsDelta never executable · only ToolCallCommitted enters authorization gate</text>
+
+<!-- === ROW 4: Provider lifecycle === -->
+<text x="30" y="465" fill="#64748b" font-size="8" font-weight="700">PROVIDER LIFECYCLE (ProviderLifecycle.md)</text>
+
+<!-- Admin states -->
+<rect x="40" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="40" y="476" width="95" height="34" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="87" y="496" fill="#a78bfa" font-size="8" text-anchor="middle">REGISTERED</text>
+
+<rect x="150" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="150" y="476" width="95" height="34" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="197" y="496" fill="#a78bfa" font-size="8" text-anchor="middle">CONFIGURING</text>
+
+<rect x="260" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="260" y="476" width="95" height="34" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="307" y="496" fill="#a78bfa" font-size="8" text-anchor="middle">CONFIGURED</text>
+
+<rect x="370" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="370" y="476" width="95" height="34" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="417" y="496" fill="#a78bfa" font-size="8" text-anchor="middle">TESTING</text>
+
+<rect x="480" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="480" y="476" width="95" height="34" rx="5" fill="rgba(6,78,59,0.3)"/>
+<text x="527" y="496" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">ACTIVE</text>
+
+<rect x="590" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#fb7185" stroke-width="1"/>
+<rect x="590" y="476" width="95" height="34" rx="5" fill="rgba(136,19,55,0.25)"/>
+<text x="637" y="496" fill="#fb7185" font-size="8" text-anchor="middle">DISABLED</text>
+
+<rect x="700" y="476" width="95" height="34" rx="5" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+<rect x="700" y="476" width="95" height="34" rx="5" fill="rgba(30,41,59,0.3)"/>
+<text x="747" y="496" fill="#94a3b8" font-size="8" text-anchor="middle">REMOVED</text>
+
+<!-- Admin transition arrows -->
+<line x1="135" y1="493" x2="145" y2="493" stroke="#a78bfa" stroke-width="1" marker-end="url(#aAmber)"/>
+<line x1="245" y1="493" x2="255" y2="493" stroke="#a78bfa" stroke-width="1" marker-end="url(#aAmber)"/>
+<line x1="355" y1="493" x2="365" y2="493" stroke="#a78bfa" stroke-width="1" marker-end="url(#aAmber)"/>
+<line x1="465" y1="493" x2="475" y2="493" stroke="#a78bfa" stroke-width="1" marker-end="url(#aAmber)"/>
+<line x1="575" y1="493" x2="585" y2="493" stroke="#a78bfa" stroke-width="1" marker-end="url(#aRose)"/>
+
+<!-- DISABLED → REMOVED -->
+<line x1="685" y1="493" x2="695" y2="493" stroke="#475569" stroke-width="1"/>
+
+<text x="100" y="525" fill="#64748b" font-size="7" text-anchor="middle">ProviderStatus (administrative)</text>
+
+<!-- Health states row -->
+<rect x="300" y="535" width="95" height="30" rx="4" fill="#0f172a" stroke="#475569" stroke-width="1"/>
+<rect x="300" y="535" width="95" height="30" rx="4" fill="rgba(30,41,59,0.3)"/>
+<text x="347" y="554" fill="#94a3b8" font-size="8" text-anchor="middle">UNKNOWN</text>
+
+<rect x="410" y="535" width="95" height="30" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="410" y="535" width="95" height="30" rx="4" fill="rgba(6,78,59,0.3)"/>
+<text x="457" y="554" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">HEALTHY</text>
+
+<rect x="520" y="535" width="95" height="30" rx="4" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="520" y="535" width="95" height="30" rx="4" fill="rgba(120,53,15,0.25)"/>
+<text x="567" y="554" fill="#fbbf24" font-size="8" text-anchor="middle">DEGRADED</text>
+
+<rect x="630" y="535" width="95" height="30" rx="4" fill="#0f172a" stroke="#fb7185" stroke-width="1"/>
+<rect x="630" y="535" width="95" height="30" rx="4" fill="rgba(136,19,55,0.25)"/>
+<text x="677" y="554" fill="#fb7185" font-size="8" text-anchor="middle">UNHEALTHY</text>
+
+<text x="490" y="580" fill="#64748b" font-size="7" text-anchor="middle">ProviderHealth (operational) — HealthMonitor coroutine, 30s interval</text>
+
+<line x1="395" y1="550" x2="405" y2="550" stroke="#475569" stroke-width="1" marker-end="url(#aEmerald)"/>
+<line x1="505" y1="550" x2="515" y2="550" stroke="#34d399" stroke-width="1" marker-end="url(#aAmber)"/>
+<line x1="615" y1="550" x2="625" y2="550" stroke="#fbbf24" stroke-width="1" marker-end="url(#aRose)"/>
+
+<!-- Coupling arrow: HEALTH → eligibility -->
+<path d="M457 565 L457 590 Q457 600 527 600 L527 510" fill="none" stroke="#34d399" stroke-width="0.8" stroke-dasharray="3,2" marker-end="url(#aEmerald)"/>
+<path d="M677 565 L677 590 Q677 600 637 600 L637 510" fill="none" stroke="#fb7185" stroke-width="0.8" stroke-dasharray="3,2" marker-end="url(#aRose)"/>
+
+<!-- === ROW 5: Stream Lifecycle + Resume/Failover === -->
+<text x="30" y="625" fill="#64748b" font-size="8" font-weight="700">STREAM LIFECYCLE + FAILOVER (ProviderStreamLifecycle.md)</text>
+
+<!-- Stream states -->
+<rect x="40" y="638" width="85" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="40" y="638" width="85" height="32" rx="4" fill="rgba(6,78,59,0.25)"/>
+<text x="82" y="658" fill="#34d399" font-size="7" text-anchor="middle">CREATED</text>
+
+<rect x="135" y="638" width="100" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="135" y="638" width="100" height="32" rx="4" fill="rgba(6,78,59,0.25)"/>
+<text x="185" y="658" fill="#34d399" font-size="7" text-anchor="middle">CONNECTING</text>
+
+<rect x="245" y="638" width="85" height="32" rx="4" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="245" y="638" width="85" height="32" rx="4" fill="rgba(6,78,59,0.35)"/>
+<text x="287" y="658" fill="#34d399" font-size="7" text-anchor="middle" font-weight="600">OPEN</text>
+
+<rect x="340" y="638" width="120" height="32" rx="4" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="340" y="638" width="120" height="32" rx="4" fill="rgba(120,53,15,0.2)"/>
+<text x="400" y="658" fill="#fbbf24" font-size="7" text-anchor="middle">BACKPRESSURED</text>
+
+<rect x="470" y="638" width="120" height="32" rx="4" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="470" y="638" width="120" height="32" rx="4" fill="rgba(76,29,149,0.25)"/>
+<text x="530" y="658" fill="#a78bfa" font-size="7" text-anchor="middle">RECONNECTING</text>
+
+<rect x="600" y="638" width="110" height="32" rx="4" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="600" y="638" width="110" height="32" rx="4" fill="rgba(8,51,68,0.3)"/>
+<text x="655" y="658" fill="#22d3ee" font-size="7" text-anchor="middle" font-weight="600">COMPLETED</text>
+
+<rect x="720" y="638" width="85" height="32" rx="4" fill="#0f172a" stroke="#fb7185" stroke-width="1"/>
+<rect x="720" y="638" width="85" height="32" rx="4" fill="rgba(136,19,55,0.25)"/>
+<text x="762" y="658" fill="#fb7185" font-size="7" text-anchor="middle">FAILED</text>
+
+<rect x="815" y="638" width="95" height="32" rx="4" fill="#0f172a" stroke="#fb7185" stroke-width="1"/>
+<rect x="815" y="638" width="95" height="32" rx="4" fill="rgba(136,19,55,0.25)"/>
+<text x="862" y="658" fill="#fb7185" font-size="7" text-anchor="middle">CANCELLED</text>
+
+<text x="450" y="655" fill="#475569" font-size="13">↔</text>
+
+<!-- Stream transition arrows -->
+<line x1="125" y1="654" x2="130" y2="654" stroke="#34d399" stroke-width="1"/>
+<line x1="235" y1="654" x2="240" y2="654" stroke="#34d399" stroke-width="1"/>
+<line x1="460" y1="654" x2="465" y2="654" stroke="#fbbf24" stroke-width="1"/>
+
+<!-- Resume/Failover modes -->
+<text x="30" y="698" fill="#64748b" font-size="7" font-weight="600">Resume modes:</text>
+<text x="140" y="698" fill="#34d399" font-size="7">NATIVE_CURSOR — same streamId, provider cursor resumes after committed sequence</text>
+<text x="640" y="698" fill="#a78bfa" font-size="7">RESTART_WITH_LINEAGE — new streamId with priorStreamId</text>
+<text x="140" y="712" fill="#fb7185" font-size="7">NONE — fail explicitly with partial output</text>
+<text x="400" y="712" fill="#64748b" font-size="7">| different provider always uses RESTART_WITH_LINEAGE; cross-provider byte splicing prohibited</text>
+
+<!-- Failover path -->
+<rect x="930" y="690" width="120" height="48" rx="5" fill="none" stroke="#475569" stroke-width="0.5" stroke-dasharray="3,2"/>
+<text x="990" y="706" fill="#64748b" font-size="7" text-anchor="middle">Failover path</text>
+<text x="990" y="718" fill="#64748b" font-size="6" text-anchor="middle">primary → fallback</text>
+<text x="990" y="730" fill="#64748b" font-size="6" text-anchor="middle">→ local model</text>
+
+<path d="M655 670 L655 700 Q655 714 862 714" fill="none" stroke="#64748b" stroke-width="0.5"/>
+
+<!-- Footer -->
+<text x="540" y="810" fill="#475569" font-size="8" text-anchor="middle">DERIVED from architecture/PROVIDER_SYSTEM.md — all elements traceable to canonical source &amp; supporting documents</text>
+</svg>
+</div>
+</body>
+</html>

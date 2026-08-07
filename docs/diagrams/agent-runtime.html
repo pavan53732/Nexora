@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora Agent Runtime</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono',monospace;display:flex;justify-content:center;padding:24px 16px}
+.container{max-width:1050px;width:100%}
+.header{margin-bottom:20px}
+.header h1{font-size:16px;font-weight:700;color:#f8fafc;margin-bottom:4px}
+.header .dot{display:inline-block;width:7px;height:7px;background:#22d3ee;border-radius:50%;margin-right:7px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.header .badge{display:inline-block;background:rgba(34,211,238,0.15);color:#22d3ee;font-size:9px;padding:2px 8px;border-radius:3px;margin-left:8px;font-weight:600}
+.header .meta{font-size:9px;color:#475569;margin-top:6px;line-height:1.6}
+.header .meta b{color:#64748b;font-weight:600}
+svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1><span class="dot"></span>Agent Runtime<span class="badge">DERIVED</span></h1>
+<div class="meta">
+<b>Canonical:</b> architecture/AGENT_RUNTIME.md<br>
+<b>Supporting:</b> architecture/RUNTIME.md · architecture/TOOL_SYSTEM.md · architecture/MEMORY_SYSTEM.md · state-machines/ProviderStreamLifecycle.md · specs/CONTEXT_MANAGEMENT.md<br>
+<b>Requirements:</b> FR-A001–015 · <b>Date:</b> 2026-08-07<br>
+<b>Introduces no new terminology, ownership, execution paths, or inferred behavior.</b>
+</div>
+</div>
+<svg viewBox="0 0 1030 880" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/></pattern>
+<marker id="a" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#94a3b8"/></marker>
+<marker id="aCyan" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#22d3ee"/></marker>
+<marker id="aEmerald" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#34d399"/></marker>
+<marker id="aAmber" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#fbbf24"/></marker>
+<marker id="aRose" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#fb7185"/></marker>
+<marker id="aViolet" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#a78bfa"/></marker>
+</defs>
+<rect width="1030" height="880" fill="url(#g)"/>
+
+<text x="30" y="28" fill="#22d3ee" font-size="8" font-weight="700">AGENT INFERENCE-TURN PIPELINE (canonical provider path is typed streaming)</text>
+
+<!-- Pipeline stages (15 steps from AGENT_RUNTIME.md:59-75) -->
+<rect x="50" y="42" width="145" height="36" rx="5" fill="#0f172a" stroke="#22d3ee" stroke-width="1"/>
+<rect x="50" y="42" width="145" height="36" rx="5" fill="rgba(8,51,68,0.3)"/>
+<text x="122" y="64" fill="#22d3ee" font-size="8" text-anchor="middle" font-weight="600">1. Inbound message</text>
+
+<rect x="215" y="42" width="145" height="36" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="215" y="42" width="145" height="36" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="287" y="64" fill="#a78bfa" font-size="8" text-anchor="middle" font-weight="600">2. Deliberation gate</text>
+
+<rect x="380" y="42" width="155" height="36" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="380" y="42" width="155" height="36" rx="5" fill="rgba(6,78,59,0.2)"/>
+<text x="457" y="64" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">3. Freshness + introspect</text>
+
+<rect x="555" y="42" width="130" height="36" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1"/>
+<rect x="555" y="42" width="130" height="36" rx="5" fill="rgba(6,78,59,0.2)"/>
+<text x="620" y="64" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">4. Evidence plan</text>
+
+<rect x="705" y="42" width="145" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="705" y="42" width="145" height="36" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="777" y="64" fill="#fbbf24" font-size="8" text-anchor="middle" font-weight="600">5. ContextSnapshot</text>
+
+<rect x="870" y="42" width="130" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="870" y="42" width="130" height="36" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="935" y="64" fill="#fbbf24" font-size="8" text-anchor="middle" font-weight="600">6. ReasoningPolicy</text>
+
+<!-- Row 2 -->
+<rect x="50" y="100" width="145" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="50" y="100" width="145" height="36" rx="5" fill="rgba(120,53,15,0.2)"/>
+<text x="122" y="122" fill="#fbbf24" font-size="8" text-anchor="middle" font-weight="600">7. ProviderRoutePlan</text>
+
+<rect x="215" y="100" width="170" height="36" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="215" y="100" width="170" height="36" rx="5" fill="rgba(6,78,59,0.35)"/>
+<text x="300" y="122" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">8. ProviderStreamLifecycle</text>
+
+<rect x="405" y="100" width="200" height="36" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="405" y="100" width="200" height="36" rx="5" fill="rgba(6,78,59,0.35)"/>
+<text x="505" y="122" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">9. Text/citation/reasoning/tool assembly</text>
+
+<rect x="625" y="100" width="170" height="36" rx="5" fill="#0f172a" stroke="#fb7185" stroke-width="1.5"/>
+<rect x="625" y="100" width="170" height="36" rx="5" fill="rgba(136,19,55,0.25)"/>
+<text x="710" y="122" fill="#fb7185" font-size="8" text-anchor="middle" font-weight="600">10. Tool authorization + execute</text>
+
+<rect x="815" y="100" width="140" height="36" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="815" y="100" width="140" height="36" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="885" y="122" fill="#a78bfa" font-size="8" text-anchor="middle" font-weight="600">11. Critic/verifier</text>
+
+<!-- Row 3 -->
+<rect x="120" y="158" width="145" height="36" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="1"/>
+<rect x="120" y="158" width="145" height="36" rx="5" fill="rgba(76,29,149,0.25)"/>
+<text x="192" y="180" fill="#a78bfa" font-size="8" text-anchor="middle" font-weight="600">12. Bounded repair/re-plan</text>
+
+<rect x="290" y="158" width="170" height="36" rx="5" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="290" y="158" width="170" height="36" rx="5" fill="rgba(8,51,68,0.35)"/>
+<text x="375" y="180" fill="#22d3ee" font-size="8" text-anchor="middle" font-weight="600">13. Answer synthesis + validation</text>
+
+<rect x="485" y="158" width="130" height="36" rx="5" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="485" y="158" width="130" height="36" rx="5" fill="rgba(6,78,59,0.3)"/>
+<text x="550" y="180" fill="#34d399" font-size="8" text-anchor="middle" font-weight="600">14. Completion gate</text>
+
+<rect x="640" y="158" width="170" height="36" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+<rect x="640" y="158" width="170" height="36" rx="5" fill="rgba(120,53,15,0.3)"/>
+<text x="725" y="180" fill="#fbbf24" font-size="8" text-anchor="middle" font-weight="600">15. Checkpoint + memory curate</text>
+
+<!-- Connecting arrows between stages -->
+<line x1="195" y1="60" x2="210" y2="60" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="360" y1="60" x2="375" y2="60" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="535" y1="60" x2="550" y2="60" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="685" y1="60" x2="700" y2="60" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="850" y1="60" x2="865" y2="60" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+
+<!-- Down arrow row 1 to row 2 -->
+<path d="M935 78 L935 95 L710 95 L710 95" fill="none" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+
+<!-- Row 2 connections -->
+<line x1="195" y1="118" x2="210" y2="118" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="385" y1="118" x2="400" y2="118" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="605" y1="118" x2="620" y2="118" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="795" y1="118" x2="810" y2="118" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+
+<!-- Down arrow row 2 to row 3 -->
+<path d="M885 136 L885 155 L550 155 L550 155" fill="none" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+
+<!-- Row 3 connections -->
+<line x1="265" y1="176" x2="285" y2="176" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="460" y1="176" x2="480" y2="176" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+<line x1="615" y1="176" x2="635" y2="176" stroke="#94a3b8" stroke-width="0.8" marker-end="url(#a)"/>
+
+<!-- Critic loopback: step 11 back to step 12 -->
+<path d="M885 136 L885 170 L885 194 L192 194" fill="none" stroke="#a78bfa" stroke-width="0.8" stroke-dasharray="5,3" marker-end="url(#aViolet)"/>
+<text x="500" y="190" fill="#a78bfa" font-size="7" text-anchor="middle">critic/verifier feedback loop (bounded)</text>
+
+<!-- Completion gate loopback: step 14 back to step 1 or 2 -->
+<path d="M550 194 L550 240 L300 240 L300 42" fill="none" stroke="#34d399" stroke-width="0.6" stroke-dasharray="4,4"/>
+<text x="550" y="235" fill="#34d399" font-size="6">not satisfied? loop back to start</text>
+
+<!-- === SECTION 2: Turn Invariants === -->
+<text x="30" y="275" fill="#64748b" font-size="8" font-weight="700">TURN INVARIANTS</text>
+<text x="30" y="295" fill="#64748b" font-size="7">- Cancellation propagates: Agent - ProviderRouter - adapter - Tool children</text>
+<text x="30" y="310" fill="#64748b" font-size="7">- Exactly one terminal stream outcome per streamId</text>
+<text x="30" y="325" fill="#64748b" font-size="7">- Provider failover never silently concatenates output from distinct streams</text>
+<text x="30" y="340" fill="#64748b" font-size="7">- Reasoning and repair inside explicit token/call/time/cost budgets</text>
+<text x="30" y="355" fill="#64748b" font-size="7">- Durable reasoning output is redacted ReasoningSummary, not raw chain-of-thought</text>
+
+<!-- === SECTION 3: AgentState === -->
+<text x="30" y="395" fill="#fbbf24" font-size="8" font-weight="700">AGENT STATE (AgentState data class)</text>
+
+<rect x="50" y="410" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="127" y="430" fill="#fbbf24" font-size="8" text-anchor="middle">goal: String</text>
+
+<rect x="220" y="410" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="297" y="430" fill="#fbbf24" font-size="8" text-anchor="middle">workspace: Workspace</text>
+
+<rect x="390" y="410" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="467" y="430" fill="#fbbf24" font-size="8" text-anchor="middle">provider: AIProvider</text>
+
+<rect x="560" y="410" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="637" y="430" fill="#fbbf24" font-size="8" text-anchor="middle">history: List[AgentStep]</text>
+
+<rect x="730" y="410" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="807" y="430" fill="#fbbf24" font-size="8" text-anchor="middle">tokenBudget: TokenBudget</text>
+
+<rect x="50" y="452" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="127" y="472" fill="#fbbf24" font-size="8" text-anchor="middle">snapshotId: String?</text>
+
+<rect x="220" y="452" width="155" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="297" y="472" fill="#fbbf24" font-size="8" text-anchor="middle">streamId: String?</text>
+
+<rect x="390" y="452" width="190" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="485" y="472" fill="#fbbf24" font-size="8" text-anchor="middle">lastStreamSequence: Long?</text>
+
+<rect x="595" y="452" width="170" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="680" y="472" fill="#fbbf24" font-size="8" text-anchor="middle">reasoningPolicy?</text>
+
+<rect x="780" y="452" width="130" height="32" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="0.5"/>
+<text x="845" y="472" fill="#fbbf24" font-size="8" text-anchor="middle">checkpoint?</text>
+
+<!-- === SECTION 4: Core Capabilities === -->
+<text x="30" y="515" fill="#34d399" font-size="8" font-weight="700">CORE CAPABILITIES (25 total, Phase 2–7)</text>
+
+<rect x="50" y="528" width="140" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="120" y="547" fill="#34d399" font-size="7" text-anchor="middle">Goal-based execution</text>
+<rect x="200" y="528" width="120" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="260" y="547" fill="#34d399" font-size="7" text-anchor="middle">Task planning</text>
+<rect x="330" y="528" width="120" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="390" y="547" fill="#34d399" font-size="7" text-anchor="middle">Reflection</text>
+<rect x="460" y="528" width="120" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="520" y="547" fill="#34d399" font-size="7" text-anchor="middle">Self-correction</text>
+<rect x="590" y="528" width="130" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="655" y="547" fill="#34d399" font-size="7" text-anchor="middle">Checkpoint saving</text>
+<rect x="730" y="528" width="140" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="800" y="547" fill="#34d399" font-size="7" text-anchor="middle">Resume after restart</text>
+<rect x="880" y="528" width="120" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="940" y="547" fill="#34d399" font-size="7" text-anchor="middle">Cancellation</text>
+
+<rect x="50" y="564" width="140" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="120" y="583" fill="#34d399" font-size="7" text-anchor="middle">Streaming responses</text>
+<rect x="200" y="564" width="150" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="275" y="583" fill="#34d399" font-size="7" text-anchor="middle">Human approval gates</text>
+<rect x="360" y="564" width="150" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="435" y="583" fill="#34d399" font-size="7" text-anchor="middle">Automatic tool select</text>
+<rect x="520" y="564" width="150" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="595" y="583" fill="#34d399" font-size="7" text-anchor="middle">Automatic skill select</text>
+<rect x="680" y="564" width="150" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="755" y="583" fill="#34d399" font-size="7" text-anchor="middle">Per-step validation</text>
+<rect x="840" y="564" width="150" height="30" rx="4" fill="rgba(6,78,59,0.15)" stroke="#34d399" stroke-width="0.5"/>
+<text x="915" y="583" fill="#34d399" font-size="7" text-anchor="middle">Objective verificatn</text>
+
+<!-- === Token Budget === -->
+<text x="30" y="625" fill="#fbbf24" font-size="8" font-weight="700">TOKEN BUDGET</text>
+
+<rect x="50" y="636" width="220" height="55" rx="5" fill="#0f172a" stroke="#fbbf24" stroke-width="1"/>
+<rect x="50" y="636" width="220" height="55" rx="5" fill="rgba(120,53,15,0.15)"/>
+<text x="160" y="654" fill="#fbbf24" font-size="9" text-anchor="middle" font-weight="600">TokenBudget</text>
+<text x="160" y="670" fill="#64748b" font-size="7" text-anchor="middle">maxPerRequest: 4096</text>
+<text x="160" y="683" fill="#64748b" font-size="7" text-anchor="middle">maxPerSession: 100,000</text>
+
+<rect x="300" y="636" width="160" height="55" rx="5" fill="rgba(34,211,238,0.1)" stroke="#22d3ee" stroke-width="0.5"/>
+<text x="380" y="660" fill="#22d3ee" font-size="8" text-anchor="middle">reservedForResponse: 1024</text>
+<text x="380" y="680" fill="#475569" font-size="7" text-anchor="middle">remaining = max - reserved</text>
+
+<!-- === Architecture summary === -->
+<text x="30" y="720" fill="#64748b" font-size="7" font-weight="600">Agent loop overview: runTurn(message, state)</text>
+<text x="30" y="738" fill="#64748b" font-size="7">deliberationGate.classify - projectIntrospector.inspect - evidenceEngine.planRetrieval - contextBuilder.compileSnapshot</text>
+<text x="30" y="753" fill="#64748b" font-size="7">reasoningPolicyResolver.resolve - providerRouter.plan - providerRouter.stream (collect StreamEnvelope events)</text>
+<text x="30" y="768" fill="#64748b" font-size="7">InferenceAssembler assembles text/tool/reasoning/citation fragments - permissionManager.authorizeToolCall - executor.execute</text>
+<text x="30" y="783" fill="#64748b" font-size="7">evidenceEngine.verify - boundedRepairIfNeeded - answerSynthesizer.create - completionGate.requireSatisfied - saveCheckpoint</text>
+
+<text x="30" y="810" fill="#64748b" font-size="7" font-weight="600">AgentStep sealed class: Thinking(reflection) | Planning(plan) | ToolExecution(call, result) | Error(message, recoverable)</text>
+
+<text x="515" y="870" fill="#475569" font-size="8" text-anchor="middle">DERIVED from architecture/AGENT_RUNTIME.md - all elements traceable to canonical source and supporting documents</text>
+</svg>
+</div>
+</body>
+</html>
