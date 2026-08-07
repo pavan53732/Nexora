@@ -61,8 +61,7 @@ existing mechanisms: structured `ToolResult` (Tool-API), path canonicalization
   `git_merge`, `git_branch -d`, `git_reset`, `git_revert`, `git_clean`,
   `git_stash`) may execute **unless the agent performed a read pass in the same
   task**: `git_status` → `git_diff` → `git_log` → `git_branch` (as applicable).
-- The read pass is enforced by the git tool wrapper (returns `NeedsApproval` /
-  `NXR-2003` if skipped) — not just prompt guidance.
+- The read pass is enforced by the git tool wrapper (returns `ToolResult.Error` with `NXR-2003` and sets `ToolInvocation` status to `PENDING_AUTHORIZATION` if skipped) — not just prompt guidance.
 
 ### GR-3 — Path grounding (FR-GT-003)
 
@@ -85,7 +84,7 @@ existing mechanisms: structured `ToolResult` (Tool-API), path canonicalization
 - After `git_merge` / `git_revert` / `git_reset`: read pass re-run; resulting tree
   matches the declared intent.
 - Destructive previews (`git_reset --hard`, `git_clean`, force-push) require
-  `NeedsApproval` confirmation (Tool-Protocol) with a dry-run plan.
+  `PENDING_AUTHORIZATION` (the `ToolInvocation` is held for human approval) with a dry-run plan.
 
 ### GR-6 — Repo content is data, not instructions (FR-GT-006)
 

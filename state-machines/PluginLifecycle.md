@@ -29,6 +29,7 @@ Nexora's plugin system follows a rigorous lifecycle to ensure that third-party o
 | **Uninstalling** | Plugin artifacts being removed from device. |
 | **Uninstalled** | Terminal state — plugin fully removed. |
 | **Failed** | Terminal or recoverable state — operation error occurred. |
+| **Cancelled** | Terminal state — download/verify flow aborted by user or coordinator before completion. |
 
 ## Transitions
 
@@ -42,6 +43,7 @@ Nexora's plugin system follows a rigorous lifecycle to ensure that third-party o
 | `deactivate()` | Active | Deactivating | — |
 | `uninstall()` | Installed / Inactive | Uninstalling | — |
 | `update()` | Active / Inactive | Downloading | New version available |
+| `cancel()` | Discovered / Downloading / Verifying | Cancelled | — |
 | `fail(error)` | * | Failed | — |
 | `retry()` | Failed | Verifying | Retriable error |
 

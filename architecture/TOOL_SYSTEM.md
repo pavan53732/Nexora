@@ -32,6 +32,9 @@ interface Tool {
     val timeout: Duration
     val requiresSandbox: Boolean
     val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery
+    val supportsStreaming: Boolean
+    val supportsCancellation: Boolean
+    val cacheTtlMs: Long
     val version: String
 
     suspend fun execute(params: JsonObject, context: ToolContext): ToolResult
@@ -44,10 +47,13 @@ data class ToolContext(
     val eventBus: EventBus
 )
 
+// Canonical result type (source of truth: models/ToolInvocation.md). Approval is NOT a
+// ToolResult variant — when authorization is required the ToolInvocation stays in
+// PENDING_AUTHORIZATION (see security/PermissionModel.md) and the Task/Agent lifecycle
+// may transition to WaitingApproval. The execute() suspend call only returns Success/Error.
 sealed class ToolResult {
     data class Success(val output: JsonObject, val metadata: ToolMetadata) : ToolResult()
     data class Error(val message: String, val code: String, val recoverable: Boolean) : ToolResult()
-    data class NeedsApproval(val toolCall: ToolCall, val reason: String) : ToolResult()
 }
 
 data class ToolMetadata(
@@ -173,7 +179,7 @@ class ToolRegistry {
 > **Transport:** `stdio` (subprocess) and `Streamable HTTP` (SSE-compatible over HTTPS) — both registered via `mcp_connect_stdio` (`TOOL-397`) and `mcp_connect_http` (`TOOL-398`).  
 > **Capability negotiation:** `mcp_list_caps` (`TOOL-399`) performs handshake; results stored per workspace in `workspace.json` settings (`FR-W005`).  
 > **Permission model:** MCP connections require `network:http` (for HTTP transport) and `plugin:install` (when registering external server capabilities) — both default `ASK` (`security/PermissionModel.md` §Explicit Risk-Based Scope Defaults). Each discovered MCP tool inherits the server's declared `requiredPermissions`; if not declared, defaults to `DENY`. Unknown scopes are always denied.
-> **Result flow:** MCP tool results (`mcp_call_tool` `TOOL-400`) return through the standard `ToolResult.Success` / `ToolResult.Error` / `ToolResult.NeedsApproval` pipeline (`protocols/Tool-Protocol.md`); no special error envelope — canonical error codes (`NXR-2004`, `NXR-7004`) apply.  
+> **Result flow:** MCP tool results (`mcp_call_tool` `TOOL-400`) return through the standard `ToolResult.Success` / `ToolResult.Error` pipeline (`protocols/Tool-Protocol.md`); no special error envelope — canonical error codes (`NXR-2004`, `NXR-7004`) apply. Authorization requirements are represented by the `ToolInvocation` status `PENDING_AUTHORIZATION`, not a `ToolResult` variant.
 > **Sandbox:** MCP client process runs inside the workspace sandbox (`sandbox:execute` scope required) with the same filesystem/network/process limits (`security/SandboxPolicy.md`); no host-level access granted by transport choice.  
 > **Phase:** Phase 5 (same phase as AI provider integrations — `specs/AI_PROVIDERS.md` Phase 5 mapping applies).  
 >
