@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexora Hidden Execution Architecture</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #020617;
+      min-height: 100vh;
+      padding: 2rem;
+      color: white;
+    }
+    .container { max-width: 1280px; margin: 0 auto; }
+    .header { margin-bottom: 2rem; }
+    .header-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .pulse-dot {
+      width: 12px; height: 12px; background: #22d3ee; border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    h1 { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; }
+    .subtitle { color: #94a3b8; font-size: 0.875rem; margin-left: 1.75rem; }
+    .diagram-container {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 1rem;
+      border: 1px solid #1e293b;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+    svg { width: 100%; min-width: 1100px; display: block; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 2rem; }
+    .card {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 0.75rem;
+      border: 1px solid #1e293b;
+      padding: 1.25rem;
+    }
+    .card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem; }
+    .card-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .card-dot.cyan { background: #22d3ee; }
+    .card-dot.emerald { background: #34d399; }
+    .card-dot.violet { background: #a78bfa; }
+    .card-dot.amber { background: #fbbf24; }
+    .card-dot.rose { background: #fb7185; }
+    .card h3 { font-size: 0.875rem; font-weight: 600; }
+    .card ul { list-style: none; color: #94a3b8; font-size: 0.75rem; }
+    .card li { margin-bottom: 0.375rem; }
+    .footer { text-align: center; margin-top: 1.5rem; color: #475569; font-size: 0.75rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-row">
+        <div class="pulse-dot"></div>
+        <h1>Nexora — Hidden Execution Architecture</h1>
+      </div>
+      <p class="subtitle">AI agents execute through an internal sandbox + hidden terminal/runtime. The user interacts only with the Chat/UI; it never runs commands. (Verified DL-045)</p>
+    </div>
+
+    <!-- Main Diagram -->
+    <div class="diagram-container">
+      <svg viewBox="0 0 1100 840">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
+          </marker>
+          <marker id="arrowheadRose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#fb7185" />
+          </marker>
+          <marker id="arrowheadEmerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#34d399" />
+          </marker>
+          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+
+        <rect width="100%" height="100%" fill="url(#grid)" />
+
+        <!-- ================= EXTERNAL: USER ================= -->
+        <rect x="30" y="360" width="110" height="60" rx="6" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+        <text x="85" y="385" fill="white" font-size="12" font-weight="600" text-anchor="middle">User</text>
+        <text x="85" y="402" fill="#94a3b8" font-size="9" text-anchor="middle">Android host</text>
+
+        <!-- ================= FRONTEND: UI ================= -->
+        <rect x="30" y="470" width="110" height="130" rx="8" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+        <text x="85" y="496" fill="white" font-size="12" font-weight="600" text-anchor="middle">Chat / UI</text>
+        <text x="85" y="516" fill="#94a3b8" font-size="8" text-anchor="middle">goal entry</text>
+        <text x="85" y="531" fill="#94a3b8" font-size="8" text-anchor="middle">activity feed</text>
+        <text x="85" y="546" fill="#94a3b8" font-size="8" text-anchor="middle">permission dialog</text>
+        <text x="85" y="561" fill="#94a3b8" font-size="8" text-anchor="middle">logs / results</text>
+        <text x="85" y="579" fill="#22d3ee" font-size="8" text-anchor="middle">display-only</text>
+
+        <!-- ================= BACKEND: AGENT RUNTIME ================= -->
+        <rect x="210" y="70" width="150" height="56" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="94" fill="white" font-size="12" font-weight="600" text-anchor="middle">Agent Runtime</text>
+        <text x="285" y="110" fill="#94a3b8" font-size="8" text-anchor="middle">autonomous loop</text>
+
+        <rect x="210" y="150" width="150" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="170" fill="white" font-size="11" font-weight="600" text-anchor="middle">Planner</text>
+        <text x="285" y="186" fill="#94a3b8" font-size="8" text-anchor="middle">decompose goal</text>
+
+        <rect x="210" y="220" width="150" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="240" fill="white" font-size="11" font-weight="600" text-anchor="middle">Workflow Engine</text>
+        <text x="285" y="256" fill="#94a3b8" font-size="8" text-anchor="middle">graph steps</text>
+
+        <rect x="210" y="300" width="150" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="320" fill="white" font-size="11" font-weight="600" text-anchor="middle">Executor</text>
+        <text x="285" y="336" fill="#94a3b8" font-size="8" text-anchor="middle">run steps</text>
+
+        <rect x="210" y="380" width="150" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="400" fill="white" font-size="11" font-weight="600" text-anchor="middle">Tool Manager</text>
+        <text x="285" y="416" fill="#94a3b8" font-size="8" text-anchor="middle">route + invoke</text>
+
+        <rect x="210" y="460" width="150" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="480" fill="white" font-size="11" font-weight="600" text-anchor="middle">Permission Mgr</text>
+        <text x="285" y="496" fill="#94a3b8" font-size="8" text-anchor="middle">authorize gate</text>
+
+        <!-- AI Provider + Router (typed streaming) -->
+        <rect x="210" y="550" width="150" height="56" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="574" fill="white" font-size="11" font-weight="600" text-anchor="middle">AI Provider</text>
+        <text x="285" y="590" fill="#94a3b8" font-size="8" text-anchor="middle">+ Router (stream)</text>
+
+        <!-- Reflection / Completion gate -->
+        <rect x="210" y="650" width="150" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="285" y="670" fill="white" font-size="11" font-weight="600" text-anchor="middle">Reflection /</text>
+        <text x="285" y="686" fill="white" font-size="11" font-weight="600" text-anchor="middle">Completion Gate</text>
+
+        <!-- Event bus (message bus) -->
+        <rect x="210" y="730" width="150" height="44" rx="6" fill="rgba(251, 146, 60, 0.3)" stroke="#fb923c" stroke-width="1.5"/>
+        <text x="285" y="750" fill="white" font-size="11" font-weight="600" text-anchor="middle">Event Bus</text>
+        <text x="285" y="766" fill="#94a3b8" font-size="8" text-anchor="middle">publish/subscribe</text>
+
+        <!-- Memory / persistence (DB) -->
+        <rect x="210" y="620" width="0" height="0" fill="none"/>
+        <rect x="40" y="700" width="0" height="0" fill="none"/>
+
+        <!-- ================= SANDBOX BOUNDARY (dashed rose) ================= -->
+        <rect x="420" y="120" width="650" height="540" rx="12" fill="rgba(136, 19, 55, 0.05)" stroke="#fb7185" stroke-width="1.2" stroke-dasharray="8,4"/>
+        <text x="434" y="138" fill="#fb7185" font-size="10" font-weight="600">Sandbox Boundary — internal, agent-invoked (proot Debian-slim guest)</text>
+
+        <!-- Sandbox Manager (security) -->
+        <rect x="440" y="160" width="170" height="50" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="525" y="180" fill="white" font-size="11" font-weight="600" text-anchor="middle">Sandbox Manager</text>
+        <text x="525" y="196" fill="#94a3b8" font-size="9" text-anchor="middle">proot + VFS</text>
+
+        <!-- Hidden Terminal / Runtime (the hidden execution core) -->
+        <rect x="440" y="240" width="610" height="90" rx="8" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="745" y="265" fill="white" font-size="12" font-weight="600" text-anchor="middle">Hidden Terminal / Runtime (internal implementation detail)</text>
+        <text x="745" y="285" fill="#94a3b8" font-size="9" text-anchor="middle">Shell · Python · Node · JavaScript · Git · SQLite · Process Mgr · Execution Engine</text>
+        <text x="745" y="303" fill="#fbbf24" font-size="8" text-anchor="middle">never user-facing — auto-triggered by agents</text>
+        <text x="745" y="318" fill="#94a3b8" font-size="8" text-anchor="middle">output surfaces in Chat activity feed + Logs</text>
+
+        <!-- Internal Tools inside sandbox -->
+        <rect x="440" y="360" width="290" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="585" y="380" fill="white" font-size="11" font-weight="600" text-anchor="middle">Internal Tools</text>
+        <text x="585" y="396" fill="#94a3b8" font-size="9" text-anchor="middle">28 categories · agent-invoked</text>
+
+        <!-- Browser Host WebView Bridge (exception) -->
+        <rect x="760" y="360" width="280" height="50" rx="6" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+        <text x="900" y="380" fill="white" font-size="11" font-weight="600" text-anchor="middle">Browser Bridge (exception)</text>
+        <text x="900" y="396" fill="#94a3b8" font-size="9" text-anchor="middle">host JVM WebView · proxied</text>
+
+        <!-- Egress proxy (security) -->
+        <rect x="440" y="450" width="610" height="50" rx="6" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1.5"/>
+        <text x="745" y="470" fill="white" font-size="11" font-weight="600" text-anchor="middle">Workspace Egress Proxy</text>
+        <text x="745" y="486" fill="#94a3b8" font-size="9" text-anchor="middle">deny-by-default · DLP · forced for guest + host WebView</text>
+
+        <!-- Multi-agent side branch inside sandbox -->
+        <rect x="440" y="540" width="610" height="100" rx="8" fill="rgba(6, 78, 59, 0.12)" stroke="#34d399" stroke-width="1" stroke-dasharray="4,4"/>
+        <text x="452" y="558" fill="#34d399" font-size="9" font-weight="600">Multi-Agent (each sub-agent in its own sandbox instance)</text>
+        <rect x="455" y="568" width="180" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="545" y="588" fill="white" font-size="10" font-weight="600" text-anchor="middle">Master Agent</text>
+        <text x="545" y="604" fill="#94a3b8" font-size="8" text-anchor="middle">coordinator</text>
+        <rect x="660" y="568" width="180" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="750" y="588" fill="white" font-size="10" font-weight="600" text-anchor="middle">Sub-Agent A</text>
+        <text x="750" y="604" fill="#94a3b8" font-size="8" text-anchor="middle">own sandbox</text>
+        <rect x="865" y="568" width="170" height="50" rx="6" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+        <text x="950" y="588" fill="white" font-size="10" font-weight="600" text-anchor="middle">Sub-Agent B</text>
+        <text x="950" y="604" fill="#94a3b8" font-size="8" text-anchor="middle">own sandbox</text>
+
+        <!-- ================= ARROWS (drawn after grid, behind boxes) ================= -->
+        <!-- User -> UI -->
+        <line x1="85" y1="470" x2="85" y2="492" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="92" y="486" fill="#94a3b8" font-size="8">goal</text>
+
+        <!-- UI -> Agent Runtime (start) -->
+        <line x1="140" y1="420" x2="208" y2="98" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="158" y="250" fill="#94a3b8" font-size="8">start</text>
+
+        <!-- Agent Runtime -> Planner -> Workflow -> Executor -> ToolManager -> Permission -->
+        <line x1="285" y1="126" x2="285" y2="148" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowheadEmerald)"/>
+        <line x1="285" y1="200" x2="285" y2="218" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowheadEmerald)"/>
+        <line x1="285" y1="270" x2="285" y2="298" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowheadEmerald)"/>
+        <line x1="285" y1="350" x2="285" y2="378" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowheadEmerald)"/>
+        <line x1="285" y1="430" x2="285" y2="458" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowheadEmerald)"/>
+
+        <!-- Tool Manager -> Sandbox Manager -->
+        <line x1="360" y1="405" x2="438" y2="185" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrowheadEmerald)"/>
+        <text x="390" y="280" fill="#94a3b8" font-size="8">execute</text>
+
+        <!-- Sandbox Manager -> Hidden Terminal/Runtime -->
+        <line x1="525" y1="210" x2="525" y2="238" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- Hidden Terminal -> Internal Tools + Browser Bridge -->
+        <line x1="600" y1="330" x2="585" y2="358" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <line x1="900" y1="330" x2="900" y2="358" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+        <!-- Tools / Bridge -> Egress Proxy -->
+        <line x1="745" y1="410" x2="745" y2="448" stroke="#fb7185" stroke-width="1.5" marker-end="url(#arrowheadRose)"/>
+        <line x1="900" y1="410" x2="770" y2="448" stroke="#fb7185" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowheadRose)"/>
+        <text x="970" y="440" fill="#fb7185" font-size="8">proxied</text>
+
+        <!-- Egress Proxy -> net -->
+        <line x1="1050" y1="475" x2="1080" y2="475" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <text x="1058" y="470" fill="#94a3b8" font-size="8">net</text>
+
+        <!-- AI Provider (streamed tool calls) -> back into Tool Manager path -->
+        <line x1="285" y1="550" x2="285" y2="520" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowheadEmerald)"/>
+        <text x="295" y="540" fill="#94a3b8" font-size="8">stream</text>
+
+        <!-- Reflection / Completion Gate loop back to Planner -->
+        <path d="M 210 675 Q 150 675 150 200 Q 150 160 208 175" fill="none" stroke="#34d399" stroke-width="1.5" stroke-dasharray="5,5" marker-end="url(#arrowheadEmerald)"/>
+        <text x="120" y="430" fill="#34d399" font-size="8">reflect / replan</text>
+
+        <!-- Event Bus -> UI update -->
+        <line x1="285" y1="730" x2="140" y2="560" stroke="#fb923c" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#arrowhead)"/>
+        <text x="200" y="660" fill="#fb923c" font-size="8">UI update</text>
+
+        <!-- ================= LEGEND (below all boundaries) ================= -->
+        <text x="420" y="700" fill="white" font-size="10" font-weight="600">Legend</text>
+        <rect x="420" y="710" width="16" height="10" rx="2" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="1"/>
+        <text x="442" y="718" fill="#94a3b8" font-size="8">UI / User (display only)</text>
+        <rect x="420" y="726" width="16" height="10" rx="2" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1"/>
+        <text x="442" y="734" fill="#94a3b8" font-size="8">Agent Runtime / Tools / Provider</text>
+        <rect x="420" y="742" width="16" height="10" rx="2" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1"/>
+        <text x="442" y="750" fill="#94a3b8" font-size="8">Sandbox / Runtime / Browser Bridge</text>
+        <rect x="640" y="710" width="16" height="10" rx="2" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1"/>
+        <text x="662" y="718" fill="#94a3b8" font-size="8">Memory / Store</text>
+        <rect x="640" y="726" width="16" height="10" rx="2" fill="rgba(136, 19, 55, 0.4)" stroke="#fb7185" stroke-width="1"/>
+        <text x="662" y="734" fill="#94a3b8" font-size="8">Security / Sandbox boundary</text>
+        <line x1="640" y1="742" x2="656" y2="742" stroke="#fb923c" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="662" y="750" fill="#94a3b8" font-size="8">Event bus / UI update</text>
+
+        <!-- Developer Mode read-only note (outside sandbox) -->
+        <text x="860" y="700" fill="#94a3b8" font-size="9">Developer Mode (ADR-0006): read-only</text>
+        <text x="860" y="714" fill="#94a3b8" font-size="9">infrastructure observability —</text>
+        <text x="860" y="728" fill="#94a3b8" font-size="9">never a command-entry surface.</text>
+      </svg>
+    </div>
+
+    <!-- Info Cards -->
+    <div class="cards">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot cyan"></div>
+          <h3>UI Is Display-Only</h3>
+        </div>
+        <ul>
+          <li>• User enters a goal in Chat; never a shell</li>
+          <li>• Activity feed shows tool calls + terminal output</li>
+          <li>• Permission dialogs are approval gates, not command entry</li>
+          <li>• Logs/results surface in chat + Logs tab</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot emerald"></div>
+          <h3>Agent Execution Path</h3>
+        </div>
+        <ul>
+          <li>• Agent → Planner → Workflow → Executor → Tool Mgr</li>
+          <li>• Provider streams committed tool calls</li>
+          <li>• Permission Manager authorizes every call</li>
+          <li>• Reflection/Completion gate loops back to Planner</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-dot rose"></div>
+          <h3>Hidden Internals + Exception</h3>
+        </div>
+        <ul>
+          <li>• Terminal, runtimes, sandbox = internal details</li>
+          <li>• Shell/Python/Node/Git/SQLite auto-triggered</li>
+          <li>• Multi-agent: each sub-agent in own sandbox</li>
+          <li>• Browser bridge: host WebView, proxied; egress deny-by-default</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <p class="footer">
+      Nexora • Hidden Execution Architecture (verified DL-045) • documentation-only visual, no implementation
+    </p>
+  </div>
+</body>
+</html>
