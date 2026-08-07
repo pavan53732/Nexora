@@ -13,7 +13,11 @@
 ## Coverage
 - Minimum 80% line coverage for `core/` and `runtime/`.
 - Minimum 60% for `tools/`, `agents/`, `providers/`.
-- All ADRs must have corresponding test cases.
+## ADR Test Coverage
+
+- Every ADR SHOULD map to test cases. ADR-0008 (Typed Inference Streaming) has explicit test mapping (`UT-STREAM-*`, `IT-STREAM-*`, `E2E-STREAM-*`, `SEC-STREAM-*`, `PERF-STREAM-*`).
+- The remaining accepted ADRs (ADR-0001..0007) are covered by the subsystem contract/integration tests cited in `docs/TRACEABILITY.md` (e.g. `UT-CONTRACT-*`, `IT-AGENT-*`, `IT-TOOL-*`, `IT-PLUGIN-*`, `SEC-PERM-*`, `SEC-SBX-*`), since each ADR's decision is realized through those subsystem contracts.
+- The `docs/adr/README.md` registry is the authoritative ADR list; when a new ADR is accepted, its realization tests SHOULD be recorded in `docs/TRACEABILITY.md` or the relevant `testing/cases/` inventory so coverage is auditable.
 
 ## Naming
 - Test class: `{ClassName}Test` (`ToolRegistryTest`)

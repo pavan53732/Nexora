@@ -1,3 +1,5 @@
+> **Status: DERIVED** for tool registry inventory. Canonical tool subsystem ownership is [../architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md); per-tool compatibility metadata follows [../standards/Registry-Standard.md](../standards/Registry-Standard.md).
+
 # Tool Registry — Nexora
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [docs/api/Tool-API.md](../docs/api/Tool-API.md) for the Tool API.

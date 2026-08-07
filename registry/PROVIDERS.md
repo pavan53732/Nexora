@@ -1,3 +1,5 @@
+> **Status: DERIVED** for provider registry inventory. Canonical provider subsystem ownership is [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md).
+
 # Provider Registry — Nexora
 
 ## Standard Fields

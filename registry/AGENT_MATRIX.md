@@ -1,3 +1,5 @@
+> **Status: DERIVED** for per-agent capability matrix inventory. Generated from the agent catalog; keep in sync with [AGENTS.md](./AGENTS.md) and [../architecture/MULTI_AGENT_SYSTEM.md](../architecture/MULTI_AGENT_SYSTEM.md).
+
 # Nexora Agent Capability Matrix
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [AGENTS.md](./AGENTS.md)

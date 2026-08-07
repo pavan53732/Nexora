@@ -1,3 +1,5 @@
+> **Status: DERIVED** for skill registry inventory. Skills are first-class capabilities per ADR-0007; canonical definitions in [../models/Skill.md](../models/Skill.md).
+
 # Skill Registry — Nexora
 
 ## Standard Fields

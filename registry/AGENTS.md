@@ -1,3 +1,5 @@
+> **Status: DERIVED** for agent registry inventory (field spec + standard fields). Canonical agent definitions live in [../architecture/MULTI_AGENT_SYSTEM.md](../architecture/MULTI_AGENT_SYSTEM.md); per-type capability rows live in [AGENT_MATRIX.md](./AGENT_MATRIX.md).
+
 # Agent Registry — Nexora
 
 ## Standard Fields

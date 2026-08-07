@@ -1,3 +1,5 @@
+> **Status: DERIVED** for tool capability matrix inventory. Companion to [TOOLS.md](./TOOLS.md); canonical tool categories live in [../architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md).
+
 # Nexora Tool Capability Matrix
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md) | See [TOOLS.md](./TOOLS.md)

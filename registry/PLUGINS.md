@@ -1,3 +1,5 @@
+> **Status: DERIVED** for plugin registry inventory. Canonical plugin lifecycle/architecture is [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md) + [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
+
 # Plugin Registry — Nexora
 
 ## Standard Fields
