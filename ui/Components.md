@@ -16,7 +16,7 @@
 | `ToolCallCard` | Expandable card showing tool invocation and result — core of the agent activity feed. | P0 |
 | `ActivityCard` | Streamed terminal output, file changes, and progress events rendered inline in chat. | P0 |
 | `TaskCard` | Task status card with progress indicator. | P0 |
-| `TerminalView` | Terminal emulator — internal only (agent activity / developer mode). Not a primary screen. | P2 |
+| `TerminalView` | Terminal emulator — internal only (agent activity / developer mode — read-only observability, see ADR-0006). Not a primary screen. | P2 |
 | `FileExplorer` | Tree-view file browser for the virtual file system. | P0 |
 | `AgentCard` | Agent status and capabilities display. | P1 |
 | `MemorySearchBar` | Semantic search input for memory recall. | P1 |

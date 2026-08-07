@@ -30,8 +30,8 @@ Workspace
     └── Chats
 ```
 
-- The bottom navigation shows: **Workspace, Tasks, Terminal, Settings**. ⚠ **superseded by ADR-0006** — the terminal tab is removed; bottom nav is Workspace, Tasks, Settings.
-- Inside a workspace, tabs provide access to: Agents, Files, Chats, Memory, Terminal, Logs. ⚠ **superseded by ADR-0006** — the Terminal tab is removed; terminal output surfaces in the chat activity feed and Logs.
+- The bottom navigation shows: **Workspace, Tasks, Terminal, Settings**. ⚠ **superseded by ADR-0006** — the terminal tab is removed; bottom nav is Workspace, Tasks, Settings. (This example is historical; see ADR-0006 for the current navigation.)
+- Inside a workspace, tabs provide access to: Agents, Files, Chats, Memory, Terminal, Logs. ⚠ **superseded by ADR-0006** — the Terminal tab is removed; terminal output surfaces in the chat activity feed and Logs. (This example is historical; see ADR-0006 for the current navigation.)
 - A user can have multiple workspaces, each fully isolated.
 - Chats are one artifact within a workspace.
 

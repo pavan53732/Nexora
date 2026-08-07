@@ -56,7 +56,7 @@ terminal, runtimes, and execution engine are internal implementation details.**
 
 ### Negative
 
-- Users cannot manually drive the shell or sandbox without developer mode.
+- Users cannot enter shell commands directly; developer mode (see the Developer Mode note below) exposes read-only terminal/sandbox observability views and is never a command-entry surface.
 - Debugging requires trusting the observability/activity feed (mitigated by full
   execution logs and audit trail).
 - Documentation and tests referencing a "Terminal screen" must be updated.
@@ -66,6 +66,10 @@ terminal, runtimes, and execution engine are internal implementation details.**
 - Rich **agent activity feed** in chat (tool-call cards, streaming output, file diffs).
 - Full **execution history + logs** screen for auditability.
 - Optional **developer mode** (P2+) exposing terminal/sandbox views to advanced users.
+
+## Developer Mode (canonical note)
+
+Developer Mode (future, P2+) is an **observability** feature only. It exposes read-only infrastructure views — execution logs, captured terminal output, and sandbox state — to advanced users for trust and debugging. It is **never** a command-entry surface: the terminal and runtimes remain agent-invoked internal implementation details (Decision #2, #4). Developer Mode does not alter the hidden-execution model defined in this ADR.
 
 ## Affected Documents
 

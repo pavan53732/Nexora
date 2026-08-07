@@ -42,7 +42,7 @@ Workspace
     ├── Tasks
     ├── Files
     ├── Memory
-    ├── Terminal
+    ├── Terminal (internal — agent-invoked; output in Logs/activity feed)
     ├── Plugins
     ├── Logs
     ├── Settings

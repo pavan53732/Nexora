@@ -17,7 +17,7 @@
 
 ## Overview
 
-The Sandbox is Nexora's isolated execution environment. The AI never directly executes commands on Android. Everything runs inside the sandbox, which lives in the app's private storage.
+The Sandbox is Nexora's isolated execution environment. The AI never directly executes commands on Android. Almost all execution runs inside the sandbox (the proot Debian-slim guest in app-private storage). The one documented exception is the browser automation bridge (see [specs/BROWSER.md](../specs/BROWSER.md)): browser commands are redirected to a host-mediated WebView under the workspace egress proxy. This is an intentional, proxied exception, not a sandbox escape.
 
 ## Components
 
