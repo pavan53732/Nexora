@@ -96,6 +96,26 @@ ProjectContext.
 - Tool-call fragments are deleted after commit/failure; committed Tool calls remain in Tool History.
 - Export/delete operations preserve workspace scope and redaction rules.
 
+## Artifacts (coordination note)
+
+"Artifact" is the composite term for durable agent outputs whose storage,
+promotion, and lifecycle span several canonical subsystems:
+
+| Artifact kind | Canonical owner | Detail |
+|---|---|---|
+| File versions | [specs/FILE_SYSTEM.md](../specs/FILE_SYSTEM.md) (§File Versioning, FR-M012) | Capture, diff, revert, quota; stored in `file_version` table + sandbox `files/.history/` |
+| Workspace snapshots | [docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md) (§2.3, FR-S013) | Content-addressed full-workspace snapshots with atomic restore |
+| Agent output promotion | [MULTI_AGENT_SYSTEM.md](MULTI_AGENT_SYSTEM.md) (§SA-5) | Sub-agent overlay → shared workspace; permission-gated promotion |
+| Quarantined downloads | [docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md) (§2.5, FR-S015) | Scanned before promotion into live workspace |
+
+All are stored in the `file_version` table ([specs/DATABASE_SCHEMA.md](../specs/DATABASE_SCHEMA.md))
+or workspace `files/.history/`. A future `artifact:read` permission scope is noted
+([docs/SANDBOX_DEPTH.md](../docs/SANDBOX_DEPTH.md):141, Phase 5) for gating artifact
+retrieval across workspace and agent boundaries.
+
+> **Note:** This section does not establish canonical ownership. It coordinates existing
+> definitions. Each artifact kind remains owned by its listed canonical document.
+
 ## Memory Flow
 
 ```
