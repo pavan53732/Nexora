@@ -16,6 +16,9 @@ body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono',monospace;dis
 .header .meta{font-size:9px;color:#475569;margin-top:6px;line-height:1.6}
 .header .meta b{color:#64748b;font-weight:600}
 svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
+.legend{font-size:8px;color:#64748b;margin-top:10px;display:flex;gap:20px;flex-wrap:wrap}
+.legend span{display:inline-flex;align-items:center;gap:4px}
+.legend .sw{display:inline-block;width:20px;height:0;border-top-width:1.5px}
 </style>
 </head>
 <body>
@@ -28,6 +31,11 @@ svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
 <b>Requirements:</b> FR-A001–015 · <b>Date:</b> 2026-08-07<br>
 <b>Introduces no new terminology, ownership, execution paths, or inferred behavior.</b>
 </div>
+</div>
+<div class="legend">
+<span><b class="sw" style="border-style:solid;border-color:#94a3b8"></b> control</span>
+<span><b class="sw" style="border-style:dashed;border-color:#22d3ee"></b> data</span>
+<span><b class="sw" style="border-style:dotted;border-color:#a78bfa"></b> event</span>
 </div>
 <svg viewBox="0 0 1030 880" xmlns="http://www.w3.org/2000/svg">
 <defs>
