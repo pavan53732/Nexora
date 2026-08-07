@@ -369,6 +369,8 @@
 
 ## Android Device (DEV)
 
+> **Tool ID contract:** `device_camera` (`TOOL-302`) and `device_audio` (`TOOL-303`) are one-shot capture tools (photo / microphone recording). Continuous streaming variants are reserved and MUST NOT reuse these IDs: `device_camera_stream` (`TOOL-403`) and `device_audio_stream` (`TOOL-404`). See `specs/AI_PROVIDERS.md` §Real-Time Voice & Live Camera.
+
 | ID | Tool | Description | Phase | Status |
 |----|------|-------------|-------|--------|
 | TOOL-295 | device_info | Device and OS information | Later | Planned |

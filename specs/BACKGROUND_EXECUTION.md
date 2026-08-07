@@ -198,7 +198,7 @@ When detection indicates denial (`BatteryOptimizationStatus.DENIED` or `AutoStar
 
 **Permission model (`security/PermissionModel.md`):**
 - `device:notifications` remains `ASK` (default); the settings surface does not change the permission model — it provides user education and navigation links (`FR-U011`: chat is single interaction surface; settings links surface through chat settings or workspace settings).
-- No new scope added — `device:*` scopes (`device:notifications`, `device:camera`, `device:audio`, etc.) remain unchanged; the settings flow is a user-guidance mechanism, not a new permission.
+- No new scope added — `device:*` scopes (`device:notifications`, `device:camera`, `device:microphone`, etc.) remain unchanged; the settings flow is a user-guidance mechanism, not a new permission.
 
 ### 8.3 Graceful Degradation to WorkManager-Only (Reduced Autonomy)
 

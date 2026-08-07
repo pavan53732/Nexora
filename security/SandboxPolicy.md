@@ -67,6 +67,9 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
 | **Whitelist** | When granted, only HTTPS (port 443) is allowed; HTTP is blocked unless explicitly opted in per-domain |
 | **DNS** | DNS resolution restricted to system DNS resolver; no custom DNS to prevent DNS exfiltration |
 | **No inbound** | Sandbox processes never open listening sockets |
+| **Egress enforcement boundary** | All guest egress is forced through the host-side workspace egress proxy (`docs/SANDBOX_DEPTH.md` §2.4). proot is launched with `http_proxy`/`https_proxy`/`all_proxy` set to `127.0.0.1:{perWorkspacePort}`; guest processes cannot create direct outbound sockets. The proxy — not an in-guest interceptor — is the sole authority for allowlist, DLP, audit, and grant enforcement |
+| **Encrypted egress** | For inspectable DLP the proxy terminates guest TLS with a workspace-scoped CA (private key in `SecureKeyStore`, never exported to the guest) and re-encrypts to the real destination. Pinned/foreign-certificate traffic or any attempt to bypass the proxy is denied — fail-closed, no silent path |
+| **Provider & pipe clients** | Host-side provider HTTP clients and pipe transports are *not* guest processes; they remain host-managed and confined by `NFR-SEC-012` / `NFR-SEC-014`. Their request bodies are scanned by the DLP engine before transport encryption, so they do not traverse the guest egress proxy |
 
 ## 4. Process Restrictions
 
@@ -116,7 +119,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 | Violation | Response |
 |-----------|----------|
 | Path escape attempt | Immediate process kill; audit log entry with severity `CRITICAL`; user notification |
-| Network rule breach | Connection terminated; `NXR-2003` returned; violation counted toward workspace risk score |
+| Network rule breach | Connection terminated; `NXR-2003` returned; violation counted toward workspace risk score. A direct guest socket attempt (bypassing the egress proxy) is also terminated and denied — there is no allowlist path for non-proxied egress |
 | Resource limit exceeded | Graceful termination with partial output; `NXR-7xxx` error returned to agent |
 | Repeated violations (3+ in 1 hour) | Workspace locked to read-only; user must manually unlock via Settings |
 

@@ -41,7 +41,7 @@ primary authority for task or execution lifecycle state.
 | **CREATED** | No process; not yet attached. | None. |
 | **ATTACHED** | Spawned, waiting for I/O. | Foreground I/O; may receive input. |
 | **RUNNING** | Executing command or reading input. | Full I/O. |
-| **DETACHED** | Running in background; output continues. | No foreground I/O; output buffered. |
+| **DETACHED** | Running in background; output continues. | No foreground I/O; output buffered. `suspended` MAY be set when the detach was caused by an interactive timeout rather than an explicit `detach()`. |
 | **CLOSED** | Exited; resources released. | None. |
 | **FAILED** | Killed or crashed; error details preserved. | None. |
 

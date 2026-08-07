@@ -58,18 +58,36 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
   workspace); restore is atomic (write-new + swap) and is an audited, `ASK`-gated,
   irreversible-until-next-snapshot operation. NFR-REL-010.
 
-### 2.4 Network Egress Policy Engine — deny-by-default, inspected (FR-S014)
-- **What:** All sandbox network traffic flows through an **in-app egress proxy**
-  (OkHttp interceptor layer, not VPNService) that enforces per-workspace **domain
-  allowlists**, per-task **time windows** (network enabled only while a task runs),
-  and writes an egress log (host, bytes, duration) per request.
+### 2.4 Network Egress Policy Engine — deny-by-default, fail-closed (FR-S014)
+- **What:** All sandbox network traffic is **enforced at the boundary**, not merely
+  observed. Nexora runs a dedicated **egress proxy** (host-side, not a guest
+  `VPNService`) bound to `127.0.0.1:{perWorkspacePort}`. The sandbox is configured so
+  guest processes **cannot open direct outbound sockets**: proot is launched with an
+  explicit `http_proxy`/`https_proxy`/`all_proxy` pointing at the workspace proxy, and
+  the Android `VpnService`/packet-filter exclusion is used only to *block* raw guest
+  sockets, never to tunnel them. Every guest connection (curl, wget, pip, npm, Python,
+  Node, apt, the WebView bridge) is forced through that proxy.
+- **Proxy responsibilities:** enforce per-workspace **domain allowlists**, apply the
+  `network:http` / `network:websocket` permission grant, enforce per-task **time
+  windows** (network enabled only while a task runs), write an egress log (host, bytes,
+  duration, matched rule), and run the **DLP scan of outbound bodies** (NFR-SEC-013).
+- **Encrypted egress (HTTPS):** for inspectable DLP, the proxy terminates guest TLS
+  using a workspace-scoped CA whose private key lives in `SecureKeyStore` and is *never*
+  exported to the guest; the proxy re-encrypts to the real destination over the host
+  network stack. Guest traffic carrying a pinned/foreign certificate (or refusing the
+  workspace CA) is **denied** — there is no silent bypass path. This is the only
+  approved egress route; direct socket creation from guest processes fails closed.
+- **WebView bridge:** `specs/BROWSER.md` routes through the *same* proxy via a forced
+  host proxy configuration; the WebView does not perform direct guest networking.
 - **Tool:** `sandbox_network_rules` (TOOL-392).
-- **Why:** Baseline policy is "HTTPS-only + permission gate"; depth adds *inspectable,
+- **Why:** Baseline policy is "HTTPS-only + permission gate"; depth adds *enforced,
   time-boxed, per-workspace* egress so an autonomous agent can safely browse/API-call
-  without a blanket network grant.
+  without a blanket network grant, and so native guest binaries cannot evade the
+  OkHttp-level controls.
 - **Enforcement:** deny-by-default; allowlist entries require `network:http` grant;
-  every egress event enters the audit trail (FR-TL015). DLP scan of outbound bodies
-  (NFR-SEC-013).
+  every egress event enters the audit trail (FR-TL015); DLP scan of outbound bodies
+  (NFR-SEC-013); socket-level enforcement validated by `SEC-NET-001` (proxy allowlist +
+  direct-socket-denial + TLS-termination DLP).
 
 ### 2.5 Quarantine & Content Scanning (FR-S015)
 - **What:** Files fetched from the network (downloads, browser plugin output) land in

@@ -10,7 +10,7 @@
 | SEC-DOS-001 | SEC-DOS | Validate process spawn limiting and Doze handoffs | Security + Sandbox | Planned | `evidence/security/SEC-DOS-001/` | 2026-08-05 |
 | SEC-DOS-002 | SEC-DOS | Validate workspace memory quotas and write-blocking | Security + Sandbox | Planned | `evidence/security/SEC-DOS-002/` | 2026-08-05 |
 | SEC-FLOW-001 | SEC-FLOW | Validate provider profile isolation and credential containment | Security + Provider | Planned | `evidence/security/SEC-FLOW-001/` | 2026-08-05 |
-| SEC-NET-001 | SEC-NET | Validate egress proxy Allowed Domains and DLP outbound scan | Security | Planned | `evidence/security/SEC-NET-001/` | 2026-08-05 |
+| SEC-NET-001 | SEC-NET | Validate egress proxy Allowed Domains, DLP outbound scan, and direct-socket denial (guest processes cannot bypass the workspace egress proxy; pinned/foreign-cert traffic is denied — fail-closed) | Security | Planned | `evidence/security/SEC-NET-001/` | 2026-08-05 |
 | SEC-PERM-003 | SEC-PERM | Multi-scope permission: empty permission list → allowed | Security | Planned | `evidence/security/SEC-PERM-003/` | 2026-08-06 |
 | SEC-PERM-004 | SEC-PERM | Multi-scope permission: one ALLOW scope → allowed | Security | Planned | `evidence/security/SEC-PERM-004/` | 2026-08-06 |
 | SEC-PERM-005 | SEC-PERM | Multi-scope permission: one ASK scope approved → allowed | Security | Planned | `evidence/security/SEC-PERM-005/` | 2026-08-06 |

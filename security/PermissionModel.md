@@ -17,7 +17,7 @@
 
 ## Overview
 
-Every action in Nexora—tool invocation, network call, device access—requires a permission. The model defines **18 scopes**, three decision levels, a layered override hierarchy, and full auditability.
+Every action in Nexora—tool invocation, network call, device access—requires a permission. The model defines **19 scopes**, three decision levels, a layered override hierarchy, and full auditability.
 
 ## Permission Scopes
 
@@ -29,6 +29,7 @@ Every action in Nexora—tool invocation, network call, device access—requires
 | `network:http` | Make outbound HTTP/HTTPS requests | `ASK` | `INTERNET` |
 | `network:websocket` | Open persistent WebSocket connections | `ASK` | `INTERNET` |
 | `device:camera` | Access the device camera stream | `DENY` | `CAMERA` |
+| `device:microphone` | Capture microphone audio input (e.g., terminal voice input, real-time transcription) | `DENY` | `RECORD_AUDIO` |
 | `device:storage` | Access shared/external storage (`/sdcard`) | `DENY` | `READ/WRITE_EXTERNAL_STORAGE` |
 | `device:notifications` | Post system notifications | `ASK` | `POST_NOTIFICATIONS` |
 | `ai:complete` | Call an AI provider for text completions | `ALLOW` | `INTERNET` |
