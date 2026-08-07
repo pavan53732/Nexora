@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora Memory Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#020617;color:#e2e8f0;font-family:'JetBrains Mono',monospace;display:flex;justify-content:center;padding:32px 16px}
+.container{max-width:900px;width:100%}
+.header{margin-bottom:28px}
+.header h1{font-size:18px;font-weight:700;color:#f8fafc;margin-bottom:6px}
+.header .sub{font-size:11px;color:#64748b}
+.header .src{font-size:10px;color:#475569;margin-top:4px}
+.header .src a{color:#38bdf8;text-decoration:none}
+.header .dot{display:inline-block;width:8px;height:8px;background:#a78bfa;border-radius:50%;margin-right:8px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1><span class="dot"></span>Nexora Memory Pipeline</h1>
+<div class="sub">Memory flow from ingestion to retrieval &mdash; DERIVED diagram</div>
+<div class="src">Canonical source: <a href="#">architecture/MEMORY_SYSTEM.md</a> &sect;Memory Flow (lines 99&ndash;134)</div>
+</div>
+<svg viewBox="0 0 880 720" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern id="g" width="40" height="40" patternUnits="userSpaceOnUse">
+<path d="M40 0L0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+</pattern>
+<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+<polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+</marker>
+<marker id="arrowCyan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+<polygon points="0 0, 8 3, 0 6" fill="#22d3ee"/>
+</marker>
+<marker id="arrowEmerald" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+<polygon points="0 0, 8 3, 0 6" fill="#34d399"/>
+</marker>
+<marker id="arrowViolet" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+<polygon points="0 0, 8 3, 0 6" fill="#a78bfa"/>
+</marker>
+<marker id="arrowAmber" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+<polygon points="0 0, 8 3, 0 6" fill="#fbbf24"/>
+</marker>
+</defs>
+<rect width="880" height="720" fill="url(#g)"/>
+
+<!-- Stage 1: New Information (cyan) -->
+<rect x="310" y="40" width="200" height="44" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="310" y="40" width="200" height="44" rx="8" fill="rgba(8,51,68,0.4)"/>
+<text x="410" y="58" fill="#22d3ee" font-size="11" text-anchor="middle" font-weight="600">New Information</text>
+<text x="410" y="74" fill="#64748b" font-size="8" text-anchor="middle">conversations, tool results, files</text>
+
+<line x1="410" y1="84" x2="410" y2="115" stroke="#22d3ee" stroke-width="1.2" marker-end="url(#arrowCyan)"/>
+
+<!-- Stage 2: Embedding Generator (emerald) -->
+<rect x="310" y="120" width="200" height="44" rx="8" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="310" y="120" width="200" height="44" rx="8" fill="rgba(6,78,59,0.4)"/>
+<text x="410" y="138" fill="#34d399" font-size="11" text-anchor="middle" font-weight="600">Embedding Generator</text>
+<text x="410" y="154" fill="#64748b" font-size="8" text-anchor="middle">create vector representation</text>
+
+<line x1="410" y1="164" x2="410" y2="195" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrowEmerald)"/>
+
+<!-- Stage 3: Memory Store with 3 tiers (violet) -->
+<rect x="140" y="200" width="540" height="80" rx="8" fill="none" stroke="#a78bfa" stroke-width="1" stroke-dasharray="6,3"/>
+<text x="160" y="218" fill="#a78bfa" font-size="9" font-weight="600">Memory Store</text>
+
+<rect x="165" y="230" width="140" height="38" rx="6" fill="#0f172a" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="165" y="230" width="140" height="38" rx="6" fill="rgba(76,29,149,0.3)"/>
+<text x="235" y="254" fill="#a78bfa" font-size="10" text-anchor="middle" font-weight="600">Session Memory</text>
+
+<rect x="350" y="230" width="140" height="38" rx="6" fill="#0f172a" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="350" y="230" width="140" height="38" rx="6" fill="rgba(76,29,149,0.3)"/>
+<text x="420" y="254" fill="#a78bfa" font-size="10" text-anchor="middle" font-weight="600">Project Memory</text>
+
+<rect x="535" y="230" width="125" height="38" rx="6" fill="#0f172a" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="535" y="230" width="125" height="38" rx="6" fill="rgba(76,29,149,0.3)"/>
+<text x="597" y="254" fill="#a78bfa" font-size="10" text-anchor="middle" font-weight="600">Long-Term</text>
+
+<text x="680" y="254" fill="#64748b" font-size="8">Room memory_entry</text>
+
+<!-- Arrows into tiers -->
+<line x1="235" y1="195" x2="235" y2="226" stroke="#a78bfa" stroke-width="1" marker-end="url(#arrowViolet)"/>
+<line x1="410" y1="195" x2="420" y2="226" stroke="#a78bfa" stroke-width="1" marker-end="url(#arrowViolet)"/>
+<line x1="410" y1="195" x2="597" y2="226" stroke="#a78bfa" stroke-width="1" marker-end="url(#arrowViolet)"/>
+
+<line x1="410" y1="280" x2="410" y2="315" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arrowViolet)"/>
+
+<!-- Stage 4: Knowledge Graph (amber) -->
+<rect x="280" y="320" width="260" height="50" rx="8" fill="#0f172a" stroke="#fbbf24" stroke-width="1.5"/>
+<rect x="280" y="320" width="260" height="50" rx="8" fill="rgba(120,53,15,0.3)"/>
+<text x="410" y="340" fill="#fbbf24" font-size="11" text-anchor="middle" font-weight="600">Knowledge Graph</text>
+<text x="410" y="356" fill="#64748b" font-size="8" text-anchor="middle">extract entities &amp; relationships</text>
+<text x="410" y="368" fill="#475569" font-size="7" text-anchor="middle">graph_entity + graph_edge (Room)</text>
+
+<line x1="410" y1="370" x2="410" y2="405" stroke="#fbbf24" stroke-width="1.2" marker-end="url(#arrowAmber)"/>
+
+<!-- Stage 5: Index Update (cyan) -->
+<rect x="200" y="410" width="420" height="62" rx="8" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="5,2"/>
+<text x="220" y="428" fill="#22d3ee" font-size="9" font-weight="600">Index Update</text>
+
+<rect x="215" y="438" width="180" height="28" rx="5" fill="#0f172a" stroke="#22d3ee" stroke-width="1"/>
+<rect x="215" y="438" width="180" height="28" rx="5" fill="rgba(8,51,68,0.3)"/>
+<text x="305" y="457" fill="#22d3ee" font-size="9" text-anchor="middle">Vector Index</text>
+
+<rect x="425" y="438" width="180" height="28" rx="5" fill="#0f172a" stroke="#22d3ee" stroke-width="1"/>
+<rect x="425" y="438" width="180" height="28" rx="5" fill="rgba(8,51,68,0.3)"/>
+<text x="515" y="457" fill="#22d3ee" font-size="9" text-anchor="middle">FTS Index</text>
+
+<line x1="410" y1="472" x2="410" y2="505" stroke="#22d3ee" stroke-width="1.2" marker-end="url(#arrowCyan)"/>
+
+<!-- Stage 6: Semantic Search (emerald) -->
+<rect x="310" y="510" width="200" height="44" rx="8" fill="#0f172a" stroke="#34d399" stroke-width="1.5"/>
+<rect x="310" y="510" width="200" height="44" rx="8" fill="rgba(6,78,59,0.4)"/>
+<text x="410" y="528" fill="#34d399" font-size="11" text-anchor="middle" font-weight="600">Semantic Search</text>
+<text x="410" y="544" fill="#64748b" font-size="8" text-anchor="middle">query vector + FTS indexes</text>
+
+<line x1="410" y1="554" x2="410" y2="585" stroke="#34d399" stroke-width="1.2" marker-end="url(#arrowEmerald)"/>
+
+<!-- Stage 7: Recall Ranking (violet) -->
+<rect x="310" y="590" width="200" height="38" rx="8" fill="#0f172a" stroke="#a78bfa" stroke-width="1.5"/>
+<rect x="310" y="590" width="200" height="38" rx="8" fill="rgba(76,29,149,0.4)"/>
+<text x="410" y="614" fill="#a78bfa" font-size="11" text-anchor="middle" font-weight="600">Recall Ranking</text>
+
+<line x1="410" y1="628" x2="410" y2="655" stroke="#a78bfa" stroke-width="1.2" marker-end="url(#arrowViolet)"/>
+
+<!-- Stage 8: Response Assembly (cyan) -->
+<rect x="310" y="660" width="200" height="38" rx="8" fill="#0f172a" stroke="#22d3ee" stroke-width="1.5"/>
+<rect x="310" y="660" width="200" height="38" rx="8" fill="rgba(8,51,68,0.4)"/>
+<text x="410" y="684" fill="#22d3ee" font-size="11" text-anchor="middle" font-weight="600">Response Assembly</text>
+
+<!-- Side annotations -->
+<text x="30" y="248" fill="#64748b" font-size="8">scope-based</text>
+<text x="30" y="258" fill="#64748b" font-size="8">routing</text>
+<text x="760" y="305" fill="#475569" font-size="7">FR-M014/M015</text>
+<text x="760" y="395" fill="#475569" font-size="7">TOOL-385/386</text>
+
+<!-- Footer -->
+<text x="440" y="715" fill="#475569" font-size="8" text-anchor="middle">DERIVED from architecture/MEMORY_SYSTEM.md §Memory Flow — no new terminology</text>
+</svg>
+</div>
+</body>
+</html>
