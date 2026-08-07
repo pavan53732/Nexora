@@ -20,7 +20,7 @@ data class Tool(
     val requiresSandbox: Boolean,
     val supportsStreaming: Boolean,
     val supportsCancellation: Boolean,
-    val isIdempotent: Boolean,
+    val isIdempotent: Boolean, // canonical: architecture/TOOL_SYSTEM.md `Tool` interface (FR-AS-007)
     val cacheTtlMs: Long,
     val configSchemaRef: String?,
     val health: ToolHealth,

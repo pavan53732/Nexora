@@ -519,12 +519,22 @@ append-only `permission_audit_log`, whose canonical event schema is defined abov
 
 ## Permission Audit Trail
 
-All permission and authorization-gate events are written to `permission_audit_log`.
-This log cannot be edited or deleted by agents, tools, or plugins. It supports:
+All permission and authorization-gate events are written to `permission_audit_log`
+(canonical schema: `specs/DATABASE_SCHEMA.md`). This log cannot be edited or deleted by
+agents, tools, or plugins. It supports:
 
 - Filtering by workspace, agent, or time range.
 - Export for compliance review.
-- Retention policy: 90 days, auto-purged.
+- **Retention:** `permission_audit_log` is the authoritative, **non-evictable** audit
+  trail retained for legal/compliance review. A separate *operational* audit view MAY
+  surface a 90-day rolling window for UX filtering and routine review, but that derived
+  view MUST NOT delete or mutate the canonical rows — any purge path preserves the source
+  (copy-to-cold-storage or a `purgeEligible` flag on the derived view, never `DELETE` from
+  `permission_audit_log`). This reconciles the earlier "90-day auto-purged" text with the
+  schema's "legal retention / non-evictable" rule.
+- Exactly-once recovery depends on a separate append-only `execution_replay` log
+  (`specs/DATABASE_SCHEMA.md`) that records completed tool calls; it is distinct from the
+  permission audit trail.
 
 ## Plugin Permission Manifest
 

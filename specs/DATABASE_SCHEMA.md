@@ -12,10 +12,25 @@
 
 # Application Database Schema — Nexora
 
-Nexora persists all durable runtime, memory, security, and execution state in a single
-Room-backed SQLite database (`nexora.db`, version 1 at specification-closure). Every table
-below is authoritative. Entity lifecycles are owned by their respective state machines; this
-document defines only storage shape.
+Nexora persists durable state across three coordinated stores. **Room** (`nexora.db`)
+is the authoritative *structured/relational* store and owns the tables defined below.
+Two additional stores are explicitly delegated and are NOT redefined here:
+
+- **DataStore** — key/value preferences and policy configuration: user preferences
+  (FR-M013), provider/plugin settings, and the mutable permission policy stores
+  (`security/PermissionModel.md` §Policy Stores). Owned by `architecture/MEMORY_SYSTEM.md`
+  and `security/PermissionModel.md`.
+- **Sandbox workspace VFS** (`architecture/SANDBOX.md`) — large binary/streaming artifacts
+  and process state that are impractical to relationalize: workspace `files/`, terminal
+  sessions/history, `tasks/` checkpoints, `env/` config, `logs/`, `memory/` blobs, and
+  `file_version` blobs under `files/.history/`. The Room tables `file_version`,
+  `context_snapshot`, and `reasoning_summary` hold *references* to these blobs, not the
+  bytes themselves.
+
+Every table below is authoritative for its store. Entity lifecycles are owned by their
+respective state machines; this document defines only storage shape. The Room schema is
+the single source of truth for relational columns; subsystem docs reference these tables
+by name but MUST NOT redefine their columns.
 
 ## Conventions
 
@@ -107,6 +122,37 @@ document defines only storage shape.
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
 
+### `execution_replay` (append-only)
+
+Compact, durable replay log that makes exactly-once recovery representable end-to-end
+(FR-AS-007 / NFR-REL-012). It records every *completed* tool call so recovery can replay
+only uncompleted calls and reconcile non-idempotent in-flight calls from durable history.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| replayId | TEXT PK | |
+| executionId | TEXT FK → execution.executionId | |
+| toolCallId | TEXT | Correlates to `tool_call.toolCallId` |
+| workspaceId | TEXT FK | |
+| correlationId | TEXT | |
+| toolId | TEXT | |
+| inputHash | TEXT | Stable hash of normalized parameters (dedupe key) |
+| idempotent | INTEGER | 0/1 — mirrors `Tool.isIdempotent` at call time |
+| resultRef | TEXT | Reference to `tool_call.resultJson` / outcome |
+| status | TEXT | Maps ToolInvocationStatus at completion |
+| occurredAt | TEXT | |
+
+> **Retention reconciliation:** `permission_audit_log` is the authoritative audit trail
+> and is **non-evictable** for legal/compliance review. The 90-day auto-purge described
+> in `security/PermissionModel.md` §Permission Audit Trail and mirrored in
+> `docs/SANDBOX_DEPTH.md` / `specs/PIPES.md` applies ONLY to a separate, derived
+> *operational* audit view used for UX filtering and routine review — it MUST NOT delete
+> or mutate the canonical `permission_audit_log` rows. Any auto-purge path MUST preserve
+> the source rows (e.g., copy-to-cold-storage or mark a `purgeEligible` flag on the
+> derived view, never `DELETE` from `permission_audit_log`). This resolves the prior
+> contradiction between the "legal retention / non-evictable" schema and the "90-day
+> auto-purged" policy text.
+
 ---
 
 ## Tool & Provider
@@ -122,6 +168,7 @@ document defines only storage shape.
 | executionId | TEXT NULL FK → execution.executionId | |
 | parametersJson | TEXT | |
 | status | TEXT | Maps ToolInvocationStatus |
+| idempotent | INTEGER | 0/1 — mirrors `Tool.isIdempotent` at call time (FR-AS-007) |
 | resultJson | TEXT NULL | |
 | startedAt | TEXT | |
 | completedAt | TEXT NULL | |
@@ -326,7 +373,8 @@ document defines only storage shape.
 | context_snapshot | Task/execution evidence window | With execution |
 | reasoning_summary | Workspace execution-history retention | With workspace |
 | inference_stream | Identity + lineage + terminal outcome only | Coalesced deltas not retained indefinitely |
-| permission_audit_log | Append-only; legal retention | None (audit) |
+| permission_audit_log | Append-only; **non-evictable** by default — retained for legal/compliance review (see retention rule below) | None (audit) |
+| execution_replay | Append-only; bounded by execution/workspace retention | With execution |
 | execution / task / workflow | Until workspace archival | With workspace |
 | provider / plugin / agent / instance | Until removal | With entity |
 

@@ -134,7 +134,9 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
   cannot read the coordinator's or siblings' state.
 - **Enforcement:** sub-sandboxes inherit workspace limits split evenly; artifact
   promotion is permissioned (extend PermissionModel with `artifact:read` scope in
-  Phase 5).
+  Phase 5). All decisions append-only to `permission_audit_log` (non-evictable canonical
+  trail; a derived 90-day operational view is permitted for UX filtering — see
+  `security/PermissionModel.md` §Permission Audit Trail).
 
 ### 3.3 Prompt-Injection Containment
 - **What:** Untrusted content (web pages, downloaded files, user-provided docs) is

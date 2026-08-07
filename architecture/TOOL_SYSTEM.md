@@ -31,6 +31,7 @@ interface Tool {
     val requiredPermissions: List<String> // canonical PermissionScope IDs
     val timeout: Duration
     val requiresSandbox: Boolean
+    val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery
     val version: String
 
     suspend fun execute(params: JsonObject, context: ToolContext): ToolResult

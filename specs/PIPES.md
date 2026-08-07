@@ -134,7 +134,7 @@ Broadcast is a coordinator-only operation for fan-out announcements (e.g., "work
 | Untrusted payloads | All inbound payloads wrapped as untrusted context segments (FR-CM-006); tool calls inside payloads validated against the registry before execution (TM-025) |
 | Auto-approval classifier | The optional TFLite classifier (PermissionModel §Auto-Approval Classifier) can `DENY` a pipe delegation even when the acceptance mode would allow it |
 | Egress confinement | Pipe sockets connect only to the paired endpoint (NFR-SEC-012 network confinement applied to pipe clients); discovery sockets are mDNS-only |
-| Audit | Every pipe event → `permission_audit_log`-adjacent pipe audit stream (FR-TL015), 90-day retention |
+| Audit | Every pipe event → `permission_audit_log`-adjacent pipe audit stream (FR-TL015). The canonical `permission_audit_log` is non-evictable; a derived 90-day operational view may be surfaced for routine review but MUST NOT delete/mutate the source rows (see `security/PermissionModel.md` §Permission Audit Trail) |
 
 ## 9. Failure Handling (FR-MI-009)
 
