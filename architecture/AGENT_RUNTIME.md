@@ -135,6 +135,19 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
 - Reasoning and repair remain inside explicit token/call/time/cost budgets.
 - Durable reasoning output is a redacted `ReasoningSummary`, not unrestricted private chain-of-thought.
 
+### Semantic Progress & Anti-Replay (mandated by ADR-0009; mirrored in AUTONOMY_STABILITY.md §9.5)
+
+- Syntactic loop detection (n=2 identical action+argument repeat) is a **floor**, not a ceiling.
+- Each iteration, before `saveCheckpoint`, Agent Runtime MUST compute a semantic `ProgressSignal`
+  over the `ContextSnapshot` working-state lineage (test delta, file-change delta,
+  new-evidence delta, error-category shift). If `ProgressSignal == 0` over N=3
+  consecutive iterations, the turn is escalated via §3's escalation path.
+- Each task carries a task-scoped **failure ledger** `{toolId, errorSignature, count}`.
+  After K=3 identical signatures on a single tool within the task, Agent Runtime
+  MUST NOT re-issue that tool with the same arguments on the next turn. The ledger
+  is **task-scoped only**; global `Tool` registry descriptors are never mutated.
+
+
 ## Agent State
 
 ```kotlin

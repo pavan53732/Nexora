@@ -21,6 +21,7 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | **Queued** | Dependencies satisfied; placed in the agent's execution queue. |
 | **Running** | Agent is actively executing the task. |
 | **Blocked** | Execution stalled due to an unresolved dependency or resource lock. |
+| **BlockedAwaitingInput** | Stalled due to loop escalation or missing capability; awaiting user clarification/input. |
 | **WaitingApproval** | Task produced an action requiring human approval. |
 | **Completed** | Terminal state — task finished successfully. |
 | **Failed** | Terminal state — non-retryable failure. |
@@ -36,6 +37,8 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | `start()` | Queued / RetryPending | Running | Agent available |
 | `block(dependency)` | Running | Blocked | Dependency not yet completed |
 | `unblock()` | Blocked | Running | Dependency resolved |
+| `requestEscalation(question)` | Running | BlockedAwaitingInput | Loop escalation triggered or capability gap identified |
+| `resolveEscalation(answer)` | BlockedAwaitingInput | Running | User input received; resumes from checkpoint |
 | `requestApproval()` | Running | WaitingApproval | Action exceeds autonomy scope |
 | `approve()` | WaitingApproval | Running | — |
 | `complete()` | Running | Completed | Result validated |
@@ -49,6 +52,7 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 - **Draft → Running** — must submit and enqueue first.
 - **Completed → Running** — terminal state; create a new task.
 - **Queued → Completed** — task must pass through Running.
+- **BlockedAwaitingInput → Completed** — task must resolve escalation input and return to Running first.
 - **Pending → RetryPending** — task has never attempted execution.
 
 ## State Diagram
@@ -62,6 +66,8 @@ stateDiagram-v2
     Queued --> Running : start()
     Running --> Blocked : block(dependency)
     Blocked --> Running : unblock()
+    Running --> BlockedAwaitingInput : requestEscalation(question)
+    BlockedAwaitingInput --> Running : resolveEscalation(answer)
     Running --> WaitingApproval : requestApproval()
     WaitingApproval --> Running : approve()
     Running --> Completed : complete()
@@ -77,6 +83,7 @@ stateDiagram-v2
     Queued --> Cancelled : cancel()
     Running --> Cancelled : cancel()
     Blocked --> Cancelled : cancel()
+    BlockedAwaitingInput --> Cancelled : cancel()
     WaitingApproval --> Cancelled : cancel()
     RetryPending --> Cancelled : cancel()
     Cancelled --> [*]

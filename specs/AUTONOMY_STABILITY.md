@@ -62,10 +62,13 @@ Repair decision (bounded):
 | Tokens (per session) | Pause → notify user → offer: raise budget, switch provider, or continue with summarization (CONTEXT_MANAGEMENT §3) |
 | Steps (per task) | Pause → notify → offer: continue with checkpoint, or mark incomplete |
 | Wall-clock time | Same — never kill silently |
-| Cost (per task) | Notify with spent/remaining; require explicit confirmation to continue |
+| Cost (per task) | **Not an autonomous-stop gate** (ADR-0009). Cost notifications remain informational only; execution continues until a semantic progress failure, a safety violation, or explicit user interruption. |
 
 Every exhaustion path ends in a **user-visible state** (notification + task status),
-never a silent stop.
+never a silent stop. Cost is intentionally out of scope as a termination signal —
+resource pressure is observable (PERFORMANCE_BUDGET.md) and the user may interrupt
+at any time, but the agent never stops purely because a token or cost limit was
+reached while genuine progress is still being made.
 
 ## 4. Closed-Loop Learning (FR-AS-004)
 
@@ -166,6 +169,36 @@ isolation). Reinforced here:
 - **Every** external call (provider, network, sandbox process) has a deadline; no
   unbounded waits.
 - Timeouts are classified retryable/non-retryable (NFR-REL-003) and feed plan repair (§1).
+
+## 9.5 Semantic Progress & Anti-Replay (new, mandated by ADR-0009)
+
+**State-Delta Evaluation — the "Treadmill" Detector.** Syntactic loop detection
+(n=2 identical action+argument repeat) is necessary but insufficient: an agent can
+alternate between different-but-equally-ineffective tools and still make zero real
+progress. Agent Runtime MUST additionally evaluate a **semantic `ProgressSignal`**
+over each iteration, computed by the Context Builder from the `ContextSnapshot`
+working-state lineage:
+
+- Test-suite pass count delta (FR-EL-008 verification gates)
+- Workspace file change delta (non-equivalence hash of changed paths)
+- New evidence / artifact count delta (CONTEXT_MANAGEMENT §7)
+- Error category shift (is the failure *different*, or just the same one rehashed?)
+
+If `ProgressSignal == 0` over **N=3 consecutive iterations** — even when the actions
+differ — Agent Runtime MUST classify the run as escalated and route through §3's
+escalation path (`e. Escalate to user`) OR apply a strategy mutation, never an
+unconditionally silent retry. This closes the "treadmill" class of infinite loop.
+
+**Task-Scoped Failure Ledger.** Each task's working context carries a compact,
+durable failure ledger: `{toolId, errorSignature, count, firstSeenAt}`. After
+**K=3 identical signature repetitions** on the same tool within one task, Agent
+Runtime MUST enforce strategy mutation for that task on the (4) retry path
+("Repair step — same plan, new approach"); it is **forbidden** to re-issue that
+tool with the same args on the next attempt. The ledger is **task-scoped only** —
+it NEVER mutates the global `Tool` registry descriptor (`trust: BROKEN` is the
+canonical, registry-level signal, separate from this ephemeral task ledger).
+This prevents tool-immutability violations while still forcing the agent off a
+failing tool within the task.
 
 ## 10. Fault-Injection Testing (FR-AS-009)
 

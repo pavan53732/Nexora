@@ -15,6 +15,7 @@
 | `OPEN` | Typed events may be accepted and committed in sequence. |
 | `BACKPRESSURED` | Consumer capacity reached; producer is suspended or deltas are safely coalesced. |
 | `RECONNECTING` | Recoverable transport loss; bounded native resume is in progress. |
+| `STALLED` | No semantic event received within the stalled-stream timeout (first-byte or inter-token). |
 | `COMPLETED` | Exactly one successful terminal event committed; terminal. |
 | `FAILED` | Canonical failure committed, including partial-output metadata; terminal. |
 | `CANCELLED` | Cancellation committed and propagated; terminal. |
@@ -28,10 +29,12 @@
 | `capacityExceeded` | `OPEN` | `BACKPRESSURED` | Buffer high-water mark reached; never drop terminal/tool events. |
 | `capacityAvailable` | `BACKPRESSURED` | `OPEN` | Queue below low-water mark; ordering preserved. |
 | `transportLost` | `OPEN` / `BACKPRESSURED` | `RECONNECTING` | Native resume supported, cursor valid, retry budget remains. |
+| `stalled` | `CONNECTING` / `OPEN` / `BACKPRESSURED` / `RECONNECTING` | `STALLED` | No first-byte within deadline OR no semantic event within inter-token window. |
 | `resumed` | `RECONNECTING` | `OPEN` | Same `streamId`; next sequence follows last committed sequence. |
 | `resumeRejected` | `RECONNECTING` | `FAILED` | Commit `NXR-4014`; partial output remains explicitly partial. |
 | `terminal` | `OPEN` / `BACKPRESSURED` | `COMPLETED` | Terminal sequence contiguous; usage reconciled; no incomplete tool call. |
-| `fail` | `CONNECTING` / `OPEN` / `BACKPRESSURED` / `RECONNECTING` | `FAILED` | Canonical error and partial-output status committed. |
+| `fail` | `CONNECTING` / `OPEN` / `BACKPRESSURED` / `RECONNECTING` / `STALLED` | `FAILED` | Canonical error and partial-output status committed. |
+| `failover` | `STALLED` | `RESTART_WITH_LINEAGE` | Abandon stalled stream; emit new stream with `priorStreamId`; no byte splicing. |
 | `cancel` | Any nonterminal | `CANCELLED` | Cancellation propagates Agent → Router → Adapter within budget. |
 
 ## Invariants
@@ -48,6 +51,8 @@
 10. Stream events are at-least-once; consumers deduplicate by `(streamId, sequence)`.
 11. Persisted sequence/cursor state is authoritative after restart.
 12. Provider health changes may affect future routing but never rewrite committed stream history.
+13. Stalled streams abandon without appending output to the prior `streamId`; failover emits a new stream with `priorStreamId`.
+14. A different provider always uses `RESTART_WITH_LINEAGE`; cross-provider byte splicing is prohibited; stalled failover is one such lineage-bounded restart.
 
 ## Backpressure Contract
 
@@ -63,3 +68,12 @@
 - `RESTART_WITH_LINEAGE`: create a new request/stream; include committed context and `priorStreamId`; do not claim byte-continuation.
 - `NONE`: fail explicitly with partial output.
 - A different provider always uses `RESTART_WITH_LINEAGE`; cross-provider byte splicing is prohibited.
+- Stalled failover is one such lineage-bounded restart: same committed context, same `priorStreamId`, new provider when configured.
+
+## Stalled-Stream Timeouts
+
+| Timeout | Applies from | Deadline | Effect |
+|---|---|---|---|
+| `firstByteTimeout` | Stream enter | 12s | Transition to `STALLED`; triggers `failover`. |
+| `interTokenTimeout` | last semantic `StreamEvent` committed | 8s | Transition to `STALLED`; triggers `failover`. |
+| `stalledFailoverBudget` | consecutive `STALLED` states | 2 attempts total | Exceeded consecutive stalls commit `FAILED` with `NXR-4015`. |
