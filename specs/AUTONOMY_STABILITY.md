@@ -192,13 +192,16 @@ unconditionally silent retry. This closes the "treadmill" class of infinite loop
 **Task-Scoped Failure Ledger.** Each task's working context carries a compact,
 durable failure ledger: `{toolId, errorSignature, count, firstSeenAt}`. After
 **K=3 identical signature repetitions** on the same tool within one task, Agent
-Runtime MUST enforce strategy mutation for that task on the (4) retry path
-("Repair step — same plan, new approach"); it is **forbidden** to re-issue that
-tool with the same args on the next attempt. The ledger is **task-scoped only** —
-it NEVER mutates the global `Tool` registry descriptor (`trust: BROKEN` is the
-canonical, registry-level signal, separate from this ephemeral task ledger).
+Runtime **MUST** enforce **strategy mutation**: the next invocation **MUST select a
+different `toolId`** (not merely different arguments); the blocked `toolId` is
+recorded in the ledger as `BLACKLISTED_UNTIL_TASK_END`. It is **forbidden** to re-issue
+the blacklisted tool (regardless of parameter changes) on any subsequent turn within
+the same task. The ledger is **task-scoped only**; global `Tool` registry descriptors
+and `ToolStatus` are never mutated (`TOOL_SYSTEM.md` §ToolStatus Lifecycle owns
+descriptor health, explicitly excluding per-call failures — see NXR-2004 recovery).
 This prevents tool-immutability violations while still forcing the agent off a
-failing tool within the task.
+failing tool within the task — and the `ToolReplaced` history entry records the
+substitution for the final report.
 
 ## 10. Fault-Injection Testing (FR-AS-009)
 

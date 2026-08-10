@@ -143,9 +143,16 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
   new-evidence delta, error-category shift). If `ProgressSignal == 0` over N=3
   consecutive iterations, the turn is escalated via §3's escalation path.
 - Each task carries a task-scoped **failure ledger** `{toolId, errorSignature, count}`.
-  After K=3 identical signatures on a single tool within the task, Agent Runtime
-  MUST NOT re-issue that tool with the same arguments on the next turn. The ledger
-  is **task-scoped only**; global `Tool` registry descriptors are never mutated.
+  After K=3 identical signatures on a single tool within the task, Agent Runtime **MUST**
+  enforce **strategy mutation**: the next invocation **MUST select a different `toolId`**
+  (not merely different arguments); the blocked `toolId` is recorded in the ledger as
+  `BLACKLISTED_UNTIL_TASK_END`. It is **forbidden** to re-issue the blacklisted tool
+  (regardless of parameter changes) on any subsequent turn within the same task. The
+  ledger is **task-scoped only**; global `Tool` registry descriptors and `ToolStatus` are
+  never mutated (`TOOL_SYSTEM.md` §ToolStatus Lifecycle owns descriptor health, explicitly
+  excluding per-call failures — see NXR-2004 recovery).
+- `ToolReplaced` (old: `blockedToolId`, `replacementToolId`, `newSignature`) is logged in
+  `AgentStep` history when a blacklisted tool is substituted with an alternative selection.
 
 
 ## Agent State
