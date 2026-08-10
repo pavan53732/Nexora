@@ -222,6 +222,7 @@ defined in `models/Execution.md`:
 - **Recoverable interruption before a terminal state:** retain the same `executionId`; increment `version`; retain `correlationId`; resume `RUNNING` from checkpoint.
 - **Committed terminal `FAILED`/`CANCELLED`/`COMPLETED`:** never transition back to `RUNNING`. Explicit retry/restart creates a new `executionId`; parent/prior execution linkage and correlation policy preserved.
 - **Unrecoverable failure:** commit `FAILED`; no same-identity resume.
+- **Android ANR (Application Not Responding):** `AgentExecutionService` MUST commit a checkpoint on the 6 s / 10 s ANR threshold (foreground / background), emit `TASK_SUSPENDED`, and suspend execution. Service restart or watchdog resumes from the checkpoint without user-visible crash data (NFR-REL-002, ADR-0009 Decision #7). The `executionId` and `correlationId` are preserved across the ANR/resume cycle; `version` increments at resume.
 
 ### Phase Mapping
 

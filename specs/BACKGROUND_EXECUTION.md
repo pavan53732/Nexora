@@ -85,6 +85,12 @@ surfaces in the workflow engine (Phase 8 plugin scheduling).
 
 - Agent state is **checkpointed periodically** during execution (default every 30 s,
   reduced on low battery — [LIFECYCLES §7](../docs/LIFECYCLES.md)).
+- **ANR safeguard:** if the Android main thread is blocked beyond the platform ANR
+  threshold (6 s foreground / 10 s background per Android API 34+), `AgentExecutionService`
+  MUST emit a `TASK_SUSPENDED` event, transactionally commit a checkpoint via `saveCheckpoint`,
+  and release the main dispatcher — the foreground coroutine holds a CPU wake lock but must
+  never block the main thread. Agents resume from the checkpoint on service restart
+  (NFR-REL-002, ADR-0009 Decision #7).
 - On app kill or device restart, `BootReceiver` checks for incomplete executions,
   restarts `AgentExecutionService`, and agents **resume from their last checkpoint**
   with 100% state fidelity (NFR-REL-002, FR-A011).
