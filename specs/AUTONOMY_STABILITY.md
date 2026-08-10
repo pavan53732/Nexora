@@ -163,12 +163,25 @@ critical tasks).
 
 ## 9. Timeout & Concurrency Discipline
 
-Already strong (TOOL_SYSTEM `timeout`, FR-TL002/005, FR-A015, NXR-2002, crash
-isolation). Reinforced here:
-
 - **Every** external call (provider, network, sandbox process) has a deadline; no
   unbounded waits.
 - Timeouts are classified retryable/non-retryable (NFR-REL-003) and feed plan repair (§1).
+
+### 9.2 Retry Policy (NFR-REL-003)
+
+Transient failures (NFR-REL-003 retryable class) MUST retry with exponential
+backoff + full jitter:
+
+```
+interval = base × 2^attempt × random(0.5…1.5)
+```
+
+- **base**: 1 s for provider calls, 5 s for sandbox process calls (FR-TL005)
+- **attempts**: capped at 3 per [NFR-REL-003](../requirements/NFR.md) (NFR-REL-003 row)
+- After 3 identical failures: route through plan repair (§1 item **b**) or task-scoped
+  failure ledger `BLACKLISTED_UNTIL_TASK_END` (§9.5); never an unconditional retry.
+- Non-retryable timeouts commit terminal `FAILED` with `latestError` and surface to
+  the degradation ladder (§8) for visibility — no silent continuation.
 
 ## 9.5 Semantic Progress & Anti-Replay (new, mandated by ADR-0009)
 

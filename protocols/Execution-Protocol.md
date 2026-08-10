@@ -51,8 +51,13 @@ data class ExecutionRecoveryCommand(
     val correlationId: String,
     val expectedVersion: Long,
     val idempotencyKey: String,
-    val escalationAnswer: JsonObject? = null  // populated for ESCALATION recovery (overloads RESUME when Option A)
+    val escalationAnswer: JsonObject? = null  // populated for ESCALATION recovery; deprecated overload field (see Note below)
 )
+
+> **Note (deprecated Option A):** The `escalationAnswer` field on `ExecutionRecoveryCommand`
+> exists for backward-compatible `RESUME` overloading. New implementations MUST use the dedicated
+> `ESCALATION` operation and `EscalationRecoveryCommand` data class instead. `RESUME` with a
+> non-null `escalationAnswer` is retained for legacy wire compatibility only.
 
 data class ExecutionRecoveryCommitted(
     val operation: ExecutionRecoveryOperation,
