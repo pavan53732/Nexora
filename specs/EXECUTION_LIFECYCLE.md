@@ -66,7 +66,7 @@ For each task:
   3. Determine TOOLS (from skills + task needs)      -> ToolRegistry (requiredTools)
   4. Determine PROVIDER/MODEL (per task)             -> ProviderRegistry (profiles)
   5. Determine PLUGINS/DEPENDENCIES (missing pieces) -> PluginManager + Sandbox
-  6. Validate: agent possesses skill; tool refs valid; permissions resolvable
+  6. Validate: agent possesses skill; tool refs valid; permissions resolvable — if any fails, escalate to the user via `BlockedAwaitingInput` (TaskLifecycle `requestEscalation`); the planner does not silently degrade authority.
 ```
 
 Skills are the **primary selection axis** (ADR-0007): the planner reasons in expertise
@@ -143,6 +143,7 @@ pipeline returns to the relevant earlier stage (bounded fix loop, FR-EL-013).
 | Build/test failure | Auto-fix loop (bounded): analyze error → fix → rebuild; fall back to human approval after N iterations |
 | Non-retryable | Fail task, save checkpoint, notify, offer retry |
 | Approval required | Suspend at approval gate (WaitingApproval), resume on approve |
+| Escalation / missing capability / clarification needed | Suspend at `BlockedAwaitingInput` gate (TaskLifecycle `requestEscalation`); emit user-facing clarification prompt; preserve checkpoint; resume on user input (`resolveEscalation`). |
 | Provider failure | Provider failover via ProviderRouter (health-based) |
 | Sandbox resource limit | Graceful termination + partial results (NXR-7xxx) |
 
