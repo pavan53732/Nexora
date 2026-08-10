@@ -71,7 +71,8 @@ data class ResumeExecutionRequest(
     val checkpointId: String,
     val correlationId: String,
     val expectedVersion: Long,
-    val idempotencyKey: String
+    val idempotencyKey: String,
+    val escalationAnswer: JsonObject? = null  // set when resuming from BlockedAwaitingInput
 )
 
 data class RetryExecutionRequest(

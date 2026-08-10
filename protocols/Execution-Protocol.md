@@ -40,7 +40,8 @@ data class ExecutionRecoveryCommand(
     val checkpointId: String?,
     val correlationId: String,
     val expectedVersion: Long,
-    val idempotencyKey: String
+    val idempotencyKey: String,
+    val escalationAnswer: JsonObject? = null  // populated for resolveEscalation resumes (Option A: overloads RESUME)
 )
 
 data class ExecutionRecoveryCommitted(

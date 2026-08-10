@@ -34,6 +34,7 @@ enum class TaskStatus {
     QUEUED,
     RUNNING,
     BLOCKED,
+    BLOCKED_AWAITING_INPUT,
     WAITING_APPROVAL,
     COMPLETED,
     FAILED,
