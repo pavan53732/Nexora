@@ -37,7 +37,7 @@ Every claim must be backed by the actual file contents, cited as `path:line`.
   file's status without justification.
 - Table format: consistent column counts, no doubled-pipe (`||`) defects
   (a known patch-tool artifact — scan for it after every edit).
-- IDs: `FR-XXX-NNN`, `NFR-XXX-NNN`, `TOOL-NNN`, `TM-NNN`, `DL-NNN`,
+- IDs: `FR-<PREFIX>-NNN` (e.g. `FR-W001`), `NFR-<PREFIX>-NNN` (e.g. `NFR-PERF-001`), `TOOL-NNN`, `TM-NNN`, `DL-NNN`,
   `ADR-NNNN` — use the existing naming scheme. Verify IDs exist before
   citing them.
 - Links: repository-relative (`../architecture/RUNTIME.md`). From
