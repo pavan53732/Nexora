@@ -11,6 +11,7 @@
 - A derived document projects identity, shape, capability, or integration data from canonical sources.
 - An ADR records a decision and its rationale; it does not replace the implementation specification unless explicitly stated.
 - High-level overviews and diagrams are non-normative unless explicitly marked canonical.
+- Diagram artifacts use two tiers: (1) Mermaid code-block diagrams in ADRs and design docs follow the DL-011 practice; (2) the SVG/HTML overview visuals under `docs/diagrams/` are DERIVED, non-normative design-doc visuals added by DL-045..DL-047. DL-011 remains the historical record for the Mermaid code-block standard; it is not amended here.
 
 ## Source Map
 

@@ -101,7 +101,7 @@ data class ToolMetadata(
 | 28 | **Project Introspection** | introspect_api, introspect_database, introspect_config, introspect_build, introspect_ui, introspect_domain, introspect_infrastructure — pre-flight readers that scan the workspace and populate ProjectContext before planning (FR-CM-009, Path C) | 4 |
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
-> registry of every tool — **350 tools** with stable `TOOL-###` IDs, descriptions, and
+> registry of every tool — **352 tools** (authoritative count in [registry/TOOLS.md](../registry/TOOLS.md)) with stable `TOOL-###` IDs, descriptions, and
 > phases across the 28 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.
