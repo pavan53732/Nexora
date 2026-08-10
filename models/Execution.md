@@ -18,6 +18,7 @@ data class Execution(
     val checkpointId: String?,
     val priorExecutionId: String? = null,
     val latestError: CanonicalErrorEnvelope? = null,
+    val escalationPayload: JsonObject? = null,
     val createdAt: Instant,
     val updatedAt: Instant,
     val completedAt: Instant? = null

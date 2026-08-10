@@ -143,7 +143,7 @@ pipeline returns to the relevant earlier stage (bounded fix loop, FR-EL-013).
 | Build/test failure | Auto-fix loop (bounded): analyze error → fix → rebuild; fall back to human approval after N iterations |
 | Non-retryable | Fail task, save checkpoint, notify, offer retry |
 | Approval required | Suspend at approval gate (WaitingApproval), resume on approve |
-| Escalation / missing capability / clarification needed | Suspend at `BlockedAwaitingInput` gate (TaskLifecycle `requestEscalation`); emit user-facing clarification prompt; preserve checkpoint; resume on user input (`resolveEscalation`). |
+| Escalation / missing capability / clarification needed | Suspend at `BlockedAwaitingInput` gate (TaskLifecycle `requestEscalation`); emit user-facing clarification prompt; preserve checkpoint; resume on user input (`resolveEscalation`) from the checkpoint captured at suspension (same `executionId`; `version` increment per RUNTIME.md §ExecutionStatus Lifecycle). |
 | Provider failure | Provider failover via ProviderRouter (health-based) |
 | Sandbox resource limit | Graceful termination + partial results (NXR-7xxx) |
 
