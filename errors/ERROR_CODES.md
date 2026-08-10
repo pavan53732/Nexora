@@ -138,7 +138,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | NXR-4012 | Provider quota exceeded | Infrastructure | Monthly or daily token quota is exhausted | Notify user; pause generation until quota resets |
 | NXR-4013 | Stream backpressure overflow | Infrastructure | Bounded event queue stayed over capacity beyond deadline | Cancel stream, retain partial output, tune consumer/buffer policy |
 | NXR-4014 | Stream resume rejected | Infrastructure | Resume cursor is unsupported, expired, or mismatched | Keep partial result; restart with lineage only when policy permits |
-| NXR-4015 | Stream sequence gap | Server | Missing sequence cannot be recovered | Fail stream; never synthesize missing content |
+| NXR-4015 | Stream sequence gap | Stalled stream over failover budget (ProviderStreamLifecycle `stalledFailoverBudget`) | Server | Missing sequence cannot be recovered | Fail stream; never synthesize missing content |
 | NXR-4016 | Incomplete streamed Tool call | Client | Tool fragments ended before schema-valid commit | Discard fragments; never execute |
 | NXR-4017 | Stream terminal missing | Infrastructure | Transport closed without canonical terminal event | Commit failure and reconcile usage; never report success |
 

@@ -112,6 +112,13 @@ A different provider always uses `RESTART_WITH_LINEAGE`. Replacement output is n
 appended to the prior stream as if it were byte-continuation. Invalid/expired cursors
 return `NXR-4014`; sequence gaps that cannot be recovered return `NXR-4015`.
 
+> **Stalled-Stream Failover (ADR-0009):** When `ProviderStreamLifecycle` reaches `STALLED`
+> via `firstByteTimeout` or `interTokenTimeout`, the `failover` transition emits a new
+> stream using `RESTART_WITH_LINEAGE` with `priorStreamId` set and the last committed
+> `sequence` carried forward. After `stalledFailoverBudget` consecutive `STALLED` states,
+> the stream commits `NXR-4015` (sequence gap). Cross-provider stale-stream recovery is
+> one such lineage-bounded restart.
+
 ## Usage Audit Record
 
 ```kotlin

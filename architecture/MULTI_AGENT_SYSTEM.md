@@ -240,6 +240,51 @@ max_parallel_agents = min(
 | **File conflict** | A sub-agent holds a **write-lock per file**; a second writer waits, or the coordinator assigns a copy and merges at the end |
 | Sandbox budgets | Workspace limits split across active sub-agents (`FR-S018`); each sub-agent isolated |
 | Result merging | Coordinator merges outputs + execution histories in dependency order |
+| **Deadlock detection** | A waits-for graph over file write-locks + pending delegation futures is monitored by the coordinator; cycles abort the youngest child and report to the Master Agent (FR-MA-005) |
+| **Delegation timeout** | Every delegation carries an explicit deadline; on expiry the coordinator aborts the child, logs `NXR-3011`, and resumes the parent (FR-MA-003) |
+
+#### Deadlock Watchdog Algorithm (ADR-0009, Decision #6)
+
+The `CoordinatorAgent` runs a periodic watchdog coroutine (default interval: 5 s) that
+maintains a **waits-for graph** `W`:
+
+- **Nodes** are active sub-agents in the workspace queue.
+- **Edges** `A → B` exist when `A` is blocked waiting on:
+  - a file write-lock currently held by `B` (from the per-file `ReentrantReadWriteLock`
+    in `ResourceManager`, RUNTIME.md §Resource Manager), or
+  - a delegation `Future` that `B` has not resolved (e.g. `B` is awaiting its own
+    provider stream or a downstream tool commit).
+- A **cycle** in `W` means a deadlock: every agent in the cycle is waiting on another
+  member and none can progress.
+
+On cycle detection:
+
+1. Identify the **youngest** agent in the cycle (lowest `startedAt`).
+2. Abort that agent's execution coroutine, cancel its in-flight tool/stream calls,
+   and release its held write-locks.
+3. Commit an `execution_checkpoint` (BackgroundExecution §3) so its partial work is
+   recoverable.
+4. Log `NXR-3011` (Agent coordination failed) to the audit trail with the cycle path
+   and the aborted agent's `correlationId`.
+5. Promote the **parent** task (the one that delegated to the cycle) out of the
+   resource deadlock by re-planning its subtask assignment (FR-AS-001 Plan Repair,
+   option **c. Re-plan**) — the parent never waits on the aborted child.
+
+The graph is recomputed from authoritative lock-ownership state in `ResourceManager`
+and the delegation futures table in `ExecutionState` (models/Execution.md). Lock
+state is the single source of truth; stale edges from cancelled agents are pruned on
+each sweep.
+
+#### Delegation Timeout Enforcement
+
+Each delegation records a `deadlineAt` timestamp derived from the task's configured
+`timeout` (Toolbox §Timeout Discipline, FR-TL002) plus jitter (ADR-0009 Decision #8).
+If the deadline passes before the delegate reports `COMPLETED` or `FAILED`:
+
+- The coordinator aborts the child (same cleanup path as deadlock).
+- Emits `NXR-3011` with `cause: "delegation_timeout_exceeded"`.
+- Resumes the parent from its last checkpoint with the delegated subtask marked
+  `not-attempted` (FR-AS-005 reporting semantics).
 
 ### SA-4 — Inherited rules (FR-MA-004)
 
