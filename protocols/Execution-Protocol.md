@@ -26,12 +26,22 @@ Orchestration Engine         CheckpointManager          TaskScheduler
 2. **Periodic Checkpointing**: Every 30s, serializes execution frames; `CheckpointManager` commits via ACID SQLite.
 3. **RESUME**: Recoverable interruption resumes same `executionId` with `correlationId` unchanged and `version` incremented.
 4. **RETRY_AFTER_TERMINAL**: Explicit retry after terminal (`FAILED`/`CANCELLED`/`COMPLETED`) creates new `executionId` with `priorExecutionId` linking the terminal predecessor.
-5. **Outcome Roll-up**: Terminal outcomes (`COMPLETED`, `FAILED`, `CANCELLED`) are committed and final; no terminal-to-RUNNING transition.
+5. **ESCALATION**: User answer injected via `resolveEscalation` resumes nonterminal `BlockedAwaitingInput`; `executionId`/`correlationId` retained, `version` incremented. `escalationPayload` (stored on checkpoint) is cleared after resume.
+6. **Outcome Roll-up**: Terminal outcomes (`COMPLETED`, `FAILED`, `CANCELLED`) are committed and final; no terminal-to-RUNNING transition.
 
 ### Recovery Operations
 
 ```kotlin
-enum class ExecutionRecoveryOperation { RESUME, RETRY_AFTER_TERMINAL }
+enum class ExecutionRecoveryOperation { RESUME, RETRY_AFTER_TERMINAL, ESCALATION }
+
+data class EscalationRecoveryCommand(
+    val executionId: String,
+    val checkpointId: String,
+    val correlationId: String,
+    val expectedVersion: Long,
+    val idempotencyKey: String,
+    val escalationAnswer: JsonObject  // populated: user's response to resolveEscalation
+)
 
 data class ExecutionRecoveryCommand(
     val operation: ExecutionRecoveryOperation,
@@ -41,7 +51,7 @@ data class ExecutionRecoveryCommand(
     val correlationId: String,
     val expectedVersion: Long,
     val idempotencyKey: String,
-    val escalationAnswer: JsonObject? = null  // populated for resolveEscalation resumes (Option A: overloads RESUME)
+    val escalationAnswer: JsonObject? = null  // populated for ESCALATION recovery (overloads RESUME when Option A)
 )
 
 data class ExecutionRecoveryCommitted(
