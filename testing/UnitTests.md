@@ -85,3 +85,6 @@ At minimum, unit suites for contract-sensitive modules SHOULD explicitly assert:
 - `UT-REASON-001..003` validate bounded ReasoningPolicy and redacted summaries.
 - `UT-CONTEXT-001..002` validate ContextSnapshot reproducibility and retrieval diversity.
 - `UT-ROUTE-001` validates deterministic capability/budget/privacy-aware routing.
+
+- `UT-CONV-001..006` — conversation checkpoint lifecycle and branch semantics
+- `UT-SKILL-001..006` — skill lifecycle metadata and authorization-boundary semantics

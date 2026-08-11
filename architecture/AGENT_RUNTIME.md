@@ -71,7 +71,9 @@ Inbound message
 → bounded repair or re-plan
 → answer synthesis + claim/evidence validation
 → completion gate
-→ checkpoint + memory curation
+→ execution checkpoint + memory curation
+
+> The checkpoint in this execution loop is an execution checkpoint for recovery. Conversation checkpoint and rollback semantics are owned by `architecture/CONVERSATION_CHECKPOINTS.md`; the two artifacts are not interchangeable.
 ```
 
 A partial `ToolArgumentsDelta` is data, never executable. Only a schema-valid

@@ -68,3 +68,6 @@ Integration suites SHOULD explicitly validate:
 - `IT-STREAM-001..008` validate adapter normalization, backpressure, cancellation, resume, failover lineage, usage, and Tool commit barriers.
 - `IT-REASON-001..004` validate effort routing, verifier/critic, OFF behavior, and bounded repair.
 - `IT-CONTEXT-001..002` validate model-aware ContextSnapshot assembly and resume lineage.
+
+- `IT-CONV-001..007` — conversation checkpoint and branching integration (immutability, source preservation, stale/expired rejection, conflicting mutation rejection, interrupted branch safety, no external side-effect reversal)
+- `IT-SKILL-001..006` — skill registry/runtime integration (validation, acquisition, binding, revocation, automatic selection, permission inheritance)

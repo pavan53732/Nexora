@@ -121,3 +121,11 @@ Plugin SDK, Nexora Hub, tools/providers/agents as plugins.
 
 
 > **S2 — MCP Canonical Status:** MCP adapter contract (`architecture/TOOL_SYSTEM.md` §MCP Client + `protocols/Tool-Protocol.md` §MCP Invocation) is now marked canonical in `docs/CANONICAL_SOURCES.md`. Implementation remains `Phase 5` (`specs/AI_PROVIDERS.md`); registry (`TOOL-397`..`402`) and capability matrix (`TOOL_MATRIX.md`) already synchronized (`G4` commit `8e1e937`). No phase timing change required.
+
+
+## Capability placement decisions
+
+- Conversation checkpoint and non-destructive conversation branching are runtime/session capabilities dependent on conversation persistence and authorization; no implementation phase is claimed until the conversation/session persistence plan assigns one.
+- Execution checkpointing remains Phase 2. Workspace snapshot/rollback remains its existing sandbox phase. These are not conversation rollback.
+- Skill lifecycle completion follows the existing Skill Registry/runtime phases; this documentation decision does not claim implementation.
+- No first-class Command artifact or command phase is established by DEC-12.

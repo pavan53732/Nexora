@@ -56,3 +56,17 @@
 | IT-REASON-004 | IT-REASON | Critic disagreement triggers bounded repair then escalation | Reasoning + Agent | Planned | `evidence/integration/IT-REASON-004/` | 2026-08-06 |
 | IT-CONTEXT-001 | IT-CONTEXT | ContextSnapshot budget accounts for tools/output/reasoning | Context + Provider | Planned | `evidence/integration/IT-CONTEXT-001/` | 2026-08-06 |
 | IT-CONTEXT-002 | IT-CONTEXT | Resume reconstructs identical ContextSnapshot lineage | Context + Memory | Planned | `evidence/integration/IT-CONTEXT-002/` | 2026-08-06 |
+
+| IT-CONV-001 | IT-CONV | Validate immutable conversation checkpoint creation at selected post-turn boundary | Conversation/Session | Planned | `evidence/integration/IT-CONV-001/` | 2026-08-12 |
+| IT-CONV-002 | IT-CONV | Validate non-destructive branch creation preserves source conversation | Conversation/Session | Planned | `evidence/integration/IT-CONV-002/` | 2026-08-12 |
+| IT-CONV-003 | IT-CONV | Reject stale, expired, invalid, or unauthorized checkpoint operations without source mutation | Conversation/Session + Security | Planned | `evidence/integration/IT-CONV-003/` | 2026-08-12 |
+| IT-CONV-004 | IT-CONV | Reject conflicting concurrent conversation mutation during branch request | Conversation/Session | Planned | `evidence/integration/IT-CONV-004/` | 2026-08-12 |
+| IT-CONV-005 | IT-CONV | Recover interrupted branch operation as no branch or one complete branch | Conversation/Session | Planned | `evidence/integration/IT-CONV-005/` | 2026-08-12 |
+| IT-CONV-006 | IT-CONV | Confirm conversation rollback does not restore task, execution, memory, file, workspace, provider, or Git state | Conversation/Session + Runtime | Planned | `evidence/integration/IT-CONV-006/` | 2026-08-12 |
+| IT-CONV-007 | IT-CONV | Confirm conversation rollback does not reverse external side effects | Conversation/Session + Runtime | Planned | `evidence/integration/IT-CONV-007/` | 2026-08-12 |
+| IT-SKILL-001 | IT-SKILL | Validate skill registration and compatibility validation before availability | Skill Registry | Planned | `evidence/integration/IT-SKILL-001/` | 2026-08-12 |
+| IT-SKILL-002 | IT-SKILL | Validate skill acquisition and agent binding preserve registry authority | Skill Registry + Agent Runtime | Planned | `evidence/integration/IT-SKILL-002/` | 2026-08-12 |
+| IT-SKILL-003 | IT-SKILL | Validate automatic skill selection does not require manual user selection | Agent Runtime | Planned | `evidence/integration/IT-SKILL-003/` | 2026-08-12 |
+| IT-SKILL-004 | IT-SKILL | Validate revoked skill blocks new selection without inventing separate permission rules | Skill Registry + Security | Planned | `evidence/integration/IT-SKILL-004/` | 2026-08-12 |
+| IT-SKILL-005 | IT-SKILL | Validate skill use inherits tool authorization and sandbox constraints | Agent Runtime + Tooling + Security | Planned | `evidence/integration/IT-SKILL-005/` | 2026-08-12 |
+| IT-SKILL-006 | IT-SKILL | Validate replacement path is new versioned registration plus explicit compatibility validation | Skill Registry | Planned | `evidence/integration/IT-SKILL-006/` | 2026-08-12 |

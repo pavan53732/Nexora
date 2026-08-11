@@ -21,13 +21,15 @@
 | Single-agent autonomous loop | `architecture/AGENT_RUNTIME.md` | `docs/SYSTEM_DESIGN.md`, `docs/api/Agent-API.md`, `sdk/AgentSDK.md` |
 | Multi-agent coordination | `architecture/MULTI_AGENT_SYSTEM.md` | `protocols/Agent-Protocol.md`, `registry/AGENTS.md`, `registry/AGENT_MATRIX.md` |
 | Workflow graph progression | `architecture/WORKFLOW_ENGINE.md` | `models/Workflow.md`, `state-machines/WorkflowLifecycle.md`, `docs/api/Runtime-API.md` |
+| Conversation checkpoint and rollback semantics | `architecture/CONVERSATION_CHECKPOINTS.md` | `specs/CONVERSATION_CHECKPOINTS.md`, `decisions/DEC-8-conversation-checkpoint-rollback.md`, `decisions/DEC-9-conversation-rollback-operation.md`, `decisions/DEC-10-conversation-checkpoint-ownership.md` |
+| Conversation checkpoint lifecycle | `state-machines/ConversationCheckpointLifecycle.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md` |
 | Checkpoint, recovery, and resume | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md` (§Checkpoint System), `architecture/AGENT_RUNTIME.md` (saveCheckpoint), `state-machines/TaskLifecycle.md` |
 | Agent lifecycle | `state-machines/AgentLifecycle.md` | `architecture/AGENT_RUNTIME.md`, `docs/LIFECYCLES.md` |
 | Context assembly, ReasoningPolicy, ContextSnapshot, grounding, and reasoning-artifact privacy | `specs/CONTEXT_MANAGEMENT.md` | `architecture/RUNTIME.md` (Context Builder), `architecture/AGENT_RUNTIME.md`, `architecture/MEMORY_SYSTEM.md`, `models/Inference.md`, `docs/adr/ADR-0008-Typed-Inference-Streaming.md` |
 | Event bus | `architecture/RUNTIME.md` (§Core Interfaces — EventBus) | `docs/MODULE_BOUNDARIES.md` (shared module) |
 | Observability | `architecture/RUNTIME.md` (§Module Inventory — Observability) | `docs/SYSTEM_DESIGN.md`, `docs/MODULE_BOUNDARIES.md` |
 | Resource management | `architecture/RUNTIME.md` (§Module Inventory — Resource Manager) | `architecture/MULTI_AGENT_SYSTEM.md` (§SA-3), `security/SandboxPolicy.md` |
-| Skill registry | `architecture/RUNTIME.md` (§Module Inventory — Skill Registry) | `registry/SKILLS.md`, `docs/adr/ADR-0007-Skills-First-Class.md` |
+| Skill registry and skill runtime boundary | `architecture/RUNTIME.md` (§Module Inventory — Skill Registry) + `decisions/DEC-11-skill-lifecycle.md` | `registry/SKILLS.md`, `docs/adr/ADR-0007-Skills-First-Class.md` |
 | Evidence and validation | `specs/CONTEXT_MANAGEMENT.md` (§7) | `architecture/RUNTIME.md` (§Module Inventory), `architecture/MULTI_AGENT_SYSTEM.md` (§Mandatory Review Rule) |
 | Tool identity catalog | `registry/TOOLS.md` | `registry/TOOL_MATRIX.md` |
 | Memory storage, retention, promotion, summarization | `architecture/MEMORY_SYSTEM.md` | `models/Memory.md`, `protocols/Memory-Protocol.md` |

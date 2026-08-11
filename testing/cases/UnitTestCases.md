@@ -20,3 +20,16 @@
 | UT-CONTEXT-001 | UT-CONTEXT | Reproduce immutable ContextSnapshot from segment hashes | Context | Planned | `evidence/unit/UT-CONTEXT-001/` | 2026-08-06 |
 | UT-CONTEXT-002 | UT-CONTEXT | Deduplicate retrieval while preserving source diversity | Context + Memory | Planned | `evidence/unit/UT-CONTEXT-002/` | 2026-08-06 |
 | UT-ROUTE-001 | UT-ROUTE | Rank eligible providers by hard constraints then policy score | Provider Layer | Planned | `evidence/unit/UT-ROUTE-001/` | 2026-08-06 |
+
+| UT-CONV-001 | UT-CONV | Validate immutable conversation checkpoint lifecycle state entry | Conversation/Session | Planned | `evidence/unit/UT-CONV-001/` | 2026-08-12 |
+| UT-CONV-002 | UT-CONV | Validate newer checkpoint supersedes without mutating prior checkpoint | Conversation/Session | Planned | `evidence/unit/UT-CONV-002/` | 2026-08-12 |
+| UT-CONV-003 | UT-CONV | Validate invalid transitions leave checkpoint state unchanged | Conversation/Session | Planned | `evidence/unit/UT-CONV-003/` | 2026-08-12 |
+| UT-CONV-004 | UT-CONV | Validate non-destructive branch semantics preserve source lineage | Conversation/Session | Planned | `evidence/unit/UT-CONV-004/` | 2026-08-12 |
+| UT-CONV-005 | UT-CONV | Validate repeated operation identity does not create duplicate branch result | Conversation/Session | Planned | `evidence/unit/UT-CONV-005/` | 2026-08-12 |
+| UT-CONV-006 | UT-CONV | Validate rollback side-effect boundary excludes external reversal | Conversation/Session | Planned | `evidence/unit/UT-CONV-006/` | 2026-08-12 |
+| UT-SKILL-001 | UT-SKILL | Validate skill state progression Registered→Validated→Available | Skill Registry | Planned | `evidence/unit/UT-SKILL-001/` | 2026-08-12 |
+| UT-SKILL-002 | UT-SKILL | Validate binding does not transfer tool execution ownership to Skill Registry | Skill Registry + Agent Runtime | Planned | `evidence/unit/UT-SKILL-002/` | 2026-08-12 |
+| UT-SKILL-003 | UT-SKILL | Validate revoked skill blocks new binding/selection transitions | Skill Registry | Planned | `evidence/unit/UT-SKILL-003/` | 2026-08-12 |
+| UT-SKILL-004 | UT-SKILL | Validate replacement requires explicit compatibility validation | Skill Registry | Planned | `evidence/unit/UT-SKILL-004/` | 2026-08-12 |
+| UT-SKILL-005 | UT-SKILL | Validate skill metadata cannot grant permissions | Skill Registry + Security | Planned | `evidence/unit/UT-SKILL-005/` | 2026-08-12 |
+| UT-SKILL-006 | UT-SKILL | Validate skill-use authorization remains tool/security controlled | Agent Runtime + Security | Planned | `evidence/unit/UT-SKILL-006/` | 2026-08-12 |

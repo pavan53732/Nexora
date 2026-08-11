@@ -65,3 +65,16 @@ The complete requirement identifier inventory is tracked separately in `docs/REQ
 - Lifecycle linkage reaches all protocol/API/SDK surfaces (Phases 3-4 closure).
 - Evidence locations are defined for every row; execution artifacts remain `Planned` (no implementation code exists yet — the repository is documentation-first per the specification-closure gate). `Planned` status is expected and correct at this stage; it is not a closure defect.
 - Requirement-ID orphans referenced in this matrix but not yet defined in `requirements/FR.md`/`NFR.md` or `docs/REQUIREMENT_COVERAGE_LEDGER.md`: `FR-SESS-001` (session context lifecycle — covered canonically by `state-machines/SessionLifecycle.md` + `models/Session.md`), `FR-WF-001` (workflow lifecycle orchestration — covered canonically by `state-machines/WorkflowLifecycle.md` + `architecture/WORKFLOW_ENGINE.md`), `NFR-COMP-001` (contract compatibility and versioning — covered canonically by `VERSIONING.md` + `standards/Registry-Standard.md`). These matrix rows pre-date the requirement definitions; define the IDs explicitly in `requirements/FR.md`/`NFR.md` or re-point the rows to the canonical coverage above. (Recorded per `docs/TRACEABILITY_RULES.md` Audit Rule — not silently omitted.)
+
+
+## Conversation checkpoint and command decision traceability
+
+| Requirement/decision | Canonical source | Supporting sources | Status |
+|---|---|---|---|
+| DEC-8 conversation checkpoint semantics | `architecture/CONVERSATION_CHECKPOINTS.md` | `decisions/DEC-8-conversation-checkpoint-rollback.md` | Semantics specified; Conversation identity/persistence/retention dependencies unresolved; not implemented |
+| DEC-9 non-destructive rollback branching | `architecture/CONVERSATION_CHECKPOINTS.md` | `specs/CONVERSATION_CHECKPOINTS.md`, `decisions/DEC-9-conversation-rollback-operation.md` | Semantics specified; Conversation identity/persistence/authorization dependencies unresolved; not implemented |
+| DEC-10 ownership and lifecycle | `architecture/CONVERSATION_CHECKPOINTS.md` | `state-machines/ConversationCheckpointLifecycle.md`, `decisions/DEC-10-conversation-checkpoint-ownership.md` | Owner responsibility selected; existing Conversation authority not independently established; not implemented |
+| DEC-11 skill lifecycle boundary | `architecture/RUNTIME.md` | `decisions/DEC-11-skill-lifecycle.md`, `models/Skill.md`, `registry/SKILLS.md` | Specified; not implemented |
+| DEC-12 command artifact decision | `architecture/WORKFLOW_ENGINE.md` and `architecture/RUNTIME.md` | `decisions/DEC-12-command-artifact.md` | No first-class Command artifact |
+
+No executable test is claimed by these mappings.

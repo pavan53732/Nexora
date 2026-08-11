@@ -386,3 +386,23 @@
 | FR-MI-008 | Pipe security gates — pairing, connect, and broadcast pass PermissionManager checks with `instance:*` scopes (pair/connect `ASK`, broadcast `DENY` defaults); forged or malformed payloads rejected pre-parse, audited CRITICAL, 3 violations auto-revoke | Must | 7 |
 | FR-MI-009 | Pipe failure handling — discovery absence is graceful (not an error); pairing mismatch aborts with audit; version incompatibility blocks handshake with a clear user notice; revoked pipes close immediately with graceful remote cancellation | Must | 7 |
 | FR-MI-010 | Pipes settings surface — Settings → Pipes: paired instance list, pair/revoke, acceptance mode per pipe, discovery toggle; pipe activity surfaces in the chat activity feed with a pipe badge (FR-U005); no pipes tab or slash-command surface (FR-U011) | Must | 7 |
+
+
+## Conversation Checkpoint and Branching
+
+| ID | Requirement | Priority | Phase |
+|---|---|---|---|
+| FR-CB001 | Create an immutable conversation checkpoint at the selected post-turn or explicit user trigger | Should | TBD after conversation persistence decision |
+| FR-CB002 | Preserve checkpoint identity, conversation boundary, integrity, and lineage references | Should | TBD after conversation persistence decision |
+| FR-CB003 | Create a non-destructive conversation branch from an eligible checkpoint without altering the source conversation | Should | TBD after conversation persistence decision |
+| FR-CB004 | Reject unauthorized, stale, expired, invalid, or conflicting checkpoint operations without mutating the source | Should | TBD after conversation persistence decision |
+| FR-CB005 | Make repeated submission of the same operation identity safe without duplicate branch creation | Should | TBD after conversation persistence decision |
+| FR-CB006 | Do not imply reversal of task, execution, context, memory, file, workspace, provider, Git, or external side-effect state | Must | TBD after conversation persistence decision |
+
+## Skill Lifecycle Boundary
+
+| ID | Requirement | Priority | Phase |
+|---|---|---|---|
+| FR-SK001 | Register, validate, discover, acquire, bind, revoke, and retire skills through the canonical Skill Registry lifecycle | Must | Existing Skill Registry/runtime phase |
+| FR-SK002 | Allow Agent Runtime skill selection without requiring per-task manual user selection | Must | Existing Agent Runtime phase |
+| FR-SK003 | Apply canonical tool, permission, sandbox, approval, and audit policy to skill use | Must | Existing security/runtime phase |
