@@ -6,10 +6,10 @@
 |------|-------|
 | **Project Name** | Nexora |
 | **Package** | `com.nexora.app` |
-| **Platform** | Android (native, Kotlin/Java + Gradle) |
+| **Application target** | Android (native, Kotlin/Java + Gradle) |
 | **Tagline** | Autonomous AI Agent App for Android |
 | **Alt Taglines** | Think. Plan. Execute. / Your Personal AI Agent. / One App. Unlimited AI Agents. / Autonomous AI for Android. / From Prompt to Execution. / AI That Gets Work Done. |
-| **Positioning** | **Android AI Agent Platform** |
+| **Positioning** | **Pure Android application** |
 | **Spec Version** | 4.6.0 |
 | **Status** | Phase 0 — Foundation Complete |
 | **Created** | 2026-08-03 |
@@ -33,7 +33,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 ## Quick Reference
 
 - **One-line**: Nexora is an Android application that transforms your phone into a powerful autonomous AI agent workspace.
-- **Positioning**: Android AI Agent Platform (not an OS, ROM, or VM).
+- **Positioning**: Pure Android application (not an OS, ROM, or VM).
 - **Architecture**: Workspace-first (Workspace > Chat).
 - **Interaction**: Agent-first — users chat with agents; the sandbox, internal terminal, runtimes, and execution engine are internal implementation details (ADR-0006).
 - **Principles**: 15 codified product principles (PP-001–015) — autonomous agents, provider-agnostic, tool-based execution, persistent memory, agent-driven execution, plugins, background execution, multi-agent orchestration, dashboards, sandboxing, observability, and more.

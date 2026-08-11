@@ -7,19 +7,19 @@
 
 ## What is Nexora?
 
-Nexora is an **Android AI Agent Platform** — an Android application that transforms your phone into a powerful autonomous AI agent workspace. AI agents think, plan, execute tasks, use tools, manage projects, and automate complex workflows securely within the app.
+Nexora is a **pure Android application** — an Android application that transforms your phone into a powerful autonomous AI agent workspace. AI agents think, plan, execute tasks, use tools, manage projects, and automate complex workflows securely within the app.
 
 It goes beyond chat. AI agents autonomously perform real tasks using files, code, terminals, browsers, APIs, and Android capabilities.
 
 ### What Nexora Is
 
 - An **Android application** — install from APK or app store.
-- An **autonomous AI agent platform** — AI agents that think, plan, and execute.
+- An **autonomous AI application** — AI agents that think, plan, and execute.
 - A **multi-agent execution environment** — specialized agents collaborating.
 - An **agent-first AI workspace** — you talk to agents; they do the work for you.
 - A **project workspace** — manage files, code, and tasks inside the app.
-- A **tool execution platform** — 300-500+ tools across 28 categories, invoked by agents.
-- A **plugin-based AI ecosystem** — extensible through community plugins.
+- A **tool execution application** — 300-500+ tools across 28 categories, invoked by agents.
+- A **plugin-based AI application** — extensible through community plugins.
 
 ### What Nexora Is Not
 
@@ -49,7 +49,7 @@ Workspace
     └── Chats
 ```
 
-Chats are one artifact within a workspace. This scales much better as the platform grows.
+Chats are one artifact within a workspace. This scales much better as the application grows.
 
 ---
 
