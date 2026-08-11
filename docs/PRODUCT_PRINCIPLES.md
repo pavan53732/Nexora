@@ -106,6 +106,30 @@ manages *projects and conversations* — never plumbing.
 
 - Sources: [ADR-0001](../docs/adr/ADR-0001-Workspace-First.md) · [FR-W001–010](../requirements/FR.md) · [FR-U001–011](../requirements/FR.md)
 
+### PP-009a — User and Runtime Responsibilities
+
+In the ordinary agent-first interaction, the user expresses goals and provides required
+input, responds to clarification requests, approves or denies permission-gated actions,
+cancels work, configures supported settings, and inspects meaningful execution evidence.
+The runtime performs planning, orchestration, capability selection, background progression,
+checkpointing, retry, and recovery on behalf of the goal. This boundary does not prohibit
+additional administrative, configuration, observability, or future interaction surfaces
+where separately established by an authoritative document.
+
+This principle preserves the distinction between user-facing outcomes and controls and
+primarily internal execution machinery. Internal infrastructure is not the primary
+interaction surface, while meaningful activity, progress, results, approvals, errors,
+completion information, logs, audit information, and established cost or token
+information remain observable through their authoritative user-facing surfaces.
+
+This principle does not define the detailed semantics or ownership of execution
+checkpoints, context snapshots, conversation checkpoints, file versions, workspace
+snapshots, memory artifacts, skills, workflows, tools, or commands. Those distinctions
+remain governed by their canonical architecture, specification, model, registry, and
+decision documents.
+
+- Sources: [ADR-0006](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md) · [ADR-0009](../docs/adr/ADR-0009-Adaptive-Autonomy-And-Persistence.md) · [BACKGROUND_EXECUTION](../specs/BACKGROUND_EXECUTION.md) · [AGENT_RUNTIME](../architecture/AGENT_RUNTIME.md) · [TOOL_SYSTEM](../architecture/TOOL_SYSTEM.md) · [WORKFLOW_ENGINE](../architecture/WORKFLOW_ENGINE.md)
+
 ---
 
 ## 4. Supporting Principles
