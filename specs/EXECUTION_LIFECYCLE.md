@@ -12,7 +12,7 @@
 ---
 
 
-> **DEC-7 (2026-08-11):** `RetryPending` is EPHEMERAL and is not reconstructed after process death. Execution identity remains stable for RetryPending retry and changes only for explicit retry after a committed terminal state. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+> **DEC-7 (2026-08-11):** `RetryPending` is EPHEMERAL and is not reconstructed after process death. RetryPending retry (PATH A) preserves the same `executionId`; explicit retry after a committed terminal state via `retryExecution` (PATH B) creates a new `executionId` with `priorExecutionId` referencing the terminal predecessor. Idempotency is scoped per-Execution: PATH A preserves the same `idempotencyKey` and idempotency boundary; PATH B creates a new idempotency boundary. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
 
 ## Overview
 

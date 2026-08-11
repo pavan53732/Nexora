@@ -10,7 +10,7 @@
 > Communication contract between the runtime and agents.
 
 
-> **DEC-7 (2026-08-11):** Idempotency scope is per-Execution. RetryPending retry preserves the same `executionId` and idempotency boundary; explicit retry after terminal state creates a new execution identity and a new idempotency boundary. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+> **DEC-7 (2026-08-11):** `RetryPending` is EPHEMERAL (does not survive process death). Idempotency scope is per-Execution. RetryPending retry (PATH A) preserves the same `executionId` and idempotency boundary; explicit retry after a committed terminal state via `retryExecution` (PATH B) creates a new `executionId` (with `priorExecutionId`) and a new idempotency boundary. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
 
 ## Flow
 
