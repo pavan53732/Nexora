@@ -104,10 +104,6 @@ The workspace is the primary entity (ADR-0001). Dashboards give an overview of
 agents, tasks, files, and memory per workspace; sessions persist and resume. The user
 manages *projects and conversations* — never plumbing.
 
-- Sources: [ADR-0001](../docs/adr/ADR-0001-Workspace-First.md) · [FR-W001–010](../requirements/FR.md) · [FR-U001–011](../requirements/FR.md)
-
-### PP-009a — User and Runtime Responsibilities
-
 In the ordinary agent-first interaction, the user expresses goals and provides required
 input, responds to clarification requests, approves or denies permission-gated actions,
 cancels work, configures supported settings, and inspects meaningful execution evidence.
@@ -128,7 +124,7 @@ snapshots, memory artifacts, skills, workflows, tools, or commands. Those distin
 remain governed by their canonical architecture, specification, model, registry, and
 decision documents.
 
-- Sources: [ADR-0006](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md) · [ADR-0009](../docs/adr/ADR-0009-Adaptive-Autonomy-And-Persistence.md) · [BACKGROUND_EXECUTION](../specs/BACKGROUND_EXECUTION.md) · [AGENT_RUNTIME](../architecture/AGENT_RUNTIME.md) · [TOOL_SYSTEM](../architecture/TOOL_SYSTEM.md) · [WORKFLOW_ENGINE](../architecture/WORKFLOW_ENGINE.md)
+- Sources: [ADR-0001](../docs/adr/ADR-0001-Workspace-First.md) · [FR-W001–010](../requirements/FR.md) · [FR-U001–011](../requirements/FR.md) · [ADR-0006](../docs/adr/ADR-0006-Agent-First-Interaction-Model.md) · [ADR-0009](../docs/adr/ADR-0009-Adaptive-Autonomy-And-Persistence.md) · [BACKGROUND_EXECUTION](../specs/BACKGROUND_EXECUTION.md) · [AGENT_RUNTIME](../architecture/AGENT_RUNTIME.md) · [TOOL_SYSTEM](../architecture/TOOL_SYSTEM.md) · [WORKFLOW_ENGINE](../architecture/WORKFLOW_ENGINE.md)
 
 ---
 
