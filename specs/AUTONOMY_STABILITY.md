@@ -176,12 +176,23 @@ backoff + full jitter:
 interval = base × 2^attempt × random(0.5…1.5)
 ```
 
+**Attempt semantics:**
+- Initial execution is NOT a retry attempt.
+- `attempt=0` = first retry; `attempt=1` = second retry; `attempt=2` = third retry.
+- `maxAttempts = 3` means exactly 3 retry iterations (1 initial execution + 3 retries = 4 total executions maximum).
+- Total possible executions = 1 initial + 3 retries = 4.
+- The retry attempt index is zero-based and corresponds to the retry iteration index.
+- The existing `retries < max` TaskLifecycle guard is mathematically consistent with this contract: after the initial execution, `retries` counts `0, 1, 2` and stops at `3`, matching `attempt` values `0, 1, 2`.
+
 - **base**: 1 s for provider calls, 5 s for sandbox process calls (FR-TL005)
-- **attempts**: capped at 3 per [NFR-REL-003](../requirements/NFR.md) (NFR-REL-003 row)
-- After 3 identical failures: route through plan repair (§1 item **b**) or task-scoped
+- **attempts**: capped at 3 retries (attempt=0, attempt=1, attempt=2) per [NFR-REL-003](../requirements/NFR.md) (NFR-REL-003 row)
+- **No max interval cap**: the retry interval policy does not impose a ceiling beyond the exponential jitter formula. Provider-stream liveness timers (`firstByteTimeout`, `interTokenTimeout`) are a separate, unconstrained timer domain and do not bound retry backoff delays.
+- After all retries exhausted: route through plan repair (§1 item **b**) or task-scoped
   failure ledger `BLACKLISTED_UNTIL_TASK_END` (§9.5); never an unconditional retry.
 - Non-retryable timeouts commit terminal `FAILED` with `latestError` and surface to
   the degradation ladder (§8) for visibility — no silent continuation.
+- **Cancellation**: A task in `RetryPending` MAY cancel per TaskLifecycle `cancel()` semantics.
+- **Determinism**: Retry jitter MUST be deterministic when seeded for reproducible testing.
 
 ## 9.5 Semantic Progress & Anti-Replay (new, mandated by ADR-0009)
 
