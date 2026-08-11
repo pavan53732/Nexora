@@ -83,6 +83,8 @@ by name but MUST NOT redefine their columns.
 
 ## Execution & Recovery
 
+> **DEC-7 R4 placement:** Durable process-death recovery evidence is a dedicated Room recovery-evidence artifact, conceptually separate from the `task`, `execution`, `execution_checkpoint`, `execution_replay`, and lifecycle-history stores. It is not durable RetryPending state. This documentation establishes semantic placement only; entity names, columns, keys, indexes, DAO operations, migrations, SQL, and retention duration are not defined or implemented here. Unreconciled evidence must remain available until the recovery outcome is durably established.
+
 ### `execution`
 | Column | Type | Notes |
 |--------|------|-------|

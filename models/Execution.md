@@ -72,4 +72,4 @@ It does not replace `correlationId`.
 
 ## Execution Phase Semantics
 
-Execution events are append-only and at-least-once. Consumers MUST deduplicate by execution ID and sequence/version. A checkpoint event is durable only after the referenced checkpoint has been committed. `phase` is transient execution activity; `status` is the durable lifecycle projection.
+Execution events are append-only and at-least-once. Consumers MUST deduplicate by execution ID and sequence/version. A checkpoint event is durable only after the referenced checkpoint has been committed. `phase` is transient execution activity; `status` is the durable lifecycle projection. `CREATED` represents an existing Execution that has not yet started; it is also the post-recovery projection selected by DEC-7 when the preserved Execution awaits a future start after its Task returns to `Queued`.

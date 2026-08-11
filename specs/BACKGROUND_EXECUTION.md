@@ -106,7 +106,7 @@ surfaces in the workflow engine (Phase 8 plugin scheduling).
 - Checkpoints are stored per workspace (`sandbox/workspaces/{id}/tasks/`) with WAL
   journaling for crash-safe writes (NFR-REL-001).
 
-> **DEC-7 (2026-08-11):** BootReceiver does **not** reconstruct RetryPending state. RetryPending is EPHEMERAL and is lost on process death. BootReceiver only resumes checkpointed executions (CREATED/RUNNING/BLOCKED states), not RetryPending tasks.
+> **DEC-7:** BootReceiver does **not** reconstruct RetryPending state or restore its previous deadline. RetryPending is ephemeral and is lost on process death. BootReceiver is the startup trigger; eligible durable R4 evidence is reconciled through the separate process-death recovery responsibility. That recovery returns the Task to `Queued` and does not resume a checkpoint; checkpoint recovery remains the separate path described above. See [DEC-7](../decisions/DEC-7-retry-attempt-state.md) §DEC-7.7–DEC-7.12.
 
 ## 4. Notifications
 

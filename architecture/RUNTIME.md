@@ -12,7 +12,7 @@
 ---
 
 
-> **DEC-7 (2026-08-11):** Retry-attempt indexing is Execution-scoped via `retryAttempt`. RetryPending is EPHEMERAL and does not survive process death. RetryPending retry (PATH A) preserves the same `executionId`; explicit retry after a committed terminal state via `retryExecution` (PATH B) creates a new `executionId` with `priorExecutionId`. Idempotency is scoped per-Execution: PATH A keeps the same `idempotencyKey` and boundary; PATH B creates a new idempotency boundary. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+> **DEC-7:** Retry-attempt indexing is Execution-scoped via `retryAttempt`. RetryPending is ephemeral and does not survive process death. PATH A preserves the same Execution; PATH B after a committed terminal state creates a new Execution with `priorExecutionId`. Process-death recovery is distinct from both retry paths and is governed by [DEC-7](../decisions/DEC-7-retry-attempt-state.md) §DEC-7.7–DEC-7.12.
 
 ## Overview
 

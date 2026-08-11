@@ -14,13 +14,13 @@
 **Decision:** The authoritative retry-attempt index (`retryAttempt`, 0-based) is stored on the **Execution** model.
 
 **Rationale:**
-- Execution is the canonical unit of retry lineage (`priorExecutionId` field). [cite:1]
-- Task identity remains stable across retries; Execution identity encodes retry attempts. [cite:1]
-- Aligns with `version` and `checkpointId` fields, which are already Execution-scoped. [cite:1]
+- Execution is the canonical unit of retry lineage (`priorExecutionId` field). [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
+- Task identity remains stable across retries; Execution identity encodes retry attempts. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
+- Aligns with `version` and `checkpointId` fields, which are already Execution-scoped. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
 
-**Required schema update:** Add `retryAttempt INTEGER NOT NULL DEFAULT 0` to the `execution` table in `specs/DATABASE_SCHEMA.md`. [cite:1]
-**Required model update:** Add `val retryAttempt: Int` to the `Execution` data class in `models/Execution.md`. [cite:1]
-**Scope:** `retryAttempt` is scoped per-Execution, not per-Task. Each retry that creates a new Execution increments this counter. [cite:1]
+**Required schema update:** Add `retryAttempt INTEGER NOT NULL DEFAULT 0` to the `execution` table in `specs/DATABASE_SCHEMA.md`. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
+**Required model update:** Add `val retryAttempt: Int` to the `Execution` data class in `models/Execution.md`. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
+**Scope:** `retryAttempt` is scoped per-Execution, not per-Task. Each retry that creates a new Execution increments this counter. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
 
 ---
 
@@ -29,143 +29,138 @@
 **Decision:** RetryPending state is **EPHEMERAL** — it does not survive process death.
 
 **Rationale:**
-- `BACKGROUND_EXECUTION.md` explicitly distinguishes checkpoint resume (durable) from retry (unspecified). [cite:1]
-- No `retryDueAt`, `nextRetryAt`, or `backoff_until` field exists in the schema. [cite:1]
-- Treating RetryPending as ephemeral simplifies persistence and aligns with the checkpoint-vs-retry distinction. [cite:1]
+- `BACKGROUND_EXECUTION.md` explicitly distinguishes checkpoint resume (durable) from retry (unspecified). [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
+- No `retryDueAt`, `nextRetryAt`, or `backoff_until` field exists in the schema. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
+- Treating RetryPending as ephemeral simplifies persistence and aligns with the checkpoint-vs-retry distinction. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
 
-**Required behavior:** On process death, any Task in `RetryPending` state must transition to a defined post-crash state (see GAP-2 clarification below). [cite:1]
+**Required behavior:** On process death, any Task in `RetryPending` state must transition to a defined post-crash state (see DEC-7.7–DEC-7.12 below). [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
 
 ---
 
 ## DEC-2A — RetryPending State Durability (Conditional: Not Applicable)
 
-**Decision:** Not applicable — DEC-2 = Ephemeral, so no retry-scheduling state is persisted or reconstructed. [cite:1]
+**Decision:** Not applicable — DEC-2 = Ephemeral, so no retry-scheduling state is persisted or reconstructed. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
 
-**Implication:** BootReceiver does not reconstruct RetryPending state. Tasks in RetryPending at crash time are handled via the post-crash transition path defined in GAP-2. [cite:1]
-
----
-
-## DEC-3 — Post-Recovery Execution Projection
-
-**Decision:** After process-death recovery reconciliation, the preserved existing Execution semantically fits `ExecutionStatus.CREATED` because:
-- The Execution identity (`executionId`, `correlationId`) is durably preserved via R4 evidence.
-- The Execution is not currently running and is awaiting future start from `Queued` state.
-- `CREATED` is the canonical ExecutionStatus for an execution record that exists but is not currently executing and is awaiting future start from Queued. [cite:models/Execution.md]
-- Selecting `CREATED` does not create a new Execution; it designates the existing preserved Execution's status.
-- `retryAttempt` is unchanged (per DEC-1, scoped per-Execution, no increment on post-death recovery). [cite:1]
-- `version` is unchanged (no checkpoint resume occurs; per RUNTIME.md §ExecutionStatus Lifecycle, only explicit checkpoint/resume transitions increment version).
-- `priorExecutionId` is unchanged (the preserved Execution retains its identity).
-- No new Execution is created (the existing Execution's status is designated as CREATED).
-- Identity is preserved: same `executionId`, `correlationId` across the recovery boundary.
-
-**What CREATED does not mean**:
-- It does not mean the Execution is ready to run immediately without transitioning through QUEUED and start().
-- It does not mutate `retryAttempt` or consume retry budget.
-- It does not signal a terminal retry (PATH B).
-
-**Identity behavior**:
-- Same `executionId` retained across the recovery boundary.
-- Same `correlationId` retained (stable tracing across same-identity resumes).
-- Same `taskId` retained; the Execution remains scoped to its original Task.
-
-**Version behavior**:
-- `version` is unchanged at reconciliation.
-- Version increments only on explicit checkpoint/resume transitions, not on status designation.
-
-**retryAttempt behavior**:
-- Unchanged from pre-crash value.
-- Per DEC-1, `retryAttempt` is scoped per-Execution and does not increment on post-death recovery.
-
-**No new Execution**:
-- The existing Execution is designated `CREATED`; no new `executionId` is generated.
-
-**Compatible schema state**:
-- `execution.status = CREATED` [cite:models/Execution.md]
-- `execution.retryAttempt = <unchanged value>` [cite:DEC-1]
-- `execution.version = <unchanged value>` [cite:RUNTIME.md]
-- `execution.priorExecutionId = <unchanged or null>` [cite:DEC-1]
-- `task.status = QUEUED` (the Task transitions to QUEUED after recovery reconciliation). [cite:state-machines/TaskLifecycle.md]
+**Implication:** BootReceiver does not reconstruct RetryPending state. Tasks in RetryPending at crash time are handled via the post-crash transition path defined in DEC-7.7–DEC-7.12. [repository evidence: models/Execution.md; specs/DATABASE_SCHEMA.md; state-machines/TaskLifecycle.md]
 
 ---
 
-## DEC-4 — Process-Death Recovery Ownership
+## DEC-7 Secondary Decisions — Process-Death Recovery Closure
 
-**Decision:** Process-death recovery responsibility is separated as follows:
-- **BootReceiver** = startup trigger: detects process death / device reboot and initiates recovery. [cite:specs/BACKGROUND_EXECUTION.md §5.7]
-- **Explicit recovery reconciliation responsibility** = detection + reconciliation: identifies affected Tasks, validates R4 evidence, and designates post-recovery Execution status. [cite:decisions/DEC-7-retry-attempt-state.md DEC-7.3]
-- **TaskScheduler** = ordinary scheduling owner after Task returns to Queued: schedules Tasks back into the execution queue after reconciliation commits them to QUEUED. [cite:architecture/RUNTIME.md §Service Inventory]
-- **Executor** = ExecutionStatus lifecycle owner: manages ExecutionStatus transitions (CREATED→RUNNING→COMPLETED/FAILED) per RUNTIME.md §ExecutionStatus Lifecycle. [cite:architecture/RUNTIME.md §ExecutionStatus Lifecycle]
-- **WorkManager** = infrastructure: provides scheduled/periodic job mechanisms; does not own retry policy or Execution lifecycle decisions. [cite:specs/BACKGROUND_EXECUTION.md §1-8]
+This section closes the secondary decisions requested by the DEC-7 recovery audit. The labels below are the authoritative labels for this closure: DEC-7.7 through DEC-7.12. The earlier DEC-3 through DEC-8 headings in the prior record were descriptive placeholders and are superseded by these labels.
+
+### DEC-7.7 — Post-Recovery Execution Projection
+
+**Question:** Which `ExecutionStatus` represents the preserved Execution after process-death recovery reconciliation?
+
+**Repository evidence:**
+- `models/Execution.md` defines the status set `CREATED`, `RUNNING`, `COMPLETED`, `FAILED`, and `CANCELLED`.
+- `architecture/RUNTIME.md` §ExecutionStatus Lifecycle defines `CREATED` as an execution record that exists and has not yet started; it separately defines `RUNNING` as active execution and the other statuses as completed, failed, or cancelled outcomes.
+- `architecture/RUNTIME.md` §ExecutionStatus Lifecycle states that checkpoint resume is a distinct path and increments `version`; terminal retry creates a new Execution.
+- `state-machines/TaskLifecycle.md` defines `Queued → Running` through `start()` and identifies `RetryPending → Queued` as the ordinary retry transition.
+
+**Candidates and analysis:** `RUNNING` is excluded because reconciliation does not execute the Task. Terminal statuses are excluded because recovery is not a terminal outcome. A checkpoint-resume projection is excluded by the locked DEC-7 invariant that no checkpoint resume occurs. `CREATED` is therefore the narrowest compatible projection for an existing Execution awaiting future start after the Task is returned to `Queued`.
+
+**Selected decision:** After successful process-death recovery reconciliation, the preserved existing Execution is projected as `ExecutionStatus.CREATED`.
+
+**Classification:** EVIDENCE-SUPPORTED ARCHITECTURE DECISION.
+
+**Consequences:** The same `executionId`, `correlationId`, `taskId`, `retryAttempt`, and `priorExecutionId` remain associated with the Execution. The Execution status does not become `RUNNING` during reconciliation. `version` remains unchanged by this status designation; the repository documents version advancement for checkpoint/resume transitions, and this recovery path is not checkpoint resume.
+
+**Non-consequences:** `CREATED` does not mean a new Execution was created, a retry attempt occurred, retry budget was consumed, a checkpoint was resumed, or PATH A/PATH B retry was performed.
+
+**Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
+
+### DEC-7.8 — Process-Death Recovery Ownership
+
+**Question:** Which responsibility owns startup triggering, detection, reconciliation, ordinary retry scheduling, Execution lifecycle, and infrastructure?
+
+**Repository evidence:**
+- `specs/BACKGROUND_EXECUTION.md` §3 states that `BootReceiver` checks incomplete executions after app kill or device restart and starts the background execution path for checkpoint resume; the DEC-7 clarification in that document explicitly excludes reconstruction of `RetryPending`.
+- `architecture/RUNTIME.md` §Service Inventory identifies `Executor` as managing execution state and `Background Runtime` as the background execution boundary.
+- `architecture/RUNTIME.md` §ExecutionStatus Lifecycle assigns ExecutionStatus lifecycle semantics to the Executor.
+- `state-machines/TaskLifecycle.md` §Implementation Notes assigns automatic Task transition driving and RetryPending backoff behavior to `TaskScheduler`.
+- `specs/BACKGROUND_EXECUTION.md` §1 identifies WorkManager as the mechanism for scheduled and deferred work.
+
+**Candidates and analysis:** BootReceiver is a trigger, not the owner of Task or Execution lifecycle semantics. TaskScheduler owns ordinary queue and retry scheduling, not process-death reconciliation. Executor owns ExecutionStatus lifecycle, not the Task lifecycle. WorkManager supplies execution infrastructure, not recovery policy. The repository does not establish a named existing component that owns the cross-entity R4 detection/reconciliation boundary.
+
+**Selected decision:** BootReceiver is the startup trigger; an explicit documentation-level process-death recovery responsibility detects and reconciles eligible R4 evidence; TaskScheduler owns ordinary scheduling after `Queued`; Executor owns ExecutionStatus transitions; WorkManager remains infrastructure. The reconciliation responsibility is not a new implementation class or module.
+
+**Classification:** EVIDENCE-SUPPORTED ARCHITECTURE DECISION with an explicit responsibility boundary.
+
+**Caveat:** The repository does not establish a concrete implementation owner for the cross-entity reconciliation responsibility. That implementation choice remains separate from this documentation decision.
+
+**Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
+
+### DEC-7.9 — Startup Eligibility and Duplicate / Idempotency Semantics
+
+**Question:** When may startup recovery reconcile R4 evidence, and what happens when the same evidence is observed more than once?
+
+**Repository evidence:**
+- `specs/DATABASE_SCHEMA.md` is canonical for Room persistence and documents separate `execution`, `execution_checkpoint`, and `execution_replay` storage.
+- `state-machines/TaskLifecycle.md` §Normative Transition Contract requires guards against current persisted version, durable persistence before event publication, rejection of invalid transitions without mutation, and duplicate-command convergence through an idempotency key; it also requires event deduplication by entity and transition version.
+- `architecture/RUNTIME.md` §ExecutionStatus Lifecycle separates ExecutionStatus from TaskStatus and defines versioned checkpoint/resume and terminal-retry behavior.
+- `models/Execution.md` §Retry Lineage defines `priorExecutionId` only for explicit retry/restart after a committed terminal state.
+
+**Selected decision:** R4 evidence is eligible only when all of the following are true: it identifies the affected Task; identifies the preserved existing Execution; proves the relevant RetryPending provenance; represents process-death recovery rather than ordinary retry or checkpoint recovery; is unreconciled; is compatible with the current Task and Execution projections; has no newer authoritative lifecycle or version boundary; and has no stale or conflicting evidence.
+
+The following are explicitly ineligible: ordinary `Queued`; `Running`; checkpoint recovery; terminal retry; ordinary RetryPending retry; already reconciled evidence; stale or conflicting evidence; and evidence for an unrelated Execution.
+
+The first valid reconciliation commits one recovery result. A later observation converges to that committed result or is rejected as already reconciled or stale. It must not create another Execution, increment `retryAttempt`, consume retry budget, mutate `priorExecutionId`, perform a second semantic Task transition, or repeat a non-idempotent side effect. No concrete key format is introduced; existing lifecycle version and idempotency-key semantics are reused where applicable.
+
+**Atomicity contract:** Successful reconciliation must durably establish one coherent projection: Task = `Queued`; the preserved Execution identity and selected status; unchanged `retryAttempt`; unchanged `priorExecutionId`; unchanged retry budget; and R4 evidence marked reconciled. A failed reconciliation must not be represented as successful recovery. `state-machines/TaskLifecycle.md` provides the required atomic transition and durable-persistence semantics; this decision does not claim that a concrete reconciliation transaction is implemented.
+
+**Classification:** ARCHITECTURE CONTRACT grounded in existing lifecycle/version/idempotency semantics; not an implementation claim.
+
+**Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
+
+### DEC-7.10 — Post-Recovery Scheduling
+
+**Question:** What happens after successful process-death reconciliation?
+
+**Repository evidence:** `state-machines/TaskLifecycle.md` defines `Queued → Running` through `start()` and identifies `TaskScheduler` as the driver of automatic Task transitions. `specs/BACKGROUND_EXECUTION.md` distinguishes retryable failure handling from checkpoint resume. DEC-7 locks RetryPending as ephemeral.
+
+**Selected decision:** The path is `Recovery → Queued → normal TaskScheduler scheduling lifecycle`. Recovery is not ordinary retry. It does not increment `retryAttempt`, consume retry budget, restore the previous RetryPending deadline, perform PATH A, perform PATH B, or resume a checkpoint. The recovered Task re-enters normal scheduling only after reconciliation succeeds.
+
+**Classification:** EVIDENCE-SUPPORTED ARCHITECTURE DECISION constrained by locked DEC-7 invariants.
+
+**Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
+
+### DEC-7.11 — Recovery-Evidence Retention
+
+**Question:** How long must R4 evidence remain available?
+
+**Repository evidence:** `specs/DATABASE_SCHEMA.md` establishes Room as the authoritative structured persistence store and defines retention policies for documented tables, but does not define a post-reconciliation R4 retention period.
+
+**Selected decision:** Unreconciled R4 evidence must survive until the recovery outcome is durably established. It must not be removed while correctness depends on it. Post-reconciliation retention and deletion remain unspecified and require a separate decision if needed; no duration and no indefinite audit-retention policy are introduced here.
+
+**Classification:** MINIMUM CORRECTNESS REQUIREMENT supported by the documented persistence boundary.
+
+**Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
+
+### DEC-7.12 — Concrete R4 Persistence Placement
+
+**Question:** Where is durable process-death recovery evidence placed?
+
+**Repository evidence:** `specs/DATABASE_SCHEMA.md` is canonical for the Room relational store and separates Task, Execution, checkpoint, and replay persistence. `state-machines/TaskLifecycle.md` separates current lifecycle projection from transition semantics. No existing table is identified as the semantic owner of R4 evidence.
+
+**Candidates and analysis:** Placing R4 in `task` or `execution` would merge recovery evidence with a current-state projection. Placing it in `execution_checkpoint` or `execution_replay` would merge process-death recovery with checkpoint or tool-replay semantics. Placing it in lifecycle history would merge evidence with history storage. Persisting RetryPending itself would contradict DEC-2. A dedicated Room recovery-evidence artifact is the narrowest compatible placement.
+
+**Selected decision:** R4 is a dedicated Room recovery-evidence persistence artifact, conceptually separate from `task`, `execution`, `execution_checkpoint`, `execution_replay`, lifecycle-history storage, and durable RetryPending state. The artifact is retained through durable reconciliation according to DEC-7.11.
+
+**Classification:** ARCHITECTURE DECISION; schema placement is documented, not implemented.
+
+**Caveat:** This decision does not define entity names, columns, indexes, keys, DAO operations, migrations, SQL, or retention duration. Those remain future implementation/specification work.
+
+**Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
 
 ---
 
-## DEC-5 — Startup Eligibility + Duplicate/Idempotency Semantics
+## Atomicity and Evidence Contract
 
-**Decision:** The semantic eligibility predicate for process-death recovery is defined in terms of durable R4 evidence:
+The DEC-7 recovery boundary is a semantic consistency contract, not a claim about an existing implementation transaction. A successful reconciliation must durably establish the Task projection `Queued`, the Execution projection `CREATED`, and the reconciled R4 evidence together while preserving the existing Execution identity, `retryAttempt`, `priorExecutionId`, retry budget, and absence of checkpoint resume. A failed reconciliation must leave no false semantic success and must not publish a success result for an uncommitted recovery.
 
-**Eligible iff** all of the following are durably true:
-- R4 evidence identifies the affected Task [cite:specs/DATABASE_SCHEMA.md `execution` table + R4 convention]
-- R4 evidence identifies the preserved existing Execution [cite:models/Execution.md `execution` row]
-- R4 evidence proves the relevant RetryPending provenance [cite:decisions/DEC-7-retry-attempt-state.md GAP-2]
-- R4 evidence represents process-death recovery (not ordinary retry or checkpoint resume) [cite:specs/BACKGROUND_EXECUTION.md GAP-2]
-- R4 evidence is unreconciled (has not yet been committed to the reconciliation result) [cite:protocol-level idempotency guards]
-- R4 evidence is not stale or conflicting with current persisted state [cite:protocol-level version checks]
-- R4 evidence is compatible with current persisted state (no newer authoritative lifecycle/version boundary invalidates it) [cite:RUNTIME.md §ExecutionStatus Lifecycle versioning]
-- R4 evidence is not invalidated by a newer checkpoint or transition [cite:protocol-level expectedVersion guards]
-
-**Explicitly excluded** (ineligible, reconciliation rejected):
-- ordinary `Queued` — no R4 evidence present; task is in normal lifecycle flow [cite:state-machines/TaskLifecycle.md]
-- `Running` — Execution is actively in progress; recovery does not apply mid-execution [cite:models/Execution.md]
-- `checkpoint recovery` — checkpoint resume is a distinct path (different from process-death recovery); R4 evidence from checkpoint resume is handled per RUNTIME.md §ExecutionStatus Lifecycle [cite:architecture/RUNTIME.md]
-- `terminal retry` — PATH B explicit retry after committed terminal state; creates new executionId [cite:decisions/DEC-7-retry-attempt-state.md GAP-2]
-- `ordinary retry` — RetryPending → Queued → start() path; not process-death recovery [cite:state-machines/TaskLifecycle.md RETRY_PENDING→Queued→start]
-- already reconciled evidence — if R4 evidence was already committed as reconciliation result, it is not eligible for re-reconciliation [cite:protocol-level idempotency guards]
-- `stale` or `conflicting` evidence — R4 evidence contradicted by newer persisted state (status, version, retryAttempt) [cite:protocol-level conflict detection]
-- `unrelated` Execution records — R4 evidence from a different Execution/scoped per-Execution [cite:DEC-1 per-Execution scoping]
-
-**Duplicate handling guarantee**:
-- First valid reconciliation commits recovery: the first durable R4 evidence observation that passes all eligibility checks commits the recovery result atomically. [cite:protocol-level atomic commit]
-- Later observations converge to committed result or are rejected as stale/already reconciled: subsequent observations that fail eligibility checks are rejected without side effects; they do not create a new Execution, do not increment `retryAttempt`, do not consume retry budget, and do not mutate `priorExecutionId`. [cite:protocol-level idempotency guards + version checks]
-- No new Execution: the committed result designates the existing preserved Execution's status; no new `executionId` is generated. [cite:DEC-7.3]
-- No `retryAttempt` increment: the existing Execution's `retryAttempt` is unchanged. [cite:DEC-1]
-- No budget consumption: retry budget is not consumed for already-committed recovery. [cite:DEC-7 retry budget semantics]
-- No `priorExecutionId` mutation: the existing Execution retains its identity. [cite:DEC-1]
-- No second semantic Task transition: the Task moves once to QUEUED (if not already there); no duplicate Task state change occurs. [cite:state-machines/TaskLifecycle.md]
-- No duplicated non-idempotent side effect: the reconciliation is designed to be idempotent; repeated observations produce the same committed result. [cite:specs/DATABASE_SCHEMA.md append-only + idempotency guards]
-
----
-
-## DEC-6 — Post-Recovery Scheduling
-
-**Decision:** After process-death recovery reconciliation commits the result (Execution designated CREATED, Task designated QUEUED), the following is the post-recovery scheduling flow:
-- **Recovery → Queued → TaskScheduler**: After reconciliation, the Task is in QUEUED state and re-enters the normal TaskScheduler scheduling lifecycle. [cite:state-machines/TaskLifecycle.md QUEUED→start()]
-- **no retryAttempt increment**: the existing Execution's `retryAttempt` is unchanged through the recovery boundary. [cite:DEC-1]
-- **no budget consumption**: retry budget is not consumed; the recovery is not an ordinary retry. [cite:DEC-7 retry budget semantics]
-- **no restoration of RetryPending deadline**: RetryPending is EPHEMERAL and does not survive process death; no deadline is restored. [cite:decisions/DEC-7-retry-attempt-state.md DEC-2]
-- **no PATH A retry**: PATH A (RetryPending retry) preserves `executionId` and applies backoff — this is inapplicable because RetryPending is ephemeral and lost on process death. [cite:decisions/DEC-7-retry-attempt-state.md DEC-2A]
-- **no PATH B retry**: PATH B (terminal retry via `retryExecution`) creates a new `executionId` — this is inapplicable because the recovery designates the existing Execution's status, not a new Execution. [cite:decisions/DEC-7-retry-attempt-state.md GAP-2]
-- **recovered queued task re-enters normal scheduling lifecycle only after reconciliation**: the TaskScheduler schedules the Task from QUEUED via ordinary `start()` transition when the agent loop is available. [cite:state-machines/TaskLifecycle.md QUEUED→start()]
-
----
-
-## DEC-7 — Recovery Evidence Retention
-
-**Decision:** The minimum correctness requirement for R4 (recovery evidence) retention is:
-- R4 evidence must survive until the recovery outcome is durably established.
-- Minimum lifetime is until durable reconciliation: R4 evidence must be retained at least through the point where the recovery result (Execution CREATED, Task QUEUED) is durably persisted in the Room database. [cite:specs/DATABASE_SCHEMA.md Room persistence durability]
-- Post-reconciliation retention remains independently unspecified unless the repository explicitly defines it: after the recovery outcome is durably established, whether R4 evidence continues to be retained is not defined by this decision and would require a separate architectural decision. [cite:no broader rule exists in repository]
-- It is acceptable to document: "minimum lifetime is until durable reconciliation; post-reconciliation retention remains independently unspecified unless the repository explicitly defines it." [cite:decision rationale]
-
----
-
-## DEC-8 — Concrete R4 Persistence Placement
-
-**Decision:** After DEC-7.1 through DEC-7.7 are closed, the repository supports a concrete persistence placement for R4 (recovery evidence) as a dedicated Room artifact:
-- R4 is represented as a dedicated Room recovery-evidence persistence artifact, stored in a dedicated schema location.
-- R4 is **separate from**: `task` table, `execution` table, `execution_checkpoint` table, `execution_replay` table, lifecycle-history storage, and durable `RetryPending` state. [cite:specs/DATABASE_SCHEMA.md table isolation]
-- R4 persistence placement is documented in `specs/DATABASE_SCHEMA.md` as a dedicated recovery-evidence table/column arrangement, separate from the core execution/task lifecycle tables. [cite:specs/DATABASE_SCHEMA.md documentation update]
-- The narrowest compatible option is chosen: a dedicated recovery-evidence artifact that satisfies the eligibility predicate (DEC-7.5) without altering core lifecycle tables. [cite:architectural minimalism]
-- R4 is not implemented as a new entity/DAO/migration code: this decision is documentation-only, updating the schema description to identify the R4 placement. [cite:editing rules — do not implement schema code]
+The existing Task lifecycle contract in `state-machines/TaskLifecycle.md` requires guards against current persisted version, durable persistence before event publication, one semantic transition event after commit, and rejection of invalid or conflicting commands without state mutation. DEC-7 adopts those semantics at the architecture level without asserting that R4 reconciliation has been implemented.
 
 ---
 
