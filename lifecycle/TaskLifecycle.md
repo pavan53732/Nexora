@@ -14,15 +14,19 @@
 
 ## Transitions
 
-- `DRAFT → PENDING`: Task created and queued.
-- `PENDING → QUEUED`: Resources available, scheduled.
-- `QUEUED → RUNNING`: Execution started.
-- `RUNNING → BLOCKED`: Dependency/resource unavailable.
-- `BLOCKED → QUEUED`: Blockage resolved.
-- `RUNNING → WAITING_APPROVAL`: Approval gate reached.
-- `WAITING_APPROVAL → RUNNING`: Approval granted.
-- `RUNNING → COMPLETED`: Task finished successfully.
-- `RUNNING → FAILED`: Unrecoverable error.
-- `FAILED → RETRY_PENDING`: Retry scheduled.
-- `RETRY_PENDING → QUEUED`: Retry triggered.
-- `* → CANCELLED`: Cancellation requested.
+This supporting narrative summarizes the canonical transitions in
+[state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md); it does not redefine
+ownership, guards, or state semantics.
+
+- `DRAFT → PENDING`: Task submitted.
+- `PENDING → QUEUED`: Dependencies are satisfied and the Task is enqueued.
+- `QUEUED → RUNNING`: `start()` is accepted by the canonical guard.
+- `RUNNING → BLOCKED`: Dependency or resource blocking occurs.
+- `BLOCKED → RUNNING`: The canonical unblock condition is satisfied.
+- `RUNNING → WAITING_APPROVAL`: An approval gate is reached.
+- `WAITING_APPROVAL → RUNNING`: Approval is granted.
+- `RUNNING → COMPLETED`: The result is validated.
+- `RUNNING → FAILED`: The error is non-retryable.
+- `RUNNING → RETRY_PENDING`: The error is retryable and retry policy permits it.
+- `RETRY_PENDING → QUEUED`: Ordinary retry backoff elapses, or the distinct DEC-7 process-death recovery reconciliation succeeds; the latter preserves the existing Execution and is not ordinary retry.
+- `* → CANCELLED`: Cancellation is accepted by the canonical guard.

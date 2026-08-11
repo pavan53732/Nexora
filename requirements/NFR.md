@@ -29,7 +29,7 @@
 |----|-------------|--------|----------|
 | NFR-REL-001 | Crash recovery | Zero data loss on crash | WAL journaling, periodic checkpoints |
 | NFR-REL-002 | Checkpoint resume | 100% state fidelity | Serialize full agent state to disk |
-| NFR-REL-003 | Error recovery | Automatic retry (configurable) | Exponential backoff, max 3 retries (attempt=0 is the first retry; 1 initial execution + 3 retries = 4 total executions maximum); each delay = `base × 2^attempt × random(0.5…1.5)` (jitter); retry across tool invocations, sub-agent delegation, and provider reconnects per [AUTONOMY_STABILITY.md §9.2](specs/AUTONOMY_STABILITY.md#92-retry-policy) and [ADR-0009](docs/adr/ADR-0009-Adaptive-Autonomy-And-Persistence.md) Decision #8. No maximum interval cap is imposed beyond the exponential formula. |
+| NFR-REL-003 | Error recovery | Automatic retry (configurable) | Exponential backoff, max 3 retries (attempt=0 is the first retry; 1 initial execution + 3 retries = 4 total executions maximum); each delay = `base × 2^attempt × random(0.5…1.5)` (jitter); retry across tool invocations, sub-agent delegation, and provider reconnects per [AUTONOMY_STABILITY.md §9.2](../specs/AUTONOMY_STABILITY.md#92-retry-policy) and [ADR-0009](../docs/adr/ADR-0009-Adaptive-Autonomy-And-Persistence.md) Decision #8. No maximum interval cap is imposed beyond the exponential formula. |
 | NFR-REL-004 | Data persistence | ACID-compliant | Room with WAL mode |
 | NFR-REL-005 | Graceful degradation | Degrade features, not crash | Fallback providers, cached responses |
 | NFR-REL-006 | Offline mode | Read-only workspace access | Local data available without network |
