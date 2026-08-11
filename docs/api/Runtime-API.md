@@ -66,7 +66,11 @@ data class ExecutionProjection(
     val version: Long
 )
 
-data class ResumeExecutionRequest(
+data class 
+
+> **DEC-7 (2026-08-11):** PATH A (RetryPending retry) preserves the same `idempotencyKey` and `executionId`. PATH B (terminal retry via `retryExecution`) creates a new `executionId` and a new idempotency boundary. See `decisions/DEC-7-retry-attempt-state.md`.
+
+ResumeExecutionRequest(
     val executionId: String,
     val checkpointId: String,
     val correlationId: String,

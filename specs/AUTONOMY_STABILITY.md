@@ -11,6 +11,9 @@
 
 ---
 
+
+> **DEC-7 (2026-08-11):** Retry lifecycle clarification: RetryPending retry preserves `executionId`; explicit retry after terminal state creates a new `executionId` with `priorExecutionId` linkage. RetryPending is EPHEMERAL. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+
 ## Overview
 
 Two goals: **deeper autonomy** (agents recover, re-plan, learn, and earn trust on

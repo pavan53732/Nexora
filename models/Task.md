@@ -78,6 +78,9 @@ data class CanonicalErrorEnvelope(
 )
 ```
 
+
+> **DEC-7 (2026-08-11):** `TaskStatus.RETRY_PENDING` remains a Task lifecycle state, but retry-attempt indexing is not stored on Task. The authoritative retry-attempt index is `Execution.retryAttempt`, and RetryPending is EPHEMERAL. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+
 ## Lifecycle and Execution Semantics
 
 `status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.

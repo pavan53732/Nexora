@@ -11,6 +11,7 @@ data class Execution(
     val id: String,
     val workspaceId: String,
     val correlationId: String,
+    val retryAttempt: Int = 0,  // DEC-7: retry attempt index, scoped per-Execution
     val taskId: String?,
     val status: ExecutionStatus,
     val phase: ExecutionPhase,

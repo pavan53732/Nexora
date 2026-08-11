@@ -8,6 +8,10 @@
 
 > Communication and wire contract between the Orchestration Engine, CheckpointManager, and TaskScheduler.
 
+
+
+> **DEC-7 (2026-08-11):** PATH A (RetryPending retry) preserves `executionId`. PATH B (terminal retry via `retryExecution`) creates a new `executionId` with `priorExecutionId` referencing the terminal predecessor. See `decisions/DEC-7-retry-attempt-state.md`.
+
 ## Execution Lifecycle Flow
 
 ```

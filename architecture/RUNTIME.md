@@ -11,6 +11,9 @@
 
 ---
 
+
+> **DEC-7 (2026-08-11):** Retry-attempt indexing is Execution-scoped via `retryAttempt`. RetryPending is EPHEMERAL and does not survive process death. Explicit retry after a committed terminal state creates a new `executionId`; RetryPending retry does not. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+
 ## Overview
 
 The Core Runtime is the composition layer of Nexora. It coordinates runtime services

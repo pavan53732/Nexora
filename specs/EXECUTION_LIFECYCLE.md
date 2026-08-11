@@ -11,6 +11,9 @@
 
 ---
 
+
+> **DEC-7 (2026-08-11):** `RetryPending` is EPHEMERAL and is not reconstructed after process death. Execution identity remains stable for RetryPending retry and changes only for explicit retry after a committed terminal state. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+
 ## Overview
 
 The AI determines **far more than tools and execution order**. For every goal, the

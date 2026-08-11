@@ -96,6 +96,7 @@ by name but MUST NOT redefine their columns.
 | version | INTEGER | Monotonic; checkpoint/resume increments |
 | checkpointId | TEXT NULL | FK → execution_checkpoint.id |
 | priorExecutionId | TEXT NULL | FK → execution.executionId (retry lineage) |
+| retryAttempt | INTEGER NOT NULL DEFAULT 0 | DEC-7: retry attempt index, scoped per-Execution |
 | escalationPayload | TEXT NULL | JSON blob captured on requestEscalation; NULL after resolveEscalation |
 | createdAt | TEXT | |
 | updatedAt | TEXT | |

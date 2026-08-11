@@ -10,6 +10,9 @@
 
 ---
 
+
+> **DEC-7 (2026-08-11):** Provider `Retry-After` handling remains independent from Task `RetryPending`; no canonical precedence or interaction is defined. Retry lifecycle identity and durability semantics are defined in [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+
 ## Overview
 
 All Nexora errors use the `NXR-` prefix and are grouped by subsystem. Each error carries an HTTP-like category indicating the responsible party and a recovery strategy for callers.

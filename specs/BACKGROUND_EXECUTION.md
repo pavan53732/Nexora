@@ -106,6 +106,8 @@ surfaces in the workflow engine (Phase 8 plugin scheduling).
 - Checkpoints are stored per workspace (`sandbox/workspaces/{id}/tasks/`) with WAL
   journaling for crash-safe writes (NFR-REL-001).
 
+> **DEC-7 (2026-08-11):** BootReceiver does **not** reconstruct RetryPending state. RetryPending is EPHEMERAL and is lost on process death. BootReceiver only resumes checkpointed executions (CREATED/RUNNING/BLOCKED states), not RetryPending tasks.
+
 ## 4. Notifications
 
 | Notification | When | Channel |

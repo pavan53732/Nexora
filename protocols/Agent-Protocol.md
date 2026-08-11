@@ -9,6 +9,9 @@
 
 > Communication contract between the runtime and agents.
 
+
+> **DEC-7 (2026-08-11):** Idempotency scope is per-Execution. RetryPending retry preserves the same `executionId` and idempotency boundary; explicit retry after terminal state creates a new execution identity and a new idempotency boundary. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+
 ## Flow
 
 1. Runtime creates a `StartTaskRequest` with `requestId`, `correlationId`, workspace identity, caller identity, and task goal.

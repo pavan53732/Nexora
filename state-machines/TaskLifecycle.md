@@ -28,6 +28,8 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | **Cancelled** | Terminal state — cancelled by user or parent workflow. |
 | **RetryPending** | Failure was retryable; queued for re-execution after backoff. |
 
+> **DEC-7 (2026-08-11):** RetryPending state is **EPHEMERAL** — it does not survive process death. On crash, tasks in RetryPending are lost and must be handled via the post-crash transition path (see `decisions/DEC-7-retry-attempt-state.md`).
+
 ## Transitions
 
 | Trigger | From | To | Guard |
