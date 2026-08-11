@@ -36,9 +36,8 @@ Every durable transition SHOULD emit workspace identity, prior state, new state,
 - `Archived → Deleted`: User deletes; automatic deletion after retention period expires.
 
 ### Lifecycle Authorities
-- `WorkspaceLifecycle.md` (this file) — canonical state machine.
 - `state-machines/WorkspaceLifecycle.md` — canonical state machine (Created/Active/Suspended/Archived/Deleted).
-- this file — thin lifecycle authority / narrative reference.
+- this file — supporting lifecycle narrative and thin reference only.
 - `docs/LIFECYCLES.md` — overview referencing this document.
 - `docs/MODULE_BOUNDARIES.md` — workspace module boundary (runtime ownership).
 - `models/Workspace.md` — workspace model (`Workspace.md` updated with `maxConcurrency` per S1).
