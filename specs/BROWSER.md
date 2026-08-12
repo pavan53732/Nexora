@@ -38,7 +38,7 @@ Instead, Nexora implements the **Headless WebView Bridge Protocol**. This protoc
 │  │  proot Linux Guest (Debian)       │              │  │
 │  │                                   │              │  │
 │  │   Agent Loop ───────── [Tool] ────┘              │  │
-│  │   (Python/Node)       (browser_navigate)         │  │
+│  │   (Python/Node)       (browser_open / TOOL-245)  │  │
 │  │                                                  │  │
 │  │   /workspace/downloads/ ◄────────────────────────│  │
 │  │   (Shared storage path for downloads/scrapes)    │  │
@@ -58,7 +58,7 @@ Browser automation is exposed to the agent loop via specialized tools (`TOOL-2xx
 | `browser_screenshot`| `TOOL-248` | Captures a high-resolution PNG of the active page | `outputFilename` | Draws the WebView canvas onto an Android Bitmap; saves to workspace `/files/` |
 | `browser_extract` | `TOOL-247` | Extracts text, links, headings, or metadata | `selector`, `mode` | Executes host-side JavaScript to parse DOM; returns JSON structure |
 | `browser_click` | `TOOL-249` | Performs a click event on an element matching a CSS selector | `selector` | Dispatches simulated touch events to WebView coordinates |
-| `browser_fill` | `TOOL-250` | Injects text into an input field or form element | `selector`, `value`| Focuses element and programmatically changes the value attribute |
+| `browser_type` | `TOOL-250` | Injects text into an input field or form element | `selector`, `value`| Focuses element and programmatically changes the value attribute |
 | `browser_evaluate` | `TOOL-256` | Runs raw JavaScript inside the page context and returns serializable output | `script` | Invokes `WebView.evaluateJavascript()` with callback |
 
 ---
@@ -136,6 +136,6 @@ When `browser_open` (`TOOL-245`) attempts to load a blocked domain (`*.bank*`, `
 
 ## 6. Phase Mapping
 
-- **Phase 3 (Core Telemetry)**: Headless WebView class integration; core navigation and text extraction tools (`browser_navigate`, `browser_extract`).
+- **Phase 3 (Core Telemetry)**: Headless WebView class integration; core navigation and text extraction tools (`browser_open` / `TOOL-245`, `browser_extract`).
 - **Phase 4 (Autonomy)**: Screenshot capture (`browser_screenshot`) writing to VFS; form-fill and click simulation; content quarantine wrapping.
 - **Phase 5 (Advanced Templates)**: Playwright-compatible Python/Node wrapper scripts inside the guest that proxy commands to the host JVM port dynamically.
