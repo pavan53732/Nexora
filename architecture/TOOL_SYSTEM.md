@@ -30,6 +30,35 @@ interface Tool {
     val parameters: JsonSchema
     val requiredPermissions: List<String> // canonical PermissionScope IDs
     val timeout: Duration
+    val timeout: Duration
+
+## Timeout Semantics
+
+Tool invocation timeouts are classified as follows:
+
+- **Soft timeout**: the tool invocation SHOULD complete within this budget; exceeding it triggers a progress check but does not immediately fail the invocation.
+- **Hard timeout**: the tool invocation MUST NOT exceed this budget; exceeding it terminates the invocation with a `TIMEOUT` outcome.
+
+Timeout classification:
+
+- `NOT_REACHED` — invocation completed before timeout.
+- `SOFT_EXCEEDED` — soft timeout exceeded; invocation continues under progress monitoring.
+- `HARD_EXCEEDED` — hard timeout exceeded; invocation terminated.
+
+Retry eligibility:
+
+- `SOFT_EXCEEDED` MAY be eligible for retry if the tool's retry policy permits and the failure is not classified as non-retryable.
+- `HARD_EXCEEDED` is generally non-retryable unless the tool explicitly declares timeout-retry eligibility.
+
+Non-retryable failure classes include:
+
+- authorization failures;
+- schema validation failures;
+- permanent tool errors (e.g., missing required resource);
+- repeated identical failures after strategy mutation.
+
+Timeout values are specified per-tool in the tool descriptor and MUST respect workspace sandbox limits.
+
     val requiresSandbox: Boolean
     val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery
     val supportsStreaming: Boolean

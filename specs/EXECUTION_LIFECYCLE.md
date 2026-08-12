@@ -126,6 +126,40 @@ Stages marked with `->` are mandatory; testing stages apply **where applicable**
 (small tasks may skip E2E). Each stage has a **pass gate**: if validation fails, the
 pipeline returns to the relevant earlier stage (bounded fix loop, FR-EL-013).
 
+
+## Failure Classification
+
+Execution failures are classified as follows:
+
+### Transient failures
+
+- Network timeouts (soft);
+- Provider rate-limit (429);
+- Temporary resource exhaustion;
+- Transient tool errors (retryable).
+
+Transient failures MAY be retried subject to bounded retry policy.
+
+### Permanent failures
+
+- Authorization failures;
+- Schema validation failures;
+- Missing required resources;
+- Permanent tool errors (non-retryable);
+- Repeated identical failures after strategy mutation.
+
+Permanent failures MUST NOT be retried without explicit strategy change or user intervention.
+
+### Escalation failures
+
+- Bounded-progress violations;
+- Retry-storm detection;
+- Deadline exceeded;
+- Resource quota exceeded.
+
+Escalation failures trigger user notification or termination with incomplete/blocked status.
+
+
 ## 3. Validation & Verification (FR-EL-008, FR-EL-011)
 
 | Stage | Validation criteria |

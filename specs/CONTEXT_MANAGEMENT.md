@@ -151,6 +151,26 @@ All inputs injected into the context window are structured with explicit XML tag
 - **`<untrusted_content>` Gating**: Any content retrieved from external sources (web scrapes, downloads, third-party plugin repositories) MUST be enclosed within the `<untrusted_content>` block.
 - **Instruction Stripping**: The system prompt instructs the provider model to treat text inside `<untrusted_content>` strictly as passive data. The model is forbidden from executing commands or following directives found inside untrusted blocks.
 - **Freshness Validation (FR-CM-005)**: Before any loop iteration, the `ContextBuilder` re-validates that all referenced files, workspace parameters, and provider statuses have not drifted. Stale segments are marked `EXPIRED` and re-fetched.
+- **Freshness Validation (FR-CM-005)**: Before any loop iteration, the `ContextBuilder` re-validates that all referenced files, workspace parameters, and provider statuses have not drifted. Stale segments are marked `EXPIRED` and re-fetched.
+
+## Stale Evidence Precedence
+
+When evidence conflicts due to staleness, the following precedence rules apply:
+
+1. **Canonical conversation facts** (immutable message history) override all derived context.
+2. **Fresh tool results** override stale tool results from the same tool.
+3. **Fresh memory entries** override stale memory entries of the same kind.
+4. **Fresh summaries** override stale summaries of the same source.
+5. **Verified evidence** overrides unverified or contradicted evidence.
+
+Staleness is determined by:
+
+- explicit freshness timestamps or sequence numbers;
+- invalidation events from the source subsystem;
+- detection of contradictory newer evidence.
+
+Stale evidence that cannot be refreshed enters a conflict state and MUST NOT silently override fresh evidence. The runtime escalates unresolved conflicts when they affect task completion criteria.
+
 
 ---
 
