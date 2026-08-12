@@ -3,6 +3,7 @@
 >
 > Depends on: the canonical memory architecture document.
 > Referenced by: models, context management, ranking, and tests.
+> This protocol is the externally visible contract for Memory operations within the repository; no separate docs/api/Memory-API.md artifact exists or is required by current repository evidence.
 
 # Memory Protocol — Nexora
 

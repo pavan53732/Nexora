@@ -96,3 +96,5 @@ Canonical architecture or specification
 ```
 
 When a document disagrees with its canonical source, the canonical source wins and the disagreement must be corrected or recorded as an ADR.
+
+| Memory Protocol as internal subsystem contract boundary | `protocols/Memory-Protocol.md` | `architecture/MEMORY_SYSTEM.md`, `models/Memory.md`, `lifecycle/MemoryLifecycle.md`, `specs/CONTEXT_MANAGEMENT.md` | Memory is an internal subsystem boundary; no separate `docs/api/Memory-API.md` artifact is required by current repository evidence. |

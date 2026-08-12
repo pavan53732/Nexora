@@ -95,3 +95,8 @@ No executable implementation or runnable test is claimed by this traceability se
 | NFR-CI-002 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md`, `architecture/TOOL_SYSTEM.md` |
 | NFR-REL-004 | `architecture/AGENT_RUNTIME.md` | `specs/EXECUTION_LIFECYCLE.md`, `decisions/DEC-7-retry-attempt-state.md` |
 | NFR-PERF-006 | `architecture/AGENT_RUNTIME.md` | `architecture/PROVIDER_SYSTEM.md`, `docs/PERFORMANCE_BUDGET.md` |
+
+
+| Memory API boundary determination | `architecture/MEMORY_SYSTEM.md`, `protocols/Memory-Protocol.md` | `models/Memory.md`, `lifecycle/MemoryLifecycle.md`, `specs/CONTEXT_MANAGEMENT.md` | No separate `docs/api/Memory-API.md` exists; protocol is the repository contract boundary | RESOLVED (internal subsystem / protocol-sufficient) |
+| Session–Conversation implementation closure | `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `specs/DATABASE_SCHEMA.md` | `docs/TRACEABILITY.md` existing DEC-13..DEC-21 rows | OK |
+| Conversation persistence closure | `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/DATABASE_SCHEMA.md` | `decisions/DEC-13-conversation-identity-persistence.md`, `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md` | `docs/CANONICAL_SOURCES.md` existing conversation rows | OK |

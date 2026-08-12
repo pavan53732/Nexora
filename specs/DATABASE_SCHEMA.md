@@ -416,3 +416,10 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 Room schema version is monotonically increased. Migrations are forward-only; downgrade
 is not supported. Each migration is recorded in `room_master_table` and the
 `CHANGELOG.md` references the spec version that introduced the change.
+
+
+## Session–Conversation Trace Closure
+
+The schema is the persistence authority for storage shape, but it does not rewrite relationship semantics. For conversation identity and Session–Conversation continuation, the schema must preserve the identifiers and lineage fields required by `decisions/DEC-13-conversation-identity-persistence.md` and `decisions/DEC-14-session-conversation-relationship-semantic-status.md` through `decisions/DEC-21-session-conversation-continuation-recovery.md`.
+
+The schema is intentionally silent on whether a Conversation is exposed as a public API object; that determination is owned by the architecture and protocol documents, not by the schema.

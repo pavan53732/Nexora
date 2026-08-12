@@ -38,3 +38,13 @@ Nexora uses SQLite for structured data storage within the sandbox and for the me
 
 - **Phase 3**: SQLite available in sandbox.
 - **Phase 6**: Memory system uses SQLite.
+
+
+## Traceability Closure
+
+- `requirements/FR.md` and `requirements/NFR.md` define the requirement layer.
+- `specs/DATABASE_SCHEMA.md` defines the authoritative persistent storage shape.
+- `architecture/RUNTIME.md` and `architecture/MEMORY_SYSTEM.md` define runtime and memory behavior that depend on persistence.
+- `decisions/DEC-13-conversation-identity-persistence.md` and `decisions/DEC-14-session-conversation-relationship-semantic-status.md` through `decisions/DEC-21-session-conversation-continuation-recovery.md` define the conversation/session semantics that the schema must preserve.
+
+This document does not choose storage technology beyond the repository’s existing SQLite/Room-oriented schema authority.

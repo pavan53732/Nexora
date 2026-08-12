@@ -7,6 +7,7 @@
 >
 > Depends on: [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) (read-time consumer).
 > Referenced by: [AGENT_RUNTIME.md](AGENT_RUNTIME.md), [RUNTIME.md](RUNTIME.md), [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md).
+> Memory is an internal subsystem boundary, not a public API surface; protocol and model documents are the authoritative contract boundaries for consumers within the repository.
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 

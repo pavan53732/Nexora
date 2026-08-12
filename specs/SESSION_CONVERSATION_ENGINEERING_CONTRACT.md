@@ -201,3 +201,38 @@ Implementation MUST NOT infer that:
 - process death automatically mutates Conversation semantics,
 - application restart automatically creates continuation,
 - Runtime, Memory, or Checkpoint owns the relationship semantics.
+
+
+## Implementation Closure
+
+This specification does not alter DEC-13 through DEC-21. It only closes implementation-facing boundaries that those decisions already imply.
+
+### Decided semantics
+
+- Conversation identity is durable and immutable once established by DEC-13.
+- Session–Conversation relationship semantics remain owned by DEC-14 through DEC-21.
+- Conversation checkpoint and non-destructive rollback semantics remain owned by `architecture/CONVERSATION_CHECKPOINTS.md` and `specs/CONVERSATION_CHECKPOINTS.md`.
+
+### Implementation constraints
+
+- A consumer must treat the canonical decisions as the authority for identity, ownership, cardinality, and continuation semantics.
+- Implementation must not infer a separate relationship identity or a separate relationship lifecycle.
+- Implementation must preserve checkpoint lineage and the source Conversation during branch or continuation operations.
+
+### Persistence requirements
+
+- Persistent storage must preserve enough information to distinguish a same-Conversation recovery from a new-Session continuation.
+- Persistent storage must preserve checkpoint lineage, source Conversation addressability, and branch result addressability.
+- Persistent storage requirements are satisfied only where the repository already defines them in the database/schema documents; this specification does not choose a storage technology.
+
+### Recovery requirements
+
+- Recovery must restore the conversation record boundary and conversation-local metadata only.
+- Recovery must not implicitly restore unrelated task, execution, provider, workspace, or external state.
+- Recovery semantics remain non-destructive and idempotent where already established by the canonical checkpoint documents.
+
+### Unresolved choices
+
+- Storage technology.
+- Retention policy beyond existing database/schema authority.
+- Any behavior not already decided by DEC-13 through DEC-21 or the checkpoint documents.
