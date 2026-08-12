@@ -1,7 +1,7 @@
 # Conversation Checkpoints — Nexora
 
 > **Status: CANONICAL** for conversation checkpoint and rollback semantics.
-> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes a narrow Conversation identity contract; Conversation-to-Session cardinality, Conversation resumption, Session-closure/expiration effects on Conversation, branch-lineage ownership, and the conversation-local metadata boundary remain unresolved architecture dependencies to be completed before implementation.
+> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes a narrow Conversation identity contract and DEC-14 establishes the Session–Conversation relationship as a first-class semantic relationship; Conversation-to-Session cardinality, Conversation resumption, Session-closure/expiration effects on Conversation, relationship ownership, relationship identity, relationship representation, branch-lineage ownership, and the conversation-local metadata boundary remain unresolved architecture dependencies to be completed before implementation.
 > Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, and `DEC-13-conversation-identity-persistence.md`.
 
 ## Scope
@@ -18,7 +18,7 @@ A conversation checkpoint is an immutable boundary over one conversation's order
 
 ## Conversation and session boundary
 
-A Session is a durable runtime context container governed by `state-machines/SessionLifecycle.md`; it is not automatically identical to a Conversation. Per DEC-13, a Conversation has a distinct, durable, immutable conversation identity, an ordered conversation record, and conversation-local metadata; the concrete identifier representation remains intentionally unselected. The Conversation-to-Session relationship — including cardinality, whether a Conversation may be resumed through a later Session, and the effect of Session closure, expiration, or recreation on Conversation identity or persistence — remains an unresolved architecture decision not answered by DEC-13.
+A Session is a durable runtime context container governed by `state-machines/SessionLifecycle.md`; it is not automatically identical to a Conversation. Per DEC-13, a Conversation has a distinct, durable, immutable conversation identity, an ordered conversation record, and conversation-local metadata; the concrete identifier representation remains intentionally unselected. DEC-14 establishes that the Conversation-to-Session relationship is first-class semantic architecture. It does not select cardinality, relationship ownership, relationship identity, relationship representation, whether a Conversation may be resumed through a later Session, or the effect of Session closure, expiration, or recreation on Conversation identity or persistence; those remain unresolved architecture decisions.
 
 ## Checkpoint contents
 
