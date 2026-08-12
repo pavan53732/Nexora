@@ -43,14 +43,14 @@ data class AgentOutput(
 
 ## Grounding & Anti-Hallucination Enforcements
 
-Custom agents extending the SDK are bound by the platform's anti-hallucination rules:
+Custom agents extending the SDK are bound by the Evidence & Validation Engine's anti-hallucination rules:
 - **Zero-Assumption Mode**: The agent is forbidden from assuming or guessing missing parameters. If ambiguous, the agent loop MUST call `askUser()` or yield with a clarification request.
 - **Tool-Before-Claim**: Any factual claim made by the agent in chat MUST trace directly to a tool result stored in the active task history. Unsourced statements are highlighted as opinion or unverified.
 - **Git Grounding Rules**: When executing version control tasks, the agent MUST run a read-only pass (status → diff) before running mutable actions. No destructive actions are permitted without a generated preview.
 
 ## Errors & Watchdog Heartbeats
 
-Agents running autonomous loops MUST report periodic watchdog heartbeats via `context.heartbeat()`. If an agent hangs or fails to iterate for longer than `maxIterationTimeMs`, the platform watchdog traps the freeze, logs `NXR-3004` (Agent Timeout), cancels the coroutine context, and attempts to restart the loop from the last valid checkpoint.
+Agents running autonomous loops MUST report periodic watchdog heartbeats via `context.heartbeat()`. If an agent hangs or fails to iterate for longer than `maxIterationTimeMs`, the application watchdog traps the freeze, logs `NXR-3004` (Agent Timeout), cancels the coroutine context, and attempts to restart the loop from the last valid checkpoint.
 
 ## Typed Inference Consumption
 

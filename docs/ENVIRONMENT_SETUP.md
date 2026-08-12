@@ -520,7 +520,7 @@ The environment is fully verified and documented. When instructed to proceed:
 1. **Phase 1 (Android Foundation):** Create `android/` scaffold with Kotlin + Gradle + Compose BOM + Room.
 2. **Phase 2 (Core Runtime):** Implement agent loop interfaces.
 3. **Phase 3 (Sandbox):** Integrate embedded runtimes (Chaquopy, QuickJS, JGit) and Sandbox Manager.
-4. **Phase 4+ (Tools / Providers / Memory / Agents):** Build out the full platform.
+4. **Phase 4+ (Tools / Providers / Memory / Agents):** Build out the remaining application capabilities.
 
 ---
 

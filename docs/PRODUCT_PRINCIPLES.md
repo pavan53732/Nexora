@@ -16,7 +16,7 @@ the principle.
 
 ## 2. Positioning Statement
 
-> **Nexora is an Android-native platform of autonomous AI agents.**
+> **Nexora is an Android-native application for autonomous AI agents.**
 > You talk to agents — they get real work done.
 > Think. Plan. Execute.
 
@@ -30,7 +30,7 @@ trigger automatically (ADR-0006).
 
 ### PP-001 — Autonomous Agents, Not a Chatbot
 
-Nexora is an **agent platform**, not a chat application. Every conversation is a
+Nexora is an **agent-driven Android application**, not a chat application. Every conversation is a
 potential execution; every message is a potential task. The user gives a **goal**; the
 agent plans, uses tools, iterates, and completes the goal autonomously.
 

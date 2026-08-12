@@ -6,7 +6,7 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
-Measurable performance targets for Nexora — an Android-native autonomous AI agent platform (Kotlin/Java, API 34+, targeting mid-range devices). These are **hard budgets**: if a metric exceeds its budget, it is a regression that must be fixed before release.
+Measurable performance targets for Nexora — an Android-native autonomous AI agent application (Kotlin/Java, API 34+, targeting mid-range devices). These are **hard budgets**: if a metric exceeds its budget, it is a regression that must be fixed before release.
 
 ## Startup & Navigation
 

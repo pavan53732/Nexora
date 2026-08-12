@@ -73,4 +73,4 @@ refactor(plugin): simplify plugin loading
 
 ---
 
-Thank you for helping build the Android AI Agent Platform.
+Thank you for helping build the Android AI Agent Application.

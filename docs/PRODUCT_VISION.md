@@ -15,12 +15,12 @@
 ## What Nexora Is
 
 - **An Android application** — A native app you install from an APK or app store.
-- **An autonomous AI agent platform** — AI agents that think, plan, and execute on their own.
+- **An autonomous AI agent application** — AI agents that think, plan, and execute on their own.
 - **A multi-agent execution environment** — Multiple specialized agents collaborating on tasks.
 - **An agent-first AI workspace** — The user interacts with AI agents; infrastructure stays hidden.
 - **A sandboxed AI runtime** — Internal secure execution environment isolated from the host system; the agent uses it automatically, the user never touches it.
 - **A project workspace** — Manage files, code, and tasks inside the app.
-- **A tool execution platform** — 300-500+ tools across 28 categories, invoked by agents on the user's behalf.
+- **A tool-enabled application** — 300-500+ tools across 28 categories, invoked by agents on the user's behalf.
 - **A plugin-based AI ecosystem** — Extensible through plugins and community contributions.
 
 ## Interaction Model
@@ -69,13 +69,13 @@ The application should feel like having an **autonomous software engineer** runn
 
 ## Product Positioning
 
-> **Android AI Agent Platform**
+> **Android AI Agent Application**
 
-Nexora is consistently positioned as an **Android AI Agent Platform** — an app with a comprehensive AI agent platform inside it, rather than an operating system.
+Nexora is consistently positioned as an **Android AI Agent Application** — an app with comprehensive AI agent capabilities, rather than an operating system.
 
 Alternative phrasings:
 
-- Autonomous AI Agent Platform for Android
+- Autonomous AI Agent Application for Android
 - The Ultimate AI Agent App for Android
 
 ## Brand Identity
@@ -96,7 +96,7 @@ Alternative phrasings:
 
 | Component | Estimated Count |
 |-----------|----------------|
-| Core Platform Modules | 17+ |
+| Core Application Modules | 17+ |
 | Tool Categories | 28 |
 | Individual Tool Functions | 300-500 |
 | Built-in Agent Types | 10-20 |
@@ -105,7 +105,7 @@ Alternative phrasings:
 
 ## Long-Term Goal
 
-Create the **world's most capable Android AI Agent Platform**, comparable to Cursor, Cline, Claude Code, Roo Code, GitHub Copilot Agent, Gemini CLI, and OpenHands — but designed specifically for Android.
+Create the **world's most capable Android AI Agent Application**, comparable to Cursor, Cline, Claude Code, Roo Code, GitHub Copilot Agent, Gemini CLI, and OpenHands — but designed specifically for Android.
 
 ## Product Philosophy
 
@@ -161,10 +161,10 @@ Workspace
 | **Cline** | VS Code | Autonomous AI coding agent. Nexora is a standalone Android equivalent. |
 | **Claude Code** | CLI | Terminal-based AI agent. Nexora adds GUI + mobile. |
 | **Roo Code** | VS Code | Multi-model AI agent. Nexora supports multiple providers natively. |
-| **GitHub Copilot Agent** | VS Code/GitHub | Integrated AI coding. Nexora is platform-independent. |
+| **GitHub Copilot Agent** | VS Code/GitHub | Integrated AI coding. Nexora is an Android-native application. |
 | **Gemini CLI** | CLI | Google's CLI agent. Nexora adds GUI, plugins, and mobile. |
 | **OpenHands** | Web/Desktop | AI software engineer. Nexora is Android-first. |
 
 ### Key Differentiator
 
-Nexora is the **only** platform designed specifically for **Android** as a first-class platform, not a port or wrapper.
+Nexora is the **only** application designed specifically for **Android** as a first-class target, not a port or wrapper.

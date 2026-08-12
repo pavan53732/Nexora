@@ -93,7 +93,7 @@ User or policy approves → skill updated/created
 ```
 
 Lessons are also retrieved during planning (Context Builder pulls relevant lessons for
-similar tasks), so the platform literally gets smarter with use.
+similar tasks), so the application literally gets smarter with use.
 
 ## 5. Trust Growth (FR-AS-005)
 

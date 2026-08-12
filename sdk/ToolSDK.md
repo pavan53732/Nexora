@@ -41,7 +41,7 @@ data class ToolOutput(
 
 ## Lifecycle Alignment
 
-When writing custom tools, authors MUST respect the platform's lifecycle boundaries:
+When writing custom tools, authors MUST respect the documented lifecycle boundaries:
 - **Terminal Session Alignment**: Tools executing commands within bash or persistent consoles MUST register their process handles using the `TerminalSessionLifecycle` registry, allowing the watchdog to monitor for hangs.
 - **Transactional Side-effects**: Stateful tools modifying workspace files MUST utilize the virtual filesystem (`VFS`) interface rather than raw Java IO, allowing automated per-file snapshots (`FR-M012`) and full workspace rollbacks (`FR-S013`).
 

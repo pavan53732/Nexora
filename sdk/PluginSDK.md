@@ -6,7 +6,7 @@ The Plugin SDK defines the standard packaging structure, entry-point interfaces,
 
 ## SDK Architecture
 
-All Nexora plugins MUST implement the `NexoraPlugin` entry-point interface provided by the SDK. The platform's dynamic ClassLoader boundary loads the class marked as the `entry-point` in the plugin manifest and drives its activation.
+All Nexora plugins MUST implement the `NexoraPlugin` entry-point interface provided by the SDK. The application's dynamic ClassLoader boundary loads the class marked as the `entry-point` in the plugin manifest and drives its activation.
 
 ```kotlin
 package com.nexora.app.sdk.plugin
@@ -52,8 +52,8 @@ failed activation rolls back to the prior committed plugin state.
 
 Plugins operate within strict sandbox boundaries:
 - **ClassLoader Isolation**: Plugins are loaded via separate `DexClassLoader` instances. A plugin CANNOT inspect or invoke host classes unless they are explicitly exposed in the SDK package (`com.nexora.app.sdk.*`).
-- **Least-Privilege Declarations**: All required security permissions (e.g. `sandbox:read`, `network:http`) MUST be statically declared inside the plugin manifest. The platform validates these permissions against user-granted profiles at installation time, blocking activation if unauthorized.
+- **Least-Privilege Declarations**: All required security permissions (e.g. `sandbox:read`, `network:http`) MUST be statically declared inside the plugin manifest. The `PluginManager` validates these permissions against user-granted profiles at installation time, blocking activation if unauthorized.
 
 ## Errors & Exception Guidelines
 
-Plugin authors MUST catch internal failures and translate them into clean, descriptive SDK outcomes. Leaking native platform exceptions triggers an unhandled crash trap, forcing the `PluginManager` to transition the plugin state to `FAILED`, disable its capabilities, and isolate its classloader for safety.
+Plugin authors MUST catch internal failures and translate them into clean, descriptive SDK outcomes. Leaking native application exceptions triggers an unhandled crash trap, forcing the `PluginManager` to transition the plugin state to `FAILED`, disable its capabilities, and isolate its classloader for safety.

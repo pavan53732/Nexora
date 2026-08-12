@@ -6,7 +6,7 @@
 
 # Plugin Protocol — Nexora
 
-> Communication contract between the PluginManager, Registry, and platform ClassLoader boundary.
+> Communication contract between the PluginManager, Registry, and application ClassLoader boundary.
 
 ## Installation Flow
 
