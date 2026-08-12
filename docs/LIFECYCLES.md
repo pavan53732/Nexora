@@ -24,7 +24,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Deletion.** `WorkspaceManager.delete(id)` first confirms with the user, stops all running agents within the workspace, deletes the sandbox directory, performs a cascading DB delete, and publishes `WorkspaceDeleted`.
 
-**Error Recovery.** If sandbox directory creation fails, error code NXR-7001 is raised. The workspace is marked with an error state and the user is offered a retry action.
+**Error Recovery.** If sandbox directory creation fails, error code NXR-7001 is raised. Directory allocation terminates and the Workspace remains uncreated; canonical Sandbox recovery retries sandbox creation.
 
 ---
 
