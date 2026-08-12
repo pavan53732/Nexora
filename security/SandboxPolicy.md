@@ -153,7 +153,7 @@ When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked 
 1. **Sandbox denies** (`NXR-7005` for filesystem/network escape attempts; `NXR-2003` for network connections to blocked domains).
 2. **Audit log entry** (`FR-TL015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
 3. **User notification** (`agent_error` — `NotificationHelper`) with isolation instruction: "Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."
-4. **Agent loop stops** (`AgentLoop` pauses at `Blocked` state — `state-machines/TaskLifecycle.md` `Blocked` — until user explicitly resolves isolation via workspace settings or provides explicit `ALLOW` for the specific scope + domain combination — `security/PermissionModel.md` `Workspace override` layer).
+4. **Continuation status:** The blocked-list rule remains in effect. The repository does not establish a TaskLifecycle state/transition or a permission-override mechanism for user resolution of blocked-list isolation; any future continuation path is **OPEN/DEFERRED**.
 
 **Traceability (G3 — Documentation Updates Only):**
 - `security/SandboxPolicy.md`: Updated (§Blocked Domains and Sensitive Apps — above).
