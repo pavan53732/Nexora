@@ -34,30 +34,37 @@ interface Tool {
 
 ## Timeout Semantics
 
-Tool invocation timeouts are classified as follows:
+Tool invocation timeouts are transport/execution outcomes that do NOT prove the underlying operation did not execute. A timeout may produce an **unknown completion state** for potentially non-idempotent tools.
 
-- **Soft timeout**: the tool invocation SHOULD complete within this budget; exceeding it triggers a progress check but does not immediately fail the invocation.
-- **Hard timeout**: the tool invocation MUST NOT exceed this budget; exceeding it terminates the invocation with a `TIMEOUT` outcome.
+### Completion State Classification
 
-Timeout classification:
+- **Confirmed failure**: the tool returned an explicit error response.
+- **Timeout**: the invocation exceeded its time budget without a confirmed outcome.
+- **Unknown completion**: a timeout where the tool may have partially or fully executed (non-idempotent operations).
+
+### Retry Eligibility
+
+Retrying an unknown-completion non-idempotent operation MUST NOT be treated as automatically safe. Retry eligibility requires one of:
+
+- established idempotency (`isIdempotent: true` in the tool descriptor);
+- explicit operation-level deduplication/idempotency semantics;
+- an explicit compensating/recovery mechanism.
+
+### Timeout Classification
+
+Timeout values are specified per-tool in the tool descriptor and MUST respect workspace sandbox limits. The following classifications are used:
 
 - `NOT_REACHED` — invocation completed before timeout.
-- `SOFT_EXCEEDED` — soft timeout exceeded; invocation continues under progress monitoring.
-- `HARD_EXCEEDED` — hard timeout exceeded; invocation terminated.
+- `EXCEEDED` — timeout exceeded; invocation terminated.
 
-Retry eligibility:
+### Retry and Non-Retryable Failures
 
-- `SOFT_EXCEEDED` MAY be eligible for retry if the tool's retry policy permits and the failure is not classified as non-retryable.
-- `HARD_EXCEEDED` is generally non-retryable unless the tool explicitly declares timeout-retry eligibility.
+- `EXCEEDED` is generally non-retryable for non-idempotent tools unless idempotency or compensation is established.
+- Non-retryable failure classes include authorization failures, schema validation failures, permanent tool errors, and repeated identical failures after strategy mutation.
 
-Non-retryable failure classes include:
+### Ownership
 
-- authorization failures;
-- schema validation failures;
-- permanent tool errors (e.g., missing required resource);
-- repeated identical failures after strategy mutation.
-
-Timeout values are specified per-tool in the tool descriptor and MUST respect workspace sandbox limits.
+Timeout monitoring is owned by the tool execution subsystem. The specific state transition authority for timeout handling is OPEN/DEFERRED pending explicit mapping to the existing ToolInvocation state model.
 
     val requiresSandbox: Boolean
     val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery

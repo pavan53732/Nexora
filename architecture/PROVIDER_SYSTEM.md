@@ -210,19 +210,27 @@ Provider selection SHOULD consider:
 - cost policy.
 
 The routing layer SHOULD distinguish latency-critical foreground execution from background work such as indexing, summarization refresh, and cache warming.
-The routing layer SHOULD distinguish latency-critical foreground execution from background work such as indexing, summarization refresh, and cache warming.
 
 ## Rate-Limit Handling
 
-Provider rate-limit responses are classified as transient failures that trigger bounded retry behavior with exponential backoff, subject to the following constraints:
+Provider rate-limit responses (HTTP 429 or provider-specific rate-limit error codes) are classified as bounded transient conditions where appropriate. Rate-limit handling is distinct from other failure classes and does not count against tool-level retry limits unless the tool explicitly couples to provider rate-limit state.
 
-- Rate-limit detection: HTTP 429 or provider-specific rate-limit error codes.
-- Backoff strategy: exponential backoff with jitter, bounded by a maximum retry count and total elapsed time.
-- Retry budget: rate-limit retries consume from the execution's overall retry budget; they do not grant unlimited additional attempts.
-- Failover: if rate-limit retries are exhausted, the provider router MAY fail over to an alternative provider if routing policy permits and the request is not provider-locked.
-- User notification: persistent rate-limit failures across providers escalate to user notification rather than silent degradation.
+### Failover
 
-Rate-limit handling is distinct from other failure classes and does not count against tool-level retry limits unless the tool explicitly couples to provider rate-limit state.
+- Failover is **OPTIONAL and policy-driven**, not automatically mandatory.
+- Failover is owned by the existing provider-routing authority and MUST respect the existing routing policy.
+- Provider capability compatibility must be respected before failover.
+- Sequential provider rate limits MUST NOT create unbounded retry/failover loops or retry storms.
+
+### Retry and Identity
+
+- Retry budgets remain bounded and continue to follow existing retry authority.
+- Provider switching MUST NOT silently create a new logical execution/retry lineage unless existing architecture explicitly requires that.
+- Execution/retry identity semantics remain stable across provider failover unless an existing canonical rule says otherwise.
+
+### User Notification
+
+Persistent rate-limit failures across providers escalate to user notification rather than silent degradation.
 
 
 Routing decisions MUST remain compatible with the provider abstraction and MUST NOT hardcode a single provider as universal default for all task classes.

@@ -155,7 +155,17 @@ All inputs injected into the context window are structured with explicit XML tag
 
 ## Stale Evidence Precedence
 
-When evidence conflicts due to staleness, the following precedence rules apply:
+When evidence conflicts due to staleness, the following rules apply:
+
+### Authority Preservation
+
+1. **Canonical-source authority is preserved.** Freshness and verification status are metadata used for retrieval and conflict handling; they do NOT override canonical-source authority. Canonical requirements, decisions, and specifications cannot be displaced merely because another artifact is newer.
+2. **Locked DEC-* decisions remain authoritative** according to repository authority rules (`docs/CANONICAL_SOURCES.md`). A stale canonical source remains authoritative until the repository's canonical authority is explicitly superseded.
+3. **Derived context, retrieved content, tool results, memory, summaries, and other contextual artifacts cannot silently redefine canonical behavior.**
+
+### Conflict Handling Among Contextual Artifacts
+
+Where canonical authority is not directly at stake, the following precedence applies among contextual artifacts:
 
 1. **Canonical conversation facts** (immutable message history) override all derived context.
 2. **Fresh tool results** override stale tool results from the same tool.
@@ -163,13 +173,23 @@ When evidence conflicts due to staleness, the following precedence rules apply:
 4. **Fresh summaries** override stale summaries of the same source.
 5. **Verified evidence** overrides unverified or contradicted evidence.
 
+### Definitions
+
+- **Authority**: The right to define normative behavior, owned by canonical documents (`docs/CANONICAL_SOURCES.md`).
+- **Provenance**: The origin and lineage of evidence (e.g., tool result, memory entry, summary).
+- **Freshness**: A retrieval classification indicating whether evidence has been recently validated or re-fetched.
+- **Verification status**: Whether evidence has been validated against its source or through independent checks.
+- **Conflict status**: Whether evidence contradicts other evidence or canonical authority.
+
+### Conflict Resolution
+
 Staleness is determined by:
 
 - explicit freshness timestamps or sequence numbers;
 - invalidation events from the source subsystem;
 - detection of contradictory newer evidence.
 
-Stale evidence that cannot be refreshed enters a conflict state and MUST NOT silently override fresh evidence. The runtime escalates unresolved conflicts when they affect task completion criteria.
+Stale evidence that cannot be refreshed enters a conflict state and MUST NOT silently override fresh evidence. Conflicting evidence MUST preserve provenance and authority rather than being resolved by freshness alone. The runtime escalates unresolved conflicts when they affect task completion criteria or canonical authority.
 
 
 ---

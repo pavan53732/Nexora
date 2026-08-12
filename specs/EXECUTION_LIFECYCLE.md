@@ -129,35 +129,45 @@ pipeline returns to the relevant earlier stage (bounded fix loop, FR-EL-013).
 
 ## Failure Classification
 
-Execution failures are classified as follows:
+Execution failures are classified as follows. Classification determines whether retry, recovery, escalation, or termination is permitted.
 
-### Transient failures
+### Transient failures (retry permitted)
+
+Transient failures MAY be retried subject to bounded retry policy. Examples include:
 
 - Network timeouts (soft);
 - Provider rate-limit (429);
 - Temporary resource exhaustion;
-- Transient tool errors (retryable).
+- Transient tool errors (retryable per tool policy).
 
-Transient failures MAY be retried subject to bounded retry policy.
+Classification criterion: the failure is recoverable without strategy change and is not on the permanent-failure list.
 
-### Permanent failures
+### Permanent failures (retry not permitted)
+
+Permanent failures MUST NOT be retried without explicit strategy change or user intervention. Examples include:
 
 - Authorization failures;
 - Schema validation failures;
 - Missing required resources;
-- Permanent tool errors (non-retryable);
+- Permanent tool errors (non-retryable per tool policy);
 - Repeated identical failures after strategy mutation.
 
-Permanent failures MUST NOT be retried without explicit strategy change or user intervention.
+Classification criterion: the failure is not recoverable without strategy change, or the tool explicitly declares it non-retryable.
 
-### Escalation failures
+### Escalation failures (user notification or termination)
+
+Escalation failures trigger user notification or termination with incomplete/blocked status. Examples include:
 
 - Bounded-progress violations;
 - Retry-storm detection;
 - Deadline exceeded;
 - Resource quota exceeded.
 
-Escalation failures trigger user notification or termination with incomplete/blocked status.
+Classification criterion: the failure indicates a systemic constraint violation rather than a recoverable operation failure.
+
+### Open/Deferred
+
+Specific error codes and state transitions for each class are OPEN/DEFERRED pending explicit binding to canonical error signals or state-machine transitions. Implementations MUST NOT invent arbitrary classification authority.
 
 
 ## 3. Validation & Verification (FR-EL-008, FR-EL-011)
