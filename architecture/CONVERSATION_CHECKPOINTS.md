@@ -1,7 +1,7 @@
 # Conversation Checkpoints — Nexora
 
 > **Status: CANONICAL** for conversation checkpoint and rollback semantics.
-> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. Conversation-specific persistence and identity semantics remain an architecture dependency to be completed before implementation.
+> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes a narrow Conversation identity contract; Conversation-to-Session cardinality, Conversation resumption, Session-closure/expiration effects on Conversation, branch-lineage ownership, and the conversation-local metadata boundary remain unresolved architecture dependencies to be completed before implementation.
 > Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, and `DEC-13-conversation-identity-persistence.md`.
 
 ## Scope
@@ -18,7 +18,7 @@ A conversation checkpoint is an immutable boundary over one conversation's order
 
 ## Conversation and session boundary
 
-A Session is a durable runtime context container governed by `state-machines/SessionLifecycle.md`; it is not automatically identical to a Conversation. Per DEC-13, a Conversation is a durable product-state record with a distinct durable conversation identity, an ordered conversation record, and conversation-local metadata. Conversation identity is separate from Session identity, and the concrete identifier representation remains intentionally unselected here. A Conversation MAY be resumed through a later Session, and closing or expiring a Session does not by itself redefine Conversation identity.
+A Session is a durable runtime context container governed by `state-machines/SessionLifecycle.md`; it is not automatically identical to a Conversation. Per DEC-13, a Conversation has a distinct, durable, immutable conversation identity, an ordered conversation record, and conversation-local metadata; the concrete identifier representation remains intentionally unselected. The Conversation-to-Session relationship — including cardinality, whether a Conversation may be resumed through a later Session, and the effect of Session closure, expiration, or recreation on Conversation identity or persistence — remains an unresolved architecture decision not answered by DEC-13.
 
 ## Checkpoint contents
 
@@ -34,7 +34,7 @@ Execution crash-recovery checkpoints, pre-tool checkpoints, file snapshots, work
 
 ## Rollback/branch
 
-Rollback validates the source conversation, checkpoint lineage, authorization, and freshness. It creates a new conversation branch with a new conversation identity and parent/source-checkpoint lineage. The source conversation remains unchanged. Per DEC-13, branch lineage is authoritative Conversation state; it is not only checkpoint-local metadata.
+Rollback validates the source conversation, checkpoint lineage, authorization, and freshness. It creates a new conversation branch with a new conversation identity and parent/source-checkpoint lineage. The source conversation remains unchanged. Per DEC-9, this lineage must be recorded and preserved; its precise ownership (Conversation-owned versus checkpoint-owned) remains an unresolved architecture decision not answered by DEC-13.
 
 The branch starts at the selected conversation boundary. No tool call, task, execution, provider request, message, Git operation, device action, or external mutation is replayed or reversed by this operation.
 
