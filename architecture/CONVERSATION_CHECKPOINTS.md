@@ -51,3 +51,15 @@ Checkpoint retention, expiration, deletion, quotas, and branch/source dependency
 ## User boundary
 
 The runtime may create and use checkpoints automatically. The user-visible surface is limited to a rollback/recover action, necessary confirmation, and result/status. Internal checkpoint identifiers and checkpoint management are not an administrative dashboard.
+
+
+## Engineering handoff references
+
+Implementation-facing projections of this canonical architecture are documented in:
+- `models/Conversation.md`
+- `models/Session.md`
+- `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`
+- `specs/SESSION_CONVERSATION_RUNTIME_RECOVERY.md`
+- `specs/SESSION_CONVERSATION_ERRORS.md`
+- `testing/SESSION_CONVERSATION_TEST_MATRIX.md`
+- `docs/SESSION_CONVERSATION_IMPLEMENTATION_HANDOFF.md`

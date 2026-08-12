@@ -96,20 +96,15 @@ Nexora/
 ├── docs/             # Product documentation
 ├── architecture/     # Architecture deep dives (10 documents)
 ├── specs/            # Component specifications (11 documents)
-├── android/          # Android application source
-├── runtime/          # Core runtime implementation
-├── plugins/          # Plugin implementations
-├── tools/            # Tool implementations
-├── agents/           # Agent implementations
-├── memory/           # Memory system
-├── sandbox/          # Sandbox implementation
-├── provider/         # AI provider implementations
-├── testing/          # Test suites
-├── scripts/          # Build and utility scripts
-├── assets/           # Static assets
-├── examples/         # Example plugins, agents, workflows
-├── design/           # UI/UX design assets
-└── roadmap/          # Roadmap planning
+├── docs/             # Current documentation corpus
+├── architecture/     # Canonical architecture documents
+├── decisions/        # Architecture decisions
+├── models/           # Domain model projections
+├── specs/            # Engineering-facing specifications
+├── state-machines/   # Canonical lifecycle/state machines
+├── testing/          # Test specifications and cases
+├── scripts/          # Utility/documentation scripts
+└── planned implementation modules/  # Android/runtime/tool/provider/etc. modules are planned by roadmap phases and are not yet present in this Phase 0 repository snapshot
 ```
 
 ---

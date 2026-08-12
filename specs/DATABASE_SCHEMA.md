@@ -42,6 +42,27 @@ by name but MUST NOT redefine their columns.
 
 ---
 
+
+## Session–Conversation semantic persistence contract
+
+The Session–Conversation semantic contract is governed by `architecture/CONVERSATION_CHECKPOINTS.md`, `models/Session.md`, `models/Conversation.md`, and `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`. This schema document remains authoritative for concrete relational columns only when such columns are explicitly defined here.
+
+The semantic persistence requirements are:
+- Session identity persists.
+- Conversation identity persists.
+- Ordered Conversation record continuity persists.
+- Checkpoint identity and checkpoint-to-Conversation reference persist.
+- Rollback branch lineage persists, including source Conversation and source checkpoint reference.
+- Session `CLOSED`/`EXPIRED` do not by themselves delete or rewrite Conversation data.
+- Session recreation creates a new Session identity; later continuation may preserve Conversation identity while creating a new active association.
+- Process death and application restart do not independently mutate Session–Conversation semantics; persistence must preserve enough state for implementation to distinguish same-Session recovery from new-Session continuation.
+
+This document does **not** currently establish a dedicated `conversation` table, relationship table, or historical association table. Their presence or absence is therefore not yet a selected schema fact in this repository.
+
+Implementation may choose concrete schema representation using existing repository patterns, but must not elevate that representation into a new semantic relationship authority. `(sessionId, conversationId)` fields, join rows, or read models may exist as implementation structures without implying a separate relationship identity or lifecycle.
+
+Historical association persistence is a downstream implementation choice unless and until a canonical schema section explicitly selects it. Active-association enforcement, continuation support, lineage preservation, and checkpoint integrity are required semantic outcomes; exact relational encoding is not architecturally fixed here.
+
 ## Workspace & Session
 
 ### `workspace`

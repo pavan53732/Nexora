@@ -1,6 +1,7 @@
 # Conversation Checkpoint and Rollback Specification — Nexora
 
-> **Status: SUPPORTING**. This document defers to `architecture/CONVERSATION_CHECKPOINTS.md` for semantic architecture, ownership, boundaries, and lifecycle. It only states implementation-facing contract obligations and must not redefine them.
+> **Status: SUPPORTING**. This document defers to `architecture/CONVERSATION_CHECKPOINTS.md` for semantic architecture, ownership, boundaries, and lifecycle. It states implementation-facing contract obligations only and must not redefine them.
+> Supporting engineering references: `models/Conversation.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/SESSION_CONVERSATION_RUNTIME_RECOVERY.md`, and `specs/SESSION_CONVERSATION_ERRORS.md`.
 
 ## Contract
 
@@ -8,7 +9,7 @@ The operation described here is the non-destructive branch operation selected by
 
 ## Preconditions
 
-The request must identify an addressable source conversation and checkpoint, pass conversation-data authorization, pass integrity and freshness validation, and not conflict with a concurrent mutation of the source conversation. Invalid, stale, expired, or unauthorized requests fail without modifying the source conversation.
+The request must identify an addressable source Conversation and checkpoint, pass conversation-data authorization, pass integrity and freshness validation, and not conflict with a concurrent mutation of the source Conversation. Invalid, stale, expired, or unauthorized requests fail without modifying the source Conversation.
 
 ## Idempotency
 
@@ -22,10 +23,10 @@ Validation precedes mutation. The implementation must durably commit branch iden
 
 The operation does not replay or reverse tool calls, duplicate or cancel execution, consume retry budget, restore a file version, restore a workspace snapshot, rewrite Git history, repeat provider requests, resend messages, perform device actions, or compensate external mutations.
 
-## Open architecture dependencies
+## Relationship to Session
 
-Conversation identity, Conversation-to-Session relationship, message/turn ordering, retention/deletion policy, and authorization subject scope remain architecture dependencies. This specification must not be classified implementation-ready until those dependencies are assigned canonical authority.
+Rollback does not by itself decide Session lifecycle. If the branch later becomes the current active Conversation for a Session, that association must still respect the Session–Conversation engineering contract: no independent relationship identity, no independent relationship lifecycle, and at most one active Session ↔ one active Conversation at a point in time.
 
-## Open dependency
+## Engineering boundary
 
-The canonical conversation/session persistence policy and authorization subject identifiers remain governed by their existing authorities. This specification does not create a second persistence or security model.
+The semantic architecture required for implementation is now closed by DEC-8 through DEC-21. Remaining implementation work includes persistence encoding, storage schema realization, API transport shape, concurrency primitives, and recovery mechanics. Those items are implementation choices unless selected by another canonical source.
