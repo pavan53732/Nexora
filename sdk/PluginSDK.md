@@ -52,7 +52,7 @@ failed activation rolls back to the prior committed plugin state.
 
 Plugins operate within strict sandbox boundaries:
 - **ClassLoader Isolation**: Plugins are loaded via separate `DexClassLoader` instances. A plugin CANNOT inspect or invoke host classes unless they are explicitly exposed in the SDK package (`com.nexora.app.sdk.*`).
-- **Least-Privilege Declarations**: All required security permissions (e.g. `sandbox:read`, `network:http`) MUST be statically declared inside the plugin manifest. The `PluginManager` validates these permissions against user-granted profiles at installation time, blocking activation if unauthorized.
+- **Least-Privilege Declarations**: All required security permissions (e.g. `sandbox:read`, `network:http`) MUST be statically declared inside the plugin manifest. Plugin permissions are validated against the applicable user-granted permission profiles at installation time, and activation is blocked when required permissions are unauthorized.
 
 ## Errors & Exception Guidelines
 
