@@ -147,3 +147,8 @@ data class TokenUsageRecord(
 - Provider adapters map native event formats to this contract without exposing provider-specific logic to Agent Runtime.
 - Private chain-of-thought is not emitted; only provider-approved, redacted `ReasoningSummaryDelta` may cross the boundary.
 - `NXR-4007` represents general stream transport failure; `NXR-4013..4017` identify canonical stream-contract failures.
+
+
+## Upgrade Notes
+
+This protocol participates in the architecture upgrade for bounded progress, provenance-aware execution, and explicit failure classification. Implementations conforming to this protocol SHOULD preserve enough metadata to support retry policy, conflict handling, and verification.

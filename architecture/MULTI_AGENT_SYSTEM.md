@@ -318,3 +318,39 @@ is a first-class `Task` whose executor happens to run in another instance's sand
 (FR-S018) with that instance's own provider profiles (FR-P011). Instance/pipe states
 are owned by [../state-machines/InstanceLifecycle.md](../state-machines/InstanceLifecycle.md);
 models in [../models/Instance.md](../models/Instance.md); requirements FR-MI-001..010.
+
+
+## Delegation Boundaries and Performance Controls
+
+This upgrade strengthens multi-agent performance semantics.
+
+### Delegation criteria
+
+Subagent delegation is justified only when it provides a clear benefit such as:
+
+- independent parallelizable work;
+- distinct expertise requirements;
+- isolated verification;
+- bounded evidence collection that does not duplicate active work.
+
+Delegation MUST NOT occur merely because multi-agent capability exists.
+
+### Fan-out controls
+
+The orchestrator MUST prevent:
+
+- redundant subagents collecting the same evidence;
+- duplicate context construction for identical objectives;
+- uncontrolled fan-out from recursive delegation;
+- delegation loops between planner/specialist agents.
+
+### Subagent output aggregation
+
+Aggregating subagent outputs MUST include:
+
+- source subagent identity;
+- task scope;
+- evidence/provenance references;
+- conflict indicators;
+- unresolved items;
+- verification status.

@@ -118,3 +118,31 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 | **Recommended AAB delivery** | **~80 MB download, architecture-specific delivery** |
 
 Mitigation: Android App Bundle delivery should split by architecture so users receive only the required ABI assets.
+
+
+## Latency-Critical Path vs Background Work
+
+This upgrade distinguishes foreground latency-critical work from background work.
+
+### Latency-critical path
+
+Foreground execution SHOULD prioritize:
+
+- current request understanding;
+- minimum-sufficient context assembly;
+- provider/tool routing for the active task;
+- direct execution on the selected path;
+- early streaming when safe.
+
+### Background work
+
+Background execution MAY handle:
+
+- indexing;
+- memory compaction refresh;
+- cache warming;
+- summary refresh;
+- checkpoint maintenance;
+- low-priority retrieval preparation.
+
+Background work MUST NOT block completion of a latency-critical path unless it is required for correctness or safety.

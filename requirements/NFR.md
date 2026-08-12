@@ -122,3 +122,13 @@
 | NFR-ENV-005 | Rootfs reset to clean state | < 3 s | Wipe overlay without re-extraction |
 | NFR-ENV-006 | Offline package installation from cache after seven days offline | 100% | Integration test |
 | NFR-ENV-007 | Environment reset and upgrade preserve workspace files outside the overlay | 100% | VFS bind-mount test |
+
+
+## Context Integrity and Bounded Execution
+
+| ID | Requirement |
+|---|---|
+| NFR-CI-001 | Canonical conversation history must remain recoverable independently of summaries or compacted context views. |
+| NFR-CI-002 | Read-time context assembly must preserve provenance and authority distinctions between conversation, memory, evidence, requirements, constraints, decisions, tool results, and execution state. |
+| NFR-REL-004 | Iterative reasoning and execution loops must use bounded-progress controls with explicit retry, step, and time limits. |
+| NFR-PERF-006 | The runtime must prefer the minimum sufficient execution mode (FAST, NORMAL, DEEP, VERIFY, RECOVER) rather than using deep reasoning by default. |

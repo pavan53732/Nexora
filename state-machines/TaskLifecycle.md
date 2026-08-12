@@ -118,3 +118,8 @@ An invalid transition MUST return a canonical error without changing persisted s
 ## Implementation Notes
 
 Task state is persisted in the local Room database via the `TaskEntity` table. The `TaskScheduler` service drives transitions automatically — it watches dependency completions to trigger `enqueue()` and applies exponential backoff for `RetryPending` tasks. Approval requests surface through the `ApprovalGateway`, which blocks the agent loop until the user responds.
+
+
+## Upgrade note
+
+This lifecycle participates in bounded-progress execution. Re-entry from retry, recovery, verification, or self-correction must remain bounded by explicit retry/iteration policy defined outside this state machine.

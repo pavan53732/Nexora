@@ -176,3 +176,40 @@ data class MemoryEntry(
 - **Phase 5**: Knowledge graph (FR-M014–015).
 - **Phase 6**: Session, Project, Long-Term memory. Semantic search. Execution history.
 - **Later**: Cloud sync. Advanced embeddings.
+
+
+## Authority, Provenance, and Invalidation
+
+This upgrade clarifies that memory is a **context source**, not a silent override of higher-authority canonical records.
+
+### Authority ordering
+
+Unless a stricter decision states otherwise, memory retrieval MUST NOT silently override:
+
+1. active user request;
+2. active requirements and constraints;
+3. locked architecture decisions;
+4. canonical conversation facts;
+5. verified evidence.
+
+Retrieved memory that conflicts with higher-authority active context MUST enter an explicit conflict state for resolution.
+
+### Provenance
+
+Memory objects SHOULD carry:
+
+- origin source;
+- capture context;
+- capture time or sequence;
+- last validation time;
+- freshness status;
+- invalidation status.
+
+### Invalidation and staleness
+
+The memory system MUST support invalidation or downgrade of memories that are:
+
+- contradicted by newer canonical conversation facts;
+- superseded by locked decisions;
+- invalidated by tool/evidence updates;
+- stale beyond their declared freshness horizon.

@@ -171,3 +171,7 @@ The existing Task lifecycle contract in `state-machines/TaskLifecycle.md` requir
 - **Status:** CANONICAL
 - **Owners:** Architecture Owner (retry lifecycle)
 - **Related Audit:** NEXORA #7 — Corrected Architecture Decision Package
+
+## Non-goals and guardrails
+
+This decision establishes retry-attempt identity semantics only. It does not by itself authorize unbounded retry behavior. Retry orchestration remains subject to bounded progress, failure classification, and retry-storm prevention requirements defined by the execution and agent runtime specifications.

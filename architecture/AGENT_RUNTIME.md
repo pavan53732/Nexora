@@ -18,6 +18,44 @@
 
 The Agent Runtime defines how individual AI agents behave autonomously. Each agent instance runs the agent loop, makes decisions, and executes tools within a workspace.
 
+## Execution Modes
+
+The single-agent runtime supports **mode-selected execution**. These modes are **PROPOSED runtime behavior introduced by this upgrade** and extend the canonical loop without changing multi-agent ownership.
+
+| Mode | Purpose | Typical use | Required controls |
+|---|---|---|---|
+| FAST | Lowest-latency path with minimal planning | Direct requests with low ambiguity and low risk | Small plan budget, direct tool/model execution, explicit termination gate |
+| NORMAL | Default balanced path | Typical multi-step requests | Structured planning, bounded evidence gathering, validation before completion |
+| DEEP | Higher-cost reasoning for ambiguity, contradiction, or high-stakes work | Complex debugging, architectural analysis, conflict resolution | Bounded decomposition, competing hypotheses, contradiction checks, uncertainty tracking |
+| VERIFY | Independent validation path | Important outputs, compliance-sensitive tasks, user-requested verification | Requirement/constraint re-check, provenance validation, output verification |
+| RECOVER | Failure-handling path | Retryable failure, context reconstruction, checkpoint restore | Retry policy, fallback routing, checkpoint recovery, bounded escalation |
+
+### Mode selection
+
+The runtime MUST select the **minimum sufficient mode** for the task. FAST is preferred when requirement coverage, risk, and evidence needs permit. DEEP MUST NOT be the default path for all requests.
+
+Mode selection SHOULD consider:
+
+- task criticality;
+- ambiguity level;
+- conflict or contradiction presence;
+- evidence sufficiency;
+- user-requested rigor;
+- failure history;
+- provider/tool latency sensitivity.
+
+### Bounded reasoning contract
+
+Regardless of mode, each agent iteration MUST have:
+
+- an iteration identifier;
+- a declared objective;
+- a bounded step/iteration budget;
+- a progress signal evaluation;
+- a termination condition;
+- an escalation condition when bounded progress is not achieved.
+
+
 ## Capabilities
 
 | Capability | Description | Phase |
@@ -79,6 +117,42 @@ Inbound message
 A partial `ToolArgumentsDelta` is data, never executable. Only a schema-valid
 `ToolCallCommitted` enters the Tool authorization gate. Stream failure leaves displayed
 text marked partial; failover starts a new stream identity with lineage.
+
+## Progress and Loop Guards
+
+This upgrade adds an explicit bounded-progress contract to the single-agent loop.
+
+### Progress signals
+
+Progress is established only when one or more of the following occurs:
+
+- new evidence is collected;
+- execution state changes;
+- a task acceptance criterion is satisfied;
+- unresolved requirements or contradictions are reduced;
+- a plan is materially revised;
+- a tool result succeeds where it previously failed;
+- verification confidence increases through independent checks.
+
+Repeated activity without meaningful progress MUST NOT continue indefinitely.
+
+### Loop-prevention requirements
+
+The runtime MUST detect and react to:
+
+- repeated identical tool calls with materially identical inputs and no new state;
+- repeated searches or reads that return no new evidence;
+- planner/executor oscillation without plan advancement;
+- repeated self-correction attempts that do not improve validation state;
+- verification loops that restate the same failure without new evidence;
+- retry storms after repeated transient failure beyond policy bounds.
+
+When a bounded-progress violation is detected, the runtime MUST either:
+
+1. switch to RECOVER mode,
+2. escalate for user input/approval,
+3. fall back to a different provider/tool strategy, or
+4. terminate with explicit incomplete/blocked status.
 
 ## Agent Loop
 

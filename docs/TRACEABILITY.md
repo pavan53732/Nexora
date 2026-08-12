@@ -85,3 +85,13 @@ The complete requirement identifier inventory is tracked separately in `docs/REQ
 | DEC-21 | Later Session continuation preserves Conversation identity and creates a new active association; rollback branch remains a distinct Conversation | `decisions/DEC-21-session-conversation-continuation-recovery.md` | `models/Conversation.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/SESSION_CONVERSATION_RUNTIME_RECOVERY.md`, `docs/SESSION_CONVERSATION_IMPLEMENTATION_HANDOFF.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (T04, T05, T07, T11, T14, T18, T19, T24) | DECIDED |
 
 No executable implementation or runnable test is claimed by this traceability section; this section defines the documentation-level engineering handoff chain only.
+
+
+## Added Architecture Upgrade Traceability
+
+| Requirement | Architecture / Spec | Supporting artifacts |
+|---|---|---|
+| NFR-CI-001 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `architecture/MEMORY_SYSTEM.md` |
+| NFR-CI-002 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md`, `architecture/TOOL_SYSTEM.md` |
+| NFR-REL-004 | `architecture/AGENT_RUNTIME.md` | `specs/EXECUTION_LIFECYCLE.md`, `decisions/DEC-7-retry-attempt-state.md` |
+| NFR-PERF-006 | `architecture/AGENT_RUNTIME.md` | `architecture/PROVIDER_SYSTEM.md`, `docs/PERFORMANCE_BUDGET.md` |

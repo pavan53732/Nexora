@@ -234,3 +234,25 @@ States are defined in `models/Tool.md`:
 
 
 > **S4 — Terminal specification fully specified:** `specs/TERMINAL.md` (§Execution Model, §Session State Machine, §Working-Dir Boundary, §Output Caps, §Timeout Discipline, §Restore Behavior, §Security & Isolation) defines terminal behavior; lifecycle authority `lifecycle/TerminalSessionLifecycle.md` (S3 filled); model fields updated (`models/TerminalSession.md`); registry capabilities updated (`TOOL_MATRIX.md`). See `docs/DECISION_LOG.md` DL-028.
+
+
+## Tool Reuse and Repetition Control
+
+This upgrade adds bounded tool-execution controls.
+
+The tool subsystem SHOULD support safe reuse of recent successful tool results when:
+
+- the inputs are materially identical;
+- the underlying source has not changed;
+- freshness constraints still hold;
+- reuse does not violate evidence or safety requirements.
+
+The subsystem MUST detect repeated identical invocations that provide no new progress signal. Such invocations MUST either reuse a valid cached result, request new inputs, switch strategy, or terminate/escalate.
+
+Tool execution policy MUST also define:
+
+- timeout classification;
+- retry eligibility;
+- non-retryable failure classes;
+- cancellation propagation;
+- provenance on tool outputs.

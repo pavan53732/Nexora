@@ -19,6 +19,76 @@ This specification defines Nexora's complete read-time context assembly pipeline
 
 ---
 
+## 2. Deterministic Context Assembly Layer
+
+This upgrade formalizes a **Deterministic Context Assembly Layer (CAL)**. CAL is the canonical read-time process that constructs model input from higher-authority persisted sources without turning compaction artifacts into the sole source of truth.
+
+### Authority distinction
+
+CAL MUST distinguish between:
+
+1. canonical conversation history;
+2. working context;
+3. retrieved context;
+4. summarized context;
+5. compressed context;
+6. evidence;
+7. decisions;
+8. requirements;
+9. constraints;
+10. memory;
+11. tool results;
+12. execution state.
+
+Summaries and compressed context are **derived context views**. They MUST NOT become the only recoverable representation of a conversation when canonical conversation history exists.
+
+### Required context categories
+
+For each model invocation, CAL assembles from explicit categories:
+
+- current user request;
+- active task;
+- immutable conversation facts;
+- relevant prior messages;
+- active requirements;
+- active constraints;
+- locked decisions;
+- relevant evidence;
+- relevant memories;
+- relevant tool results;
+- current execution state;
+- required output contract.
+
+### Token budgeting and truncation
+
+Token pressure is handled as an **assembly problem**, not as destructive deletion of canonical history.
+
+CAL MUST define:
+
+- selection rules;
+- priority ordering by authority and recency;
+- per-category token budgets;
+- truncation rules for low-authority duplicate material;
+- compaction rules for derived views;
+- reconstruction rules back to canonical sources;
+- provenance for every included context object;
+- invalidation and freshness rules;
+- conflict surfacing when high-authority sources disagree.
+
+### Provenance requirement
+
+Each context object included in model input SHOULD carry enough metadata to answer: **what source caused this context to enter the model input?**
+
+Minimum provenance fields:
+
+- source category;
+- source identifier;
+- source version or checkpoint;
+- retrieval reason;
+- freshness timestamp or sequence;
+- authority level.
+
+
 ## 2. Context Window Token Budget Allocation (FR-CM-002)
 
 To avoid context overflow (`NXR-1006`) and maximize recall accuracy, the context window is assembled as five distinct, priority-ordered layers. Truncation is restricted strictly to Layer 5.
@@ -309,3 +379,23 @@ introspection — no ordering dependency between readers.
 5. **KG query after introspection.** The Knowledge Graph is queried AFTER the
    ProjectContext is populated, so entity extraction can reference the fresh
    file paths and schema names.
+
+
+## Context Drift Protection
+
+CAL MUST explicitly protect against:
+
+- lost requirements;
+- lost constraints;
+- stale summaries;
+- stale memories;
+- contradictory memories;
+- outdated decisions;
+- stale tool results;
+- cross-conversation contamination;
+- cross-agent contamination;
+- subagent context loss;
+- agent handoff drift;
+- branch contamination.
+
+If conflicts are detected, CAL MUST surface an explicit conflict state rather than silently choosing one source.

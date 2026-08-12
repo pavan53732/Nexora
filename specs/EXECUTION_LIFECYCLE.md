@@ -159,3 +159,39 @@ pipeline returns to the relevant earlier stage (bounded fix loop, FR-EL-013).
 - **Phase 5**: Per-task provider/model selection (FR-EL-005).
 - **Phase 6**: Memory storage of results, follow-up identification (FR-EL-012).
 - **Phase 7**: Automatic agent selection across the 16 agent types (FR-EL-003).
+
+
+## Execution Modes and Bounded Progress
+
+This upgrade formalizes five execution modes across the lifecycle:
+
+- **FAST** — minimal planning and direct execution when evidence and risk allow;
+- **NORMAL** — structured planning, bounded decomposition, evidence gathering, and validation;
+- **DEEP** — bounded deep reasoning with competing hypotheses, contradiction checks, and explicit uncertainty;
+- **VERIFY** — independent validation of important outputs and compliance against requirements/constraints;
+- **RECOVER** — bounded recovery using retry/fallback/checkpoint restoration and context reconstruction.
+
+### Minimum execution contract
+
+Every iterative execution cycle MUST declare:
+
+- iteration identity;
+- active mode;
+- progress signals under evaluation;
+- retry and time budget;
+- termination condition;
+- escalation condition.
+
+### Progress definition
+
+Meaningful progress includes one or more of:
+
+- new evidence collected;
+- execution state transition;
+- a completed acceptance criterion;
+- reduced unresolved requirements;
+- a resolved contradiction;
+- successful tool result after prior failure;
+- materially improved verification result.
+
+Repeated iterations without meaningful progress MUST terminate, recover, or escalate.

@@ -120,3 +120,8 @@ data class ExecutionStatusChangedEvent(
 - **Idempotency Replay**: Checkpoints MUST store whether in-progress tool executions were declared idempotent. Non-idempotent calls MUST be reconciled from durable transaction history; safe incomplete idempotent calls MAY replay.
 - **Recovery guards**: Reject terminal `RESUME`, nonterminal retry predecessors, missing checkpoint/prior ID, cyclic lineage, stale `expectedVersion`, and idempotency conflicts.
 - **Versioning**: A successful recovery commit has `committedVersion > previousVersion`; consumers deduplicate by `(executionId, committedVersion, operation)`.
+
+
+## Upgrade Notes
+
+This protocol participates in the architecture upgrade for bounded progress, provenance-aware execution, and explicit failure classification. Implementations conforming to this protocol SHOULD preserve enough metadata to support retry policy, conflict handling, and verification.

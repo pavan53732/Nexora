@@ -192,3 +192,23 @@ scale defined in [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md
 - **Phase 1**: Define `AIProvider` interface, `ProviderRegistry`, configuration models.
 - **Phase 5**: Implement all 9 providers. Streaming. Health checks.
 - **Phase 8**: Providers as plugins. Custom provider SDK.
+
+
+## Routing Policy
+
+This upgrade adds explicit provider/model routing semantics while preserving provider abstraction.
+
+Provider selection SHOULD consider:
+
+- latency sensitivity;
+- reasoning depth requirement;
+- context-window requirement;
+- tool-calling capability;
+- vision/multimodal need;
+- availability and health;
+- reliability history;
+- cost policy.
+
+The routing layer SHOULD distinguish latency-critical foreground execution from background work such as indexing, summarization refresh, and cache warming.
+
+Routing decisions MUST remain compatible with the provider abstraction and MUST NOT hardcode a single provider as universal default for all task classes.

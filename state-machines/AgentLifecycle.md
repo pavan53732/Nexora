@@ -157,3 +157,8 @@ transitions through `Created → Configured → Ready → Running` identically t
 primary agent; the coordinator tracks delegation via `Task.childTaskIds` and
 `Task.delegatedAgentIds` (see `architecture/RUNTIME.md` §Core Interfaces — Task).
 This avoids duplicating delegation semantics across two state machines.
+
+
+## Upgrade note
+
+This lifecycle participates in bounded-progress execution. Re-entry from retry, recovery, verification, or self-correction must remain bounded by explicit retry/iteration policy defined outside this state machine.

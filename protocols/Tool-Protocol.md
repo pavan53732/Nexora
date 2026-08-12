@@ -92,3 +92,8 @@ data class ToolExecutedEvent(
 - **Correlation Tracing**: Every protocol message MUST propagate `correlationId` and `toolCallId`.
 - **At-Least-Once Delivery**: Outbound events MUST be deduplicated by downstream orchestrators using `(toolCallId, version)`.
 - **Termination Signalling**: Processes MUST cleanly emit an exit code. A non-zero exit code or an unhandled signal (like OOM Kill `137`) MUST be converted into `NXR-2004` or `NXR-7004` error envelopes.
+
+
+## Upgrade Notes
+
+This protocol participates in the architecture upgrade for bounded progress, provenance-aware execution, and explicit failure classification. Implementations conforming to this protocol SHOULD preserve enough metadata to support retry policy, conflict handling, and verification.
