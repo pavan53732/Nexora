@@ -44,3 +44,21 @@ Historical decision text is preserved as historical record. Active engineering d
 - Canonical-source and traceability references: validated for referenced Markdown paths.
 - Implementation scope: documentation inventory only; no source implementation is created by this document.
 - This inventory is supporting evidence and does not replace any decision, canonical source, model, protocol, specification, or test artifact.
+
+## Implementation-handoff closure
+
+For every documented domain, the existing model/architecture/lifecycle/state-machine/protocol/specification/API/security/testing artifacts are the authoritative evidence set when present. The following cross-domain rules are explicit for implementation handoff:
+
+- Runtime may coordinate documented protocols but does not acquire ownership that a canonical source assigns to another domain.
+- Session, Task, Execution, Context, Memory, Workspace, Provider, Plugin, Tool, and Workflow identities remain distinct unless a canonical source explicitly defines a relationship.
+- Process death, restart, crash, retry, cancellation, timeout, shutdown, persistence failure, provider failure, plugin failure, authorization failure, quota exhaustion, and migration/version mismatch must preserve the owning domain's documented lifecycle and persistence invariants; no automatic semantic transition is inferred from the platform event alone.
+- Duplicate requests and retries must follow the idempotency or repeat-submission rule of the owning protocol/specification; where no such rule exists, the operation is not granted implicit idempotency.
+- Concrete schema, transport, Android component, package, and deployment mechanisms may be selected downstream only if they preserve the documented identity, ordering, lifecycle, authorization, concurrency, recovery, cleanup, and compatibility invariants.
+
+## Adversarial scenario coverage
+
+The repository's domain specifications and test strategy documents are the governing sources for adversarial implementation validation. The Session–Conversation matrix explicitly covers process death, restart, concurrency conflicts, rollback, continuation, recreation, checkpoint recovery, and identity/lineage violations. Other domains retain their scenario coverage in the corresponding lifecycle, protocol, security, API, and testing documents; absence of an executable test artifact is not treated as executed evidence.
+
+## Requirement closure
+
+Checkpoint requirements FR-CB001 through FR-CB006 no longer contain a stale decision-dependent TBD marker. Their semantic coverage is derived from the existing checkpoint decisions and supporting engineering contracts; concrete persistence and transport mechanisms remain bounded downstream choices.

@@ -392,12 +392,12 @@
 
 | ID | Requirement | Priority | Phase |
 |---|---|---|---|
-| FR-CB001 | Create an immutable conversation checkpoint at the selected post-turn or explicit user trigger | Should | TBD after conversation persistence decision |
-| FR-CB002 | Preserve checkpoint identity, conversation boundary, integrity, and lineage references | Should | TBD after conversation persistence decision |
-| FR-CB003 | Create a non-destructive conversation branch from an eligible checkpoint without altering the source conversation | Should | TBD after conversation persistence decision |
-| FR-CB004 | Reject unauthorized, stale, expired, invalid, or conflicting checkpoint operations without mutating the source | Should | TBD after conversation persistence decision |
-| FR-CB005 | Make repeated submission of the same operation identity safe without duplicate branch creation | Should | TBD after conversation persistence decision |
-| FR-CB006 | Do not imply reversal of task, execution, context, memory, file, workspace, provider, Git, or external side-effect state | Must | TBD after conversation persistence decision |
+| FR-CB001 | Create an immutable conversation checkpoint at the selected post-turn or explicit user trigger | Should | Covered by the Session–Conversation engineering contract, persistence/schema boundary, and implementation handoff; concrete storage selection remains downstream |
+| FR-CB002 | Preserve checkpoint identity, conversation boundary, integrity, and lineage references | Should | Covered by the Session–Conversation engineering contract, persistence/schema boundary, and implementation handoff; concrete storage selection remains downstream |
+| FR-CB003 | Create a non-destructive conversation branch from an eligible checkpoint without altering the source conversation | Should | Covered by the Session–Conversation engineering contract, persistence/schema boundary, and implementation handoff; concrete storage selection remains downstream |
+| FR-CB004 | Reject unauthorized, stale, expired, invalid, or conflicting checkpoint operations without mutating the source | Should | Covered by the Session–Conversation engineering contract, persistence/schema boundary, and implementation handoff; concrete storage selection remains downstream |
+| FR-CB005 | Make repeated submission of the same operation identity safe without duplicate branch creation | Should | Covered by the Session–Conversation engineering contract, persistence/schema boundary, and implementation handoff; concrete storage selection remains downstream |
+| FR-CB006 | Do not imply reversal of task, execution, context, memory, file, workspace, provider, Git, or external side-effect state | Must | Covered by the Session–Conversation engineering contract, persistence/schema boundary, and implementation handoff; concrete storage selection remains downstream |
 
 ## Skill Lifecycle Boundary
 
