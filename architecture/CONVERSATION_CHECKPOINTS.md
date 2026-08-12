@@ -22,7 +22,7 @@ A Session is a durable runtime context container governed by `state-machines/Ses
 
 ## Checkpoint contents
 
-DEC-16 deferred relationship identity status, and DEC-17 selects no independent relationship semantic identity. The relationship remains first-class semantic architecture under DEC-14; this does not select representation, cardinality, lifecycle, resumption, persistence, storage, schema, API, or implementation.
+DEC-16 deferred relationship identity status, DEC-17 selects no independent relationship semantic identity, and DEC-18 represents the relationship semantically through the participating Session and Conversation concepts plus the DEC-15 contract; no separate relationship representation is required. This does not select reference encoding, cardinality, lifecycle, resumption, persistence, storage, schema, API, or implementation.
 
 The checkpoint records the conversation identity, ordered conversation-record boundary, conversation-local metadata, creation provenance, integrity information, and parent/lineage information when applicable. It may reference related artifacts for inspection. References do not transfer ownership or restoration semantics.
 
