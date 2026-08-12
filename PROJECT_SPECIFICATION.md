@@ -344,18 +344,18 @@ Nexora/
 │   ├── PROVIDERS.md
 │   ├── TOOL_MATRIX.md
 │   └── AGENT_MATRIX.md
-├── android/                # Android application source (Phase 1)
+├── android/                # Planned implementation module (Phase 1; not present in the current documentation-only snapshot)
 ├── core/                   # Core interfaces and abstractions
-├── runtime/                # Core runtime implementation (Phase 2)
-├── sandbox/                # Sandbox implementation (Phase 3)
-├── tools/                  # Tool implementations (Phase 4)
-├── providers/              # AI provider implementations (Phase 5)
-├── memory/                 # Memory system implementation (Phase 6)
-├── agents/                 # Agent implementations (Phase 7)
-├── plugins/                # Plugin implementations (Phase 8)
-├── workflows/              # Workflow definitions and templates
-├── storage/                # Database and persistence layer
-├── services/               # Android services (foreground, scheduled)
+├── runtime/                # Planned implementation module (Phase 2; not present in the current documentation-only snapshot)
+├── sandbox/                # Planned implementation module (Phase 3; not present in the current documentation-only snapshot)
+├── tools/                  # Planned implementation module (Phase 4; not present in the current documentation-only snapshot)
+├── providers/              # Planned implementation module (Phase 5; not present in the current documentation-only snapshot)
+├── memory/                 # Planned implementation module (Phase 6; not present in the current documentation-only snapshot)
+├── agents/                 # Planned implementation module (Phase 7; not present in the current documentation-only snapshot)
+├── plugins/                # Planned implementation module (Phase 8; not present in the current documentation-only snapshot)
+├── workflows/              # Planned workflow definitions and templates (not present in the current documentation-only snapshot)
+├── storage/                # Planned database and persistence layer (not present in the current documentation-only snapshot)
+├── services/               # Planned Android services (foreground, scheduled; not present in the current documentation-only snapshot)
 ├── shared/                 # Shared utilities and extensions
 ├── testing/                # Test suites
 ├── scripts/                # Build and utility scripts
