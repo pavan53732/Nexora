@@ -1,7 +1,7 @@
 # Conversation Checkpoints — Nexora
 
 > **Status: CANONICAL** for conversation checkpoint and rollback semantics.
-> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes a narrow Conversation identity contract and DEC-14 establishes the Session–Conversation relationship as a first-class semantic relationship; Conversation-to-Session cardinality, Conversation resumption, Session-closure/expiration effects on Conversation, relationship representation, branch-lineage ownership, and the conversation-local metadata boundary remain unresolved architecture dependencies to be completed before implementation.
+> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes a narrow Conversation identity contract and DEC-14 establishes the Session–Conversation relationship as a first-class semantic relationship; Conversation-to-Session cardinality, Conversation resumption, Session-closure/expiration effects on Conversation, relationship identity, relationship representation, branch-lineage ownership, and the conversation-local metadata boundary remain unresolved architecture dependencies to be completed before implementation.
 > Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, and `DEC-13-conversation-identity-persistence.md`.
 
 ## Scope
@@ -22,7 +22,7 @@ A Session is a durable runtime context container governed by `state-machines/Ses
 
 ## Checkpoint contents
 
-DEC-16 establishes independent semantic identity for the Session–Conversation relationship, distinct from Session, Conversation, and Checkpoint identities; its concrete representation remains unresolved.
+DEC-16 leaves Session–Conversation relationship identity status unresolved. First-class semantic status does not imply the existence or absence of an independent relationship identity; no identity outcome or concrete representation is selected.
 
 The checkpoint records the conversation identity, ordered conversation-record boundary, conversation-local metadata, creation provenance, integrity information, and parent/lineage information when applicable. It may reference related artifacts for inspection. References do not transfer ownership or restoration semantics.
 

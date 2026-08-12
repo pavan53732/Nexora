@@ -25,7 +25,7 @@
 | Conversation identity and persistence contract | `decisions/DEC-13-conversation-identity-persistence.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Session–Conversation relationship semantic status | `decisions/DEC-14-session-conversation-relationship-semantic-status.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Session–Conversation relationship ownership | `decisions/DEC-15-session-conversation-relationship-ownership.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
-| Session–Conversation relationship identity | `decisions/DEC-16-session-conversation-relationship-identity.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
+| Session–Conversation relationship identity semantic status | `decisions/DEC-16-session-conversation-relationship-identity.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Conversation checkpoint lifecycle | `state-machines/ConversationCheckpointLifecycle.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md` |
 | Checkpoint, recovery, and resume | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md` (§Checkpoint System), `architecture/AGENT_RUNTIME.md` (saveCheckpoint), `state-machines/TaskLifecycle.md` |
 | Agent lifecycle | `state-machines/AgentLifecycle.md` | `architecture/AGENT_RUNTIME.md`, `docs/LIFECYCLES.md` |
