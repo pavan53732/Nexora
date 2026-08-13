@@ -9,7 +9,7 @@
 
 ## Operations
 
-Memory protocol messages cover write, fetch, score, update, and retention operations across session, project, and long-term memory tiers. Messages SHOULD preserve `correlationId` when memory entries originate from a concrete execution or tool/provider interaction. Durable lifecycle semantics for retained memory records are governed by [lifecycle/MemoryLifecycle.md](../lifecycle/MemoryLifecycle.md).
+Memory protocol messages cover write, fetch, score, update, and retention operations across session, project, and long-term memory tiers. Messages SHOULD preserve `correlationId` when memory entries originate from a concrete execution or tool/provider interaction. Durable lifecycle semantics for retained memory records are governed by the canonical [state-machines/MemoryLifecycle.md](../state-machines/MemoryLifecycle.md). An `EXPIRED` record cannot be reindexed, return to `INDEXED`, or become searchable again.
 
 Every `MemoryKind` declared in [../models/Memory.md](../models/Memory.md) has a
 corresponding protocol section below.

@@ -58,11 +58,14 @@ Provider request execution is correlated by `correlationId` and provider-scoped 
 ### Administrative Status vs. Operational Health
 
 To eliminate responsibility gaps and resolve High Finding 6, the Provider domain model separates administrative lifecycle status (`ProviderStatus`) from periodic operational health checks (`ProviderHealth`):
-- `status: ProviderStatus` tracks manual configuration, registration, enablement, and removal states. 
+- `status: ProviderStatus` tracks manual configuration, registration, enablement, and removal states.
 - `health: ProviderHealth` tracks runtime reachability, latency thresholds, and consecutive error rates handled automatically by the background `HealthMonitor` coroutine.
+- Administrative lifecycle `From` and `To` values are `ProviderStatus` only. A `ProviderHealth` value is a predicate only when an explicit lifecycle guard requires it; it is not an administrative state.
+- `disable()` is `ACTIVE → DISABLED`; `remove()` is `DISABLED → REMOVED`. An `ACTIVE` provider, including one whose health is `UNHEALTHY`, cannot be removed directly.
+- After `DISABLED`, persisted health is retained but no longer actively evaluated. After `REMOVED`, health has no operational effect.
 
 ### Failover and Routing Constraints
 
 - Only providers with `status = ACTIVE` and `health = HEALTHY` are eligible for primary request routing.
 - Degraded providers may be used if no healthy alternative is configured (emitting warning events).
-- Unhealthy providers are immediately excluded from active routing tables and put on a connection re-probe cycle.
+- Unhealthy providers are immediately excluded from active routing tables and put on a connection re-probe cycle while their status remains eligible for health evaluation.

@@ -392,7 +392,7 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 
 | Table | Retention | Eviction |
 |-------|-----------|----------|
-| memory_entry | Per MemoryStatus; RETAINED→EXPIRED LRU | LRU within quota |
+| memory_entry | Per MemoryStatus; RETAINED→EXPIRED non-revivable LRU | LRU within quota |
 | tool_record | Append-only; bounded by workspace quota | LRU eviction |
 | file_version | Bounded history depth | Oldest-first |
 | context_snapshot | Task/execution evidence window | With execution |

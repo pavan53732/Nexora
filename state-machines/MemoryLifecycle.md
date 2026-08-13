@@ -24,7 +24,7 @@ projection are derived behaviors that must not replace this state.
 | **Indexed** | Embedding/vector + search-index updated; retrievable. |
 | **Retrieved** | Surfaced into a context/recall segment (read-only state marker). |
 | **Retained** | Durable and within retention policy. |
-| **Expired** | Retention/lifetime reached; pending eviction. |
+| **Expired** | Retention/lifetime reached; non-revivable and pending eviction. |
 | **Deleted** | Terminal state — removed from storage. |
 
 ## Durable Status vs. Derived Behavior
@@ -41,7 +41,7 @@ for observability/replay).
 | **INDEXED** | In vector + FTS index; searchable. |
 | **RETRIEVED** | Read into a context segment; marked for audit/replay. |
 | **RETAINED** | Durable, in-policy; eligible for long-term memory. |
-| **EXPIRED** | LRU/retention evicted; pending physical delete. |
+| **EXPIRED** | LRU/retention evicted; non-revivable, no longer searchable, and pending physical delete. |
 | **DELETED** | Removed; not retrievable. |
 
 ## Transitions
@@ -54,12 +54,13 @@ for observability/replay).
 | `retain()` | Indexed / Retrieved | Retained | Retention policy allows |
 | `expire()` | Retained | Expired | Lifetime/quota reached |
 | `delete()` | Recorded / Indexed / Retrieved / Expired | Deleted | Explicit or policy eviction |
-| `reindex()` | Retrieved / Expired | Indexed | Content changed |
+| `reindex()` | Retrieved | Indexed | Content changed |
 
 ### Invalid Transitions
 
 - **Recorded → Retrieved** — must be indexed first.
 - **Deleted → * (any)** — terminal; new record required.
+- **Expired → Indexed** — expired records are non-revivable and cannot be reindexed or become searchable again.
 - **Indexed → Retained without retrieval** — allowed (retain directly from indexed).
 
 ## State Diagram
@@ -73,6 +74,7 @@ stateDiagram-v2
     Retrieved --> Retained : retain()
     Retrieved --> Indexed : reindex()
     Retained --> Expired : expire()
+    note right of Expired : Non-revivable; no reindex()
     Expired --> Deleted : delete()
     Recorded --> Deleted : delete()
     Indexed --> Deleted : delete()

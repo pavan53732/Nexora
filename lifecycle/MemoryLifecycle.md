@@ -39,8 +39,8 @@ state machine. In case of discrepancy, `state-machines/MemoryLifecycle.md` wins.
 - `Indexed → Retrieved`: Surfaced into a context/recall segment.
 - `Indexed / Retrieved → Retained`: Within retention policy; durable.
 - `Retrieved → Indexed`: Content changed; reindexed.
-- `Retained → Expired`: Lifetime/quota reached; pending eviction.
-- `Expired → Deleted`: Physical removal from store.
+- `Retained → Expired`: Lifetime/quota reached; non-revivable, no longer searchable, and pending eviction.
+- `Expired → Deleted`: Physical removal from store. `Expired → Indexed` is invalid; an expired record cannot be reindexed.
 - `Recorded / Indexed / Retrieved / Expired → Deleted`: Deleted at any non-terminal point.
 
 ### Dependencies
