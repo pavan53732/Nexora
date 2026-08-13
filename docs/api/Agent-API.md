@@ -157,10 +157,10 @@ data class AgentProjection(
 
 | Operation | Canonical `NXR-*` codes |
 |---|---|
-| registerAgent | NXR-1001, NXR-1002, NXR-5007 |
-| startTask | NXR-1003, NXR-1004, NXR-2002, NXR-2003, NXR-7004 |
-| cancelTask | NXR-1005, NXR-7007 |
-| getTaskStatus | NXR-1006, NXR-7001 |
-| getAgent / listAgents | NXR-1001, NXR-7001 |
+| registerAgent | NXR-3002 |
+| startTask | NXR-1008, NXR-7001 |
+| cancelTask | NXR-3010 |
+| getTaskStatus | NXR-1009 |
+| getAgent / listAgents | **OPEN/DEFERRED** — no operation mapping is established in the canonical Error Catalog. |
 
 See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for canonical envelope requirements.
