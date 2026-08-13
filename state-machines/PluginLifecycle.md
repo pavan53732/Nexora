@@ -37,11 +37,16 @@ Nexora's plugin system follows a rigorous lifecycle to ensure that third-party o
 |---------|------|----|-------|
 | `discover()` | [*] | Discovered | Registry reachable |
 | `download()` | Discovered | Downloading | — |
+| `downloadComplete()` | Downloading | Downloaded | — |
 | `verify()` | Downloaded | Verifying | — |
 | `install()` | Verifying | Installing | Signature valid && SDK compatible |
+| `installComplete()` | Installing | Installed | — |
 | `activate()` | Installed / Inactive | Activating | — |
+| `activateComplete()` | Activating | Active | — |
 | `deactivate()` | Active | Deactivating | — |
+| `deactivateComplete()` | Deactivating | Inactive | — |
 | `uninstall()` | Installed / Inactive | Uninstalling | — |
+| `uninstallComplete()` | Uninstalling | Uninstalled | — |
 | `update()` | Active / Inactive | Downloading | New version available |
 | `cancel()` | Discovered / Downloading / Verifying | Cancelled | — |
 | `fail(error)` | * | Failed | — |

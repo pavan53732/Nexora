@@ -22,7 +22,8 @@ Each step tracks: `PENDING`, `RUNNING`, `COMPLETED`, `FAILED`, `SKIPPED`
 - `VALIDATED → RUNNING`: Execution started.
 - `RUNNING → PAUSED`: Pause requested.
 - `PAUSED → RUNNING`: Resume requested; pending steps exist.
-- `RUNNING → STEP_RUNNING`: Step starts (upstream deps completed).
+- `RUNNING → STEP_PENDING`: Step readiness evaluated.
+- `STEP_PENDING → STEP_RUNNING`: Step starts (upstream deps completed).
 - `STEP_RUNNING → STEP_COMPLETED`: Step finished successfully.
 - `STEP_COMPLETED → STEP_PENDING`: Next step eligible.
 - `STEP_COMPLETED → COMPLETED`: No pending steps remain.

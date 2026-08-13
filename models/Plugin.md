@@ -52,7 +52,8 @@ enum class PluginStatus {
     INACTIVE,
     UNINSTALLING,
     UNINSTALLED,
-    FAILED
+    FAILED,
+    CANCELLED
 }
 ```
 

@@ -80,7 +80,6 @@ stateDiagram-v2
     Degraded --> Connected : recover()
     Connected --> Disconnected : disconnect()
     Degraded --> Disconnected : disconnect()
-    Paired --> Disconnected : disconnect()
     Paired --> Unpaired : unpair()
     Disconnected --> Unpaired : unpair()
     Paired --> Revoked : revoke()

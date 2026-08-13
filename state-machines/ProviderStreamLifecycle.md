@@ -34,7 +34,6 @@
 | `resumeRejected` | `RECONNECTING` | `FAILED` | Commit `NXR-4014`; partial output remains explicitly partial. |
 | `terminal` | `OPEN` / `BACKPRESSURED` | `COMPLETED` | Terminal sequence contiguous; usage reconciled; no incomplete tool call. |
 | `fail` | `CONNECTING` / `OPEN` / `BACKPRESSURED` / `RECONNECTING` / `STALLED` | `FAILED` | Canonical error and partial-output status committed. |
-| `failover` | `STALLED` | `RESTART_WITH_LINEAGE` | Abandon stalled stream; emit new stream with `priorStreamId`; no byte splicing. |
 | `cancel` | Any nonterminal | `CANCELLED` | Cancellation propagates Agent → Router → Adapter within budget. |
 
 ## Invariants

@@ -35,10 +35,11 @@ A **Workflow** in Nexora is a step dependency graph that supports bounded cycles
 | `start()` | Validated | Running | — |
 | `pause()` | Running | Paused | — |
 | `resume()` | Paused | Running | Pending steps exist |
-| `stepStart()` | Running | StepRunning | Upstream steps completed |
+| `evaluateSteps()` | Running | StepPending | — |
+| `stepStart()` | StepPending | StepRunning | Upstream steps completed |
 | `stepComplete()` | StepRunning | StepCompleted | Step result valid |
+| `evaluateSteps()` | StepCompleted | StepPending | Downstream step eligible |
 | `complete()` | StepCompleted | Completed | No pending steps remain |
-| `stepStart()` | StepCompleted | StepRunning | Downstream step eligible |
 | `fail(error)` | StepRunning | Failed | No error-handler edge |
 | `fallback(error)` | StepRunning | StepRunning | FALLBACK edge exists; alternates available |
 | `iterate()` | StepCompleted | StepRunning | Iterative step has remaining iterations |
