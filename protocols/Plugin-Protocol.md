@@ -1,7 +1,7 @@
 > **Status: DERIVED** for Plugin message contract.
 > This document defines protocol messages for Plugin lifecycle operations. Canonical subsystem behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Plugin (`architecture/PLUGIN_SYSTEM.md`).
+> Depends on: the canonical architecture document for Plugin (`architecture/PLUGIN_SYSTEM.md`) and [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md) for Plugin lifecycle transitions.
 > Referenced by: models, APIs, SDKs, registries, security, and tests.
 
 # Plugin Protocol — Nexora

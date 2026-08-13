@@ -1,6 +1,6 @@
 # Plugin SDK — Nexora
 
-The Plugin SDK defines the standard packaging structure, entry-point interfaces, and registration utilities for developing third-party extensions in Nexora.
+The Plugin SDK defines the standard packaging structure, entry-point interfaces, and registration utilities for developing third-party extensions in Nexora. Canonical Plugin lifecycle semantics are owned by [../state-machines/PluginLifecycle.md](../state-machines/PluginLifecycle.md).
 
 ---
 

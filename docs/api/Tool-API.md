@@ -1,7 +1,7 @@
 > **Status: DERIVED** for Tool API.
 > This document describes the API surface for the Tool System. Canonical behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Tool System (`architecture/TOOL_SYSTEM.md`).
+> Depends on: [../../architecture/TOOL_SYSTEM.md](../../architecture/TOOL_SYSTEM.md) for ToolStatus lifecycle; [../../state-machines/TaskLifecycle.md](../../state-machines/TaskLifecycle.md) for Task lifecycle effects; and [../../state-machines/AgentLifecycle.md](../../state-machines/AgentLifecycle.md) for Agent lifecycle effects.
 > Referenced by: upstream architecture, models, protocols, and implementation consumers.
 
 # Tool API — Nexora

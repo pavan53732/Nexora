@@ -1,7 +1,7 @@
 > **Status: DERIVED** for Plugin API.
 > This document describes the API surface for the Plugin System. Canonical behavior is defined in the owning state-machine (`state-machines/PluginLifecycle.md`) and architecture (`architecture/PLUGIN_SYSTEM.md`) documents.
 >
-> Depends on: the canonical architecture document for Plugin System (`architecture/PLUGIN_SYSTEM.md`).
+> Depends on: [../../architecture/PLUGIN_SYSTEM.md](../../architecture/PLUGIN_SYSTEM.md) and [../../state-machines/PluginLifecycle.md](../../state-machines/PluginLifecycle.md) for Plugin lifecycle transitions.
 > Referenced by: upstream architecture, models, protocols, and registries.
 
 # Plugin API — Nexora

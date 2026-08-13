@@ -1,7 +1,7 @@
 > **Status: DERIVED** for Agent API.
 > This document describes the api surface for Agent. Canonical behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical architecture document for Agent.
+> Depends on: the canonical architecture document for Agent; [../../state-machines/AgentLifecycle.md](../../state-machines/AgentLifecycle.md) for Agent lifecycle transitions; and [../../state-machines/TaskLifecycle.md](../../state-machines/TaskLifecycle.md) for Task lifecycle transitions.
 > Referenced by: upstream architecture, models, protocols, and implementation consumers.
 
 

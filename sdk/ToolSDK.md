@@ -1,6 +1,6 @@
 # Tool SDK — Nexora
 
-The Tool SDK provides standard base classes, dependency injection utilities, and convenience adapters for developer-authored tool implementations.
+The Tool SDK provides standard base classes, dependency injection utilities, and convenience adapters for developer-authored tool implementations. Persistent command-process handling follows the canonical [../state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md).
 
 ---
 

@@ -1,7 +1,7 @@
 > **Status: DERIVED** for Execution message contract.
 > This document defines protocol messages for Execution operations. Canonical subsystem behavior is defined in the owning architecture document.
 >
-> Depends on: the canonical runtime and execution lifecycle sources.
+> Depends on: [../architecture/RUNTIME.md](../architecture/RUNTIME.md) for the canonical Runtime and ExecutionStatus lifecycle sources.
 > Referenced by: APIs, SDKs, tasks, workflows, and tests.
 
 # Execution Protocol — Nexora

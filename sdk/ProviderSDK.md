@@ -1,7 +1,8 @@
 # Provider SDK — Nexora
 
 The Provider SDK defines provider adapter, typed-stream normalization, credentials,
-cancellation, and backpressure contracts.
+cancellation, and backpressure contracts. Canonical provider-stream lifecycle semantics are
+owned by [../state-machines/ProviderStreamLifecycle.md](../state-machines/ProviderStreamLifecycle.md).
 
 ## Adapter Contract
 

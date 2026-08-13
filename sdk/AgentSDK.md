@@ -58,4 +58,4 @@ Custom agents consume `Flow<StreamEnvelope>` through SDK collectors that validat
 identity/sequence, expose provisional text separately from committed output, assemble
 only committed Tool calls, and propagate cancellation. SDK callbacks receive redacted
 `ReasoningSummary` artifacts; raw private chain-of-thought is never required. Resume
-uses the provider lifecycle contract and never silently combines distinct stream IDs.
+uses the canonical [../state-machines/ProviderStreamLifecycle.md](../state-machines/ProviderStreamLifecycle.md) contract and never silently combines distinct stream IDs.

@@ -141,7 +141,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | NXR-4012 | Provider quota exceeded | Infrastructure | Monthly or daily token quota is exhausted | Notify user; pause generation until quota resets |
 | NXR-4013 | Stream backpressure overflow | Infrastructure | Bounded event queue stayed over capacity beyond deadline | Cancel stream, retain partial output, tune consumer/buffer policy |
 | NXR-4014 | Stream resume rejected | Infrastructure | Resume cursor is unsupported, expired, or mismatched | Keep partial result; restart with lineage only when policy permits |
-| NXR-4015 | Stream sequence gap |  | Stalled stream over failover budget (ProviderStreamLifecycle `stalledFailoverBudget`); missing sequence cannot be recovered | Fail stream; never synthesize missing content |
+| NXR-4015 | Stream sequence gap | Infrastructure | Stalled stream over failover budget (ProviderStreamLifecycle `stalledFailoverBudget`); missing sequence cannot be recovered | Fail stream; never synthesize missing content |
 | NXR-4016 | Incomplete streamed Tool call | Client | Tool fragments ended before schema-valid commit | Discard fragments; never execute |
 | NXR-4017 | Stream terminal missing | Infrastructure | Transport closed without canonical terminal event | Commit failure and reconcile usage; never report success |
 
@@ -235,7 +235,7 @@ To eliminate responsibility gaps and satisfy Critical Finding 2, every public in
 | **`ProviderManager`**| `complete` / `stream` | `NXR-4003` | Client | Safe | Never | `NO_CHANGE` | User Action: prompt to update API credentials in settings |
 | | `stream` | `NXR-4013` | Infrastructure | Conditional | Never without policy change | Stream → `FAILED` | Provider Router: cancel transport, retain partial output, audit queue state |
 | | `resumeStream` | `NXR-4014` | Infrastructure | Conditional (lineage restart) | Conditional | Stream → `FAILED` or new lineage | Provider Router: keep prior partial; restart only with explicit policy |
-| | `stream` | `NXR-4015` / `NXR-4017` | Server / Infrastructure | Unsafe to infer success | Never | Stream → `FAILED` | Stream Validator: fail on unrecoverable gap or missing terminal |
+| | `stream` | `NXR-4015` / `NXR-4017` | Infrastructure | Unsafe to infer success | Never | Stream → `FAILED` | Stream Validator: fail on unrecoverable gap or missing terminal |
 | | `stream` | `NXR-4016` | Client | Conditional regeneration | Never execute partial call | `NO_CHANGE` for Tool | Inference Assembler: discard fragments; optionally retry generation |
 | | | `NXR-4004` | Infrastructure | Safe | Conditional (rate-limit backoff)| `NO_CHANGE` | Provider Layer: parse `Retry-After` header, delay request execution |
 | | | `NXR-4009` | Infrastructure | Safe | Safe (Automatic fallback) | `NO_CHANGE` | Provider Layer: switch to next Healthy provider in priority queue, emit alert |
