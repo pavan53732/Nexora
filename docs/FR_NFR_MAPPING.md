@@ -23,7 +23,7 @@
 ## Verification Notes
 
 - **No placeholder patterns remain** in edited docs (`architecture/TOOL_SYSTEM.md`, `protocols/Tool-Protocol.md`, `registry/TOOLS.md`, `registry/TOOL_MATRIX.md`, `specs/BACKGROUND_EXECUTION.md`, `security/PermissionModel.md`, `security/SandboxPolicy.md`, `specs/BROWSER.md`, `specs/AI_PROVIDERS.md`, `docs/DECISION_LOG.md`). Verified with regex search (`FR-[A-Z]{2}-[4-9][0-9]{2}` etc.) — `0` matches.
-- All edited documents reference **actual** ledger IDs (`FR-S016`, `FR-AS-009`, `FR-T011`, `FR-W005`, `FR-P011`, `FR-S014`/`015`, `FR-T015`, `FR-EV-002`/`006`, `FR-S028`, `FR-P009`, `NFR-REL-002`/`003`).
+- All edited documents reference **actual** ledger IDs (`FR-S016`, `FR-AS-009`, `FR-T011`, `FR-W005`, `FR-P011`, `FR-S014`/`015`, `FR-TL015`, `FR-EV-002`/`006`, `FR-S028`, `FR-P009`, `NFR-REL-002`/`003`).
 - Mapping aligns with `docs/TRACEABILITY_RULES.md` (Evidence Rule, Coverage Rule, Audit Rule) and `docs/REQUIREMENT_COVERAGE_LEDGER.md` (authoritative inventory).
 
 ---
@@ -50,7 +50,7 @@
 - `FR-TE001`..`005` (terminal execution/lifecycle/tools) → `specs/TERMINAL.md` (§Execution Model, §Lifecycle, §Security).
 - `FR-S002`/`003`/`018` (sandbox/process/workspace isolation) → `specs/TERMINAL.md` (§Security & Isolation) + `security/SandboxPolicy.md`.
 - `FR-AS-002`/`003`/`009`/`013` (heartbeat/budget/degradation/recovery) → `specs/TERMINAL.md` (§Timeout Discipline, §Restore Behavior) + `specs/BACKGROUND_EXECUTION.md`.
-- `FR-T015` (audit trail) → `specs/TERMINAL.md` (§Audit).
+- `FR-TL015` (audit trail) → `specs/TERMINAL.md` (§Audit).
 - `FR-EV-002`/`006` (evidence/reviewer) → `specs/TERMINAL.md` (§Evidence & Validation Engine reference).
 - `FR-M012`/`013` (file version/user preferences) → `specs/TERMINAL.md` (§Restore Behavior — checkpoint storage + retention).
 - `FR-A010` (real-time monitoring) → `specs/TERMINAL.md` (§Audit — budget/cap/timeout events).
@@ -64,7 +64,7 @@
 - `FR-S018` (per-agent sandbox) → remote sub-agent runs in the remote instance's own sandbox (PIPES.md §6).
 - `FR-P011`/`FR-P013` (provider profiles, provider isolation) → credentials never cross pipes; remote execution uses remote profiles (PIPES.md §2 rule 2, §8).
 - `FR-S014`/`FR-S015` (egress policy, quarantine) → pipe egress confinement + inbound artifact quarantine (PIPES.md §8).
-- `FR-T015` (audit trail) → pipe events audited end-to-end (PIPES.md §2 rule 4).
+- `FR-TL015` (audit trail) → pipe events audited end-to-end (PIPES.md §2 rule 4).
 - `FR-CM-006` (context trust tagging) → inbound payloads are untrusted segments (PIPES.md §8).
 - `NFR-SEC-014` (pipe channel security) → `requirements/NFR.md`; validation `SEC-NET-001`.
 - `NFR-REL-002`/`012` (resume fidelity, exactly-once) → mid-task pipe recovery (PIPES.md §6, §9).

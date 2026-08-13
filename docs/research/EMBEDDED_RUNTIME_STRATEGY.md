@@ -564,7 +564,7 @@ The embedded runtime is designed for full visibility:
 - **Permission decisions** — written to an immutable Room table (permission_audit_log)
   with 90-day retention; filterable by workspace, agent, time range
 - **Tool invocations** — every call recorded with tool ID, parameters, result,
-  duration, permission decision (FR-T015)
+  duration, permission decision (FR-TL015)
 - **Provider routing** — per-request token usage tracked by session, provider, and
   model; health transitions published
 - **Resource usage** — CPU, memory, disk, and network tracked by workspace and agent
@@ -679,7 +679,7 @@ Key requirement IDs used in this document and verified against the current repos
 | FR-EV-001..006 | Evidence & Validation Engine | [`requirements/FR.md`](../../requirements/FR.md) |
 | FR-MA-001..005 | Multi-agent sub-tasks (SA-1..SA-5) | [`requirements/FR.md`](../../requirements/FR.md) |
 | FR-MI-001..010 | Multi-instance pipes | [`requirements/FR.md`](../../requirements/FR.md) |
-| FR-T015 | Tool execution audit trail | [`requirements/FR.md`](../../requirements/FR.md) |
+| FR-TL015 | Tool execution audit trail | [`requirements/FR.md`](../../requirements/FR.md) |
 | FR-S016 | Autonomy modes (Manual/Assisted/Autopilot) | [`requirements/FR.md`](../../requirements/FR.md) |
 | NFR-REL-002 | Checkpoint resume (100% fidelity) | [`requirements/NFR.md`](../../requirements/NFR.md) |
 | NFR-REL-012 | Exactly-once recovery | [`requirements/NFR.md`](../../requirements/NFR.md) |
