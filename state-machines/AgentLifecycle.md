@@ -69,6 +69,7 @@ To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly
 | Trigger | From | To | Guard |
 |---------|------|----|-------|
 | `configure()` | Created | Configured | Required fields non-null |
+| `validate()` | Configured | Ready | All prerequisites validated |
 | `start()` | Ready | Running | Agent not disabled |
 | `pause()` | Running | Paused | — |
 | `resume()` | Paused | Running | — |
