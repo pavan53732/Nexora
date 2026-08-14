@@ -17,7 +17,7 @@ The Tool API defines the boundaries for registering tools, executing tools in th
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
 | `registerTool` | Tool `Discovered → Registered` | Stable validated descriptor | Duplicate ID (`NXR-2006`), invalid schema/risk/scope declaration (`NXR-2005`), storage failure | Safe (Idempotent) | Validates unique known permission IDs and risk level before registry exposure | `SEC-PERM-055/066`, `IT-TOOL-010` |
-| `executeTool` | No ToolStatus change; backing terminal may run | Standardized output envelope | Not found (`NXR-2001`), timeout (`NXR-2002`), authorization denied (`NXR-2003`), exception (`NXR-2004`), validation (`NXR-2005`), OOM (`NXR-7004`) | Idempotency key required for retry-sensitive calls | Runs the complete PermissionModel authorization gate before any side effect; preserves denial subreason, toolCallId, and correlationId | `SEC-PERM-001..066`, `IT-TOOL-001..014` |
+| `executeTool` | No ToolStatus change; backing terminal may run | Standardized output envelope | Not found (`NXR-2001`), timeout (`NXR-2002`), authorization denied (`NXR-2003`), exception (`NXR-2004`), validation (`NXR-2005`), sandbox-policy violation (`NXR-2009`), OOM (`NXR-7004`) | Idempotency key required for retry-sensitive calls | Runs the complete PermissionModel authorization gate before any side effect; preserves denial subreason, toolCallId, and correlationId | `SEC-PERM-001..066`, `IT-TOOL-001..014` |
 | `getToolDescriptor`| No lifecycle change | Dynamic tool schema and metadata | Not found (`NXR-2001`) | Safe to retry; side-effect free | Open access; sanitizes internal implementation details | API contract tests |
 | `listTools` | No lifecycle change | Paged list of registered tool descriptors | Storage failure, invalid page parameters | Safe to retry; side-effect free | Filters out internal-only tools based on client credentials | API contract tests |
 
@@ -98,5 +98,6 @@ interface ToolApi {
 | | `NXR-2003` (Authorization Denied) | ToolInvocation status → `PENDING_AUTHORIZATION` for an effective `ASK` decision; the owning Task/Agent lifecycle may transition to `WaitingApproval` and resume on approve. Unknown, policy, malformed, user, or classifier denial returns `ToolResult.Error` without side effects according to the canonical subreason. Approval is never represented as a `ToolResult` variant. |
 | | `NXR-2004` (Execution Failed) | Log exception; run agent bounded self-correction loop. |
 | | `NXR-2005` (Invalid Parameters) | Return schema validation errors back to agent for repair. |
+| | `NXR-2009` (Sandbox Policy Violation) | Terminate tool; record the policy violation in the audit log. This includes Tool-originated filesystem path escape. |
 | | `NXR-7004` (OOM) | Terminate sandbox process; transition task status to `FAILED`. |
 | `getToolDescriptor`| `NXR-2001` (Not Found) | Safe to retry; no state mutation. |

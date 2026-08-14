@@ -28,7 +28,7 @@ Runtime Executor          Authorization Gate          Sandbox Runner
 1. **Authorization Gate**: The complete authorization gate (see `security/PermissionModel.md`) validates the Tool descriptor, resolves every required scope through PermissionScopeRegistry, denies unknown/effective-DENY scopes, aggregates ASK into validated approval transaction, applies ClassifierPolicy, and optionally evaluates the Classifier. Authorization denial returns `NXR-2003` with authoritative subreason (`UNKNOWN_SCOPE`, `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`). Invalid descriptors return `NXR-2005` with `INVALID_SCOPE_DECLARATION`. No Tool side effect occurs before complete authorization.
 2. **Process Spawn**: The sandbox manager allocations sandbox memory/disk slices and spawns the tool runner inside proot.
 3. **Execution & Stream**: The tool runs, streams real-time stdout/stderr into the activity feed (for long-running terminal scripts), and commits file snapshot modifications.
-4. **Outcome Publication**: The sandbox manager collects exit codes, transforms exceptions into `CanonicalErrorEnvelope` records, and dispatches the `ToolExecuted` event onto the Event Bus.
+4. **Outcome Publication**: The sandbox manager collects exit codes, transforms exceptions into `CanonicalErrorEnvelope` records, and dispatches the `ToolExecuted` event onto the Event Bus. A Tool sandbox-policy violation, including Tool-originated filesystem path escape, returns `NXR-2009`.
 
 ## Message Shapes
 
@@ -91,7 +91,7 @@ data class ToolExecutedEvent(
 
 - **Correlation Tracing**: Every protocol message MUST propagate `correlationId` and `toolCallId`.
 - **At-Least-Once Delivery**: Outbound events MUST be deduplicated by downstream orchestrators using `(toolCallId, version)`.
-- **Termination Signalling**: Processes MUST cleanly emit an exit code. A non-zero exit code or an unhandled signal (like OOM Kill `137`) MUST be converted into `NXR-2004` or `NXR-7004` error envelopes.
+- **Termination Signalling**: Processes MUST cleanly emit an exit code. A non-zero exit code or an unhandled signal (like OOM Kill `137`) MUST be converted into `NXR-2004` or `NXR-7004` error envelopes, as applicable. A Tool sandbox-policy violation, including Tool-originated filesystem path escape, MUST instead use `NXR-2009`.
 
 
 ## Upgrade Notes

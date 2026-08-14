@@ -34,7 +34,7 @@ All file I/O is mediated by `SandboxFileSystem`. Direct `java.io.File` or `java.
 
 | Rule | Detail |
 |------|--------|
-| **No `/sdcard`** | Any path resolving outside the workspace root is rejected; the canonical error identity for path escape is OPEN/DEFERRED. |
+| **No `/sdcard`** | Any path resolving outside the workspace root is rejected. A path escape by a Tool during execution returns `NXR-2009`; a path escape by a Plugin during execution returns `NXR-6008`. |
 | **No `/system`** | Blocklisted at canonical-path check |
 | **No sibling workspace access** | Paths containing `../` are canonicalised and validated against the workspace root |
 | **No symlinks out** | Symlinks are resolved and re-validated; creation of outbound symlinks is denied |
@@ -47,7 +47,7 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
         val canonical = workspaceRoot.resolve(userPath).toRealPathOrNull()
             ?: throw NexoraError.SandboxPathInvalid(userPath)
         require(canonical.startsWith(workspaceRoot.normalize())) {
-            "Path escapes workspace: $userPath"  // canonical error identity OPEN/DEFERRED
+            "Path escapes workspace: $userPath"  // Tool execution: NXR-2009; Plugin execution: NXR-6008
         }
         return canonical
     }
@@ -118,7 +118,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 | Violation | Response |
 |-----------|----------|
-| Path escape attempt | Immediate process kill; audit log entry with severity `CRITICAL`; user notification |
+| Path escape attempt | Tool execution: terminate tool, return `NXR-2009`, and record the policy violation in the audit log. Plugin execution: terminate plugin, return `NXR-6008`, record the boundary violation, and disable the plugin. |
 | Network rule breach | Connection terminated; `NXR-2003` returned; violation counted toward workspace risk score. A direct guest socket attempt (bypassing the egress proxy) is also terminated and denied — there is no allowlist path for non-proxied egress |
 | Resource limit exceeded | Graceful termination with partial output; `NXR-7xxx` error returned to agent |
 | Repeated violations (3+ in 1 hour) | Workspace locked to read-only; user must manually unlock via Settings |
@@ -150,7 +150,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked domain or interact with a blocked app class:
 
-1. **Sandbox denies.** Network connections to blocked domains return `NXR-2003`. Filesystem/path-escape and blocked-app error identities are OPEN/DEFERRED; denial behavior does not depend on assigning an unsupported code.
+1. **Sandbox denies.** Network connections to blocked domains return `NXR-2003`. Filesystem/path escape is mapped by execution origin: Tool violations return `NXR-2009`; Plugin violations return `NXR-6008`. Blocked-app error identity remains OPEN/DEFERRED; denial behavior does not depend on assigning an unsupported code.
 2. **Audit log entry** (`FR-TL015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
 3. **User notification** (`agent_error` — `NotificationHelper`) with isolation instruction: "Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."
 4. **Continuation status:** The blocked-list rule remains in effect. There is no domain/app-specific `ALLOW` override and no bypass mechanism. Resolving isolation settings does not resume the blocked operation. A continuation, if needed, is a new operation/task initiated in the properly isolated workspace/profile. This rule does not create or reinterpret a TaskLifecycle state or transition.

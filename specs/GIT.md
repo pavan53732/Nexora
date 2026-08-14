@@ -68,7 +68,7 @@ existing mechanisms: structured `ToolResult` (Tool-API), path canonicalization
 - Every file path referenced in a plan or tool call must pass a real
   `file_exists` / `file_info` check before any mutation. A path that does not exist
   is **discovered** (`file_search`, `find`) — never assumed.
-- `SandboxFileSystem` canonicalization remains the backstop; the canonical path-escape error identity is OPEN/DEFERRED.
+- `SandboxFileSystem` canonicalization remains the backstop; a Git-tool path escape is a Tool sandbox-policy violation and returns `NXR-2009`.
 
 ### GR-4 — SHA grounding (FR-GT-004)
 
