@@ -161,6 +161,7 @@ data class AgentProjection(
 | startTask | NXR-1008, NXR-7001 |
 | cancelTask | NXR-3010 |
 | getTaskStatus | NXR-1009 |
-| getAgent / listAgents | **OPEN/DEFERRED** — no operation mapping is established in the canonical Error Catalog. |
+| getAgent | `NXR-3001` (Agent not found) — referenced agent ID does not exist in the agent registry. |
+| listAgents | **OPEN/DEFERRED** — no operation mapping is established in the canonical Error Catalog for invalid filter, authorization, pagination, or storage failure. |
 
 See [ERROR_CODES.md](../../errors/ERROR_CODES.md) for canonical envelope requirements.
