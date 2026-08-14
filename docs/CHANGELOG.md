@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 - Agent reliability hardening documentation: fixed duplicate Tool timeout and Context freshness declarations; added hierarchical deadline propagation, acceptance-criteria progress vectors, claim-to-evidence binding, non-overridable reasoning ceilings, operation-level unknown-completion reconciliation, deterministic multi-agent conflict abstention, new NFR-REL-016..018 and NFR-CI-003..005 coverage mappings, and E2E-REL-001..009 Android/agent fault-injection journeys. These are specification and planned-evidence updates only; no runtime implementation or executed test evidence is claimed.
+
+### Changed
+- Documentation build-contract cleanup: removed stale proposed-language from canonical mode-selected Agent Runtime behavior and removed the obsolete fixed 119-file count from the master project specification while preserving the documentation-first phase boundary.
 - Conversation checkpoint and rollback architecture completion — new canonical `architecture/CONVERSATION_CHECKPOINTS.md`, supporting `specs/CONVERSATION_CHECKPOINTS.md`, lifecycle `state-machines/ConversationCheckpointLifecycle.md`, and decisions `DEC-8`/`DEC-9`/`DEC-10`; conversation rollback is specified as non-destructive branching, distinct from execution checkpoints, file history, and workspace rollback; implementation not present.
 - Skill lifecycle boundary completion and command decision — `DEC-11` defines Skill Registry/runtime boundary and security inheritance; `DEC-12` explicitly records that Nexora does not establish a first-class Command artifact.
 - S12 — resolved permission-default, multi-scope, Session lifecycle, Execution lifecycle, and ToolStatus architecture conflicts.

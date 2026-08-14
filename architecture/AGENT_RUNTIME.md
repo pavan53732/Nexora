@@ -20,7 +20,7 @@ The Agent Runtime defines how individual AI agents behave autonomously. Each age
 
 ## Execution Modes
 
-The single-agent runtime supports **mode-selected execution**. These modes are **PROPOSED runtime behavior introduced by this upgrade** and extend the canonical loop without changing multi-agent ownership.
+The single-agent runtime supports **mode-selected execution**. These modes are established runtime behavior within the canonical single-agent loop and do not change multi-agent ownership.
 
 | Mode | Purpose | Typical use | Required controls |
 |---|---|---|---|

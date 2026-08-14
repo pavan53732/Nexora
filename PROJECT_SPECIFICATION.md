@@ -378,7 +378,7 @@ Nexora/
 
 | Phase | Name | Goal | Key Deliverables |
 |-------|------|------|-----------------|
-| **0** | Foundation | Repo structure, documentation, registries | This repo (119 files: requirements, architecture, models, protocols, standards, state machines, diagrams, security, testing, registries, dependency graph, module boundaries, lifecycles, performance budget) |
+| **0** | Foundation | Repo structure, documentation, registries | This repository’s documentation-first snapshot: requirements, architecture, models, protocols, standards, state machines, diagrams, security, testing, registries, dependency graph, module boundaries, lifecycles, and performance budget. The live file inventory is determined by the repository tree rather than a fixed count in this roadmap row. |
 | **1** | Android Foundation | Bootable app, no AI yet | Agent-first chat UI, navigation, theme, settings, workspace manager, interfaces |
 | **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, event bus, checkpoints |
 | **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node |
