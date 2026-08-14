@@ -80,7 +80,7 @@
 - `TOOL-410`..`416` (introspect_*) → `registry/TOOLS.md` (Category 28 — Project Introspection, INTRO prefix), `registry/TOOL_MATRIX.md`.
 - `FEAT-035` (Project Introspection) → `registry/FEATURES.md`.
 - Knowledge Graph phase Later→4 → `architecture/MEMORY_SYSTEM.md`.
-- Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, `docs/research/.
+- Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, 
 
 ## S13 — Authorization and Execution Recovery Contract Synchronization
 

@@ -457,7 +457,7 @@ No API keys were configured or stored. Key storage will use Android Keystore (as
 
 ## 13. Embedded Runtime Strategy Summary
 
-A separate research document (`docs/research/) was reconstructed from the current documentation corpus (S9, 2026-08-06). Key recommendations:
+Embedded runtime strategy recommendations (S9, 2026-08-06) are documented in this section. Key recommendations:
 
 | Component | Recommended Solution | License | APK Impact | Integration Phase |
 |-----------|---------------------|---------|-----------|-------------------|
@@ -502,9 +502,9 @@ git commit -m "docs: add environment setup documentation
 - [x] **Step 2:** System tools installed; OpenJDK 21 LTS installed and configured (`JAVA_HOME`); Android SDK installed (`ANDROID_HOME`, `ANDROID_SDK_ROOT`); SDK licenses accepted; SDK platforms (29, 34) and sources installed; build-tools (34.0.0) installed; Gradle 8.10.2 installed; Kotlin 2.1.0 installed; Python 3.13 + pip + venv + virtualenv installed; Git 2.47.3 + Git LFS 3.6.1 installed.
 - [x] **Step 3:** Compatibility with future libraries verified (Jetpack Compose, Material 3, Hilt, Room, DataStore, WorkManager, Navigation Compose, Coroutines, Kotlin Serialization). No Android project created yet.
 - [x] **Step 4:** AI provider integration environment verified (network, SSL, curl, Python HTTP libraries). No API keys configured.
-- [x] **Step 5:** Embedded runtime strategy researched; recommendations for Python (Chaquopy), JavaScript (QuickJS), Git (JGit), terminal/shell (custom + Termux/proot), SQLite (Room + SQLCipher), and sandbox execution (internal manager + Android isolation) documented in `docs/research/ (reconstructed S9).
+- [x] **Step 5:** Embedded runtime strategy researched; recommendations for Python (Chaquopy), JavaScript (QuickJS), Git (JGit), terminal/shell (custom + Termux/proot), SQLite (Room + SQLCipher), and sandbox execution (internal manager + Android isolation) documented in (reconstructed S9).
 - [x] **Step 6:** Complete environment verified (`java`, `javac`, `sdkmanager`, `adb`, `gradle`, `kotlinc`, `python3`, `pip3`, `git`); environment variables (`JAVA_HOME`, `ANDROID_HOME`, `ANDROID_SDK_ROOT`, `PATH`) configured correctly.
-- [x] **Step 7:** Documentation (`docs/ENVIRONMENT_SETUP.md`) created and committed. Embedded runtime strategy document (`docs/research/) reconstructed and committed (S9, 2026-08-06).
+- [x] **Step 7:** Documentation (`docs/ENVIRONMENT_SETUP.md`) created and committed. Embedded runtime strategy document ( reconstructed and committed (S9, 2026-08-06).
 
 ### 15.2 What Was NOT Done (As Instructed)
 
@@ -534,7 +534,7 @@ The environment is fully verified and documented. When instructed to proceed:
 - Security Model: `/home/user/Nexora/architecture/SECURITY_MODEL.md`
 - Standards: `/home/user/Nexora/standards/Coding-Standard.md`
 - SDK Documentation: `/home/user/Nexora/sdk/`
-- Embedded Runtime Research: `docs/research/ (reconstructed S9, 2026-08-06; see also §13 above)
+- Embedded Runtime Research: (reconstructed S9, 2026-08-06; see also §13 above)
 
 ---
 

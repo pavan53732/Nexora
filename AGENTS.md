@@ -67,9 +67,6 @@ Every claim must be backed by the actual file contents, cited as `path:line`.
  Do not rewrite them just to remove old numbers or outdated counts.
 - Historical sections in `FR_NFR_MAPPING.md` (e.g., S4 mapping) describe
  what was mapped at that time — do not "fix" them to current values.
-- The research document (`docs/research/)
- is pinned to a specific commit and has a historical-snapshot banner.
- Its metrics are intentionally frozen.
 
 ## Rule 7 — Verify after editing
 

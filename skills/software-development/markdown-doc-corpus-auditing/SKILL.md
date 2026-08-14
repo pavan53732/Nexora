@@ -115,8 +115,7 @@ sees, leading to false "collision" reports or missed collisions.
 
 ## Pitfall P2 — "Stale" numbers in historical docs are not always collisions
 
-- A research doc pinned to a commit date (docs/research/
- pinned to d7b670d, 2026-08-05) intentionally carries time-capsule numbers. A
+- A document pinned to a commit date (e.g., `docs/DECISION_LOG.md` or `docs/CHANGELOG.md` pinned to a specific commit) intentionally carries time-capsule numbers. A
  mismatch between its tool count and current registry is *by design*, not a defect.
  Always check for a "pinned to commit" declaration before reporting a "stale number"
  collision.

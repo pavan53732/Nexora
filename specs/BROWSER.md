@@ -109,7 +109,7 @@ To prevent prompt-injection attacks, data exfiltration, or sandbox escapes throu
 
 > **Status:** CANONICAL blocked-list specification for browser automation (added G3 — 2026-08-06). 
 > **Verified research reference:** `aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03 (`Kimi Claw` pattern — sensitive accounts must not be automated). 
-> **Reference:** `security/SandboxPolicy.md` (§Blocked Domains & Sensitive Apps); `docs/DECISION_LOG.md` (`DL-023`); `docs/research/ (§6.2 — bot integration missing; §5.2 — browser automation partial — blocked-list closes a security gap without redesign).
+> **Reference:** `security/SandboxPolicy.md` (§Blocked Domains & Sensitive Apps); `docs/DECISION_LOG.md` (`DL-023`); browser automation capability gap documented in `docs/DECISION_LOG.md` — blocked-list closes a security gap without redesign.
 
 ### Blocked App Classes (UI Automation)
 
