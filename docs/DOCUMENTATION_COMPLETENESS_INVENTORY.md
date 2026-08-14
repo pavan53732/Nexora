@@ -32,11 +32,12 @@ The current inventory does not treat the following as active OPEN/DEFERRED archi
 - Blocked-app interaction is authorization-classifier denial (`NXR-2003` / `CLASSIFIER_DENIAL`), preserving denial, audit, notification, isolation, no bypass, no automatic resume, and new-operation/task continuation.
 - Provider `Retry-After` and Task `RetryPending` retain independent scopes and do not create a merged retry state.
 - Session–Conversation semantic questions selected by DEC-13 through DEC-21 are closed; historical unresolved wording does not reopen relationship status, ownership, identity, representation, cardinality, lifecycle, or continuation semantics.
-- Conversation/checkpoint metadata, ordering, persistence, schema, API/transport, and recovery mechanics remain bounded implementation choices within the selected semantic invariants; no concrete mechanism is selected by this inventory.
+- Concrete Conversation/checkpoint mechanisms—metadata representation/encoding, message/turn ordering representation, storage technology, schema implementation, API/transport, and recovery mechanism—remain bounded implementation choices within the selected semantic invariants; no concrete mechanism is selected by this inventory.
+- Conversation-local metadata content/field boundary—what metadata must exist to interpret the Conversation record—remains **OPEN/DEFERRED / OWNER DECISION REQUIRED** under DEC-13. This inventory does not select metadata fields, schema, or policy.
 - TM-008 and TM-037 are planned security-completion work with established owners, Phase 7 targets, acceptance criteria, and residual risks.
 - Embedded runtimes and `TOOL-403`/`TOOL-404` streaming remain planned/later work; reserved tool IDs are not architecture gaps or reusable identifiers.
 
-The remaining active owner-decision inventory is limited to the requirement-ID orphans in `docs/TRACEABILITY.md`, execution failure-class binding authority, branch-lineage artifact ownership, checkpoint/retention/deletion policy, selected product scope and positioning matters, Platform Infrastructure governance, and the independent ROADMAP terminology decisions.
+The remaining active owner-decision inventory is limited to the requirement-ID orphans in `docs/TRACEABILITY.md`, Conversation-local metadata content/field boundary, execution failure-class binding authority, branch-lineage artifact ownership, checkpoint/retention/deletion policy, selected product scope and positioning matters, Platform Infrastructure governance, and the independent ROADMAP terminology decisions.
 
 ## Unresolved classification
 
