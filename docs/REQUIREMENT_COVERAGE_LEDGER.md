@@ -150,6 +150,8 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-TE003` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
 | `FR-TE004` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
 | `FR-TE005` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
+| `FR-SESS-001` | `requirements/FR.md` | MAPPED | Session / Core Runtime | `state-machines/SessionLifecycle.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |
+| `FR-WF-001` | `requirements/FR.md` | MAPPED | Workflow Engine | `architecture/WORKFLOW_ENGINE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
 | `FR-EL-001` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
 | `FR-EL-002` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
 | `FR-EL-003` | `requirements/FR.md` | MAPPED | Orchestration | `specs/EXECUTION_LIFECYCLE.md` | `IT-CONTRACT-002` | `evidence/integration/IT-CONTRACT-002/` |
@@ -306,6 +308,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-SCALE-003` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-004` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-005` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-COMP-001` | `requirements/NFR.md` | MAPPED | API Contracts | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
 | `NFR-COMPAT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
 | `NFR-COMPAT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
 | `NFR-COMPAT-003` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |

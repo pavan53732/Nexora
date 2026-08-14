@@ -31,16 +31,18 @@ The current inventory does not treat the following as active OPEN/DEFERRED archi
 - `listAgents` has no collection-specific canonical error mapping; an empty collection result is not `NXR-3001`.
 - Blocked-app interaction is authorization-classifier denial (`NXR-2003` / `CLASSIFIER_DENIAL`), preserving denial, audit, notification, isolation, no bypass, no automatic resume, and new-operation/task continuation.
 - Provider `Retry-After` and Task `RetryPending` retain independent scopes and do not create a merged retry state.
-- Session–Conversation semantic questions selected by DEC-13 through DEC-21 are closed; historical unresolved wording does not reopen relationship status, ownership, identity, representation, cardinality, lifecycle, or continuation semantics.
+- Session–Conversation semantic questions selected by DEC-13 through DEC-21 are closed; historical unresolved wording does not reopen relationship status, ownership, identity, representation, cardinality, lifecycle, or continuation semantics. DEC-22 and DEC-23 separately resolve BranchLineage ownership and checkpoint retention/deletion safety.
 - Concrete Conversation/checkpoint mechanisms—metadata representation/encoding, message/turn ordering representation, storage technology, schema implementation, API/transport, and recovery mechanism—remain bounded implementation choices within the selected semantic invariants; no concrete mechanism is selected by this inventory.
 - BranchLineage artifact ownership is resolved by DEC-22: a distinct BranchLineage artifact owns rollback parent/source lineage, separate from Conversation and ConversationCheckpoint. Its identifier, schema, storage, lifecycle, retention, deletion, quota, cleanup, API, and implementation mechanics remain unselected.
-- Conversation-local metadata content/field boundary—what metadata must exist to interpret the Conversation record—remains **OPEN/DEFERRED / OWNER DECISION REQUIRED** under DEC-13. This inventory does not select metadata fields, schema, or policy.
+- Requirement identifiers `FR-SESS-001`, `FR-WF-001`, and `NFR-COMP-001` are now defined and mapped. Their implementation and executed validation remain planned or partial because the repository has no source implementation or executed evidence.
+- Execution-failure responsibility follows the canonical three-way split: `errors/ERROR_CODES.md` owns error identity and shared recovery metadata, the owning lifecycle owns legal lifecycle effect, and the operation owner owns idempotency and retry conditions. No coordinating owner is required by current evidence.
+- Conversation-local metadata semantic boundary is resolved by DEC-24: creation provenance and integrity information required to interpret and validate the Conversation record are included; concrete field names, types, encoding, schema, storage, API, and implementation remain downstream.
 - TM-008 and TM-037 are planned security-completion work with established owners, Phase 7 targets, acceptance criteria, and residual risks.
 - Embedded runtimes and `TOOL-403`/`TOOL-404` streaming remain planned/later work; reserved tool IDs are not architecture gaps or reusable identifiers.
 - JavaScript-scripted workflows and a dedicated `/workflows` monitoring panel are planned later and out of the current scope; this product-scope decision does not create requirements, architecture, APIs, or implementation evidence.
 - The Product Vision exclusivity sentence remains unchanged; its product-positioning status remains under review and is not treated as independently verified market evidence.
 
-The remaining active owner-decision inventory is limited to the requirement-ID orphans in `docs/TRACEABILITY.md`, Conversation-local metadata content/field boundary, execution failure-class binding authority, checkpoint/retention/deletion policy, Product Vision positioning, Platform Infrastructure governance, and the independent ROADMAP terminology decisions.
+The remaining active owner-decision inventory is limited to Product Vision positioning, Platform Infrastructure governance, and the independent ROADMAP terminology decisions. Numeric retention durations, quota values, scheduling, and concrete mechanisms remain downstream configuration choices under DEC-23; concrete metadata fields and schema remain downstream under DEC-24.
 
 ## Unresolved classification
 

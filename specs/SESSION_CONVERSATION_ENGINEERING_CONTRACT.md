@@ -227,12 +227,12 @@ This specification does not alter DEC-13 through DEC-21. It only closes implemen
 
 ### Recovery requirements
 
-- Recovery must restore the conversation record boundary and conversation-local metadata only.
+- Recovery must restore the conversation record boundary and the DEC-24 creation-provenance and integrity-information metadata categories only.
 - Recovery must not implicitly restore unrelated task, execution, provider, workspace, or external state.
 - Recovery semantics remain non-destructive and idempotent where already established by the canonical checkpoint documents.
 
 ### Unresolved choices
 
 - Storage technology.
-- Retention policy beyond existing database/schema authority.
-- Any behavior not already decided by DEC-13 through DEC-21 or the checkpoint documents.
+- Numeric retention duration, quota values, cleanup scheduling, and concrete deletion mechanics beyond DEC-23.
+- Any behavior not already decided by DEC-13 through DEC-24 or the checkpoint documents.

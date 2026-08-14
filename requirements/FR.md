@@ -59,6 +59,15 @@
 | FR-T012 | Priority queue ordering — queued tasks run in priority order (critical > high > medium > low); higher-priority tasks jump the queue | Must | 2 |
 | FR-T013 | Global background control — user can pause and resume all background execution with one action | Should | 3 |
 
+## Session and Workflow Lifecycle
+
+> Session semantics are governed by `state-machines/SessionLifecycle.md` and the Session–Conversation contracts. Workflow semantics are governed by `architecture/WORKFLOW_ENGINE.md` and `state-machines/WorkflowLifecycle.md`.
+
+| ID | Requirement | Priority | Phase |
+|---|---|---|---|
+| FR-SESS-001 | Maintain the canonical Session context lifecycle while preserving Session identity, terminal behavior, and distinct Session–Conversation continuation semantics | Must | 1 |
+| FR-WF-001 | Orchestrate workflow graph progression through the canonical workflow lifecycle, including dependency ordering, step execution, completion, failure, cancellation, and recovery outcomes | Must | 2 |
+
 ## Tool System
 
 | ID | Requirement | Priority | Phase |

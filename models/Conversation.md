@@ -53,7 +53,7 @@ Conversation identity does not equal Conversation lifecycle. Conversation record
 
 ## Conversation-local data
 
-Conversation-local data includes the ordered record, checkpoint-addressable boundaries, and metadata that semantically belongs to the Conversation rather than to Session, Task, Execution, Context, or Memory.
+Conversation-local data includes the ordered record, checkpoint-addressable boundaries, and the creation-provenance and integrity-information categories selected by DEC-24. Concrete fields and schema remain downstream. Metadata semantically belongs to the Conversation rather than to Session, Task, Execution, Context, or Memory.
 
 Conversation-local data does not include:
 - Task lifecycle state,
@@ -147,7 +147,7 @@ Concrete storage mapping, table layout, blob layout, serialization, and referenc
 
 Retention, deletion, and cleanup policy are not determined by Conversation identity alone and are not changed by Session closure, Session expiration, or Session recreation.
 
-This document does not select retention duration, deletion authorization workflow, physical cleanup timing, or branch/source dependency policy. Those remain governed by persistence/security/operations specifications.
+This document does not select numeric retention duration, deletion authorization workflow, physical cleanup timing, or cleanup scheduling. DEC-23 governs checkpoint deletion safety and branch/source dependency protection; concrete persistence and operations mechanisms remain downstream.
 
 ## Authorization boundary
 

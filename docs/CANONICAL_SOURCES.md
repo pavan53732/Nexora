@@ -34,6 +34,8 @@
 | Session–Conversation association lifecycle semantics | `decisions/DEC-20-session-conversation-association-lifecycle.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Session–Conversation continuation and recovery semantics | `decisions/DEC-21-session-conversation-continuation-recovery.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | BranchLineage artifact ownership | `decisions/DEC-22-branch-lineage-artifact-ownership.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `docs/TRACEABILITY.md` |
+| Conversation checkpoint retention, deletion, quota, cleanup, and dependency safety | `decisions/DEC-23-conversation-checkpoint-retention-deletion-policy.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `state-machines/ConversationCheckpointLifecycle.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `docs/TRACEABILITY.md` |
+| Conversation-local metadata semantic boundary | `decisions/DEC-24-conversation-local-metadata-boundary.md` | `decisions/DEC-13-conversation-identity-persistence.md`, `architecture/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Conversation checkpoint lifecycle | `state-machines/ConversationCheckpointLifecycle.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md` |
 | Checkpoint, recovery, and resume | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md` (§Checkpoint System), `architecture/AGENT_RUNTIME.md` (saveCheckpoint), `state-machines/TaskLifecycle.md` |
 | Agent lifecycle | `state-machines/AgentLifecycle.md` | `architecture/AGENT_RUNTIME.md`, `docs/LIFECYCLES.md` |

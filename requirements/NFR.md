@@ -96,8 +96,9 @@
 
 ## Compatibility
 
-| ID | Requirement | Target | Verification |
-|----|-------------|--------|--------------|
+| ID | Requirement | Target | Measurement |
+|----|-------------|--------|-------------|
+| NFR-COMP-001 | Preserve compatibility and explicit version semantics across documented API, SDK, protocol, registry, plugin, provider, and schema contracts | Backward-compatible changes remain interpretable; breaking changes are versioned, migrated, or explicitly rejected | Contract regression suite and compatibility-matrix review across affected artifacts |
 | NFR-COMPAT-001 | Android version | API 34+ (Android 14) | MinSdk in build.gradle |
 | NFR-COMPAT-002 | Screen sizes | Phone, tablet, foldable | Multi-window and orientation support |
 | NFR-COMPAT-003 | Theme support | Light, dark, dynamic | Material You dynamic color |
