@@ -151,7 +151,6 @@ All inputs injected into the context window are structured with explicit XML tag
 - **`<untrusted_content>` Gating**: Any content retrieved from external sources (web scrapes, downloads, third-party plugin repositories) MUST be enclosed within the `<untrusted_content>` block.
 - **Instruction Stripping**: The system prompt instructs the provider model to treat text inside `<untrusted_content>` strictly as passive data. The model is forbidden from executing commands or following directives found inside untrusted blocks.
 - **Freshness Validation (FR-CM-005)**: Before any loop iteration, the `ContextBuilder` re-validates that all referenced files, workspace parameters, and provider statuses have not drifted. Stale segments are marked `EXPIRED` and re-fetched.
-- **Freshness Validation (FR-CM-005)**: Before any loop iteration, the `ContextBuilder` re-validates that all referenced files, workspace parameters, and provider statuses have not drifted. Stale segments are marked `EXPIRED` and re-fetched.
 
 ## Stale Evidence Precedence
 
@@ -281,6 +280,11 @@ The effective effort level resolves to a bounded policy persisted at task start:
 
 `ReasoningPolicy` also caps reasoning tokens, Tool calls, wall-clock time, and optional
 cost. Budget exhaustion follows FR-AS-003 and never silently expands the policy.
+
+#### Non-overridable Policy Ceilings
+
+The runtime MUST apply non-overridable safety ceilings for provider calls, reasoning tokens, Tool calls, repair cycles, verifier passes, wall-clock time, and device/resource class. Task, agent, workspace, and global settings MAY reduce an effective ceiling but MUST NOT increase it. Invalid or over-ceiling policies are rejected before execution and the effective policy is recorded in the immutable `ContextSnapshot`.
+
 Critic disagreement triggers bounded repair, then clarification/escalation.
 Confidence is derived from evidence coverage, verifier results, contradiction checks,
 and source quality—not provider self-confidence alone (FR-RN-012).
@@ -322,6 +326,12 @@ The Evidence & Validation Engine assigns a structured confidence and verificatio
 - **Structured Confidence (FR-EV-002)**: Claims carry confidence scores (`HIGH` / `MEDIUM` / `LOW`). Any score of `LOW` automatically triggers an `ASK` approval prompt or a clarification gate.
 - **Zero-Assumption Mode (FR-EV-003)**: The engine blocks the agent from filling in missing specifications with assumed values. If the goal lacks clarity, the engine halts the loop, states the ambiguity, and prompts the user for instructions.
 - **Completion Validation (FR-EV-006)**: Before a task is marked completed, the `Reviewer` agent evaluates the evidence log against the task's initial validation criteria. If important, a manual or separate `Reviewer` pass is a hard gate before the user-facing completion notification is unlocked.
+
+### Claim-to-Evidence Binding
+
+Every significant user-facing factual claim MUST have a claim record containing a stable claim identifier, evidence references, evidence class, source authority, freshness status, contradiction status, verifier result, confidence classification, and user-facing disposition. A general evidence list or provider self-confidence is not sufficient to establish claim support.
+
+Claims classified `UNKNOWN`, contradicted, or below the applicable confidence gate MUST NOT be presented as verified fact. They MUST be clarified, explicitly labeled as uncertain analysis, or withheld. Claim records preserve provenance without persisting unrestricted private chain-of-thought.
 
 ---
 

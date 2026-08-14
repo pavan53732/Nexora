@@ -30,7 +30,6 @@ interface Tool {
     val parameters: JsonSchema
     val requiredPermissions: List<String> // canonical PermissionScope IDs
     val timeout: Duration
-    val timeout: Duration
 
 ## Timeout Semantics
 
@@ -61,6 +60,16 @@ Timeout values are specified per-tool in the tool descriptor and MUST respect wo
 
 - `EXCEEDED` is generally non-retryable for non-idempotent tools unless idempotency or compensation is established.
 - Non-retryable failure classes include authorization failures, schema validation failures, permanent tool errors, and repeated identical failures after strategy mutation.
+
+### Unknown-Completion Reconciliation
+
+Every non-idempotent or externally side-effecting Tool MUST declare an operation-level recovery contract in addition to `isIdempotent`. The contract MUST be one of:
+
+- provider or remote idempotency key plus status lookup;
+- deterministic local transaction or compensating operation; or
+- explicit manual reconciliation required before retry or completion classification.
+
+A timeout without a confirmed result MUST remain `UNKNOWN_COMPLETION` until the declared contract resolves whether the side effect occurred. The runtime MUST NOT silently retry, silently mark failure, or report success for an unresolved unknown-completion operation. Reconciliation evidence and final disposition MUST be persisted with the ToolInvocation and execution history.
 
 ### Ownership
 

@@ -70,3 +70,19 @@ Critical E2E journeys SHOULD assert:
 - `E2E-STREAM-001..003` cover committed/provisional UI, reconnect/failure lineage, and cancellation.
 - `E2E-REASON-001..002` cover bounded verification and reasoning-artifact privacy.
 - `E2E-CONTEXT-001` covers reproducible context reconstruction after crash.
+
+## Agent Reliability Fault-Injection Journeys
+
+The following journeys are required for reliability evidence before release gating. Each journey MUST record execution identity, correlation identity, checkpoint version, task state, terminal disposition, user-visible notification state, and duplicate-side-effect outcome.
+
+- `E2E-REL-001`: process death, device restart, and repeated restart resume from the latest valid checkpoint without duplicate side effects.
+- `E2E-REL-002`: ANR suspension and service restart save and restore the execution checkpoint without blocking the Android main thread.
+- `E2E-REL-003`: foreground-service time-limit handoff to WorkManager preserves execution lineage and resumes from checkpoint.
+- `E2E-REL-004`: Doze, low battery, OEM auto-start denial, and WorkManager-only degradation produce explicit user-visible status and Manual autonomy where required.
+- `E2E-REL-005`: provider first-byte/inter-token stall, backpressure, duplicate event, sequence gap, failover, and cancellation terminate with correct stream lineage and exactly one terminal outcome.
+- `E2E-REL-006`: non-idempotent Tool timeout remains unknown completion until its declared reconciliation contract resolves it; no unsafe automatic replay occurs.
+- `E2E-REL-007`: repeated identical and alternating ineffective actions trigger semantic progress escalation rather than an infinite treadmill.
+- `E2E-REL-008`: multi-agent delegation timeout, lock cycle, child abort, parent re-plan, and conflicting-result abstention preserve provenance and do not deadlock.
+- `E2E-REL-009`: claim-level evidence omission, stale evidence, contradictory evidence, and low confidence block or qualify the user-facing claim.
+
+These journeys are planned evidence obligations. Their presence in this specification does not claim that the runtime implementation or device validation already exists.

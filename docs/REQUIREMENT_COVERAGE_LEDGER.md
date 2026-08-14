@@ -292,6 +292,12 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-REL-013` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-REL-014` | `requirements/NFR.md` | MAPPED | Provider Layer | `state-machines/ProviderStreamLifecycle.md` | `UT-STREAM-001` | `evidence/unit/UT-STREAM-001/` |
 | `NFR-REL-015` | `requirements/NFR.md` | MAPPED | Provider + Runtime | `architecture/PROVIDER_SYSTEM.md` | `IT-STREAM-006` | `evidence/integration/IT-STREAM-006/` |
+| `NFR-REL-016` | `requirements/NFR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `UT-CONTRACT-006` | `evidence/unit/UT-CONTRACT-006/` |
+| `NFR-REL-017` | `requirements/NFR.md` | MAPPED | Tool + Runtime | `architecture/TOOL_SYSTEM.md` | `UT-TOOL-006` | `evidence/unit/UT-TOOL-006/` |
+| `NFR-REL-018` | `requirements/NFR.md` | MAPPED | Android Runtime | `specs/BACKGROUND_EXECUTION.md` | `E2E-REL-001` | `evidence/e2e/E2E-REL-001/` |
+| `NFR-CI-003` | `requirements/NFR.md` | MAPPED | Evidence Engine | `specs/CONTEXT_MANAGEMENT.md` | `UT-EV-007` | `evidence/unit/UT-EV-007/` |
+| `NFR-CI-004` | `requirements/NFR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `UT-AS-010` | `evidence/unit/UT-AS-010/` |
+| `NFR-CI-005` | `requirements/NFR.md` | MAPPED | Context + Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-RN-013` | `evidence/unit/UT-RN-013/` |
 | `NFR-USE-001` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-002` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-003` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |

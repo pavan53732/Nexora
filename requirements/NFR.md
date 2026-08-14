@@ -62,6 +62,9 @@
 | NFR-REL-013 | Degradation continuity | App stays usable through provider outage | Degradation ladder (failover → local → offline → read-only), each step announced and logged (NFR-REL-005) |
 | NFR-REL-014 | Ordered stream delivery | No undetected duplicate/gap; exactly one terminal event | Monotonic `(streamId, sequence)` validation and durable terminal commit |
 | NFR-REL-015 | Stream resume/failover lineage | No silent cross-stream/provider splice | Native cursor resume or new stream with `priorStreamId` |
+| NFR-REL-016 | Hierarchical execution deadlines | No child operation outlives its parent deadline; exhaustion produces explicit incomplete/escalated status | Remaining-deadline propagation with cancellation and checkpoint reservation |
+| NFR-REL-017 | Unknown-completion reconciliation | No unresolved non-idempotent side effect is silently retried, marked failed, or reported successful | Operation-level idempotency/status lookup, compensation, or manual reconciliation contract |
+| NFR-REL-018 | Agent reliability evidence | Critical recovery and liveness controls are exercised by repeatable fault-injection journeys before release gating | Android device/emulator matrix and deterministic fault-injection suite |
 
 ## Usability
 
@@ -133,3 +136,6 @@
 | NFR-CI-002 | Read-time context assembly must preserve provenance and authority distinctions between conversation, memory, evidence, requirements, constraints, decisions, tool results, and execution state. |
 | NFR-REL-004 | Iterative reasoning and execution loops must use bounded-progress controls with explicit retry, step, and time limits. |
 | NFR-PERF-006 | The runtime must prefer the minimum sufficient execution mode (FAST, NORMAL, DEEP, VERIFY, RECOVER) rather than using deep reasoning by default. |
+| NFR-CI-003 | Significant user-facing factual claims must retain one-to-one evidence, authority, freshness, contradiction, verifier, confidence, and disposition metadata. |
+| NFR-CI-004 | Semantic progress must be evaluated against declared acceptance criteria; irrelevant changes must not reset zero-progress detection. |
+| NFR-CI-005 | Reasoning and execution settings must not exceed non-overridable provider, device, and resource-class safety ceilings. |

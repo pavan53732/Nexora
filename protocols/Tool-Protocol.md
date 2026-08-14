@@ -74,7 +74,9 @@ data class ToolExecutedEvent(
     val output: String,
     val errorEnvelope: CanonicalErrorEnvelope?,
     val durationMs: Long,
-    val version: Long
+    val version: Long,
+    val completionState: ToolCompletionState,
+    val reconciliationEvidenceRefs: List<String>
 )
 ```
 
@@ -92,6 +94,7 @@ data class ToolExecutedEvent(
 - **Correlation Tracing**: Every protocol message MUST propagate `correlationId` and `toolCallId`.
 - **At-Least-Once Delivery**: Outbound events MUST be deduplicated by downstream orchestrators using `(toolCallId, version)`.
 - **Termination Signalling**: Processes MUST cleanly emit an exit code. A non-zero exit code or an unhandled signal (like OOM Kill `137`) MUST be converted into `NXR-2004` or `NXR-7004` error envelopes, as applicable. A Tool sandbox-policy violation, including Tool-originated filesystem path escape, MUST instead use `NXR-2009`.
+- **Unknown Completion**: A timeout or transport interruption without a confirmed operation result MUST publish `completionState = UNKNOWN_COMPLETION` and reconciliation evidence references. It MUST NOT be converted to confirmed failure or confirmed success until the Tool System recovery contract resolves it.
 
 
 ## Upgrade Notes

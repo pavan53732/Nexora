@@ -44,6 +44,8 @@ The current inventory does not treat the following as active OPEN/DEFERRED archi
 
 The remaining active owner-decision inventory is limited to Product Vision positioning, Platform Infrastructure governance, and the independent ROADMAP terminology decisions. Numeric retention durations, quota values, scheduling, and concrete mechanisms remain downstream configuration choices under DEC-23; concrete metadata fields and schema remain downstream under DEC-24.
 
+Agent reliability hardening is now documented without claiming implementation completion. `NFR-REL-016` covers hierarchical deadline propagation, `NFR-REL-017` covers unknown-completion reconciliation, `NFR-REL-018` covers repeatable Android reliability evidence, `NFR-CI-003` covers claim-to-evidence binding, `NFR-CI-004` covers acceptance-criteria progress, and `NFR-CI-005` covers non-overridable reasoning ceilings. `testing/E2ETests.md` defines the planned `E2E-REL-001` through `E2E-REL-009` evidence journeys. These are documented obligations and planned validation evidence, not proof that implementation or device tests already exist.
+
 ## Unresolved classification
 
 The following are not silently promoted to architecture decisions:

@@ -354,3 +354,9 @@ Aggregating subagent outputs MUST include:
 - conflict indicators;
 - unresolved items;
 - verification status.
+
+### Conflict Resolution and Abstention
+
+The coordinator MUST resolve conflicting outputs in this order: canonical authority; fresh, verified evidence; independent verifier agreement; then explicit user direction. Majority vote, provider confidence, or output frequency MUST NOT override canonical authority or verified contradictory evidence.
+
+If the conflict remains unresolved after bounded verification, the coordinator MUST preserve both positions with provenance, mark the result uncertain or incomplete, and escalate or request clarification. It MUST NOT silently merge incompatible claims into a confident result. The selected or escalated disposition and the rejected alternatives are recorded in the merged execution history.

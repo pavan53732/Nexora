@@ -100,3 +100,13 @@
 - `NFR-REL-014`/`015` → ProviderStreamLifecycle + Provider Protocol; validation `UT-STREAM-001..004`, `IT-STREAM-004..007`, `RT-STREAM-001..002` (Planned).
 - `NFR-SEC-015` → Security Model + ReasoningSummary privacy; validation `SEC-STREAM-005/006`, `E2E-REASON-002` (Planned).
 - All S14 validation remains `Planned`; no implementation evidence is claimed.
+
+## S15 — Agent Reliability Hardening
+
+- `NFR-REL-016` → Agent Runtime hierarchical deadline propagation across provider, Tool, repair, verifier, delegation, cancellation, and checkpoint operations; validation `UT-CONTRACT-006` (Planned).
+- `NFR-REL-017` → Tool System and Tool Protocol operation-level unknown-completion reconciliation; validation `UT-TOOL-006`, `E2E-REL-006` (Planned).
+- `NFR-REL-018` → Background Execution and Android lifecycle fault-injection evidence; validation `E2E-REL-001..005` (Planned).
+- `NFR-CI-003` → Context Management claim-to-evidence binding; validation `UT-EV-007`, `E2E-REL-009` (Planned).
+- `NFR-CI-004` → Agent Runtime acceptance-criteria progress vector and anti-treadmill semantics; validation `UT-AS-010`, `E2E-REL-007` (Planned).
+- `NFR-CI-005` → Context Management and Agent Runtime non-overridable reasoning and execution ceilings; validation `UT-RN-013` (Planned).
+- All S15 validation remains `Planned`; no runtime implementation, executed test, or empirical reliability result is claimed.

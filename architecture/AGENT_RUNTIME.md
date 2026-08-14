@@ -55,6 +55,13 @@ Regardless of mode, each agent iteration MUST have:
 - a termination condition;
 - an escalation condition when bounded progress is not achieved.
 
+### Hierarchical Deadline Contract
+
+Every task or execution MUST establish an end-to-end deadline before the first provider, tool, repair, verifier, or delegation call. Child operations receive the remaining parent budget; they MUST NOT receive a fresh full timeout that can outlive the parent execution.
+
+The remaining budget MUST reserve time for cancellation propagation, checkpoint persistence, result classification, and user-visible completion. When the remaining budget cannot safely cover a new operation, the runtime MUST stop starting new work, cancel descendants, persist recoverable state, and return an explicit `INCOMPLETE`, `ESCALATED`, or equivalent non-success disposition. Deadline exhaustion MUST never become an unbounded retry, repair, or verification loop.
+
+The effective deadline and remaining budget are immutable inputs to each nested operation and are recorded in execution history and checkpoints for recovery and audit.
 
 ## Capabilities
 
@@ -135,6 +142,12 @@ Progress is established only when one or more of the following occurs:
 - verification confidence increases through independent checks.
 
 Repeated activity without meaningful progress MUST NOT continue indefinitely.
+
+### Acceptance-Criterion Progress Vector
+
+Semantic progress MUST be evaluated against the task's declared acceptance criteria. Each criterion has a monotonic status of `UNASSESSED`, `IN_PROGRESS`, `PASSED`, or `FAILED`. A progress signal is substantive only when it improves a criterion status, produces evidence directly relevant to a criterion, changes the plan to address a verified failure, or records an explicit user-directed scope change.
+
+File changes, additional evidence, or error-category changes that are unrelated to acceptance criteria MUST NOT by themselves reset the bounded-progress detector. The vector and its evidence references are persisted with the execution checkpoint.
 
 ### Loop-prevention requirements
 
