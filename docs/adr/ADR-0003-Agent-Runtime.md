@@ -50,9 +50,9 @@ Key properties:
 ### Negative
 - **Resource consumption**: Long-running loops consume CPU, memory, and network.
 - **Complexity**: Checkpointing, cancellation, and background execution add significant implementation complexity.
-- **Token cost**: Each iteration consumes tokens. Without budgeting, costs can spiral.
+- **Provider usage and cost**: Each iteration may consume provider tokens and incur provider-side cost, which remains observable but is not an internal Nexora credit or execution gate under DEC-25.
 
 ### Mitigation
-- Enforce configurable resource quotas per workspace.
+- Enforce configurable technical resource quotas per workspace.
 - Use Android WorkManager for efficient background scheduling.
-- Implement hard token budget limits with user-configurable thresholds.
+- Implement hard technical token/context limits with user-configurable thresholds that may reduce, but never exceed, non-overridable safety ceilings; do not introduce an internal credit or financial-cost stop.

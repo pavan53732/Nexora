@@ -22,7 +22,6 @@ data class ProviderRoutePlan(
     val candidates: List<RouteCandidate>,
     val requiredCapabilities: Set<ProviderCapability>,
     val maxLatencyMs: Long?,
-    val maxCostUsd: Double?,
     val localOnly: Boolean,
     val fallbackPolicy: StreamFallbackPolicy,
     val reason: String
@@ -68,13 +67,13 @@ data class ReasoningPolicy(
     val verifierPasses: Int,
     val useIndependentCritic: Boolean,
     val requireReviewer: Boolean,
-    val maxWallClockMs: Long,
-    val maxCostUsd: Double?
+    val maxWallClockMs: Long
 )
 
 // Non-overridable provider, device, and resource-class ceilings are evaluated by
 // the Context Management / Agent Runtime policy boundary before this policy is
-// accepted. Their concrete storage shape is not selected by this model.
+// accepted. Cost and usage metadata remain observable outside this execution policy;
+// no internal credit or financial-cost gate is represented here.
 
 data class ReasoningSummary(
     val summaryId: String,

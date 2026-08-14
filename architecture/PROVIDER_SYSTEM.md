@@ -95,13 +95,15 @@ typealias ProviderStream = Flow<StreamEnvelope>
 ## Model Capability Metadata and Route Planning
 
 Every routable model advertises `contextWindowTokens`, `maxOutputTokens`, tokenizer,
-stream/resume mode, reasoning-effort range, tool/citation/vision support, cost, latency,
-reliability, and data-locality attributes. `ProviderRouter.plan()` filters hard
-requirements first, then ranks eligible candidates by workspace policy, capability fit,
-health, privacy/local-only constraint, latency, cost, and reliability.
+stream/resume mode, reasoning-effort range, tool/citation/vision support, provider usage
+and cost metadata, latency, reliability, and data-locality attributes. `ProviderRouter.plan()`
+filters hard requirements first, then ranks eligible candidates by workspace policy,
+capability fit, health, privacy/local-only constraint, latency, non-blocking cost preference,
+and reliability. Cost metadata MUST NOT reject an otherwise eligible route through an
+internal credit or financial-cost gate.
 
 A persisted `ProviderRoutePlan` records selected profile/model, ranked candidates,
-required capabilities, budget constraints, fallback policy, and selection reason.
+required capabilities, technical route constraints, fallback policy, and selection reason.
 Routing is deterministic for the same catalog/health/policy snapshot.
 
 ## Typed Streaming Contract
@@ -207,7 +209,7 @@ Provider selection SHOULD consider:
 - vision/multimodal need;
 - availability and health;
 - reliability history;
-- cost policy.
+- non-blocking cost preference or reporting policy; cost MUST NOT be an internal execution gate.
 
 The routing layer SHOULD distinguish latency-critical foreground execution from background work such as indexing, summarization refresh, and cache warming.
 

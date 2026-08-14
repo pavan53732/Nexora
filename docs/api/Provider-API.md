@@ -12,7 +12,7 @@
 | Operation | Success | Canonical failures | Retry/idempotency | Security/cancellation | Evidence |
 |---|---|---|---|---|---|
 | `registerProfile` | Provider profile projection | NXR-4011, NXR-1010 | Idempotent | Keys remain in SecureKeyStore | Provider contract tests |
-| `planRoute` | Persistable ranked `ProviderRoutePlan` | No eligible model, budget/privacy conflict | Safe read for same snapshot | Profile isolation; redacted reason | Routing tests |
+| `planRoute` | Persistable ranked `ProviderRoutePlan` | No eligible model, technical capability/context/privacy conflict | Safe read for same snapshot | Profile isolation; redacted reason | Routing tests |
 | `complete` | Committed completion response | NXR-4002..4006, NXR-4012 | Idempotency key required | Endpoint confinement | Completion tests |
 | `streamComplete` | `Flow<StreamEnvelope>` ending in one terminal | NXR-4007, NXR-4013..4017 | Request/stream IDs and cursor rules | Cancellation propagates; bounded backpressure | Streaming tests |
 | `cancelStream` | Committed Cancelled event | Already terminal, not found | Idempotent | Caller owns workspace/request | Cancellation tests |
@@ -44,7 +44,6 @@ data class ProviderCompletionRequest(
 data class RouteConstraints(
     val requiredCapabilities: Set<ProviderCapability>,
     val maxLatencyMs: Long?,
-    val maxCostUsd: Double?,
     val localOnly: Boolean,
     val fallbackPolicy: StreamFallbackPolicy
 )

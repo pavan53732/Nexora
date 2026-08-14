@@ -18,7 +18,7 @@ Nexora already requires streaming responses, provider-neutral routing, six reaso
 5. Tool-call fragments are data until a complete schema-valid `ToolCallCommitted` event is assembled. Partial calls never execute.
 6. Mid-stream failover never silently splices providers. A replacement attempt gets a new `streamId` and `priorStreamId` lineage.
 7. Agent Runtime consumes typed stream events as the canonical inference path; non-streaming providers are adapted into the same event contract.
-8. Reasoning effort resolves to a bounded `ReasoningPolicy` covering provider calls, reasoning tokens, tool calls, repair cycles, verifier passes, time, and cost.
+8. Reasoning effort resolves to a bounded `ReasoningPolicy` covering provider calls, reasoning tokens, Tool calls, repair cycles, verifier passes, time, and device/resource safety ceilings. Usage and provider-cost metadata remain observable and non-blocking under DEC-25.
 9. Nexora persists a structured, redacted `ReasoningSummary` (approach, evidence, decisions, uncertainty, verification), not unrestricted private chain-of-thought.
 10. Context compilation produces a versioned `ContextSnapshot` with inclusion/exclusion rationale and compaction lineage.
 

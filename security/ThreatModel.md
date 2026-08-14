@@ -136,7 +136,7 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-044 | Cross-provider failover sends context to an ineligible provider | Provider Router | Critical | RoutePlan capability/privacy constraints; new stream lineage; provider isolation | Partial |
 | TM-045 | Oversized/high-frequency chunks exhaust memory or UI | Provider Stream | High | Event-size cap, bounded channel, semantic no-drop policy, overflow failure | Partial |
 | TM-046 | Slow consumer causes unbounded buffering and app failure | Provider Stream | High | High/low watermarks, producer suspension, safe delta coalescing | Partial |
-| TM-047 | Unbounded reasoning/critic loops exhaust cost, battery, or time | Agent Reasoning | High | Persisted ReasoningPolicy budgets and FR-AS-003 escalation | Partial |
+| TM-047 | Unbounded reasoning/critic loops exhaust device resources, battery, or time, with cost impact remaining observable but non-blocking | Agent Reasoning | High | Persisted technical ReasoningPolicy ceilings and FR-AS-003 escalation | Partial |
 
 ---
 
@@ -203,7 +203,7 @@ A threat MAY remain Partial or planned security-completion only if all four fiel
 | **TM-044** | Info Disclosure | ProviderRoutePlan privacy/capability constraints | `ProviderRouter` | Block ineligible failover; new lineage only | `SEC-STREAM-007` | provider | 8 | SEC-STREAM-007 passes on API 34 emulator | RoutePlan constraints; failover to ineligible provider before constraint check; compensating: new stream lineage |
 | **TM-045** | DoS | Event-size cap and bounded channel | `ProviderAdapter` | Fail `NXR-4013`; no unbounded allocation | `SEC-STREAM-008` | provider | 8 | SEC-STREAM-008 passes on API 34 emulator | Event-size cap/bounded channel; chunk flooding at channel boundary; compensating: NXR-4013 fail fast |
 | **TM-046** | DoS | Backpressure high/low watermarks | `StreamProcessor` | Suspend/coalesce safe deltas; preserve semantic events | `SEC-STREAM-009` | provider | 8 | SEC-STREAM-009 passes on API 34 emulator | Backpressure watermarks; slow consumer suspension delay; compensating: safe delta coalescing |
-| **TM-047** | DoS | Bounded ReasoningPolicy | `AgentLoop` | Stop/clarify/escalate at call/token/time/cost budget | `SEC-STREAM-010` | runtime | 8 | SEC-STREAM-010 passes on API 34 emulator | ReasoningPolicy budgets enforced; escalation may not stop loop in time; compensating: FR-AS-003 clarify/escalate |
+| **TM-047** | DoS | Bounded ReasoningPolicy | `AgentLoop` | Stop/clarify/escalate at technical call/token/time/device/resource safety ceiling; cost telemetry cannot stop a technically valid run | `SEC-STREAM-010` | runtime | 8 | SEC-STREAM-010 passes on API 34 emulator | Technical ReasoningPolicy ceilings enforced; escalation may not stop loop in time; compensating: FR-AS-003 clarify/escalate |
 
 ---
 

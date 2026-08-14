@@ -80,7 +80,7 @@ OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom.
 
 - Typed sequenced inference events and exactly-one terminal contract (FR-P014/015)
 - Bounded backpressure, cancellation, reconnect, and stream lineage (FR-P016/017/019)
-- Capability/cost/latency/privacy-aware ProviderRoutePlan (FR-P018)
+- Capability/latency/privacy-aware ProviderRoutePlan with non-blocking provider-cost metadata or preference (FR-P018, DEC-25)
 - ProviderStreamLifecycle and adapter conformance suite
 - ReasoningPolicy, verifier/critic, redacted ReasoningSummary (FR-RN-009..012)
 - Reproducible model-aware ContextSnapshot (FR-CM-010..012)

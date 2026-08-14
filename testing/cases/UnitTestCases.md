@@ -15,7 +15,7 @@
 | UT-STREAM-003 | UT-STREAM | Assemble interleaved Tool-call fragments by toolCallId | Provider + Tooling | Planned | `evidence/unit/UT-STREAM-003/` | 2026-08-06 |
 | UT-STREAM-004 | UT-STREAM | Reject second or missing terminal event | Provider Layer | Planned | `evidence/unit/UT-STREAM-004/` | 2026-08-06 |
 | UT-REASON-001 | UT-REASON | Resolve deterministic ReasoningPolicy for all effort levels | Reasoning | Planned | `evidence/unit/UT-REASON-001/` | 2026-08-06 |
-| UT-REASON-002 | UT-REASON | Enforce call/token/tool/repair/time/cost budgets | Reasoning | Planned | `evidence/unit/UT-REASON-002/` | 2026-08-06 |
+| UT-REASON-002 | UT-REASON | Enforce technical call/token/tool/repair/time/device-resource safety ceilings and verify cost/credit telemetry cannot block a technically valid progressing run | Reasoning | Planned | `evidence/unit/UT-REASON-002/` | 2026-08-06 |
 | UT-REASON-003 | UT-REASON | Redact ReasoningSummary and exclude private trace | Security + Reasoning | Planned | `evidence/unit/UT-REASON-003/` | 2026-08-06 |
 | UT-CONTEXT-001 | UT-CONTEXT | Reproduce immutable ContextSnapshot from segment hashes | Context | Planned | `evidence/unit/UT-CONTEXT-001/` | 2026-08-06 |
 | UT-CONTEXT-002 | UT-CONTEXT | Deduplicate retrieval while preserving source diversity | Context + Memory | Planned | `evidence/unit/UT-CONTEXT-002/` | 2026-08-06 |

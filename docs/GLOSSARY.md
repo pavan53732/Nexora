@@ -17,7 +17,7 @@
 | Inference turn | One bounded message-to-committed-answer cycle spanning context, reasoning, routing, typed streaming, Tools, verification, and checkpointing. | `architecture/AGENT_RUNTIME.md` |
 | StreamEnvelope | Provider-neutral, sequenced event envelope with immutable request/stream/provider/model identity. | `architecture/PROVIDER_SYSTEM.md` |
 | ProviderStreamLifecycle | State machine for an individual inference stream; separate from provider administrative health. | `state-machines/ProviderStreamLifecycle.md` |
-| ReasoningPolicy | Bounded per-task provider/tool/token/repair/verifier/time/cost policy derived from reasoning effort. | `specs/CONTEXT_MANAGEMENT.md` |
+| ReasoningPolicy | Bounded per-task provider/tool/token/repair/verifier/time and device/resource-safety policy derived from reasoning effort; usage and cost metadata are observable and non-blocking. | `specs/CONTEXT_MANAGEMENT.md`, `decisions/DEC-25-no-internal-credit-cost-gating.md` |
 | ReasoningSummary | Redacted durable reasoning artifact containing approach, evidence, decisions, uncertainty, and verification—not raw private chain-of-thought. | `specs/CONTEXT_MANAGEMENT.md` |
 | ContextSnapshot | Immutable, model/tokenizer-aware record of included/excluded context segments and token reservations. | `specs/CONTEXT_MANAGEMENT.md` |
 | Background Runtime | Runtime coordination for long-running work while the app is backgrounded. | `specs/BACKGROUND_EXECUTION.md` |

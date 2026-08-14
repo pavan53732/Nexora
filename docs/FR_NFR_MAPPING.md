@@ -41,18 +41,18 @@
 
 ## S1 — Dynamic Concurrency Cap (SA-3)
 - `FR-MA-003` (parallel coordination) mapped to `MULTI_AGENT_SYSTEM.md` §SA-3.
-- `FR-AS-003` (budget escalation) mapped to concurrency cap budget feed.
+- `FR-AS-003` (technical-boundary escalation) mapped to concurrency-cap and resource-safety feeds; financial cost/credit status remains informational and non-blocking.
 - `FR-S018` (sandbox isolation) mapped to per-sub-agent isolation under cap.
 - `NFR-REL-003` (reliability) preserved — cap prevents overload-induced failures.
 
 ## S4 — Terminal Specification (Fully Specified)
 - `FR-TE001`..`005` (terminal execution/lifecycle/tools) → `specs/TERMINAL.md` (§Execution Model, §Lifecycle, §Security).
 - `FR-S002`/`003`/`018` (sandbox/process/workspace isolation) → `specs/TERMINAL.md` (§Security & Isolation) + `security/SandboxPolicy.md`.
-- `FR-AS-002`/`003`/`009`/`013` (heartbeat/budget/degradation/recovery) → `specs/TERMINAL.md` (§Timeout Discipline, §Restore Behavior) + `specs/BACKGROUND_EXECUTION.md`.
+- `FR-AS-002`/`003`/`009`/`013` (heartbeat/technical-boundary escalation/degradation/recovery) → `specs/TERMINAL.md` (§Timeout Discipline, §Restore Behavior) + `specs/BACKGROUND_EXECUTION.md`; financial cost/credit is not a terminal gate.
 - `FR-TL015` (audit trail) → `specs/TERMINAL.md` (§Audit).
 - `FR-EV-002`/`006` (evidence/reviewer) → `specs/TERMINAL.md` (§Evidence & Validation Engine reference).
 - `FR-M012`/`013` (file version/user preferences) → `specs/TERMINAL.md` (§Restore Behavior — checkpoint storage + retention).
-- `FR-A010` (real-time monitoring) → `specs/TERMINAL.md` (§Audit — budget/cap/timeout events).
+- `FR-A010` (real-time monitoring) → `specs/TERMINAL.md` (§Audit — technical-limit/cap/timeout events).
 - `FR-U005` (agent activity feed) → `specs/TERMINAL.md` (§Boundary Violation Response — denied actions surfaced).
 - `FR-GT-001`..`006` (git grounding) preserved — terminal session does not affect git grounding rules.
 
@@ -94,7 +94,7 @@
 ## S14 — Typed Inference, Deep Reasoning, and Context Snapshots
 
 - `FR-P014`..`019` → Provider System + ProviderStreamLifecycle + Provider Protocol/API/SDK; validation `UT-STREAM-001..004`, `UT-ROUTE-001`, `IT-STREAM-001..008`, `E2E-STREAM-001..003` (Planned).
-- `FR-RN-009`..`012` → Context Management + Agent Runtime + Inference model; validation `UT-REASON-001..003`, `IT-REASON-001..004`, `E2E-REASON-001..002` (Planned).
+- `FR-RN-009`..`012` → Context Management + Agent Runtime + Inference model; technical ReasoningPolicy ceilings and the DEC-25 no-credit-gating rule are projected through the model/spec chain; validation `UT-REASON-001..003`, `IT-REASON-001..004`, `E2E-REASON-001..002` (Planned).
 - `FR-CM-010`..`012` → Context Management + Memory System + ContextSnapshot; validation `UT-CONTEXT-001..002`, `IT-CONTEXT-001..002`, `E2E-CONTEXT-001` (Planned).
 - `NFR-PERF-011`/`012` → Performance Budget; validation `PERF-STREAM-003/004` (Planned).
 - `NFR-REL-014`/`015` → ProviderStreamLifecycle + Provider Protocol; validation `UT-STREAM-001..004`, `IT-STREAM-004..007`, `RT-STREAM-001..002` (Planned).

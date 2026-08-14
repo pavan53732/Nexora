@@ -221,7 +221,7 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
 - Cancellation propagates Agent → ProviderRouter → adapter → Tool children.
 - Exactly one terminal stream outcome is accepted per `streamId`.
 - Provider failover never silently concatenates output from distinct streams.
-- Reasoning and repair remain inside explicit token/call/time/cost budgets.
+- Reasoning and repair remain inside explicit technical token/call/time and safety ceilings; usage and cost telemetry do not impose an internal credit or financial stop.
 - Durable reasoning output is a redacted `ReasoningSummary`, not unrestricted private chain-of-thought.
 
 ### Semantic Progress & Anti-Replay (mandated by ADR-0009; mirrored in AUTONOMY_STABILITY.md §9.5)

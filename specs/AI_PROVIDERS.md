@@ -116,7 +116,9 @@ Rules:
 ## Typed Stream and Reasoning Adapter Requirements (ADR-0008)
 
 Every provider/model profile declares context/output limits, tokenizer, Tool/citation/
-reasoning capabilities, resume mode, data locality, cost, and observed latency/reliability.
+reasoning capabilities, resume mode, data locality, provider usage/cost metadata, and
+observed latency/reliability. Cost metadata is observational and does not create an
+internal credit or financial-cost execution gate.
 Adapters normalize native events to `StreamEnvelope`; providers without native
 streaming emit a synthetic canonical Started/delta/Terminal sequence.
 
@@ -131,7 +133,10 @@ streaming emit a synthetic canonical Started/delta/Terminal sequence.
 | Socket close without done marker | `NXR-4017`, never success |
 
 Provider-specific reasoning parameters remain adapter-owned, but all adapters enforce the
-resolved `ReasoningPolicy` token/call/cost limits and report supported effort mapping.
+resolved `ReasoningPolicy` technical token/call/time and safety ceilings and report
+supported effort mapping. Provider usage and cost are reconciled as informational metadata;
+adapters MUST NOT block or terminate a technically valid run because of internal credits or
+financial cost.
 
 ## Phase Mapping
 

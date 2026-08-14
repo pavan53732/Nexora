@@ -10,7 +10,7 @@
 
 ## Scope
 
-Terminal execution operates within the sandboxed runtime (`security/SandboxPolicy.md`, `architecture/SANDBOX.md`). Every terminal session is isolated (`FR-S002` process isolation, `FR-S018` workspace isolation), resource-capped (`FR-AS-003` budget escalation), and observable (`FR-A010` real-time monitoring, `FR-TL015` audit trail, `FR-EV-002` structured confidence).
+Terminal execution operates within the sandboxed runtime (`security/SandboxPolicy.md`, `architecture/SANDBOX.md`). Every terminal session is isolated (`FR-S002` process isolation, `FR-S018` workspace isolation), resource-capped (`FR-AS-003` technical-boundary escalation), and observable (`FR-A010` real-time monitoring, `FR-TL015` audit trail, `FR-EV-002` structured confidence).
 
 ---
 
@@ -44,7 +44,7 @@ new durable states:
   lifecycle event, not a durable state.
 - **Background**: `run_background` is simply a `Running`/`Detached` session with no
   interactive timeout; it lives until the process exits or the workspace shuts down
-  (`FR-AS-003` budget exhaustion kills it with checkpoint restart).
+  (technical timeout, resource, or liveness handling under `FR-AS-003` applies; financial cost or internal credits do not kill it).
 
 State fields (`models/TerminalSession.md` — updated for S4):
 
@@ -57,7 +57,7 @@ data class TerminalSession(
     val sandboxId: String,
     val executionMode: ExecutionMode,   // SUBPROCESS or PTY (S4 — new field)
     val workingDirBoundary: String?,     // workspace root or sandbox overlay (S4 — new field)
-    val outputCapBytes: Long,            // max output bytes (S4 — new field; links FR-AS-003 budget)
+    val outputCapBytes: Long,            // max output bytes (S4 — new field; links FR-AS-003 technical output safety)
     val timeoutMs: Long,                // session timeout (S4 — new field; links FR-AS-002 heartbeat)
     val startedAt: Instant,
     val updatedAt: Instant,
@@ -77,10 +77,10 @@ Every terminal session enforces a working-directory boundary (`models/Workspace.
 
 ### Output Caps (S4 — new discipline)
 
-Every terminal session applies an output cap (`FR-AS-003` budget escalation mechanism):
+Every terminal session applies an output cap (`FR-AS-003` technical safety-boundary mechanism):
 
 - **Default cap**: `outputCapBytes = 1_048_576` (1 MB) for interactive PTY; `262_144` (256 KB) for subprocess (`run_command`).
-- **Configurable per workspace** (`models/Workspace.md` `sandboxLimits.outputCapBytes`): user can set lower cap for sensitive workspaces; cap cannot exceed `FR-AS-003` workspace budget maximum.
+- **Configurable per workspace** (`models/Workspace.md` `sandboxLimits.outputCapBytes`): user can set lower cap for sensitive workspaces; cap cannot exceed the `FR-AS-003` technical workspace output-safety maximum.
 - **Cap enforcement**: output buffer monitored by `TerminalSession` (`models/TerminalSession.md` `outputCapBytes`); when cap reached (`outputBuffer.size >= outputCapBytes`), new output is truncated; user receives truncated-output notice (`FR-U005`); execution continues (not killed) unless the user explicitly sets `truncateOnCap = false` (then output stops, session pauses for approval — `FR-AS-006` verification gate).
 - **Cap audit**: every cap event (reached, exceeded, truncated) logged via `FR-TL015` execution audit + `FR-EV-002` structured confidence (output completeness tagged `TRUNCATED` when cap applies).
 
@@ -90,8 +90,8 @@ Every terminal session applies timeout rules (`FR-AS-002` heartbeat + `FR-AS-009
 
 - **Interactive PTY (`terminal_run`)**: `timeoutMs = 300_000` (5 minutes) default; configurable per workspace (`models/Workspace.md` `sandboxLimits.sessionTimeoutMs`). If timeout reached, the session is **checkpointed** (`restoreCheckpoint` set, `FR-AS-007`) and the foreground I/O **detaches**: durable status becomes `Detached` with `suspended = true` (not a `Suspended` state). The process stays alive; output continues buffered. The user may `reattach()` → `Running` (restore) or `close()` (terminate).
 - **Subprocess (`run_command`)**: `timeoutMs = 60_000` (60 seconds) default; non-configurable for security (`FR-S016` autonomy modes: `Manual` requires shorter timeout; `Assisted` allows longer with user confirmation). Timeout triggers bounded repair (`FR-AS-001`): process killed (`FR-TE004` `terminal_kill`); error returned (`NXR-*`); user notified (`FR-U011` chat feed).
-- **Background (`run_background`)**: no interactive timeout; background session lives until process exits or workspace shutdown (`FR-AS-003` budget exhaustion kills background tasks with checkpoint restart).
-- **Timeout audit**: timeout events logged (`FR-TL015`); timeout-triggered kills recorded as `FR-AS-003` budget events (`FR-A010` real-time monitoring shows budget usage per request/session/provider/model).
+- **Background (`run_background`)**: no interactive timeout; background session lives until process exits or workspace shutdown; technical timeout, resource, or liveness handling follows `FR-AS-003`, while financial cost or internal credits do not kill the task.
+- **Timeout audit**: timeout events logged (`FR-TL015`); timeout-triggered kills recorded as `FR-AS-003` technical-boundary events (`FR-A010` real-time monitoring shows technical limit usage per request/session/provider/model).
 
 ### Restore Behavior (S4 — fully specified)
 
@@ -108,7 +108,7 @@ Session restore aligns with `FR-AS-007` (idempotent recovery) + `NFR-REL-012` (e
 ## Security & Isolation (S4 — terminal model aligns with sandbox)
 
 - **Process isolation**: terminal process spawned as child of sandbox runtime (`FR-S002` process isolation; `FR-S018` workspace isolation; `FULL_ENVIRONMENT.md` `proot` isolation); process group isolated (`FR-S003` resource quotas apply to terminal process group).
-- **Sandbox policy**: terminal execution governed by `security/SandboxPolicy.md` (§sandbox isolation); terminal-specific rules include: working-dir boundary enforcement (`models/Workspace.md`); output cap enforcement (`FR-AS-003`); timeout enforcement (`FR-AS-002`); session restore audit (`FR-AS-007`).
+- **Sandbox policy**: terminal execution governed by `security/SandboxPolicy.md` (§sandbox isolation); terminal-specific rules include: working-dir boundary enforcement (`models/Workspace.md`); output cap enforcement (`FR-AS-003` technical boundary); timeout enforcement (`FR-AS-002` heartbeat); session restore audit (`FR-AS-007`).
 - **Permission scopes**: terminal execution is gated by existing scopes — there is no `device:terminal` scope:
   - `sandbox:execute` — required for every terminal command/script (`security/PermissionModel.md`).
   - `sandbox:read` / `sandbox:write` — required for terminal working-directory access; terminal working-dir access inherits workspace settings (`FR-S001` sandbox security; `security/PermissionModel.md`).

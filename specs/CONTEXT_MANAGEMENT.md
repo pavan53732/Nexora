@@ -278,8 +278,12 @@ The effective effort level resolves to a bounded policy persisted at task start:
 | `X_HIGH` | 3–4 | 3 | 2 | Required |
 | `MAX` | Configured bounded maximum | 3 | 2–3 | Diverse-model critic |
 
-`ReasoningPolicy` also caps reasoning tokens, Tool calls, wall-clock time, and optional
-cost. Budget exhaustion follows FR-AS-003 and never silently expands the policy.
+`ReasoningPolicy` caps reasoning tokens, Tool calls, wall-clock time, repair/verifier
+cycles, provider calls, and applicable device/resource safety ceilings. Usage and
+provider-cost metadata MAY be recorded and displayed, but no internal credit or
+financial-cost threshold blocks, pauses, downgrades, or terminates a technically valid
+progressing execution. Technical exhaustion follows FR-AS-003 and never silently
+expands the policy.
 
 #### Non-overridable Policy Ceilings
 

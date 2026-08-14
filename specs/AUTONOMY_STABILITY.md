@@ -58,11 +58,11 @@ Repair decision (bounded):
 | **Escalation** | If the loop hangs again after restarts → escalate to user with diagnostics |
 | **Interaction** | Extends sandbox process watchdog (SANDBOX_DEPTH §3.4) to the **agent loop** itself |
 
-## 3. Budget Escalation — Never Silent Stop (FR-AS-003)
+## 3. Technical-Boundary Escalation — Never Silent Stop (FR-AS-003)
 
-| Budget | On exhaustion |
-|--------|---------------|
-| Tokens (per session) | Pause → notify user → offer: raise budget, switch provider, or continue with summarization (CONTEXT_MANAGEMENT §3) |
+| Technical boundary | On exhaustion |
+|--------------------|---------------|
+| Tokens (per session) | Pause → notify user → offer: raise the technical limit where permitted, switch provider, or continue with summarization (CONTEXT_MANAGEMENT §3); never exceed non-overridable ceilings |
 | Steps (per task) | Pause → notify → offer: continue with checkpoint, or mark incomplete |
 | Wall-clock time | Same — never kill silently |
 | Cost (per task) | **Not an autonomous-stop gate** (ADR-0009). Cost notifications remain informational only; execution continues until a semantic progress failure, a safety violation, or explicit user interruption. |
@@ -70,8 +70,11 @@ Repair decision (bounded):
 Every exhaustion path ends in a **user-visible state** (notification + task status),
 never a silent stop. Cost is intentionally out of scope as a termination signal —
 resource pressure is observable (PERFORMANCE_BUDGET.md) and the user may interrupt
-at any time, but the agent never stops purely because a token or cost limit was
-reached while genuine progress is still being made.
+at any time. The agent never stops purely because a financial cost or internal credit
+threshold was reached while genuine progress is still being made. Technical token,
+context, provider, device, resource, and liveness ceilings remain enforceable even when
+progress is genuine, because they protect correctness and the Android application from
+overflow, unsafe execution, or unbounded resource use.
 
 ## 4. Closed-Loop Learning (FR-AS-004)
 
@@ -257,7 +260,7 @@ unit/integration coverage for replay-log and watchdog logic.
 
 ## Phase Mapping
 
-- **Phase 2**: Verification gates (FR-AS-006), budget escalation (FR-AS-003),
+- **Phase 2**: Verification gates (FR-AS-006), technical-boundary escalation (FR-AS-003),
   heartbeat/watchdog (FR-AS-002), idempotency declarations + replay log (FR-AS-007).
 - **Phase 4**: Plan repair (FR-AS-001), degradation ladder (FR-AS-008), closed-loop
   learning (FR-AS-004), trust growth (FR-AS-005), fault-injection suite (FR-AS-009).

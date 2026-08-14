@@ -151,12 +151,15 @@ history, and audit trail. Users trust agents they can audit.
 
 - Sources: [FR-U005](../requirements/FR.md) · [SYSTEM_DESIGN → Observability](./SYSTEM_DESIGN.md) · [FR-TL015](../requirements/FR.md)
 
-### PP-013 — Token & Cost Control
+### PP-013 — Token Usage & Cost Transparency
 
-Token budgets per request/session with transparent usage tracking. On a phone with
-paid APIs, cost awareness is a user-facing feature, not plumbing.
+Technical context and provider limits remain bounded per request/session for correctness,
+liveness, and safety, with transparent usage tracking. Provider usage and estimated cost
+are user-visible information, not an internal credit balance or spending quota. Nexora
+MUST NOT block, pause, downgrade, or terminate a technically valid progressing agent
+because of internal credits or financial cost.
 
-- Sources: [AGENT_RUNTIME → TokenBudget](../architecture/AGENT_RUNTIME.md) · [FR-P009](../requirements/FR.md)
+- Sources: [DEC-25](../decisions/DEC-25-no-internal-credit-cost-gating.md) · [AGENT_RUNTIME → TokenBudget](../architecture/AGENT_RUNTIME.md) · [FR-P009](../requirements/FR.md)
 
 ### PP-014 — Offline-Capable
 
@@ -206,7 +209,7 @@ your pocket."*
 | PP-010 Sandboxed execution | ADR-0004 | SANDBOX | — | FR-S001–010, NFR-SEC-001 |
 | PP-011 Checkpoint & resume | — | AGENT_RUNTIME | — | NFR-REL-001/002 |
 | PP-012 Observable by default | — | SYSTEM_DESIGN | — | FR-U005, FR-TL015 |
-| PP-013 Token & cost control | — | AGENT_RUNTIME | AI_PROVIDERS | FR-P009 |
+| PP-013 Token usage & cost transparency | DEC-25 | AGENT_RUNTIME | AI_PROVIDERS | FR-P009 |
 | PP-014 Offline-capable | — | — | — | NFR-REL-006 |
 | PP-015 First-run onboarding | — | — | — | NFR-USE-004 |
 

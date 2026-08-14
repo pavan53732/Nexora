@@ -33,4 +33,4 @@
 | RISK-020 | Mid-stream provider failover produces duplicated or contradictory output | Medium | High | New stream identity with priorStreamId; prohibit silent output splicing; lineage tests | Runtime Lead |
 | RISK-021 | Stored reasoning artifacts leak secrets, system prompts, or private model reasoning | Medium | Critical | Persist only redacted ReasoningSummary; retention/export controls; security tests | Security Lead |
 | RISK-022 | Tool-call fragments are executed before complete schema validation | Low | Critical | ToolCallCommitted barrier; discard incomplete fragments; protocol/security tests | Tooling Lead |
-| RISK-023 | Excessive reasoning/critic loops cause cost, latency, or battery runaway | Medium | High | Bounded ReasoningPolicy with token/call/time/cost limits and budget escalation | Runtime Lead |
+| RISK-023 | Excessive reasoning/critic loops cause device-resource, latency, or battery runaway; cost impact remains observable but non-blocking | Medium | High | Bounded ReasoningPolicy with technical token/call/time/device/resource ceilings and technical-boundary escalation | Runtime Lead |

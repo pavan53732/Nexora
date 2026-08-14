@@ -109,7 +109,7 @@
 | FR-P015 | Stream integrity — gap/duplicate detection and exactly one committed terminal event; socket close is never success | Must | 5 |
 | FR-P016 | Bounded backpressure and cancellation propagation across Agent, Router, adapter, EventBus, and UI | Must | 5 |
 | FR-P017 | Stream resume/reconnect — native cursor or explicit restart-with-lineage; partial output remains marked | Must | 5 |
-| FR-P018 | Capability/cost/latency/privacy-aware ProviderRoutePlan with persisted selection reason | Should | 5 |
+| FR-P018 | Capability/latency/privacy-aware ProviderRoutePlan with persisted selection reason; provider cost metadata MAY inform non-blocking preference or tie-breaking but MUST NOT block an otherwise eligible route | Should | 5 |
 | FR-P019 | Mid-stream failover creates a new stream with lineage; cross-provider output is never silently spliced | Must | 5 |
 
 ## Memory System
@@ -282,7 +282,7 @@
 |----|-------------|----------|-------|
 | FR-AS-001 | Plan repair — on step failure: diagnose, then retry / repair / re-plan / re-delegate / escalate (bounded, max 3 cycles); repair decisions recorded in history | Must | 4 |
 | FR-AS-002 | Agent heartbeat & watchdog — heartbeat per loop iteration; hang detection with checkpoint restart (bounded) and escalation | Must | 2 |
-| FR-AS-003 | Budget escalation — token/step/time/cost exhaustion pauses and notifies the user with options; never a silent stop | Must | 2 |
+| FR-AS-003 | Technical-boundary escalation — context/token, step, wall-clock, provider-call, Tool-call, repair, verifier, device, or resource safety exhaustion pauses, summarizes, retries, reconciles, escalates, or marks incomplete according to the owning contract; cost/usage notifications are informational only and cost alone MUST NOT pause, downgrade, block, or terminate a technically valid progressing run | Must | 2 |
 | FR-AS-004 | Closed-loop learning — reflect, store lesson (memory_lessons), propose skill refinement or new LEARNED skill; lessons retrieved during planning | Should | 4 |
 | FR-AS-005 | Trust growth — per-agent/per-workspace trust score adjusts autonomy mode; success raises it, failures lower it; explicit reset | Should | 4 |
 | FR-AS-006 | Verification gates — step validation criteria are hard gates; executor blocks next step until pass or classified failure; resumed agents re-validate | Must | 2 |
@@ -334,8 +334,8 @@
 | FR-RN-006 | Answer-quality gates — grounded, complete, consistent, confident before sending; assumptions stated; premise contradictions flagged; self-consistency for critical outputs | Must | 2 |
 | FR-RN-007 | Reasoning disable (OFF) — user can disable reasoning entirely per scope (task/agent/workspace/global); OFF bypasses the deliberation gate to the FAST path, omits reasoning parameters from provider requests, and never selects REASONING models; grounding/evidence gates (RG/EV) remain active under OFF | Must | 2 |
 | FR-RN-008 | Reasoning settings surface — Settings → Model Config → Reasoning: level selector (OFF first), effective-level indicator showing the governing layer (task → agent → workspace → global → default MEDIUM), per-agent/per-workspace overrides; changes apply to new messages immediately; no chat-embedded toggle (ADR-0006) | Must | 2 |
-| FR-RN-009 | Executable ReasoningPolicy — bound provider/tool calls, reasoning tokens, repair cycles, verifier passes, wall time, and optional cost per effort level | Must | 2 |
-| FR-RN-010 | Bounded critic/verifier pipeline — independent critic for high-stakes effort, disagreement-driven repair, then clarification/escalation at budget limit | Must | 4 |
+| FR-RN-009 | Executable ReasoningPolicy — bound provider/tool calls, reasoning tokens, repair cycles, verifier passes, wall time, and non-overridable device/resource safety ceilings per effort level; usage and cost remain observable metadata and are not execution gates | Must | 2 |
+| FR-RN-010 | Bounded critic/verifier pipeline — independent critic for high-stakes effort, disagreement-driven repair, then clarification/escalation at the applicable technical safety or liveness limit; financial cost or internal credit status MUST NOT be the stop condition | Must | 4 |
 | FR-RN-011 | Structured ReasoningSummary — persist redacted approach/evidence/decisions/uncertainty/verification, never require raw private chain-of-thought | Must | 2 |
 | FR-RN-012 | Evidence-calibrated confidence — confidence derives from evidence coverage, source quality, contradiction checks, and verifier results rather than model self-report | Must | 2 |
 
