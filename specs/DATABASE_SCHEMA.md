@@ -134,6 +134,10 @@ Historical association persistence is a downstream implementation choice unless 
 | stepIndex | INTEGER | |
 | variablesJson | TEXT | |
 | historyLogJson | TEXT | |
+| acceptanceProgressJson | TEXT | | Checkpointed acceptance-criterion progress vector and evidence references |
+| failureLedgerJson | TEXT | | Task-scoped failure ledger and blacklist disposition |
+| effectiveDeadline | TEXT | | ISO-8601 UTC end-to-end deadline |
+| remainingBudgetMs | INTEGER | | Remaining parent budget at checkpoint time |
 | tokenBudgetUsed | INTEGER | |
 | phase | TEXT | |
 | occurredAt | TEXT | |
@@ -295,6 +299,9 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | excludedSegmentsJson | TEXT | |
 | contentHash | TEXT | |
 | compactionLineageJson | TEXT | |
+| progressSignalJson | TEXT | | ADR-0009 semantic state-delta evidence |
+| effectivePolicyJson | TEXT | | Effective bounded ReasoningPolicy after ceiling evaluation |
+| ceilingDecisionJson | TEXT | | Ceiling acceptance/rejection and applicable policy-boundary evidence |
 | createdAt | TEXT | |
 
 ### `reasoning_summary`

@@ -231,7 +231,7 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
   over the `ContextSnapshot` working-state lineage (test delta, file-change delta,
   new-evidence delta, error-category shift). If `ProgressSignal == 0` over N=3
   consecutive iterations, the turn is escalated via §3's escalation path.
-- Each task carries a task-scoped **failure ledger** `{toolId, errorSignature, count}`.
+- Each task carries a task-scoped **failure ledger** `{toolId, errorSignature, count, firstSeenAt, blacklistedUntilTaskEnd}`.
   After K=3 identical signatures on a single tool within the task, Agent Runtime **MUST**
   enforce **strategy mutation**: the next invocation **MUST select a different `toolId`**
   (not merely different arguments); the blocked `toolId` is recorded in the ledger as
@@ -257,15 +257,48 @@ data class AgentState(
     val activeStreamId: String?,
     val lastCommittedStreamSequence: Long?,
     val reasoningPolicy: ReasoningPolicy?,
+    val acceptanceProgress: AcceptanceProgressVector,
+    val failureLedger: TaskFailureLedger,
+    val effectiveDeadline: Instant,
+    val remainingBudget: Duration,
     val checkpoint: AgentCheckpoint?,
     val isComplete: Boolean = false,
     val startedAt: Instant = Clock.System.now()
+)
+
+data class AcceptanceProgressVector(
+    val criteria: List<AcceptanceCriterionProgress>
+)
+
+data class AcceptanceCriterionProgress(
+    val criterionId: String,
+    val status: CriterionStatus,
+    val evidenceRefs: List<String>
+)
+
+enum class CriterionStatus { UNASSESSED, IN_PROGRESS, PASSED, FAILED }
+
+data class TaskFailureLedger(
+    val entries: List<TaskFailureEntry>
+)
+
+data class TaskFailureEntry(
+    val toolId: String,
+    val errorSignature: String,
+    val count: Int,
+    val firstSeenAt: Instant,
+    val blacklistedUntilTaskEnd: Boolean
 )
 
 sealed class AgentStep {
     data class Thinking(val reflection: String) : AgentStep()
     data class Planning(val plan: ExecutionPlan) : AgentStep()
     data class ToolExecution(val call: ToolCall, val result: ToolResult) : AgentStep()
+    data class ToolReplaced(
+        val blockedToolId: String,
+        val replacementToolId: String,
+        val newSignature: String
+    ) : AgentStep()
     data class Error(val message: String, val recoverable: Boolean) : AgentStep()
 }
 ```

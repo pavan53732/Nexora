@@ -187,7 +187,7 @@ These are **hard platform constraints** for the target stack (minSdk 34):
 
 At startup (`AgentExecutionService` initialization) and before scheduling any `WorkRequest` (`FR-T011`), the runtime performs:
 
-- **Battery optimization status check**: Query `PowerManager.isIgnoringBatteryOptimizations()` (or OEM-specific equivalent via reflection, where permitted) and read `device_battery` (`device_battery` `TOOL-??`) status.
+- **Battery optimization status check**: Query `PowerManager.isIgnoringBatteryOptimizations()` (or OEM-specific equivalent via reflection, where permitted) and read `device_battery` (`TOOL-297`) status.
 - **Auto-start denial check**: Verify `BootReceiver` (`BootReceiver` — registered in manifest) has launch permission (`RECEIVE_BOOT_COMPLETED`); if denied (OEM-specific — `Xiaomi` auto-start, `Huawei` protected apps, `OnePlus` app autolaunch), log event (`FR-TL015` — audit trail) and trigger onboarding flow.
 - **OEM-specific detection**: Check `Build.MANUFACTURER` (`Xiaomi`, `Huawei`, `OnePlus`, `Samsung`, `Oppo`, etc.) and read system settings (`Settings.Global` / `Secure` keys where accessible) to detect stricter kill policies.
 

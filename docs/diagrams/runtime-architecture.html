@@ -198,7 +198,7 @@ svg{width:100%;border:1px solid #1e293b;border-radius:10px;background:#020617}
 <!-- Core Interfaces text -->
 <text x="30" y="805" fill="#fbbf24" font-size="7" font-weight="700">Core Interfaces</text>
 <text x="30" y="820" fill="#64748b" font-size="6">Task (id, workspaceId, agentId, correlationId, status, priority, version) | ExecutionPlan (steps + dependencies) | PlanStep (id, toolCalls, status: PENDING/RUNNING/COMPLETED/FAILED/SKIPPED)</text>
-<text x="30" y="833" fill="#64748b" font-size="6">EventBus (publish, subscribe, unsubscribe) | NexoraEvent sealed class | AgentCheckpoint (taskId, plan, stepIndex, memorySnapshot, timestamp)</text>
+<text x="30" y="833" fill="#64748b" font-size="6">EventBus (publish, subscribe, unsubscribe) | NexoraEvent sealed class | AgentCheckpoint (taskId, plan, stepIndex, memorySnapshot, acceptanceProgress, failureLedger, effectiveDeadline, remainingBudget, timestamp)</text>
 
 <text x="525" y="862" fill="#475569" font-size="7" text-anchor="middle">DERIVED from architecture/RUNTIME.md · all elements traceable to canonical source</text>
 </svg>

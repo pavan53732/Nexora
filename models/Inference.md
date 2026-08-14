@@ -72,6 +72,10 @@ data class ReasoningPolicy(
     val maxCostUsd: Double?
 )
 
+// Non-overridable provider, device, and resource-class ceilings are evaluated by
+// the Context Management / Agent Runtime policy boundary before this policy is
+// accepted. Their concrete storage shape is not selected by this model.
+
 data class ReasoningSummary(
     val summaryId: String,
     val approach: String,
@@ -95,7 +99,10 @@ data class ContextSnapshot(
     val segments: List<ContextSegmentRef>,
     val excludedSegments: List<ExcludedContextSegment>,
     val totalTokens: Int,
-    val createdAt: Instant
+    val createdAt: Instant,
+    val progressSignal: ProgressSignal,
+    val effectiveReasoningPolicy: ReasoningPolicy,
+    val ceilingDecision: CeilingDecision
 )
 
 data class ContextSegmentRef(
@@ -111,6 +118,20 @@ data class ContextSegmentRef(
     val contentHash: String,
     val compactionParentId: String?
 )
+
+data class ProgressSignal(
+    val testSuitePassCountDelta: Int,
+    val workspaceFileChangeDelta: Int,
+    val newEvidenceArtifactCountDelta: Int,
+    val errorCategoryShift: Boolean
+)
+
+data class CeilingDecision(
+    val accepted: Boolean,
+    val policyBoundary: String,
+    val evidenceRefs: List<String>
+)
+
 ```
 
 ## Model Rules
@@ -118,4 +139,6 @@ data class ContextSegmentRef(
 - Raw private chain-of-thought is not required or persisted; `ReasoningSummary` is the durable user/audit artifact.
 - `StreamEnvelope` ordering is validated before its event mutates UI, tool assembly, usage, or memory.
 - `ContextSnapshot` is immutable and reproducible for its tokenizer/model contract.
+- `ProgressSignal` records the state-delta dimensions required by ADR-0009 for semantic progress evaluation; it does not itself change lifecycle state.
+- Effective ceiling validation and rejection follow `specs/CONTEXT_MANAGEMENT.md` §6.1; `effectiveReasoningPolicy` and `ceilingDecision` are recorded in the immutable ContextSnapshot, while provider/device/resource-class ceiling values remain policy-boundary inputs rather than user-overridable settings.
 - Failover/restart creates a new `streamId`; `priorStreamId` preserves lineage.

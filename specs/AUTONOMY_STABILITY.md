@@ -199,6 +199,13 @@ interval = base × 2^attempt × random(0.5…1.5)
 
 ## 9.5 Semantic Progress & Anti-Replay (new, mandated by ADR-0009)
 
+**Acceptance-Criterion Progress Vector.** Semantic progress is evaluated against the
+active task's declared acceptance criteria. Each criterion has monotonic status
+`UNASSESSED`, `IN_PROGRESS`, `PASSED`, or `FAILED`, and the vector is checkpointed
+with evidence references. Activity unrelated to an acceptance criterion does not by
+itself reset the bounded-progress detector. The Agent Runtime remains the canonical
+owner of this vector; this section mirrors its stability obligation.
+
 **State-Delta Evaluation — the "Treadmill" Detector.** Syntactic loop detection
 (n=2 identical action+argument repeat) is necessary but insufficient: an agent can
 alternate between different-but-equally-ineffective tools and still make zero real
@@ -217,7 +224,7 @@ escalation path (`e. Escalate to user`) OR apply a strategy mutation, never an
 unconditionally silent retry. This closes the "treadmill" class of infinite loop.
 
 **Task-Scoped Failure Ledger.** Each task's working context carries a compact,
-durable failure ledger: `{toolId, errorSignature, count, firstSeenAt}`. After
+durable failure ledger: `{toolId, errorSignature, count, firstSeenAt, blacklistedUntilTaskEnd}`. After
 **K=3 identical signature repetitions** on the same tool within one task, Agent
 Runtime **MUST** enforce **strategy mutation**: the next invocation **MUST select a
 different `toolId`** (not merely different arguments); the blocked `toolId` is

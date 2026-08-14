@@ -184,6 +184,10 @@ data class AgentCheckpoint(
     val plan: ExecutionPlan,
     val currentStepIndex: Int,
     val memorySnapshot: Map<String, Any>,
+    val acceptanceProgress: AcceptanceProgressVector,
+    val failureLedger: TaskFailureLedger,
+    val effectiveDeadline: Instant,
+    val remainingBudget: Duration,
     val timestamp: Instant
 )
 ```
