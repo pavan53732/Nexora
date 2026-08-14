@@ -1,12 +1,12 @@
 # Environment Setup — Nexora Phase 0
 
-> **Status:** COMPLETED (Phase 0 — Foundation Environment Preparation)  
-> **Project:** Nexora — Autonomous AI Agent App for Android  
-> **Repository:** `https://github.com/pavan53732/Nexora`  
-> **Phase Scope:** Environment preparation ONLY — no Android source code created, no application features implemented  
-> **Prepared:** 2026-08-05  
-> **Workspace:** `/home/user` (Linux sandbox)  
-> **OS:** Debian GNU/Linux 13 (trixie)  
+> **Status:** COMPLETED (Phase 0 — Foundation Environment Preparation) 
+> **Project:** Nexora — Autonomous AI Agent App for Android 
+> **Repository:** `https://github.com/pavan53732/Nexora` 
+> **Phase Scope:** Environment preparation ONLY — no Android source code created, no application features implemented 
+> **Prepared:** 2026-08-05 
+> **Workspace:** `/home/user` (Linux sandbox) 
+> **OS:** Debian GNU/Linux 13 (trixie) 
 
 ---
 
@@ -107,17 +107,17 @@ This document records the complete Linux development environment setup required 
 ## 3. Installed Versions
 
 ```
-System:        Debian GNU/Linux 13 (trixie)
-Kernel:        Linux 6.1.158+ (x86_64)
-Java:          OpenJDK 21.0.11+10-1-deb13u2-Debian
-Kotlin:        2.1.0 (kotlinc-jvm)
-Gradle:        8.10.2
-Python:        3.13.14
-Pip:           26.2.1
-Git:           2.47.3
-Android SDK:   Command Line Tools 12.0
-Android API:   29 (min) + 34 (latest stable) installed
-Build Tools:   34.0.0
+System: Debian GNU/Linux 13 (trixie)
+Kernel: Linux 6.1.158+ (x86_64)
+Java: OpenJDK 21.0.11+10-1-deb13u2-Debian
+Kotlin: 2.1.0 (kotlinc-jvm)
+Gradle: 8.10.2
+Python: 3.13.14
+Pip: 26.2.1
+Git: 2.47.3
+Android SDK: Command Line Tools 12.0
+Android API: 29 (min) + 34 (latest stable) installed
+Build Tools: 34.0.0
 Platform Tools: 37.0.1
 ```
 
@@ -128,7 +128,7 @@ Platform Tools: 37.0.1
 ### 4.1 Android SDK
 
 ```
-ANDROID_HOME:     /home/user/Android/Sdk
+ANDROID_HOME: /home/user/Android/Sdk
 ANDROID_SDK_ROOT: /home/user/Android/Sdk
 ```
 
@@ -137,34 +137,34 @@ Subdirectories:
 ```
 ~/Android/Sdk/
 ├── cmdline-tools/
-│   └── latest/
-│       ├── bin/
-│       │   ├── sdkmanager
-│       │   ├── avdmanager
-│       │   └── ...
-│       └── lib/
+│ └── latest/
+│ ├── bin/
+│ │ ├── sdkmanager
+│ │ ├── avdmanager
+│ │ └── ...
+│ └── lib/
 ├── build-tools/
-│   └── 34.0.0/
-│       ├── aapt2
-│       ├── d8
-│       ├── zipalign
-│       ├── apksigner
-│       └── ...
+│ └── 34.0.0/
+│ ├── aapt2
+│ ├── d8
+│ ├── zipalign
+│ ├── apksigner
+│ └── ...
 ├── platform-tools/
-│   ├── adb
-│   ├── fastboot
-│   └── ...
+│ ├── adb
+│ ├── fastboot
+│ └── ...
 ├── platforms/
-│   ├── android-29/
-│   └── android-34/
+│ ├── android-29/
+│ └── android-34/
 ├── sources/
-│   ├── android-29/
-│   └── android-34/
+│ ├── android-29/
+│ └── android-34/
 └── extras/
-    ├── android/
-    │   └── m2repository/
-    └── google/
-        └── m2repository/
+ ├── android/
+ │ └── m2repository/
+ └── google/
+ └── m2repository/
 ```
 
 ### 4.2 Java
@@ -186,8 +186,8 @@ Key binaries:
 
 ```
 Python binary: /usr/bin/python3 (symlink to python3.13)
-Pip binary:    /usr/local/bin/pip3
-Virtualenv:    /usr/local/bin/virtualenv
+Pip binary: /usr/local/bin/pip3
+Virtualenv: /usr/local/bin/virtualenv
 ```
 
 ### 4.4 Gradle
@@ -270,7 +270,7 @@ Full `PATH` (sorted, unique entries from `~/.bashrc` after sourcing):
 ```
 NEXORA ENVIRONMENT VERIFICATION REPORT
 ======================================
-Date: Wed Aug  5 15:42:49 UTC 2026
+Date: Wed Aug 5 15:42:49 UTC 2026
 User: user
 Workspace: /home/user
 
@@ -307,11 +307,11 @@ sdkmanager --version
 adb --version
 
 # Build Tools
-aapt2                 # should show subcommand list
-d8 --version          # D8 version
+aapt2 # should show subcommand list
+d8 --version # D8 version
 java -jar ~/Android/Sdk/bundletool.jar version
-zipalign              # Zip alignment utility
-apksigner --version   # 0.9
+zipalign # Zip alignment utility
+apksigner --version # 0.9
 
 # Gradle
 gradle --version
@@ -457,7 +457,7 @@ No API keys were configured or stored. Key storage will use Android Keystore (as
 
 ## 13. Embedded Runtime Strategy Summary
 
-A separate research document (`docs/research/EMBEDDED_RUNTIME_STRATEGY.md`) was reconstructed from the current documentation corpus (S9, 2026-08-06). Key recommendations:
+A separate research document (`docs/research/) was reconstructed from the current documentation corpus (S9, 2026-08-06). Key recommendations:
 
 | Component | Recommended Solution | License | APK Impact | Integration Phase |
 |-----------|---------------------|---------|-----------|-------------------|
@@ -483,12 +483,12 @@ git commit -m "docs: add environment setup documentation
 - Documents complete Linux development environment for Nexora (Phase 0)
 - Includes installed software, versions, locations, environment variables
 - Includes verification results for java, javac, sdkmanager, adb, gradle,
-  kotlinc, python3, pip3, git, and all Android build tools
+ kotlinc, python3, pip3, git, and all Android build tools
 - Documents issues encountered (apt permissions, JDK 11 vs 21, PATH,
-  Kotlin PATH) and resolutions applied
+ Kotlin PATH) and resolutions applied
 - Includes AI provider integration readiness verification (no keys configured)
 - Includes embedded runtime comparison (Chaquopy, QuickJS, JGit, Room,
-  internal sandbox) with recommendations
+ internal sandbox) with recommendations
 - Confirms no Android source code generated; environment ready for Phase 1"
 ```
 
@@ -502,9 +502,9 @@ git commit -m "docs: add environment setup documentation
 - [x] **Step 2:** System tools installed; OpenJDK 21 LTS installed and configured (`JAVA_HOME`); Android SDK installed (`ANDROID_HOME`, `ANDROID_SDK_ROOT`); SDK licenses accepted; SDK platforms (29, 34) and sources installed; build-tools (34.0.0) installed; Gradle 8.10.2 installed; Kotlin 2.1.0 installed; Python 3.13 + pip + venv + virtualenv installed; Git 2.47.3 + Git LFS 3.6.1 installed.
 - [x] **Step 3:** Compatibility with future libraries verified (Jetpack Compose, Material 3, Hilt, Room, DataStore, WorkManager, Navigation Compose, Coroutines, Kotlin Serialization). No Android project created yet.
 - [x] **Step 4:** AI provider integration environment verified (network, SSL, curl, Python HTTP libraries). No API keys configured.
-- [x] **Step 5:** Embedded runtime strategy researched; recommendations for Python (Chaquopy), JavaScript (QuickJS), Git (JGit), terminal/shell (custom + Termux/proot), SQLite (Room + SQLCipher), and sandbox execution (internal manager + Android isolation) documented in `docs/research/EMBEDDED_RUNTIME_STRATEGY.md` (reconstructed S9).
+- [x] **Step 5:** Embedded runtime strategy researched; recommendations for Python (Chaquopy), JavaScript (QuickJS), Git (JGit), terminal/shell (custom + Termux/proot), SQLite (Room + SQLCipher), and sandbox execution (internal manager + Android isolation) documented in `docs/research/ (reconstructed S9).
 - [x] **Step 6:** Complete environment verified (`java`, `javac`, `sdkmanager`, `adb`, `gradle`, `kotlinc`, `python3`, `pip3`, `git`); environment variables (`JAVA_HOME`, `ANDROID_HOME`, `ANDROID_SDK_ROOT`, `PATH`) configured correctly.
-- [x] **Step 7:** Documentation (`docs/ENVIRONMENT_SETUP.md`) created and committed. Embedded runtime strategy document (`docs/research/EMBEDDED_RUNTIME_STRATEGY.md`) reconstructed and committed (S9, 2026-08-06).
+- [x] **Step 7:** Documentation (`docs/ENVIRONMENT_SETUP.md`) created and committed. Embedded runtime strategy document (`docs/research/) reconstructed and committed (S9, 2026-08-06).
 
 ### 15.2 What Was NOT Done (As Instructed)
 
@@ -534,10 +534,10 @@ The environment is fully verified and documented. When instructed to proceed:
 - Security Model: `/home/user/Nexora/architecture/SECURITY_MODEL.md`
 - Standards: `/home/user/Nexora/standards/Coding-Standard.md`
 - SDK Documentation: `/home/user/Nexora/sdk/`
-- Embedded Runtime Research: `docs/research/EMBEDDED_RUNTIME_STRATEGY.md` (reconstructed S9, 2026-08-06; see also §13 above)
+- Embedded Runtime Research: `docs/research/ (reconstructed S9, 2026-08-06; see also §13 above)
 
 ---
 
-*Document version: 1.0  
-Created: 2026-08-05  
+*Document version: 1.0 
+Created: 2026-08-05 
 Status: COMPLETE — Environment Ready for Phase 1 (Android Scaffold)*

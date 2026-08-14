@@ -24,25 +24,25 @@ Instead, Nexora implements the **Headless WebView Bridge Protocol**. This protoc
 
 ```text
 ┌────────────────────────────────────────────────────────┐
-│                   Nexora Android App (JVM)             │
-│                                                        │
-│  Headless WebView (Host) <─── ToolManager (Intercept)  │
-│          │                           ▲                 │
-│     (Loads URL)                      │                 │
-│          │                     executeTool()           │
-│          ▼                           │                 │
-│   [Secure Network]                   │                 │
-│          │                           │                 │
-│  ┌───────┼───────────────────────────┼──────────────┐  │
-│  │       ▼                           │              │  │
-│  │  proot Linux Guest (Debian)       │              │  │
-│  │                                   │              │  │
-│  │   Agent Loop ───────── [Tool] ────┘              │  │
-│  │   (Python/Node)       (browser_open / TOOL-245)  │  │
-│  │                                                  │  │
-│  │   /workspace/downloads/ ◄────────────────────────│  │
-│  │   (Shared storage path for downloads/scrapes)    │  │
-│  └──────────────────────────────────────────────────┘  │
+│ Nexora Android App (JVM) │
+│ │
+│ Headless WebView (Host) <─── ToolManager (Intercept) │
+│ │ ▲ │
+│ (Loads URL) │ │
+│ │ executeTool() │
+│ ▼ │ │
+│ [Secure Network] │ │
+│ │ │ │
+│ ┌───────┼───────────────────────────┼──────────────┐ │
+│ │ ▼ │ │ │
+│ │ proot Linux Guest (Debian) │ │ │
+│ │ │ │ │
+│ │ Agent Loop ───────── [Tool] ────┘ │ │
+│ │ (Python/Node) (browser_open / TOOL-245) │ │
+│ │ │ │
+│ │ /workspace/downloads/ ◄────────────────────────│ │
+│ │ (Shared storage path for downloads/scrapes) │ │
+│ └──────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -69,10 +69,10 @@ Browser automation is exposed to the agent loop via specialized tools (`TOOL-2xx
 
 ```kotlin
 data class BrowserNavigationRequest(
-    val url: String,
-    val timeoutMs: Long = 30_000,
-    val blockImages: Boolean = true,
-    val blockThirdPartyCookies: Boolean = true
+ val url: String,
+ val timeoutMs: Long = 30_000,
+ val blockImages: Boolean = true,
+ val blockThirdPartyCookies: Boolean = true
 )
 ```
 
@@ -80,12 +80,12 @@ data class BrowserNavigationRequest(
 
 ```kotlin
 data class BrowserExtractionResponse(
-    val title: String,
-    val currentUrl: String,
-    val htmlContent: String?,
-    val textContent: String?,
-    val links: List<WebLink>,
-    val metadata: Map<String, String>
+ val title: String,
+ val currentUrl: String,
+ val htmlContent: String?,
+ val textContent: String?,
+ val links: List<WebLink>,
+ val metadata: Map<String, String>
 )
 
 data class WebLink(val text: String, val url: String)
@@ -107,9 +107,9 @@ To prevent prompt-injection attacks, data exfiltration, or sandbox escapes throu
 
 ## 5.1 Blocked List & Isolation Warning (G3 — Added 2026-08-06)
 
-> **Status:** CANONICAL blocked-list specification for browser automation (added G3 — 2026-08-06).  
-> **Verified research reference:** `aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03 (`Kimi Claw` pattern — sensitive accounts must not be automated).  
-> **Reference:** `security/SandboxPolicy.md` (§Blocked Domains & Sensitive Apps); `docs/DECISION_LOG.md` (`DL-023`); `docs/research/NEXORA_VS_ZCODE_CAPABILITY_GAP.md` (§6.2 — bot integration missing; §5.2 — browser automation partial — blocked-list closes a security gap without redesign).
+> **Status:** CANONICAL blocked-list specification for browser automation (added G3 — 2026-08-06). 
+> **Verified research reference:** `aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03 (`Kimi Claw` pattern — sensitive accounts must not be automated). 
+> **Reference:** `security/SandboxPolicy.md` (§Blocked Domains & Sensitive Apps); `docs/DECISION_LOG.md` (`DL-023`); `docs/research/ (§6.2 — bot integration missing; §5.2 — browser automation partial — blocked-list closes a security gap without redesign).
 
 ### Blocked App Classes (UI Automation)
 

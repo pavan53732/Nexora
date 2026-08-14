@@ -39,7 +39,6 @@
 
 *No placeholders remain unmapped. All references point to verified ledger entries.*
 
-
 ## S1 — Dynamic Concurrency Cap (SA-3)
 - `FR-MA-003` (parallel coordination) mapped to `MULTI_AGENT_SYSTEM.md` §SA-3.
 - `FR-AS-003` (budget escalation) mapped to concurrency cap budget feed.
@@ -81,8 +80,7 @@
 - `TOOL-410`..`416` (introspect_*) → `registry/TOOLS.md` (Category 28 — Project Introspection, INTRO prefix), `registry/TOOL_MATRIX.md`.
 - `FEAT-035` (Project Introspection) → `registry/FEATURES.md`.
 - Knowledge Graph phase Later→4 → `architecture/MEMORY_SYSTEM.md`.
-- Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, `docs/research/EMBEDDED_RUNTIME_STRATEGY.md`.
-
+- Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, `docs/research/.
 
 ## S13 — Authorization and Execution Recovery Contract Synchronization
 
@@ -92,7 +90,6 @@
 - `FR-AS-007` → same-ID `RESUME`, new-ID `RETRY_AFTER_TERMINAL`, `priorExecutionId`, and reconciliation in Runtime/Background/Autonomy/Execution Protocol/Runtime API; validation `SEC-LC-EXEC-002..004`, `IT-LC-001..013/016..020` (Planned).
 - `NFR-REL-001`/`002`/`012` → durable checkpoint, resume fidelity, and exactly-once lineage/replay rules; validation `IT-LC-001..013/016..020` (Planned).
 - No S13 case is `VERIFIED`; all evidence paths are placeholders for `Planned` execution.
-
 
 ## S14 — Typed Inference, Deep Reasoning, and Context Snapshots
 
