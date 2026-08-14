@@ -34,7 +34,7 @@ All file I/O is mediated by `SandboxFileSystem`. Direct `java.io.File` or `java.
 
 | Rule | Detail |
 |------|--------|
-| **No `/sdcard`** | Any path resolving outside the workspace root is rejected with `NXR-7005` |
+| **No `/sdcard`** | Any path resolving outside the workspace root is rejected; the canonical error identity for path escape is OPEN/DEFERRED. |
 | **No `/system`** | Blocklisted at canonical-path check |
 | **No sibling workspace access** | Paths containing `../` are canonicalised and validated against the workspace root |
 | **No symlinks out** | Symlinks are resolved and re-validated; creation of outbound symlinks is denied |
@@ -47,7 +47,7 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
         val canonical = workspaceRoot.resolve(userPath).toRealPathOrNull()
             ?: throw NexoraError.SandboxPathInvalid(userPath)
         require(canonical.startsWith(workspaceRoot.normalize())) {
-            "Path escapes workspace: $userPath"  // NXR-7005
+            "Path escapes workspace: $userPath"  // canonical error identity OPEN/DEFERRED
         }
         return canonical
     }
@@ -133,10 +133,10 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 | Class | Example Apps / Services | Block Action | Evidence Classification |
 |-------|------------------------|--------------|------------------------|
-| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | `NXR-7005` (sandbox path/network denial) + audit log (`FR-TL015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`) | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
-| Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Same (`NXR-7005` + audit + isolation warning) | `VERIFIED` (same sources) |
-| Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Same (`NXR-7005` + audit + isolation warning) | `VERIFIED` (same sources) |
-| Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Same (`NXR-7005` + audit + isolation warning) | `VERIFIED` (same sources) |
+| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | Deny interaction + audit log (`FR-TL015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`); blocked-app error identity is OPEN/DEFERRED. | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
+| Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Same (deny interaction + audit + isolation warning; error identity OPEN/DEFERRED) | `VERIFIED` (same sources) |
+| Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Same (deny interaction + audit + isolation warning; error identity OPEN/DEFERRED) | `VERIFIED` (same sources) |
+| Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Same (deny interaction + audit + isolation warning; error identity OPEN/DEFERRED) | `VERIFIED` (same sources) |
 
 ### Blocked High-Risk Domains (Network Egress / Browser)
 
@@ -150,7 +150,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked domain or interact with a blocked app class:
 
-1. **Sandbox denies** (`NXR-7005` for filesystem/network escape attempts; `NXR-2003` for network connections to blocked domains).
+1. **Sandbox denies.** Network connections to blocked domains return `NXR-2003`. Filesystem/path-escape and blocked-app error identities are OPEN/DEFERRED; denial behavior does not depend on assigning an unsupported code.
 2. **Audit log entry** (`FR-TL015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
 3. **User notification** (`agent_error` — `NotificationHelper`) with isolation instruction: "Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."
 4. **Continuation status:** The blocked-list rule remains in effect. There is no domain/app-specific `ALLOW` override and no bypass mechanism. Resolving isolation settings does not resume the blocked operation. A continuation, if needed, is a new operation/task initiated in the properly isolated workspace/profile. This rule does not create or reinterpret a TaskLifecycle state or transition.
