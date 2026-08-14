@@ -542,18 +542,16 @@ without duplicating the full catalog.
 | Untrusted model/provider content | TM-003 (MITM), TM-025 (injected tool calls), TM-026 (cross-provider data leak), TM-027 (key access), TM-028 (exfiltration) | 3 Mitigated, 2 Partial, 0 Open | Provider plugin exfiltration (TM-028, Partial) |
 | Tool execution | TM-022 (sandbox escape), TM-024 (permission chaining) | 1 Mitigated, 1 Partial | Sandbox escape via raw file access (TM-022, Partial) |
 | Filesystem | TM-006 (path traversal), TM-007 (config manipulation), TM-015 (backup exposure) | 2 Mitigated, 1 Partial | Path traversal/symlink (TM-006, Partial) |
-| Network | TM-005 (post-install tampering), TM-008 (memory tampering) | 1 Partial, 1 Open | Memory entry tampering (TM-008, Open) |
+| Network | TM-005 (post-install tampering), TM-008 (memory tampering) | 1 Partial, 1 Planned security completion | Memory entry tampering (TM-008, planned security completion) |
 | Terminal/process | TM-017 (fork bomb), TM-018 (disk fill), TM-019 (memory pressure) | 3 Partial | Resource DoS (all Partial) |
 | Plugin | TM-001 (impersonation), TM-005 (tampering), TM-016 (cross-workspace memory), TM-023 (excessive permissions) | 1 Mitigated, 3 Partial | Plugin signing + integrity (TM-001, TM-005, Partial) |
-| Remote pipes | TM-029..TM-037 (mDNS spoofing, pairing, TLS MITM, payload forging, replay, cross-workspace, broadcast abuse, listener DoS, metadata leakage) | 7 Partial, 1 Open | LAN metadata leakage (TM-037, Open); all others Partial |
+| Remote pipes | TM-029..TM-037 (mDNS spoofing, pairing, TLS MITM, payload forging, replay, cross-workspace, broadcast abuse, listener DoS, metadata leakage) | 7 Partial, 1 Planned security completion | LAN metadata leakage (TM-037, planned security completion); all others Partial |
 | Device capabilities | TM-002 (key theft), TM-013/TM-014 (log leaks) | 3 Mitigated | N/A (all Mitigated) |
 
 **Status key:** Mitigated = control fully specified; Partial = control specified but
-not fully implemented; Open = control documented as unresolved.
+not fully implemented; Planned security completion = control, owner, target phase, acceptance criterion, and residual risk are documented pending implementation evidence.
 
-All Partial and Open items represent specification-level gaps or planned future work.
-This document does not convert their status. Relevant requirement IDs for the security
-boundaries: FR-S001..S028, FR-P013, NFR-SEC-001..014, FR-MI-008, FR-MI-009.
+All Partial and planned security-completion items represent specification-level work pending implementation evidence. This research document projects the canonical Threat Model status and does not alter security authority. Relevant requirement IDs for the security boundaries: FR-S001..S028, FR-P013, NFR-SEC-001..014, FR-MI-008, FR-MI-009.
 
 ## Observability, Audit, and Traceability
 
@@ -645,8 +643,7 @@ Items supported by the current corpus:
 - **Dedicated /workflows monitoring panel**: deferred. ADR-0006 requires infrastructure
   not to become user-facing tabs; a dedicated panel would need to be justified as a
   settings or observability surface, not an infrastructure tab.
-- **ThreatModel open items**: TM-008 (memory tampering, Open), TM-037 (LAN metadata
-  leakage, Open). 19 threats are Partial; 2 are Open.
+- **ThreatModel planned security-completion items**: TM-008 (memory tampering) and TM-037 (LAN metadata leakage) have documented owners, Phase 7 targets, acceptance criteria, and residual risks. 32 threats are Partial; 2 are planned security completion.
 - **Performance metric ownership**: the `standards/Performance-Standard.md` file
   previously listed active-agent memory as `< 1 GB`; this has been corrected to the
   canonical PERFORMANCE_BUDGET 256/384/512 targets. The standards file remains a

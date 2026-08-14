@@ -11,7 +11,7 @@
 ---
 
 
-> **DEC-7 (2026-08-11):** Provider `Retry-After` handling remains independent from Task `RetryPending`; no canonical precedence or interaction is defined. Retry lifecycle identity and durability semantics are defined in [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
+> **DEC-7 (2026-08-11):** Provider `Retry-After` handling and Task `RetryPending` have independent scopes. Provider throttling does not create, advance, cancel, or otherwise redefine Task retry lifecycle; Task retry identity and durability semantics remain defined in [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).
 
 ## Overview
 

@@ -23,6 +23,21 @@ The repository corpus was inventoried across:
 - Testing: present through test strategy documents, case documents, and the Session–Conversation deterministic matrix; planned evidence directories are not treated as executed test evidence.
 - Traceability/canonical sources: maintained through `docs/TRACEABILITY.md` and `docs/CANONICAL_SOURCES.md`.
 
+## Architecture-resolution status
+
+The current inventory does not treat the following as active OPEN/DEFERRED architecture gaps:
+
+- Tool timeout (`NXR-2002`) is an execution outcome with no ToolStatus lifecycle effect; unknown completion and conditional retry remain governed by `architecture/TOOL_SYSTEM.md` and the canonical error mapping.
+- `listAgents` has no collection-specific canonical error mapping; an empty collection result is not `NXR-3001`.
+- Blocked-app interaction is authorization-classifier denial (`NXR-2003` / `CLASSIFIER_DENIAL`), preserving denial, audit, notification, isolation, no bypass, no automatic resume, and new-operation/task continuation.
+- Provider `Retry-After` and Task `RetryPending` retain independent scopes and do not create a merged retry state.
+- Session–Conversation semantic questions selected by DEC-13 through DEC-21 are closed; historical unresolved wording does not reopen relationship status, ownership, identity, representation, cardinality, lifecycle, or continuation semantics.
+- Conversation/checkpoint metadata, ordering, persistence, schema, API/transport, and recovery mechanics remain bounded implementation choices within the selected semantic invariants; no concrete mechanism is selected by this inventory.
+- TM-008 and TM-037 are planned security-completion work with established owners, Phase 7 targets, acceptance criteria, and residual risks.
+- Embedded runtimes and `TOOL-403`/`TOOL-404` streaming remain planned/later work; reserved tool IDs are not architecture gaps or reusable identifiers.
+
+The remaining active owner-decision inventory is limited to the requirement-ID orphans in `docs/TRACEABILITY.md`, execution failure-class binding authority, branch-lineage artifact ownership, checkpoint/retention/deletion policy, selected product scope and positioning matters, Platform Infrastructure governance, and the independent ROADMAP terminology decisions.
+
 ## Unresolved classification
 
 The following are not silently promoted to architecture decisions:

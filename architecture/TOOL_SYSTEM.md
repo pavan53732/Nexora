@@ -64,7 +64,7 @@ Timeout values are specified per-tool in the tool descriptor and MUST respect wo
 
 ### Ownership
 
-Timeout monitoring is owned by the tool execution subsystem. The specific state transition authority for timeout handling is OPEN/DEFERRED pending explicit mapping to the existing ToolInvocation state model.
+Timeout monitoring is owned by the tool execution subsystem. A timeout (`NXR-2002`) has **no ToolStatus lifecycle effect**: it is an execution outcome, not a Tool descriptor lifecycle transition. The existing ToolInvocation record and canonical error envelope preserve the timeout/partial-output outcome without asserting that an underlying non-idempotent side effect failed or did not occur.
 
     val requiresSandbox: Boolean
     val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery

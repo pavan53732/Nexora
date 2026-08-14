@@ -72,7 +72,7 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-005 | Modified plugin binary post-install | Plugin System | Critical | Integrity check on every load (hash comparison with install-time manifest) | Partial |
 | TM-006 | Sandbox escape via path traversal or symlink | Sandbox | Critical | Canonical path resolution; block all symlinks pointing outside workspace; chroot-style mount namespace | Partial |
 | TM-007 | Configuration file manipulation by other apps on rooted device | Storage | High | App-private storage only (`/data/data/com.nexora.app`); no world-readable files | Mitigated |
-| TM-008 | Tampered memory entries to mislead agent reasoning | Memory System | Medium | Write-intent logging; hash chain on memory entries; read-only archival | Open |
+| TM-008 | Tampered memory entries to mislead agent reasoning | Memory System | Medium | Write-intent logging; hash chain on memory entries; read-only archival | Planned security completion |
 
 ### Repudiation
 
@@ -121,7 +121,7 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | TM-034 | Cross-workspace privilege escalation via pipe routing misconfiguration | Pipe Delegation | Critical | A pipe is bound to exactly one exposed workspace; cross-workspace routing is rejected (`NXR-1002` variant); `FR-MI-008` gates enforced by `PermissionManager` (`specs/PIPES.md` §8; `NFR-SEC-012` network confinement) | Partial |
 | TM-035 | Broadcast abuse — attacker floods workspace with broadcast messages | Pipe Broadcast | Medium | `instance:broadcast` is `DENY` by default; rate-limited (1/s, burst 5); recipients treat broadcasts as data, not instructions (`FR-CM-006`); `TM-020` analog applies (`specs/PIPES.md` §7; `FR-MI-007`) | Partial |
 | TM-036 | Listener DoS / connection exhaustion on pipe transport ports | Pipe Transport | Medium | Bounded retry (3 attempts, exponential backoff, `NFR-REL-003`); pipe timeout (30 s connect, 120 s task-ack); `Degraded` → `Disconnected` state machine (`specs/PIPES.md` §5, §9; `FR-MI-009`) | Partial |
-| TM-037 | LAN metadata leakage — device names, workspace counts exposed via mDNS | Pipe Discovery | Low | TXT records carry only non-sensitive fields (`instanceId`, `fingerprint`, `minContractVersion`, nonce); no workspace names, tool counts, or provider identifiers advertised (`specs/PIPES.md` §3, §4; `FR-MI-001`) | Open |
+| TM-037 | LAN metadata leakage — device names, workspace counts exposed via mDNS | Pipe Discovery | Low | TXT records carry only non-sensitive fields (`instanceId`, `fingerprint`, `minContractVersion`, nonce); no workspace names, tool counts, or provider identifiers advertised (`specs/PIPES.md` §3, §4; `FR-MI-001`) | Planned security completion |
 
 ### Inference Streaming and Reasoning Artifacts
 
@@ -144,9 +144,9 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 
 To satisfy High Finding 11 and ensure complete cryptographic, permission, and isolation coverage, every identified STRIDE threat is mapped to its core mitigating control, active enforcement point, expected containment behavior, validation test case, and — for non-Mitigated entries — deferral bookkeeping: the responsible owner, the target phase when the mitigation will be complete, the measurable acceptance criterion, and the documented residual risk accepted until then.
 
-### Deferral Bookkeeping for Partial / Open Threats
+### Deferral Bookkeeping for Partial / Planned Security-Completion Threats
 
-A threat MAY remain Partial or Open only if all four fields below are populated:
+A threat MAY remain Partial or planned security-completion only if all four fields below are populated:
 
 | Field | Requirement |
 |---|---|
@@ -209,8 +209,8 @@ A threat MAY remain Partial or Open only if all four fields below are populated:
 
 ## Summary
 
-| Category | Total | Mitigated | Partial | Open |
-|----------|-------|-----------|---------|------|
+| Category | Total | Mitigated | Partial | Planned security completion |
+|----------|-------|-----------|---------|-----------------------------|
 | Spoofing | 8 | 3 | 5 | 0 |
 | Tampering | 8 | 1 | 6 | 1 |
 | Repudiation | 4 | 2 | 2 | 0 |

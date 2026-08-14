@@ -133,10 +133,10 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 | Class | Example Apps / Services | Block Action | Evidence Classification |
 |-------|------------------------|--------------|------------------------|
-| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | Deny interaction + audit log (`FR-TL015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`); blocked-app error identity is OPEN/DEFERRED. | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
-| Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Same (deny interaction + audit + isolation warning; error identity OPEN/DEFERRED) | `VERIFIED` (same sources) |
-| Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Same (deny interaction + audit + isolation warning; error identity OPEN/DEFERRED) | `VERIFIED` (same sources) |
-| Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Same (deny interaction + audit + isolation warning; error identity OPEN/DEFERRED) | `VERIFIED` (same sources) |
+| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | Deny interaction through the authorization classifier (`NXR-2003` / `CLASSIFIER_DENIAL`) + audit log (`FR-TL015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`). | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
+| Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Same (`NXR-2003` / `CLASSIFIER_DENIAL`; deny interaction + audit + isolation warning) | `VERIFIED` (same sources) |
+| Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Same (`NXR-2003` / `CLASSIFIER_DENIAL`; deny interaction + audit + isolation warning) | `VERIFIED` (same sources) |
+| Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Same (`NXR-2003` / `CLASSIFIER_DENIAL`; deny interaction + audit + isolation warning) | `VERIFIED` (same sources) |
 
 ### Blocked High-Risk Domains (Network Egress / Browser)
 
@@ -150,7 +150,7 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 
 When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked domain or interact with a blocked app class:
 
-1. **Sandbox denies.** Network connections to blocked domains return `NXR-2003`. Filesystem/path escape is mapped by execution origin: Tool violations return `NXR-2009`; Plugin violations return `NXR-6008`. Blocked-app error identity remains OPEN/DEFERRED; denial behavior does not depend on assigning an unsupported code.
+1. **Sandbox denies.** Network connections to blocked domains return `NXR-2003`. Filesystem/path escape is mapped by execution origin: Tool violations return `NXR-2009`; Plugin violations return `NXR-6008`. Blocked-app interaction is denied by the authorization classifier as `NXR-2003` with subreason `CLASSIFIER_DENIAL`; denial behavior does not create an override or bypass.
 2. **Audit log entry** (`FR-TL015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
 3. **User notification** (`agent_error` — `NotificationHelper`) with isolation instruction: "Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."
 4. **Continuation status:** The blocked-list rule remains in effect. There is no domain/app-specific `ALLOW` override and no bypass mechanism. Resolving isolation settings does not resume the blocked operation. A continuation, if needed, is a new operation/task initiated in the properly isolated workspace/profile. This rule does not create or reinterpret a TaskLifecycle state or transition.
