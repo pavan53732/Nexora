@@ -25,7 +25,7 @@ A Conversation is the durable, ordered record boundary for interaction history a
 
 ## Ownership
 
-The Conversation/Session responsibility established by DEC-10 owns Conversation identity, conversation-local records, checkpoint creation, checkpoint lineage, rollback branch construction, and the semantic contract of the Session–Conversation relationship under DEC-15.
+The Conversation/Session responsibility established by DEC-10 owns Conversation identity, conversation-local records, checkpoint creation, rollback branch construction, and the semantic contract of the Session–Conversation relationship under DEC-15. The distinct BranchLineage artifact selected by DEC-22 owns rollback parent/source lineage; ConversationCheckpoint remains the checkpoint boundary and lifecycle artifact.
 
 Runtime, Memory, Context, Task, Execution, File, Workspace, Agent, Workflow, Tool, and Permission authorities may reference conversation data but do not own Conversation semantics merely by reference.
 
@@ -80,7 +80,7 @@ Rollback is not continuation.
 
 ## Lineage
 
-Branch lineage records parent/source relationships between distinct Conversations created by rollback.
+BranchLineage records parent/source relationships between distinct Conversations created by rollback. This derived model projects the semantic BranchLineage boundary selected by DEC-22 without selecting its identifier, schema, storage, or lifecycle mechanics.
 
 Lineage does not:
 - mutate the source Conversation identity,

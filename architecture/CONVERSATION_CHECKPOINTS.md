@@ -1,8 +1,8 @@
 # Conversation Checkpoints — Nexora
 
 > **Status: CANONICAL** for conversation checkpoint and rollback semantics.
-> Ownership: the Conversation/Session responsibility established by DEC-10. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes durable immutable Conversation identity and DEC-14 establishes the Session–Conversation relationship as a first-class semantic relationship. DEC-15 assigns ownership of the relationship semantic contract to the existing Conversation/Session responsibility; DEC-17 establishes no independent relationship identity; DEC-18 establishes participant-based semantic representation without a separate relationship representation; DEC-19 establishes at most one active Session ↔ Conversation association in either direction at a point in time without all-time uniqueness; DEC-20 establishes no independent relationship lifecycle and terminal Session states ending active association; DEC-21 establishes later-Session continuation with preserved Conversation identity and a new active association.
-> Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, `DEC-13-conversation-identity-persistence.md`, and `decisions/DEC-14-session-conversation-relationship-semantic-status.md` through `decisions/DEC-21-session-conversation-continuation-recovery.md`.
+> Ownership: the Conversation/Session responsibility established by DEC-10 owns Conversation and Session–Conversation semantic boundaries; the distinct BranchLineage artifact selected by DEC-22 owns rollback parent/source lineage; ConversationCheckpoint remains the checkpoint boundary and lifecycle artifact. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes durable immutable Conversation identity and DEC-14 establishes the Session–Conversation relationship as a first-class semantic relationship. DEC-15 assigns ownership of the relationship semantic contract to the existing Conversation/Session responsibility; DEC-17 establishes no independent relationship identity; DEC-18 establishes participant-based semantic representation without a separate relationship representation; DEC-19 establishes at most one active Session ↔ Conversation association in either direction at a point in time without all-time uniqueness; DEC-20 establishes no independent relationship lifecycle and terminal Session states ending active association; DEC-21 establishes later-Session continuation with preserved Conversation identity and a new active association.
+> Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, `DEC-13-conversation-identity-persistence.md`, and `decisions/DEC-14-session-conversation-relationship-semantic-status.md` through `decisions/DEC-22-branch-lineage-artifact-ownership.md`.
 
 ## Scope
 
@@ -14,7 +14,7 @@ A conversation checkpoint is an immutable boundary over one conversation's order
 | Context snapshot | Context management authority | Reproducible provider context | Referenced only; not restored by conversation rollback |
 | File version | File-system authority | File history and file restore | Separate operation; not restored by conversation rollback |
 | Workspace snapshot | Sandbox/workspace authority | Workspace snapshot restore | Separate operation; not restored by conversation rollback |
-| Conversation checkpoint | Conversation/session authority | Conversation boundary and branch lineage | Source of non-destructive branch |
+| Conversation checkpoint | Conversation/session authority | Conversation boundary and checkpoint lifecycle | Source of non-destructive branch; references BranchLineage for parent/source lineage |
 
 ## Conversation and session boundary
 
@@ -36,7 +36,7 @@ Execution crash-recovery checkpoints, pre-tool checkpoints, file snapshots, work
 
 ## Rollback/branch
 
-Rollback validates the source conversation, checkpoint lineage, authorization, and freshness. It creates a new conversation branch with a new conversation identity and parent/source-checkpoint lineage. The source conversation remains unchanged. Per DEC-9, this lineage must be recorded and preserved; its precise ownership (Conversation-owned versus checkpoint-owned) remains an unresolved architecture decision not answered by DEC-13.
+Rollback validates the source conversation, checkpoint lineage, authorization, and freshness. It creates a new conversation branch with a new conversation identity and parent/source-checkpoint lineage. The source conversation remains unchanged. Per DEC-9, this lineage must be recorded and preserved. DEC-22 assigns ownership of the semantic parent/source lineage relationship to the distinct BranchLineage artifact; its concrete representation and lifecycle mechanics remain separate downstream decisions.
 
 The branch starts at the selected conversation boundary. No tool call, task, execution, provider request, message, Git operation, device action, or external mutation is replayed or reversed by this operation.
 

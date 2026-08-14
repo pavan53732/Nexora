@@ -111,7 +111,7 @@ Reject at minimum:
 - Runtime references Session/Conversation but does not own their relationship semantics.
 - Task/Execution remain separate lifecycle authorities.
 - Memory references conversation data but does not own the relationship.
-- Checkpoint lifecycle remains checkpoint-owned.
+- Checkpoint lifecycle remains checkpoint-owned; BranchLineage owns rollback parent/source lineage under DEC-22.
 - Authorization, retention, cleanup, and deletion policies remain with their own authorities unless a canonical persistence/security source selects them.
 
 ## Prohibited architectural assumptions

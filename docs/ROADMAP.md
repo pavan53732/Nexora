@@ -129,3 +129,5 @@ Plugin SDK, Nexora Hub, tools/providers/agents as plugins.
 - Execution checkpointing remains Phase 2. Workspace snapshot/rollback remains its existing sandbox phase. These are not conversation rollback.
 - Skill lifecycle completion follows the existing Skill Registry/runtime phases; this documentation decision does not claim implementation.
 - No first-class Command artifact or command phase is established by DEC-12.
+- JavaScript-scripted workflows: planned later and out of the current scope; no current-phase requirement, architecture, API, or implementation commitment is created.
+- Dedicated `/workflows` monitoring panel: planned later and out of the current scope; no current-phase user-facing infrastructure-panel commitment is created.
