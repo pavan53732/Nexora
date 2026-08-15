@@ -13,6 +13,7 @@ data class Task(
     val agentId: String,
     val correlationId: String,
     val parentTaskId: String?,
+    val dependsOnTaskIds: List<String>,
     val status: TaskStatus,
     val phase: ExecutionPhase,
     val priority: TaskPriority = TaskPriority.NORMAL,
@@ -25,7 +26,9 @@ data class Task(
     val createdAt: Instant,
     val updatedAt: Instant,
     val completedAt: Instant? = null,
-    val latestError: CanonicalErrorEnvelope? = null
+    val latestError: CanonicalErrorEnvelope? = null,
+    val effectiveDeadline: Instant,
+    val retryNotBefore: Instant? = null
 )
 
 enum class TaskStatus {
@@ -83,7 +86,7 @@ data class CanonicalErrorEnvelope(
 
 ## Lifecycle and Execution Semantics
 
-`status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.
+`status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. `dependsOnTaskIds` is validated as an acyclic dependency graph before queueing. `effectiveDeadline` is inherited by dependency waits and child operations. `retryNotBefore` is authoritative for RetryPending backoff and cannot be bypassed by direct start. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.
 
 ### Error Envelope Propagation
 

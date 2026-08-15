@@ -63,6 +63,29 @@ Implementation may choose concrete schema representation using existing reposito
 
 Historical association persistence is a downstream implementation choice unless and until a canonical schema section explicitly selects it. Active-association enforcement, continuation support, lineage preservation, and checkpoint integrity are required semantic outcomes; exact relational encoding is not architecturally fixed here.
 
+### `branch_lineage`
+
+BranchLineage is a first-class persisted artifact whose semantic ownership and operational policy are defined by [DEC-22](../decisions/DEC-22-branch-lineage-artifact-ownership.md) and [DEC-31](../decisions/DEC-31-branch-lineage-and-checkpoint-operational-policy.md). It records the immutable relationship between a source Conversation, source checkpoint, and branch Conversation; it does not own their content or lifecycle.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | TEXT PK | Stable `BRANCH-###` or implementation-equivalent BranchLineage identity |
+| workspaceId | TEXT FK → workspace.id | Tenant scope and per-workspace quota scope |
+| sourceConversationId | TEXT | Source Conversation identity; immutable after `RECORDED` |
+| sourceCheckpointId | TEXT | Source ConversationCheckpoint identity; protected while lineage is `RECORDED` or `ACTIVE` |
+| branchConversationId | TEXT | Branch Conversation identity; immutable after `RECORDED` |
+| status | TEXT | Maps `BranchLineageStatus` (`RECORDED`/`ACTIVE`/`DETACHED`/`DELETED`) |
+| version | INTEGER | Monotonic lifecycle version |
+| createdAt | TEXT | ISO-8601 UTC |
+| updatedAt | TEXT | ISO-8601 UTC |
+| detachedAt | TEXT NULL | Set when the lineage becomes `DETACHED` |
+| deletedAt | TEXT NULL | Set only for terminal `DELETED` |
+| correlationId | TEXT | Correlated creation, transition, cleanup, and audit operations |
+| UNIQUE (sourceCheckpointId, branchConversationId) | — | Prevents duplicate lineage relationship records |
+| INDEX idx_branch_lineage_workspace_status | — | Supports workspace quota and lifecycle cleanup evaluation |
+
+DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACTIVE` lineage protects the source checkpoint from physical deletion; superseded checkpoints use the default 30-day retention window; the default per-workspace retained-checkpoint quota is 100; and cleanup is an idempotent daily WorkManager job with transactional eligibility rechecks and audit records for deletion or protected skip. Concrete DAO, migration, transaction, and scheduling implementation must preserve these constraints.
+
 ## Workspace & Session
 
 ### `workspace`
@@ -145,9 +168,15 @@ Historical association persistence is a downstream implementation choice unless 
 ### `task`
 | Column | Type | Notes |
 |--------|------|-------|
-| id | TEXT PK | |
+| id | TEXT PK | Stable Task identity |
 | workspaceId | TEXT FK | |
+| agentId | TEXT FK → agent.id | Assigned agent identity |
+| correlationId | TEXT | Correlated task operations |
+| parentTaskId | TEXT NULL FK → task.id | Delegation/parent lineage; NULL for root task |
+| dependsOnTaskIdsJson | TEXT | Validated dependency references; graph must be acyclic before queueing |
 | status | TEXT | Maps TaskStatus |
+| effectiveDeadline | TEXT | Immutable effective task deadline inherited by waits and child operations |
+| retryNotBefore | TEXT NULL | Retry backoff boundary; direct start cannot bypass scheduler authorization |
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
 

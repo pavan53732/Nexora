@@ -2,7 +2,7 @@
 
 > **Status: CANONICAL** for conversation checkpoint and rollback semantics.
 > Ownership: the Conversation/Session responsibility established by DEC-10 owns Conversation and Session–Conversation semantic boundaries; the distinct BranchLineage artifact selected by DEC-22 owns rollback parent/source lineage; ConversationCheckpoint remains the checkpoint boundary and lifecycle artifact. The repository has a canonical Session lifecycle (`state-machines/SessionLifecycle.md`), but no separate canonical Conversation lifecycle artifact. DEC-13 establishes durable immutable Conversation identity and DEC-14 establishes the Session–Conversation relationship as a first-class semantic relationship. DEC-15 assigns ownership of the relationship semantic contract to the existing Conversation/Session responsibility; DEC-17 establishes no independent relationship identity; DEC-18 establishes participant-based semantic representation without a separate relationship representation; DEC-19 establishes at most one active Session ↔ Conversation association in either direction at a point in time without all-time uniqueness; DEC-20 establishes no independent relationship lifecycle and terminal Session states ending active association; DEC-21 establishes later-Session continuation with preserved Conversation identity and a new active association.
-> Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, `DEC-13-conversation-identity-persistence.md`, and `decisions/DEC-14-session-conversation-relationship-semantic-status.md` through `decisions/DEC-24-conversation-local-metadata-boundary.md`.
+> Decision authority: `decisions/DEC-8-conversation-checkpoint-rollback.md`, `DEC-9-conversation-rollback-operation.md`, `DEC-10-conversation-checkpoint-ownership.md`, `DEC-13-conversation-identity-persistence.md`, and `decisions/DEC-14-session-conversation-relationship-semantic-status.md` through `decisions/DEC-24-conversation-local-metadata-boundary.md`; BranchLineage operational policy is selected by `decisions/DEC-31-branch-lineage-and-checkpoint-operational-policy.md` and its formal lifecycle is owned by `state-machines/BranchLineageLifecycle.md`.
 
 ## Scope
 
@@ -36,7 +36,7 @@ Execution crash-recovery checkpoints, pre-tool checkpoints, file snapshots, work
 
 ## Rollback/branch
 
-Rollback validates the source conversation, checkpoint lineage, authorization, and freshness. It creates a new conversation branch with a new conversation identity and parent/source-checkpoint lineage. The source conversation remains unchanged. Per DEC-9, this lineage must be recorded and preserved. DEC-22 assigns ownership of the semantic parent/source lineage relationship to the distinct BranchLineage artifact; its concrete representation and lifecycle mechanics remain separate downstream decisions.
+Rollback validates the source conversation, checkpoint lineage, authorization, and freshness. It creates a new conversation branch with a new conversation identity and parent/source-checkpoint lineage. The source conversation remains unchanged. Per DEC-9, this lineage must be recorded and preserved. DEC-22 assigns ownership of the semantic parent/source lineage relationship to the distinct BranchLineage artifact; DEC-31 selects its operational identity, lifecycle, dependency protection, retention, quota, and cleanup policy. Concrete encoding and transaction mechanics remain downstream.
 
 The branch starts at the selected conversation boundary. No tool call, task, execution, provider request, message, Git operation, device action, or external mutation is replayed or reversed by this operation.
 
@@ -46,7 +46,7 @@ The branch lineage and initial conversation boundary must have one atomic consis
 
 ## Retention, authorization, and audit
 
-Checkpoint retention, expiration, deletion, quotas, cleanup, and branch/source dependency safety are governed by DEC-23 and remain outside the Session–Conversation relationship contract. No numeric duration or quota is asserted here. Creation and rollback require the existing authorization boundary for conversation data, with audit records for actor, source conversation, checkpoint, result, and failure reason.
+Checkpoint retention, expiration, deletion, quotas, cleanup, and branch/source dependency safety are governed by DEC-23 and operationally selected by DEC-31; they remain outside the Session–Conversation relationship contract. DEC-31 selects a 30-day superseded retention window, a default per-workspace quota of 100 retained checkpoints, and daily idempotent cleanup. Creation and rollback require the existing authorization boundary for conversation data, with audit records for actor, source conversation, checkpoint, result, and failure reason.
 
 ## User boundary
 

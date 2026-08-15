@@ -47,7 +47,9 @@ Rules:
   (FR-T012).
 - **Dependencies** — a task is enqueued only when all `depends-on` tasks completed
   (FR-T004); the `TaskScheduler` watches dependency completions and triggers
-  `enqueue()`.
+  `enqueue()`. The dependency graph is validated as acyclic before queueing. A failed
+  dependency propagates terminal failure to dependent tasks instead of leaving them
+  indefinitely blocked.
 - **Backoff & retry** — retryable failures enter `RetryPending` with exponential
   backoff (NFR-REL-003); retried tasks rejoin the queue (FR-T007).
 - **Bulk operations** — cancel, retry, reassign in bulk (FR-T009).
@@ -55,6 +57,12 @@ Rules:
   cancellation preserves partial results.
 - **Multi-agent queue** — agents share the workspace task queue for delegation and
   handoff ([MULTI_AGENT_SYSTEM](../architecture/MULTI_AGENT_SYSTEM.md)).
+- **Bounded waiting** — each task has an effective deadline inherited by dependency
+  waits, approval waits, clarification waits, delegated children, and provider
+  `Retry-After` waits. `Pending`, `Blocked`, and `BlockedAwaitingInput` expire to
+  `Failed` when that deadline is reached. Approval denial uses `NXR-2003` /
+  `USER_DENIED` and transitions `WaitingApproval` to `Failed`; it does not silently
+  resume or remain pending.
 
 ## 2. Scheduled Jobs
 
@@ -118,6 +126,7 @@ surfaces in the workflow engine (Phase 8 plugin scheduling).
 | Failed | Task failed (with retry action) | `agent_error` |
 | Throttle warning | Battery/Doze throttling engaged | `agent_running` |
 | Approval requested | Human approval gate opened | `agent_approval` |
+| Approval denied / deadline failure | Approval denied or bounded wait expired | `agent_error` |
 
 Rules:
 

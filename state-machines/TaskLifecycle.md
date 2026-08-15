@@ -35,19 +35,27 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | Trigger | From | To | Guard |
 |---------|------|----|-------|
 | `submit()` | Draft | Pending | Task schema valid |
-| `enqueue()` | Pending | Queued | All dependencies completed |
+| `enqueue()` | Pending | Queued | Dependency references are valid, dependency graph is acyclic, and all dependencies completed; effective deadline has not expired |
 | `start()` | Queued / RetryPending | Running | Agent available; when the source is `RetryPending`, the existing retry backoff has elapsed and the TaskScheduler authorizes the start. |
 | `block(dependency)` | Running | Blocked | Dependency not yet completed |
 | `unblock()` | Blocked | Running | Dependency resolved |
+| `dependencyFailed()` | Pending / Blocked | Failed | A required dependency entered terminal `Failed` or `Cancelled` state |
 | `requestEscalation(question)` | Running | BlockedAwaitingInput | Loop escalation triggered or capability gap identified |
 | `resolveEscalation(answer)` | BlockedAwaitingInput | Running | User input received; resumes from checkpoint |
 | `requestApproval()` | Running | WaitingApproval | Action exceeds autonomy scope |
 | `approve()` | WaitingApproval | Running | — |
+| `deny()` | WaitingApproval | Failed | User denial; canonical `NXR-2003` / `USER_DENIED`; no task mutation beyond the terminal failure |
 | `complete()` | Running | Completed | Result validated |
 | `fail(error)` | Running | Failed | Error is non-retryable |
 | `fail(error)` | Running | RetryPending | Error is retryable && retries < max |
+| `expire()` | WaitingApproval | Failed | Approval transaction expired; canonical `NXR-2003` / `POLICY_DENIAL`; no automatic approval or retry |
+| `expire()` | Pending / Blocked / BlockedAwaitingInput | Failed | Effective deadline reached; canonical deadline failure; no retry unless a separate retryable failure rule applies |
 | `cancel()` | * | Cancelled | — |
 | `retry()` | RetryPending | Queued | Backoff elapsed |
+
+### DEC-30 Liveness Projections
+
+The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected without lifecycle mutation. A failed dependency propagates a terminal dependency failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`, and approval expiry uses `NXR-2003` / `POLICY_DENIAL`; both terminate the task through `Failed` without automatic retry. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
 
 ### Invalid Transitions
 
@@ -64,14 +72,18 @@ stateDiagram-v2
     [*] --> Draft
 
     Draft --> Pending : submit()
-    Pending --> Queued : enqueue()
+    Pending --> Queued : enqueue() [acyclic + dependencies complete + before deadline]
     Queued --> Running : start()
     Running --> Blocked : block(dependency)
     Blocked --> Running : unblock()
+    Pending --> Failed : dependencyFailed()
+    Blocked --> Failed : dependencyFailed()
     Running --> BlockedAwaitingInput : requestEscalation(question)
     BlockedAwaitingInput --> Running : resolveEscalation(answer)
     Running --> WaitingApproval : requestApproval()
     WaitingApproval --> Running : approve()
+    WaitingApproval --> Failed : deny() [NXR-2003 / USER_DENIED]
+    WaitingApproval --> Failed : expire() [NXR-2003 / POLICY_DENIAL]
     Running --> Completed : complete()
     Completed --> [*]
     Running --> Failed : fail(non-retryable)
@@ -79,6 +91,9 @@ stateDiagram-v2
     Running --> RetryPending : fail(retryable)
     RetryPending --> Queued : retry()
     RetryPending --> Running : start()
+    Pending --> Failed : expire()
+    Blocked --> Failed : expire()
+    BlockedAwaitingInput --> Failed : expire()
 
     Draft --> Cancelled : cancel()
     Pending --> Cancelled : cancel()

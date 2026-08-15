@@ -69,4 +69,4 @@ primitive separation.
 
 `RT-LIVE-005` MUST protect non-success routing for stream failure/cancellation, denied Tool calls, missing committed drafts, and unsatisfied completion gates.
 
-Task dependency-cycle handling, Task approval denial/expiry, Agent failure retry identity, provider rate-limit wait bounds, and delegation depth remain OPEN/DEFERRED owner boundaries until explicitly selected.
+DEC-30 additionally resolves Task dependency-cycle handling, Task approval denial/expiry, Agent failure retry identity, provider rate-limit wait bounds, and delegation depth. Regression coverage MUST verify these selected bounds; test execution remains planned and is not claimed by this document.

@@ -63,6 +63,8 @@ The remaining budget MUST reserve time for cancellation propagation, checkpoint 
 
 The effective deadline and remaining budget are immutable inputs to each nested operation and are recorded in execution history and checkpoints for recovery and audit.
 
+**DEC-30 projection:** Task dependency, approval, clarification, provider-wait, and delegated-child waits consume the existing effective deadline and cannot renew it. When an Agent runtime incarnation fails, retry does not reactivate the committed failed incarnation; it creates a new incarnation/version and execution identity while preserving the stable registered `agentId` and predecessor linkage. Task/Execution retry rules remain owned by their canonical lifecycle contracts.
+
 ## Capabilities
 
 | Capability | Description | Phase |

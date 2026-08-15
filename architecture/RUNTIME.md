@@ -154,6 +154,10 @@ Event Bus ---publish---> All subscribers notified
 Loop back to Planner (reflect and plan next step)
 ```
 
+### Bounded progression projections
+
+The runtime composition layer MUST route, but does not replace, the canonical Task lifecycle transitions. Before queueing, task dependencies are validated as an acyclic graph. A failed dependency propagates terminal failure to dependent tasks; approval denial produces `NXR-2003` / `USER_DENIED` and a `WaitingApproval → Failed` Task transition; and the effective task deadline bounds `Pending`, `Blocked`, and `BlockedAwaitingInput`, whose expiry transitions to `Failed`. Provider `Retry-After` waits are honored only within the parent task effective deadline; an exhausted deadline produces terminal failure rather than an indefinite wait. Delegation depth is bounded at 4 by the multi-agent coordination authority. These are projections of canonical subsystem contracts, not new runtime states or a new loop owner.
+
 ## Inference-Turn Composition
 
 Agent Runtime owns turn orchestration; Provider System owns routing/streaming; Context

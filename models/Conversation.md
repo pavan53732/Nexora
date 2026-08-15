@@ -80,7 +80,7 @@ Rollback is not continuation.
 
 ## Lineage
 
-BranchLineage records parent/source relationships between distinct Conversations created by rollback. This derived model projects the semantic BranchLineage boundary selected by DEC-22 without selecting its identifier, schema, storage, or lifecycle mechanics.
+BranchLineage records parent/source relationships between distinct Conversations created by rollback. This derived model projects the semantic BranchLineage boundary selected by DEC-22 and the operational identity/lifecycle policy selected by DEC-31; its stable identifier, `RECORDED`/`ACTIVE`/`DETACHED`/`DELETED` status, dependency protection, and retention/cleanup behavior are governed by those canonical sources.
 
 Lineage does not:
 - mutate the source Conversation identity,

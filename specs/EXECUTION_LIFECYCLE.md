@@ -75,6 +75,8 @@ For each task:
 Skills are the **primary selection axis** (ADR-0007): the planner reasons in expertise
 terms and resolves them to agents and tools.
 
+Before queueing a task or workflow step, dependency references MUST be validated as an acyclic graph. A dependency cycle is rejected without queueing or execution. If a dependency later fails terminally, dependent work fails through the canonical Task lifecycle rather than remaining indefinitely blocked. Each task carries an effective deadline inherited by dependency waits, approval waits, capability clarification, provider rate-limit waits, and delegated children.
+
 ## 2. Software Engineering Pipeline
 
 For software-engineering tasks, the lifecycle concretizes into:
@@ -175,7 +177,7 @@ A **transient** failure permits `TaskLifecycle.Running → RetryPending` only wh
 
 A **permanent** failure prohibits retry without an explicit strategy change or user intervention. The owning lifecycle commits its existing terminal failure effect: `TaskLifecycle.Running → Failed` and `ExecutionStatus.RUNNING → FAILED`. A committed terminal Execution is never resumed under the same identity; explicit retry/restart creates a new Execution under the existing retry-lineage rules.
 
-An **escalation** failure represents a systemic constraint, bounded-progress violation, retry storm, deadline exhaustion, or resource constraint. `TaskLifecycle.Running → BlockedAwaitingInput` is used only when the owning runtime explicitly invokes `requestEscalation(question)` for clarification or a capability gap. Otherwise, termination uses the existing `Failed` effects and the canonical error/recovery contract. Escalation does not create a new Task state.
+An **escalation** failure represents a systemic constraint, bounded-progress violation, retry storm, deadline exhaustion, or resource constraint. `TaskLifecycle.Running → BlockedAwaitingInput` is used only when the owning runtime explicitly invokes `requestEscalation(question)` for clarification or a capability gap. Otherwise, termination uses the existing `Failed` effects and the canonical error/recovery contract. Approval denial is not an implicit pause: it uses `NXR-2003` / `USER_DENIED` and the canonical `WaitingApproval → Failed` transition. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded and expire to `Failed`; provider `Retry-After` waits are bounded by the effective parent deadline. Escalation does not create a new Task state.
 
 Protocols, APIs, and SDKs MUST preserve the canonical error envelope and MUST NOT infer lifecycle transitions from category or message text alone. Concrete operation mappings remain governed by `errors/ERROR_CODES.md`, the applicable state machine, and the operation owner. See [DEC-29](../decisions/DEC-29-execution-failure-class-binding.md).
 
@@ -201,9 +203,9 @@ Implementations MUST NOT invent arbitrary classification authority.
 | Retryable (transient) | Automatic retry, exponential backoff (NFR-REL-003), max 3 |
 | Build/test failure | Auto-fix loop (bounded): analyze error → fix → rebuild; fall back to human approval after N iterations |
 | Non-retryable | Fail task, save checkpoint, notify, offer retry |
-| Approval required | Suspend at approval gate (WaitingApproval), resume on approve |
-| Escalation / missing capability / clarification needed | Suspend at `BlockedAwaitingInput` gate (TaskLifecycle `requestEscalation`); emit user-facing clarification prompt; preserve checkpoint; resume on user input (`resolveEscalation`) from the checkpoint captured at suspension (same `executionId`; `version` increment per RUNTIME.md §ExecutionStatus Lifecycle). |
-| Provider failure | Provider failover via ProviderRouter (health-based) |
+| Approval required | Suspend at approval gate (`WaitingApproval`), resume on approve; denial uses `NXR-2003` / `USER_DENIED` and transitions the Task to `Failed` |
+| Escalation / missing capability / clarification needed | Suspend at `BlockedAwaitingInput` gate (TaskLifecycle `requestEscalation`); emit user-facing clarification prompt; preserve checkpoint; resume on user input (`resolveEscalation`) from the checkpoint captured at suspension (same `executionId`; `version` increment per RUNTIME.md §ExecutionStatus Lifecycle). Effective deadline expiry transitions the Task to `Failed`. |
+| Provider failure | Provider failover via ProviderRouter (health-based); provider `Retry-After` waiting is bounded by the parent task effective deadline |
 | Sandbox resource limit | Graceful termination + partial results (NXR-7xxx) |
 
 ## 5. Phase Mapping

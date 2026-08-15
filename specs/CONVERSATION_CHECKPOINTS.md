@@ -1,7 +1,7 @@
 # Conversation Checkpoint and Rollback Specification — Nexora
 
 > **Status: SUPPORTING**. This document defers to `architecture/CONVERSATION_CHECKPOINTS.md` for semantic architecture, ownership, boundaries, and lifecycle. It states implementation-facing contract obligations only and must not redefine them.
-> Supporting engineering references: `models/Conversation.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/SESSION_CONVERSATION_RUNTIME_RECOVERY.md`, and `specs/SESSION_CONVERSATION_ERRORS.md`. Retention and deletion safety rules are governed by `decisions/DEC-23-conversation-checkpoint-retention-deletion-policy.md`.
+> Supporting engineering references: `models/Conversation.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/SESSION_CONVERSATION_RUNTIME_RECOVERY.md`, and `specs/SESSION_CONVERSATION_ERRORS.md`. Retention and deletion safety rules are governed by `decisions/DEC-23-conversation-checkpoint-retention-deletion-policy.md` and operationally selected by `decisions/DEC-31-branch-lineage-and-checkpoint-operational-policy.md`.
 
 ## Contract
 
@@ -29,8 +29,8 @@ Rollback does not by itself decide Session lifecycle. If the branch later become
 
 ## Retention and cleanup safety
 
-A checkpoint may expire or become invalidated under the canonical lifecycle. Physical deletion is permitted only after the checkpoint is `Expired` or `Invalidated`, no recorded BranchLineage depends on it, and required audit/retention obligations are satisfied. Quota rejection and cleanup leave protected Conversations and BranchLineage artifacts unchanged. Numeric durations, quota values, scheduling, and concrete deletion mechanics remain downstream choices under DEC-23.
+A checkpoint may expire or become invalidated under the canonical lifecycle. Physical deletion is permitted only after the checkpoint is `Expired` or `Invalidated`, no recorded BranchLineage depends on it, and required audit/retention obligations are satisfied. Quota rejection and cleanup leave protected Conversations and BranchLineage artifacts unchanged. Under DEC-31, a superseded checkpoint uses the selected 30-day operational retention window, the default per-workspace retained-checkpoint quota is 100, and cleanup runs as an idempotent daily WorkManager job; concrete storage encoding and transaction mechanics remain downstream.
 
 ## Engineering boundary
 
-The semantic architecture required for implementation is closed by DEC-8 through DEC-23. Remaining implementation work includes persistence encoding, storage schema realization, API transport shape, concurrency primitives, recovery mechanics, numeric retention/quota configuration, and cleanup scheduling. Those items are implementation choices unless selected by another canonical source.
+The semantic architecture required for implementation is closed by DEC-8 through DEC-24 and DEC-31. Remaining implementation work includes persistence encoding, storage schema realization, API transport shape, concurrency primitives, and recovery mechanics. The selected retention, quota, dependency-protection, and cleanup semantics must be preserved; their concrete transaction and storage mechanisms remain implementation choices.

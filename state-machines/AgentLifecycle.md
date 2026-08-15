@@ -24,7 +24,7 @@ The Agent Lifecycle governs the runtime state of every autonomous agent instance
 | **Reflecting** | Performing self-evaluation or plan revision. |
 | **Completing** | Finalizing results, persisting artifacts, releasing resources. |
 | **Completed** | Terminal state — agent finished successfully. |
-| **Failed** | Terminal state — unrecoverable error encountered. |
+| **Failed** | Terminal for the current runtime incarnation — unrecoverable error encountered. |
 | **Cancelled** | Terminal state — explicitly cancelled by user or system. |
 
 ## Durable Status vs. Transient Execution Phase
@@ -47,7 +47,7 @@ To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly
 | **REFLECTING** | `THINKING` | Active self-review, plan repair, or verification analysis. |
 | **COMPLETING** | `COMPLETING` | Finalizing artifacts, updating memory systems, compiling report. |
 | **COMPLETED** | `TERMINATED` | Terminal success. Resources released, execution frozen. |
-| **FAILED** | `TERMINATED` | Terminal failure. Carries canonical error; ready for retry. |
+| **FAILED** | `TERMINATED` | Terminal failure for the current runtime incarnation. Carries canonical error; retry creates a new incarnation/version and execution identity while preserving the stable registered `agentId` and failed predecessor. |
 | **CANCELLED** | `TERMINATED` | Terminal cancellation. Gracefully aborted; partial state saved. |
 
 ### Operational Semantics & Enforcement
@@ -81,7 +81,7 @@ To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly
 | `finalize()` | Completing | Completed | Artifacts and required memory/history persistence committed; resources released; terminal event ready. |
 | `fail(error)` | * | Failed | Non-recoverable exception |
 | `cancel()` | * | Cancelled | — |
-| `retry()` | Failed | Ready | Max retries not exceeded |
+| `retry()` | Failed | Ready | Max retries not exceeded; creates a new runtime incarnation/version and execution identity while preserving the failed predecessor and stable registered `agentId` |
 
 ### Invalid Transitions
 
@@ -109,9 +109,9 @@ stateDiagram-v2
     Running --> Completing : complete()
     Completing --> Completed : finalize()
     Completed --> [*]
-    Failed --> [*] : fail(error)
+    Failed --> [*] : fail(error) [current incarnation terminal]
     Cancelled --> [*] : cancel()
-    Failed --> Ready : retry()
+    Failed --> Ready : retry() [new incarnation]
 
     Running --> Failed : fail(error)
     Configured --> Failed : fail(error)

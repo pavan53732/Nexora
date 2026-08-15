@@ -78,7 +78,7 @@ To eliminate semantic ambiguity and guarantee behavioral equivalence, Nexora str
 | `REFLECTING` | `THINKING` | Active self-review. Recoverable from latest checkpoint. |
 | `COMPLETING` | `COMPLETING` | Finalizing execution. Recoverable. |
 | `COMPLETED` | `TERMINATED` | Terminal state; no recovery. |
-| `FAILED` | `TERMINATED` | Terminal state; no recovery. Can be retried (re-enters `READY`). |
+| `FAILED` | `TERMINATED` | Terminal for the current runtime incarnation; retry creates a new incarnation/version and execution identity while preserving the stable registered `agentId` and predecessor linkage. |
 | `CANCELLED` | `TERMINATED` | Terminal state; no recovery. |
 
 During recovery from process death, if the database records `status` as `RUNNING`, `REFLECTING`, or `WAITING_APPROVAL`, the engine reads the latest checkpoint. This checkpoint contains the serialized memory, token budget, step history, and the exact `AgentExecutionPhase` at the time of the checkpoint. The execution resumes precisely at that phase boundary.

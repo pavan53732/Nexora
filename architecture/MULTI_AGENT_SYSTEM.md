@@ -145,6 +145,10 @@ Terminal escalation continues to require `sandbox:execute` and applicable worksp
 
 Every escalation request and delegation decision MUST be recorded in the existing correlated trace and permission/audit projections with requester, target worker when delegated, purpose, scope, decision, approval transaction, grant lifetime, use, result, expiry/revocation, and final disposition. User-visible status MUST distinguish requested, delegated, approved, denied, active, expired, revoked, cancelled, and completed outcomes. If an active grant expires or is revoked, descendant cancellation and checkpoint behavior follow existing runtime rules; no new durable Task or Execution state is introduced.
 
+### Delegation depth bound
+
+Delegation depth is measured from the root task/delegating agent lineage. A delegation request increments the lineage depth for its child. The maximum permitted depth is **4**; a request that would exceed depth 4 is denied before child creation and is recorded through the existing correlated error and audit path. This is a bound on delegation topology, not a new agent, Task, Execution, or lifecycle state.
+
 ## Agent Registry
 
 ```kotlin
