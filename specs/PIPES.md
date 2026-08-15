@@ -100,7 +100,7 @@ Remote admission control:
    acceptanceMode(W) ∈ {MANUAL, ASSISTED, AUTOPILOT}   (FR-S016 modes, per-pipe override)
    MANUAL    → user prompt on B (one tap) before spawn
    ASSISTED  → auto-accept low-risk, prompt on high-risk (risk score as FR-S016)
-   AUTOPILOT → auto-accept within declared budgets, all actions still audited
+   AUTOPILOT → auto-accept within declared technical safety, resource, concurrency, and deadline limits; all actions remain audited. Provider cost or credit telemetry does not block a technically valid delegation.
    ▼
 Remote sub-agent spawned in B's OWN sandbox (FR-S018) with B's provider profiles (§2 rule 2)
    ▼
@@ -117,7 +117,7 @@ Hard rules:
 
 ## 7. Broadcast Routing (FR-MI-007)
 
-Broadcast is a coordinator-only operation for fan-out announcements (e.g., "workspace snapshot starting", "budget exhausted — pause delegations"):
+Broadcast is a coordinator-only operation for fan-out announcements (e.g., "workspace snapshot starting", "technical delegation limit reached — pause delegations"). Any referenced limit is a technical safety, resource, concurrency, or deadline control; provider cost or credit telemetry is never an automatic delegation gate:
 
 - `pipe_broadcast` (TOOL-407) sends a typed `Broadcast` payload to all `Connected` pipes of the active workspace.
 - Recipients treat broadcasts as **data, not instructions** (FR-CM-006 / RG-6): a broadcast can trigger a *declared, pre-registered* local handler (e.g., pause-delegations), never an arbitrary action embedded in the payload.

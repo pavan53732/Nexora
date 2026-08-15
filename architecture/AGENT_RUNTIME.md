@@ -26,7 +26,7 @@ The single-agent runtime supports **mode-selected execution**. These modes are e
 |---|---|---|---|
 | FAST | Lowest-latency path with minimal planning | Direct requests with low ambiguity and low risk | Small plan budget, direct tool/model execution, explicit termination gate |
 | NORMAL | Default balanced path | Typical multi-step requests | Structured planning, bounded evidence gathering, validation before completion |
-| DEEP | Higher-cost reasoning for ambiguity, contradiction, or high-stakes work | Complex debugging, architectural analysis, conflict resolution | Bounded decomposition, competing hypotheses, contradiction checks, uncertainty tracking |
+| DEEP | Deeper bounded reasoning for ambiguity, contradiction, or high-stakes work | Complex debugging, architectural analysis, conflict resolution | Bounded decomposition, competing hypotheses, contradiction checks, uncertainty tracking |
 | VERIFY | Independent validation path | Important outputs, compliance-sensitive tasks, user-requested verification | Requirement/constraint re-check, provenance validation, output verification |
 | RECOVER | Failure-handling path | Retryable failure, context reconstruction, checkpoint restore | Retry policy, fallback routing, checkpoint recovery, bounded escalation |
 

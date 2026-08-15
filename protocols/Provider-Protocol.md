@@ -12,7 +12,7 @@
 Agent Runtime       ProviderRouter       Accounting       Provider Adapter       UI/EventBus
      │                    │                  │                    │                    │
      ├─ route request ───>│                  │                    │                    │
-     │                    ├─ reserve budget >│                    │                    │
+     │                    ├─ reserve technical capacity/usage >│                    │                    │
      │                    │<─ validated ─────┤                    │                    │
      │                    ├─ open stream ────────────────────────>│                    │
      │                    │<─ native events ──────────────────────┤                    │
@@ -143,7 +143,7 @@ data class TokenUsageRecord(
 
 ## Conformance Rules
 
-- Budget is reserved before transport opens and reconciled only from a committed terminal or canonical failure record.
+- Technical capacity and usage reservations are established before transport opens and reconciled only from a committed terminal or canonical failure record. This is not an internal credit, spending-wallet, or financial-cost gate; provider usage and estimated cost remain observational metadata.
 - Provider adapters map native event formats to this contract without exposing provider-specific logic to Agent Runtime.
 - Private chain-of-thought is not emitted; only provider-approved, redacted `ReasoningSummaryDelta` may cross the boundary.
 - `NXR-4007` represents general stream transport failure; `NXR-4013..4017` identify canonical stream-contract failures.

@@ -13,6 +13,10 @@ End-to-end tests validate user-visible workflows across the full stack.
 - `E2E-EV-*` — evidence journeys
 - `E2E-MA-*` — multi-agent journeys
 - `E2E-ORCH-*` — orchestration journeys
+- `E2E-STREAM-*` — typed provider-streaming journeys
+- `E2E-REASON-*` — bounded reasoning and reasoning-privacy journeys
+- `E2E-CONTEXT-*` — reproducible context and crash-reconstruction journeys
+- `E2E-REL-*` — Android, provider, Tool, anti-loop, multi-agent, and claim-evidence reliability journeys
 
 ## Framework Stack
 
