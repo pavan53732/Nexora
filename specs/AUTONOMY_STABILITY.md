@@ -101,11 +101,15 @@ similar tasks), so the application literally gets smarter with use.
 The semantic lesson projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
 A lesson MUST retain agent/workspace scope, source execution provenance, evidence references,
 approval-for-planning status, and retirement status. Lesson content MUST NOT grant permissions,
-change sandbox policy, bypass approval, or directly select an autonomy mode. Learned-skill
-proposals remain subject to the existing Skill Registry validation and user/policy approval
+change sandbox policy, bypass approval, or directly select an autonomy mode. Learned-skill proposals remain subject to the existing Skill Registry validation and user/policy approval
 boundary.
 
+### Learning implementation boundary
+
+`memory_lessons` (`TOOL-409`) is the existing semantic destination for a structured `LearningLesson`; it is not a declaration of a database table, transport, or new MemoryLifecycle state. Before a lesson becomes retrievable for planning, the Evidence & Validation Engine MUST validate its provenance, evidence references, scope, redaction status, and disposition. A lesson that is missing provenance, stale, contradictory, unverified, retired, or not approved for planning MUST remain unavailable for planning injection or be presented only as explicitly non-authoritative evidence. Lesson retrieval may inform planning and propose skill refinement, but it MUST NOT change permissions, sandbox policy, approval outcomes, provider scope, execution mode, or the existing Task/Agent lifecycle. Persistence, serializer, API, promotion, and retention mechanisms remain downstream implementation choices unless a later canonical decision selects them.
+
 ## 5. Trust Growth (FR-AS-005)
+
 
 Autonomy expands with a **trust score** instead of jumping straight to autopilot:
 

@@ -113,7 +113,7 @@
 - `NFR-REL-017` → Tool System and Tool Protocol operation-level unknown-completion reconciliation; validation `UT-TOOL-006`, `E2E-REL-006` (Planned).
 - `NFR-REL-018` → Background Execution and Android lifecycle fault-injection evidence; validation `E2E-REL-001..005` (Planned).
 - `NFR-CI-003` → Context Management claim-to-evidence binding; validation `UT-EV-007`, `E2E-REL-009` (Planned).
-- `NFR-CI-004` → Agent Runtime acceptance-criteria progress vector and anti-treadmill semantics; validation `UT-AS-010`, `E2E-REL-007` (Planned).
+- `NFR-CI-004` → Agent Runtime acceptance-criteria progress vector, checkpoint/initial baseline, same-logical-execution ProgressSignal deltas, relevant-evidence gating, plan/acceptance boundary, and anti-treadmill semantics; validation `UT-AS-010`, `E2E-REL-007` (Planned).
 - `NFR-CI-005` → Context Management and Agent Runtime non-overridable reasoning and execution ceilings; validation `UT-RN-013` (Planned).
 - `NFR-CI-006` → Agent Runtime, Provider System, and Context Management minimum-sufficient execution-mode selection; validation `UT-REASON-001`, `E2E-RN-001` (Planned).
 - `NFR-CI-007` → Agent Runtime bounded-progress controls, retry/step/time limits, anti-treadmill behavior, and escalation; validation `UT-AS-010` (Planned).

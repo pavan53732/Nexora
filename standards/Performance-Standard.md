@@ -9,7 +9,7 @@
 | Metric | Target |
 |--------|--------|
 | Cold start (app launch) | < 2 seconds (canonical per NFR-PERF-001) |
-| Workspace switch | < 500ms |
+| Workspace switch | < 300ms target (canonical per NFR-PERF-010 / PERFORMANCE_BUDGET.md) |
 | File read (tool) | < 100ms |
 | Terminal command | < 500ms |
 | First AI token (streaming) | < 1 000ms target (canonical per NFR-PERF-008 / PERFORMANCE_BUDGET.md) |

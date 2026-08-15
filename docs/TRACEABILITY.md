@@ -118,7 +118,7 @@ No executable implementation or runnable test is claimed by this traceability se
 | NFR-CI-001 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `architecture/MEMORY_SYSTEM.md` |
 | NFR-CI-002 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md`, `architecture/TOOL_SYSTEM.md` |
 | NFR-CI-003 | `specs/CONTEXT_MANAGEMENT.md` | `models/Inference.md` (`ClaimRecord`), `specs/DATABASE_SCHEMA.md` (`claim_record`), `protocols/Agent-Protocol.md`, `docs/api/Agent-API.md`, `testing/E2ETests.md` (`E2E-REL-009`) |
-| NFR-CI-004 | `architecture/AGENT_RUNTIME.md` | `specs/AUTONOMY_STABILITY.md`, `models/Inference.md`, `architecture/RUNTIME.md`, `specs/DATABASE_SCHEMA.md`, `testing/cases/UnitTestCases.md` (`UT-AS-010`), `testing/E2ETests.md` (`E2E-REL-007`) |
+| NFR-CI-004 | `architecture/AGENT_RUNTIME.md` | `specs/AUTONOMY_STABILITY.md`, `specs/EXECUTION_LIFECYCLE.md`, `models/Task.md`, `models/Inference.md`, `architecture/RUNTIME.md`, `specs/DATABASE_SCHEMA.md`, `testing/cases/UnitTestCases.md` (`UT-AS-010`), `testing/E2ETests.md` (`E2E-REL-007`) |
 | NFR-CI-005 | `specs/CONTEXT_MANAGEMENT.md` | `models/Inference.md`, `architecture/AGENT_RUNTIME.md`, `specs/DATABASE_SCHEMA.md` |
 | NFR-REL-004 | `specs/DATABASE_SCHEMA.md` | ACID persistence remains the canonical data-persistence meaning; bounded-progress controls are separately identified as `NFR-CI-007` |
 | NFR-REL-016 | `architecture/AGENT_RUNTIME.md` | `architecture/RUNTIME.md`, `specs/DATABASE_SCHEMA.md`, `architecture/TOOL_SYSTEM.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `testing/E2ETests.md` (`E2E-REL-001..009`) |

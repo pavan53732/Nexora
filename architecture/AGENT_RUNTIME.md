@@ -151,6 +151,10 @@ Semantic progress MUST be evaluated against the task's declared acceptance crite
 
 File changes, additional evidence, or error-category changes that are unrelated to acceptance criteria MUST NOT by themselves reset the bounded-progress detector. The vector and its evidence references are persisted with the execution checkpoint.
 
+### ProgressSignal computation boundary
+
+The `ProgressSignal` model is a derived observation of the acceptance-criterion progress vector and the current execution lineage; it is not an independent lifecycle state. Before comparing iterations, the runtime MUST establish a baseline from the latest valid checkpoint or the initial execution snapshot. Each delta MUST be computed against that baseline for the same logical execution identity. `testSuitePassCountDelta`, `workspaceFileChangeDelta`, and `newEvidenceArtifactCountDelta` are diagnostic deltas only and count as substantive progress only when they are relevant to a declared acceptance criterion. `errorCategoryShift` is true only when the canonical error category or recovery classification changes for the same logical operation; a repeated error with a different message does not qualify. The runtime MUST evaluate the signal together with criterion-status improvement, relevant evidence, plan repair, verification improvement, and failure-ledger state. The N=3 zero-progress/escalation rule remains the existing bounded policy; no new threshold, lifecycle state, or error identity is created by this computation boundary.
+
 ### Loop-prevention requirements
 
 The runtime MUST detect and react to:

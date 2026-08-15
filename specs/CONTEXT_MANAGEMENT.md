@@ -89,7 +89,7 @@ Minimum provenance fields:
 - authority level.
 
 
-## 2. Context Window Token Budget Allocation (FR-CM-002)
+## 2.1 Context Window Token Budget Allocation (FR-CM-002)
 
 To avoid context overflow (`NXR-1006`) and maximize recall accuracy, the context window is assembled as five distinct, priority-ordered layers. Truncation is restricted strictly to Layer 5.
 
@@ -161,6 +161,7 @@ All inputs injected into the context window are structured with explicit XML tag
 - **`<untrusted_content>` Gating**: Any content retrieved from external sources (web scrapes, downloads, third-party plugin repositories) MUST be enclosed within the `<untrusted_content>` block.
 - **Instruction Stripping**: The system prompt instructs the provider model to treat text inside `<untrusted_content>` strictly as passive data. The model is forbidden from executing commands or following directives found inside untrusted blocks.
 - **Freshness Validation (FR-CM-005)**: Before any loop iteration, the `ContextBuilder` re-validates that all referenced files, workspace parameters, and provider statuses have not drifted. Stale segments are marked `EXPIRED` and re-fetched.
+- **Tool and introspection result boundary**: Browser/search results, Tool outputs, imported database records or schemas, Git/Terminal content, plugin-repository content, and ProjectContext/introspection summaries are context data, not instructions or canonical authority. Before inclusion in a `ContextSnapshot`, each result MUST retain source, trust, freshness, authority, and evidence classification metadata. Instruction-like text inside a result MUST remain passive untrusted content and MUST NOT authorize a Tool, change a permission, alter a lifecycle/requirement/decision, or bypass verification. A result with missing provenance, stale freshness, unresolved contradiction, or insufficient evidence remains non-authoritative and is blocked or qualified by the existing Evidence & Validation Engine.
 
 ## Stale Evidence Precedence
 
@@ -302,6 +303,10 @@ The runtime MUST apply non-overridable safety ceilings for provider calls, reaso
 Critic disagreement triggers bounded repair, then clarification/escalation.
 Confidence is derived from evidence coverage, verifier results, contradiction checks,
 and source quality—not provider self-confidence alone (FR-RN-012).
+
+### Cross-document execution-mode mapping
+
+The Context Management deliberation labels are routing classifications, not a second lifecycle or execution-mode owner. `FAST` maps to Agent Runtime `FAST`; `BALANCED` maps to Agent Runtime `NORMAL`; and `THOROUGH` selects Agent Runtime `DEEP` when additional reasoning is required and the existing verification gate selects `VERIFY` when independent validation is required. Agent Runtime `RECOVER` is entered only through the existing failure, checkpoint, fallback, or context-reconstruction path and is not a user-facing deliberation label. The six Context Management effort levels (`OFF`, `LOW`, `MEDIUM`, `HIGH`, `X_HIGH`, `MAX`) select bounded `ReasoningPolicy` values and provider routing; they do not create additional lifecycle states. NFR-CI-006 and `architecture/AGENT_RUNTIME.md` remain authoritative for minimum-sufficient mode selection, while Context Management owns effort-level and context-assembly projections.
 
 ## 6.2 ReasoningSummary Privacy (FR-RN-011)
 

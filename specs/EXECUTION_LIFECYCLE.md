@@ -79,6 +79,10 @@ Before queueing a task or workflow step, dependency references MUST be validated
 
 For a root Research Task, DEC-44 defines the admission boundary for research workload breadth: at most 250 distinct leaf research work items may be admitted across that root Task’s descendant Task lineage. Each item is an existing admitted leaf Task with a distinct bounded objective/scope and acceptance/evidence target, counted once by stable Task identity. Sources, claims, artifacts, tools, providers, agents, retries, and execution attempts are not counted. The Planner/Coordinator validates duplicate scope and dependencies before child creation or queueing; item 251 is rejected before creation or queueing. This limit does not change Task lifecycle ownership, grant concurrency, or the SA-3 dynamic resource ceiling.
 
+### Plan and acceptance artifact boundary
+
+`ExecutionPlan` and `PlanStep` are the existing semantic plan projections. Before queueing, each plan step MUST have a stable step identity, objective, dependency position, required capabilities/tools, expected artifact or result, and pass/fail acceptance criteria. The Planner may derive criteria from the declared Task goal and constraints, but completion MUST re-check the declared criteria rather than infer success from activity, text output, file count, or provider completion alone. A plan repair MUST preserve the current execution identity and checkpoint lineage while recording the verified failure or changed constraint that justified the revision; a repair is not substantive progress unless it improves an acceptance criterion, relevant evidence, verification result, or declared scope. Concrete storage, DTO, serialization, and plan-version representation remain downstream choices within these semantic invariants.
+
 ## 2. Software Engineering Pipeline
 
 For software-engineering tasks, the lifecycle concretizes into:

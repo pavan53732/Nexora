@@ -146,7 +146,7 @@ data class ToolMetadata(
 | 28 | **Project Introspection** | introspect_api, introspect_database, introspect_config, introspect_build, introspect_ui, introspect_domain, introspect_infrastructure — pre-flight readers that scan the workspace and populate ProjectContext before planning (FR-CM-009, Path C) | 4 |
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
-> registry of every tool — **352 tools** (authoritative count in [registry/TOOLS.md](../registry/TOOLS.md)) with stable `TOOL-###` IDs, descriptions, and
+> registry of every tool — **350 tools** (authoritative count in [registry/TOOLS.md](../registry/TOOLS.md)) with stable `TOOL-###` IDs, descriptions, and
 > phases across the 28 categories (target 300–500). [registry/TOOL_MATRIX.md](../registry/TOOL_MATRIX.md)
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.
@@ -222,7 +222,7 @@ class ToolRegistry {
 ### Agent-Visible Tool Discovery Projection
 
 The registry MAY expose a bounded discovery projection instead of placing the complete
-352-tool catalog into every model request. Discovery is a selection and presentation
+350-tool catalog defined by `registry/TOOLS.md` into every model request. Discovery is a selection and presentation
 projection; it MUST NOT create a second Tool identity catalog or bypass the ToolStatus,
 permission, sandbox, schema, or version checks.
 

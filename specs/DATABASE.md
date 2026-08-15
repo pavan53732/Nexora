@@ -34,6 +34,10 @@ Nexora uses SQLite for structured data storage within the sandbox and for the me
 | `sqlite_migrate` | Run schema migrations. |
 | `sqlite_schema` | Inspect database schema. |
 
+### SQLite result and schema-state grounding
+
+SQLite tool invocations inherit the existing Tool System authorization, schema-validation, idempotency, timeout, UNKNOWN_COMPLETION, reconciliation, SandboxPolicy, PermissionModel, and audit contracts. Query results, imported records, inspected schemas, migration output, and database files are tool-derived context and MUST be authority- and freshness-tagged before entering ContextSnapshot or supporting a user-facing claim. SQLite-discovered schema state MUST NOT silently redefine Nexora’s canonical persistence schema, requirements, decisions, lifecycle, or security policy. Mutating operations require their existing permission and side-effect rules; a timeout or transport interruption does not imply commit success. This is a cross-reference to existing authorities, not a new SQLite lifecycle, error, permission, or database schema.
+
 ## Phase Mapping
 
 - **Phase 3**: SQLite available in sandbox.

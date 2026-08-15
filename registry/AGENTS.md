@@ -14,6 +14,7 @@
 | `supportsDelegation` | Delegation capability flag |
 | `supportsBackgroundExecution` | Background execution capability flag |
 | `minContractVersion` | Minimum compatible API/SDK contract version |
+| `maxExecutionDepth` | Maximum nested tool-call depth per turn; the matrix default is 10, with orchestrator delegated children limited to depth 3 |
 |
 ## Notes
 

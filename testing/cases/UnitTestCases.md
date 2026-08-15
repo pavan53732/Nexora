@@ -14,11 +14,11 @@
 | UT-STREAM-002 | UT-STREAM | Detect sequence gap and block terminal commit | Provider Layer | Planned | `evidence/unit/UT-STREAM-002/` | 2026-08-06 |
 | UT-STREAM-003 | UT-STREAM | Assemble interleaved Tool-call fragments by toolCallId | Provider + Tooling | Planned | `evidence/unit/UT-STREAM-003/` | 2026-08-06 |
 | UT-STREAM-004 | UT-STREAM | Reject second or missing terminal event | Provider Layer | Planned | `evidence/unit/UT-STREAM-004/` | 2026-08-06 |
-| UT-REASON-001 | UT-REASON | Resolve deterministic ReasoningPolicy for all effort levels | Reasoning | Planned | `evidence/unit/UT-REASON-001/` | 2026-08-06 |
+| UT-REASON-001 | UT-REASON | Resolve deterministic ReasoningPolicy for all effort levels and verify Context FAST/BALANCED/THOROUGH to Agent FAST/NORMAL/DEEP/VERIFY mapping plus RECOVER isolation | Reasoning | Planned | `evidence/unit/UT-REASON-001/` | 2026-08-06 |
 | UT-REASON-002 | UT-REASON | Enforce technical call/token/tool/repair/time/device-resource safety ceilings and verify cost/credit telemetry cannot block a technically valid progressing run | Reasoning | Planned | `evidence/unit/UT-REASON-002/` | 2026-08-06 |
 | UT-AS-004 | UT-AS | Validate lesson provenance, approval-for-planning, retrieval, retirement, and learned-skill proposal boundaries | Autonomy Learning | Planned | `evidence/unit/UT-AS-004/` | 2026-08-15 |
 | UT-AS-005 | UT-AS | Validate per-agent/per-workspace trust updates, user-selected autonomy mode, explicit reset, and security-boundary preservation | Autonomy Trust | Planned | `evidence/unit/UT-AS-005/` | 2026-08-15 |
-| UT-AS-010 | UT-AS | Validate acceptance-criterion progress vector, semantic-progress floor, and anti-treadmill escalation | Agent Runtime | Planned | `evidence/unit/UT-AS-010/` | 2026-08-15 |
+| UT-AS-010 | UT-AS | Validate acceptance-criterion progress vector, checkpoint/initial baseline, same-logical-execution deltas, relevant-evidence gating, error-category-shift semantics, semantic-progress floor, and anti-treadmill escalation | Agent Runtime | Planned | `evidence/unit/UT-AS-010/` | 2026-08-15 |
 | UT-CONTRACT-006 | UT-CONTRACT | Validate hierarchical deadline propagation, cancellation reservation, and explicit incomplete/escalated disposition | Core Runtime | Planned | `evidence/unit/UT-CONTRACT-006/` | 2026-08-15 |
 | UT-EV-007 | UT-EV | Validate one-to-one ClaimRecord evidence binding, freshness, contradiction, verifier, confidence, and disposition fields | Evidence Engine | Planned | `evidence/unit/UT-EV-007/` | 2026-08-15 |
 | UT-RN-013 | UT-RN | Validate rejection of ReasoningPolicy values above non-overridable provider, device, and resource-class ceilings | Reasoning + Context | Planned | `evidence/unit/UT-RN-013/` | 2026-08-15 |

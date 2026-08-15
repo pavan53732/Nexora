@@ -85,7 +85,8 @@ data class Workspace(
     val updatedAt: Instant
 )
 
-enum class WorkspaceStatus { ACTIVE, ARCHIVED }
+// Lifecycle states are owned by state-machines/WorkspaceLifecycle.md.
+enum class WorkspaceStatus { CREATED, ACTIVE, SUSPENDED, ARCHIVED, DELETED }
 
 interface WorkspaceManager {
     suspend fun create(name: String, description: String = ""): Workspace

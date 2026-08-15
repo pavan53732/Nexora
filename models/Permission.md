@@ -27,13 +27,14 @@ interface PermissionScopeRegistry {
     fun resolve(scopeId: String): PermissionScope?
 }
 
-// Predefined scopes — all 18 canonical scopes
+// Predefined scopes — all 19 canonical scopes from security/PermissionModel.md
 val SANDBOX_READ = PermissionScope("sandbox:read", "sandbox", "read", PermissionDecision.ALLOW)
 val SANDBOX_WRITE = PermissionScope("sandbox:write", "sandbox", "write", PermissionDecision.ALLOW)
 val SANDBOX_EXECUTE = PermissionScope("sandbox:execute", "sandbox", "execute", PermissionDecision.ALLOW)
 val NETWORK_HTTP = PermissionScope("network:http", "network", "http", PermissionDecision.ASK)
 val NETWORK_WEBSOCKET = PermissionScope("network:websocket", "network", "websocket", PermissionDecision.ASK)
 val DEVICE_CAMERA = PermissionScope("device:camera", "device", "camera", PermissionDecision.DENY)
+val DEVICE_MICROPHONE = PermissionScope("device:microphone", "device", "microphone", PermissionDecision.DENY)
 val DEVICE_STORAGE = PermissionScope("device:storage", "device", "storage", PermissionDecision.DENY)
 val DEVICE_NOTIFICATIONS = PermissionScope("device:notifications", "device", "notifications", PermissionDecision.ASK)
 val AI_COMPLETE = PermissionScope("ai:complete", "ai", "complete", PermissionDecision.ALLOW)
