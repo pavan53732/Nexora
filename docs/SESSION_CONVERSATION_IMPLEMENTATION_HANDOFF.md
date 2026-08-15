@@ -78,7 +78,7 @@ Implementation must preserve:
 
 The architecture does not require a dedicated relationship API. Future APIs may expose Session, Conversation, checkpoint, continue, or rollback operations, but they must preserve the semantic rules above.
 
-Implementation-specific choices that remain open:
+Implementation-specific choices that remain bounded downstream selections rather than active architecture decisions:
 - endpoint naming,
 - transport shape,
 - database encoding,

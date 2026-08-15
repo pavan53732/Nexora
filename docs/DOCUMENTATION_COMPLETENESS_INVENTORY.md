@@ -25,6 +25,16 @@ The repository corpus was inventoried across:
 
 ## Architecture-resolution status
 
+### Active OPEN/DEFERRED register
+
+At the current published HEAD, **no active product, architecture, ownership, lifecycle, protocol, security, error-identity, or terminology decision is marked OPEN/DEFERRED in the current engineering contract set**. The repository does contain historical unresolved wording, bounded downstream choices, and planned evidence obligations; these categories are not interchangeable with an active owner decision.
+
+The historical `OWNER DECISION REQUIRED / UNRESOLVED` passages in DEC-13 and DEC-14 are preserved decision records. Their formerly open boundaries are superseded or narrowed by DEC-15 through DEC-24 and DEC-25 through DEC-32: Session–Conversation ownership, relationship identity/representation/cardinality/lifecycle/continuation, BranchLineage ownership and operational policy, checkpoint metadata semantics and retention, no internal credit/cost gating, Android-first positioning, requirement-owner taxonomy, ROADMAP terminology, execution-failure binding, agent-loop liveness, and workflow scope are now represented by later canonical decisions. DEC files remain immutable historical authority and are not rewritten.
+
+The remaining bounded downstream choices are not OPEN/DEFERRED architecture decisions: concrete identifier encoding, message/turn ordering representation, storage/schema/serialization, API/transport names and DTO shapes, transaction/concurrency mechanisms, Android component realization, exact DAO/migration mechanics, and implementation-level cleanup scheduling details where the governing decision already fixes the required semantic outcome. Planned unit, integration, performance, security, regression, and Android/device evidence is also not a missing architecture decision; it is an implementation/evidence obligation and must not be reported as executed evidence.
+
+The only unresolved values allowed by this inventory are local `UNKNOWN` or `UNAVAILABLE` data states explicitly defined by a contract, such as Tool `UNKNOWN_COMPLETION` pending reconciliation or provider health before its first check. They are runtime states or evidence classifications, not unresolved owner decisions.
+
 The current inventory does not treat the following as active OPEN/DEFERRED architecture gaps:
 
 - Tool timeout (`NXR-2002`) is an execution outcome with no ToolStatus lifecycle effect; unknown completion and conditional retry remain governed by `architecture/TOOL_SYSTEM.md` and the canonical error mapping.

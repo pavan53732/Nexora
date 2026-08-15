@@ -7,7 +7,7 @@
 - **Primary** — canonical owning document.
 - **Derived** — supporting document derived from the primary owner.
 - **Validation** — expected verification artifact.
-- **Status** — `OK`, `PARTIAL`, or `GAP` based on current repository coverage.
+- **Status** — `OK`, `PARTIAL`, or `GAP` based on current repository coverage. `PARTIAL` indicates documented contracts with planned or incomplete implementation/evidence coverage; it is not, by itself, an OPEN/DEFERRED architecture or owner decision. `GAP` requires a separately recorded evidence-backed defect or unresolved boundary.
 
 ## Maintenance Rule
 
