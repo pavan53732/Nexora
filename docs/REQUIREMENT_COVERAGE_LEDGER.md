@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 177 requirement rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. The previously duplicated context-integrity meanings are now represented by the distinct canonical identities `NFR-CI-006` and `NFR-CI-007`; `NFR-PERF-006` remains battery impact and `NFR-REL-004` remains data persistence.
+This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 178 requirement rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. The previously duplicated context-integrity meanings are now represented by the distinct canonical identities `NFR-CI-006` and `NFR-CI-007`; `NFR-PERF-006` remains battery impact and `NFR-REL-004` remains data persistence.
 
 ## Functional Requirements
 
@@ -318,6 +318,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-SCALE-003` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-004` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-005` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
+| `NFR-SCALE-006` | `requirements/NFR.md` | MAPPED | Multi-Agent + Execution Lifecycle + Performance | `decisions/DEC-44-normative-250-item-research-workload.md` | `E2E-SCALE-250-001`, `E2E-SCALE-250-002`, `PERF-SCALE-250-001` | `evidence/e2e/E2E-SCALE-250-001/`, `evidence/e2e/E2E-SCALE-250-002/`, `evidence/performance/PERF-SCALE-250-001/` |
 | `NFR-COMP-001` | `requirements/NFR.md` | MAPPED | API Contracts | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
 | `NFR-COMPAT-001` | `requirements/NFR.md` | MAPPED | Compatibility & Versioning | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
 | `NFR-COMPAT-002` | `requirements/NFR.md` | MAPPED | Compatibility & Versioning | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |

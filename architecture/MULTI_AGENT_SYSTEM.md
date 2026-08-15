@@ -260,6 +260,12 @@ max_parallel_agents = min(
 | **Deadlock detection** | A waits-for graph over file write-locks + pending delegation futures is monitored by the coordinator; cycles abort the youngest child and report to the Master Agent (FR-MA-005) |
 | **Delegation timeout** | Every delegation carries an explicit deadline; on expiry the coordinator aborts the child, logs `NXR-3011`, and resumes the parent (FR-MA-003) |
 
+#### Normative 250-item research workload (DEC-44)
+
+For a root Research Task, the coordinator may admit at most **250 distinct leaf research work items** across that root Task’s descendant Task lineage. A work item is an existing admitted leaf Task with a distinct bounded objective/scope and acceptance/evidence target; it is counted once by stable admitted Task identity. Sources, claims, citations, artifacts, provider calls, Tool calls, retries, execution attempts, and agents are not counted as work items. Replanning, retry, recovery, or worker reassignment does not increment the count unless the objective/scope is materially new.
+
+This is an admission boundary, not a concurrency grant. Item 251 is rejected before child Task creation or queueing, while already admitted work remains subject to the validated dependency graph, effective deadlines, resource limits, evidence gates, checkpoint/recovery, cancellation, and truthful incomplete/completion reporting. The SA-3 formula and bounds remain unchanged: default 3 sub-agents, high-end 8–16, and dynamic `min(memory_budget / per_agent_memory_estimate, cpu_cores, configurable_max)`. The 250-item boundary does not authorize 250 agents, processes, provider streams, or any bypass of technical or security controls.
+
 #### Adaptive Delegation Effort
 
 The concurrency cap is a safety/resource ceiling, not an instruction to use the maximum number of agents. Before fan-out, the coordinator MUST classify the requested work using the existing task goal, acceptance criteria, dependency graph, evidence requirements, available tools, workspace resource limits, and expected breadth/depth. It SHOULD select the smallest delegation set that can cover independent work and SHOULD increase parallelism only when additional lanes are expected to add distinct evidence or artifacts.

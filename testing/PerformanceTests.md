@@ -96,3 +96,7 @@ Model and provider claims remain evidence-scoped. Vendor-published capability or
 results may inform route selection and test design, but Nexora release gates require
 reproducible Nexora evidence under the declared device, provider, model, and fixture
 conditions.
+
+## Normative 250-Item Research Workload Benchmark (DEC-44)
+
+`PERF-SCALE-250-001` MUST measure one root Research Task admitting 250 distinct leaf research work items and MUST report admission latency, queue depth, active parallel lanes, SA-3 concurrency, dependency wait time, duplicate-scope suppression, partial-result utilization, checkpoint/recovery latency, CPU, memory, battery, storage, provider, stream, and thermal impact. The benchmark MUST separately attempt item 251 and verify rejection before child Task creation or queueing. Retries, replans, recovery, worker reassignment, sources, claims, artifacts, provider calls, Tool calls, and execution attempts MUST NOT inflate the admitted-item count when the objective and scope remain unchanged. Results are planned evidence and require declared device class, Android version, workspace limits, provider/model fixture, network condition, and build channel.

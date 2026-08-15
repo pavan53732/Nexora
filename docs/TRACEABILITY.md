@@ -63,7 +63,7 @@ The complete requirement identifier inventory is tracked separately in `docs/REQ
 
 ## Open Gaps
 
-- Requirement identifier saturation: all 177 unique FR/NFR IDs defined in `requirements/FR.md` and `requirements/NFR.md` are represented in the complete coverage ledger and referenced by at least one canonical, derived, or test artifact in the repository (verified by repository-wide scan). The matrix below remains a curated representative subset focused on requirements whose architecture, contract, and validation relationships have been explicitly reconciled; the full identifier inventory is tracked in `docs/REQUIREMENT_COVERAGE_LEDGER.md`.
+- Requirement identifier saturation: all 178 unique FR/NFR IDs defined in `requirements/FR.md` and `requirements/NFR.md` are represented in the complete coverage ledger and referenced by at least one canonical, derived, or test artifact in the repository (verified by repository-wide scan). The matrix below remains a curated representative subset focused on requirements whose architecture, contract, and validation relationships have been explicitly reconciled; the full identifier inventory is tracked in `docs/REQUIREMENT_COVERAGE_LEDGER.md`.
 - Scoped Phase 3–4 lifecycle-linkage audit complete: protocol/API/SDK documents whose contracts materially depend on durable lifecycle transitions cite their canonical lifecycle authority. Documents without durable lifecycle semantics are not given a lifecycle reference merely for uniformity.
 - Evidence locations are defined for every row; execution artifacts remain `Planned` (no implementation code exists yet — the repository is documentation-first per the specification-closure gate). `Planned` status is expected and correct at this stage; it is not a closure defect.
 - Requirement identifier orphan closure: `FR-SESS-001`, `FR-WF-001`, and `NFR-COMP-001` are now defined in the canonical requirement documents and mapped in `docs/REQUIREMENT_COVERAGE_LEDGER.md`. Their implementation and validation artifacts remain `PARTIAL` or `Planned` where no source implementation or executed evidence exists; that status is expected during documentation/specification phase.
@@ -127,6 +127,7 @@ No executable implementation or runnable test is claimed by this traceability se
 | NFR-REL-017 | `architecture/TOOL_SYSTEM.md` | `models/ToolInvocation.md`, `protocols/Tool-Protocol.md`, `testing/E2ETests.md` (`E2E-REL-006`) |
 | NFR-REL-018 | `specs/BACKGROUND_EXECUTION.md` | `testing/E2ETests.md` (`E2E-REL-001..005`) |
 | NFR-PERF-006 | `docs/PERFORMANCE_BUDGET.md` | Active-agent battery-impact target; execution-mode selection is separately identified as `NFR-CI-006` |
+| NFR-SCALE-006 | `decisions/DEC-44-normative-250-item-research-workload.md` | `requirements/NFR.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `specs/EXECUTION_LIFECYCLE.md`, `docs/PERFORMANCE_BUDGET.md`, `models/Task.md`, `testing/cases/E2ETestCases.md` (`E2E-SCALE-250-001`, `E2E-SCALE-250-002`), `testing/PerformanceTests.md` (`PERF-SCALE-250-001`) |
 
 
 | Memory API boundary determination | `architecture/MEMORY_SYSTEM.md`, `protocols/Memory-Protocol.md` | `models/Memory.md`, `lifecycle/MemoryLifecycle.md`, `specs/CONTEXT_MANAGEMENT.md` | No separate `docs/api/Memory-API.md` exists; protocol is the repository contract boundary | RESOLVED (internal subsystem / protocol-sufficient) |

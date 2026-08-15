@@ -96,6 +96,7 @@
 | NFR-SCALE-003 | Workspace count | 100+ workspaces | List rendering uses lazy loading |
 | NFR-SCALE-004 | Memory entries | 10,000+ entries | Search remains < 200ms |
 | NFR-SCALE-005 | Agent count | 20+ per workspace | Resource limits enforced per agent |
+| NFR-SCALE-006 | Root Research Task workload breadth | A maximum of 250 distinct admitted leaf research work items per root Research Task, counted once by stable admitted Task identity across its descendant Task lineage | Admission is validated before child Task creation/queueing; item 251 is rejected before creation or queueing; existing SA-3 dynamic concurrency, dependency, deadline, resource, permission, evidence, checkpoint, retry, cancellation, and truthful incomplete/completion-gate contracts remain authoritative; see DEC-44 |
 
 ## Compatibility
 

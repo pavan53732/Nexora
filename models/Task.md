@@ -88,6 +88,8 @@ data class CanonicalErrorEnvelope(
 
 `status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. `dependsOnTaskIds` is validated as an acyclic dependency graph before queueing. `effectiveDeadline` is inherited by dependency waits and child operations. `retryNotBefore` is authoritative for RetryPending backoff and cannot be bypassed by direct start. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.
 
+Under DEC-44, when a root Task is classified as a Research Task, each distinct admitted leaf research objective is counted once by its stable Task identity across the root Task’s descendant lineage. Replans, retries, recovery, and worker reassignment do not create an additional workload-item count unless they introduce a materially new objective or scope. This is a workload admission projection only; it does not add a Task state, field, or lifecycle transition.
+
 ### Error Envelope Propagation
 
 When a task fails (transitioning to `FAILED` or `RETRY_PENDING`), the terminal or transient error MUST be mapped into a `CanonicalErrorEnvelope`. This envelope is stored in the `latestError` field of the Task and propagated across all API and protocol boundaries. Under DEC-33, invalid dependency references or cycles use `NXR-1014`, unsatisfied terminal dependencies use `NXR-1015`, and effective-deadline expiry uses `NXR-1016`; the lifecycle effect remains owned by TaskLifecycle. The envelope guarantees that exact recovery rules, retryability, and lifecycle effects are accessible to calling orchestrators and user interfaces alike.

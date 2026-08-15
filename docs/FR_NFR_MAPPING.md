@@ -118,3 +118,8 @@
 - `NFR-CI-006` → Agent Runtime, Provider System, and Context Management minimum-sufficient execution-mode selection; validation `UT-REASON-001`, `E2E-RN-001` (Planned).
 - `NFR-CI-007` → Agent Runtime bounded-progress controls, retry/step/time limits, anti-treadmill behavior, and escalation; validation `UT-AS-010` (Planned).
 - All S15 validation remains `Planned`; no runtime implementation, executed test, or empirical reliability result is claimed.
+
+## S16 — Normative 250-Item Research Workload
+
+- `NFR-SCALE-006` → DEC-44, Multi-Agent SA-3, Execution Lifecycle, and Performance Budget; maximum 250 distinct admitted leaf research work items per root Research Task and descendant Task lineage, counted once by stable admitted Task identity; item 251 is rejected before child Task creation or queueing; active concurrency remains governed by SA-3 and existing Android/resource/security contracts; validation `E2E-SCALE-250-001`, `E2E-SCALE-250-002`, `PERF-SCALE-250-001` (Planned).
+- All S16 validation remains `Planned`; the external 250-item comparison claim is supporting evidence only and is not Nexora implementation or release evidence.
