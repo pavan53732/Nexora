@@ -45,6 +45,7 @@
 | Android-first Product Vision positioning | `decisions/DEC-26-android-first-product-positioning.md` | `docs/PRODUCT_VISION.md`, `docs/PRODUCT_PRINCIPLES.md` |
 | Concrete requirement owner labels | `decisions/DEC-27-concrete-requirement-owner-labels.md` | `docs/REQUIREMENT_COVERAGE_LEDGER.md`, `testing/cases/RegressionTestCases.md`, `standards/Coding-Standard.md`, `VERSIONING.md`, `docs/ENVIRONMENT_SETUP.md` |
 | ROADMAP terminology normalization | `decisions/DEC-28-roadmap-terminology-normalization.md` | `docs/ROADMAP.md`, `ui/Navigation.md`, `architecture/PLUGIN_SYSTEM.md`, `sdk/PluginSDK.md`, `models/Plugin.md`, `registry/PLUGINS.md` |
+| Execution-failure class binding | `decisions/DEC-29-execution-failure-class-binding.md` + `specs/EXECUTION_LIFECYCLE.md` | `errors/ERROR_CODES.md`, `state-machines/TaskLifecycle.md`, `architecture/RUNTIME.md`, `models/Execution.md`, `architecture/TOOL_SYSTEM.md`, applicable Provider/Sandbox/Plugin protocols and APIs, `testing/cases/UnitTestCases.md` |
 | Event bus | `architecture/RUNTIME.md` (§Core Interfaces — EventBus) | `docs/MODULE_BOUNDARIES.md` (shared module) |
 | Observability | `architecture/RUNTIME.md` (§Module Inventory — Observability) | `docs/SYSTEM_DESIGN.md`, `docs/MODULE_BOUNDARIES.md` |
 | Resource management | `architecture/RUNTIME.md` (§Module Inventory — Resource Manager) | `architecture/MULTI_AGENT_SYSTEM.md` (§SA-3), `security/SandboxPolicy.md` |

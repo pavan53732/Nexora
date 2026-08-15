@@ -165,9 +165,21 @@ Escalation failures trigger user notification or termination with incomplete/blo
 
 Classification criterion: the failure indicates a systemic constraint violation rather than a recoverable operation failure.
 
-### Open/Deferred
+### Canonical Failure-Class Binding
 
-Specific error codes and state transitions for each class are OPEN/DEFERRED pending explicit binding to canonical error signals or state-machine transitions. Implementations MUST NOT invent arbitrary classification authority.
+DEC-29 resolves the authority binding for the failure classes without creating new errors, states, or transitions.
+
+The canonical error catalog owns the concrete `NXR-` identity, category, retryability, idempotency, lifecycle effect, recovery owner, and redacted details. The owning lifecycle owns the legal state effect. The operation owner owns idempotency, retry conditions, and side-effect recovery. Classification MUST NOT replace or reinterpret the canonical error envelope.
+
+A **transient** failure permits `TaskLifecycle.Running → RetryPending` only when the canonical error envelope and operation policy mark the operation retryable and the retry limit remains available. `RetryPending → Queued` uses the existing Task transition after backoff. A transient classification does not create a new Task or Execution state.
+
+A **permanent** failure prohibits retry without an explicit strategy change or user intervention. The owning lifecycle commits its existing terminal failure effect: `TaskLifecycle.Running → Failed` and `ExecutionStatus.RUNNING → FAILED`. A committed terminal Execution is never resumed under the same identity; explicit retry/restart creates a new Execution under the existing retry-lineage rules.
+
+An **escalation** failure represents a systemic constraint, bounded-progress violation, retry storm, deadline exhaustion, or resource constraint. `TaskLifecycle.Running → BlockedAwaitingInput` is used only when the owning runtime explicitly invokes `requestEscalation(question)` for clarification or a capability gap. Otherwise, termination uses the existing `Failed` effects and the canonical error/recovery contract. Escalation does not create a new Task state.
+
+Protocols, APIs, and SDKs MUST preserve the canonical error envelope and MUST NOT infer lifecycle transitions from category or message text alone. Concrete operation mappings remain governed by `errors/ERROR_CODES.md`, the applicable state machine, and the operation owner. See [DEC-29](../decisions/DEC-29-execution-failure-class-binding.md).
+
+Implementations MUST NOT invent arbitrary classification authority.
 
 
 ## 3. Validation & Verification (FR-EL-008, FR-EL-011)
