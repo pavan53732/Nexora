@@ -190,8 +190,8 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-AS-001` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-002` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-003` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
-| `FR-AS-004` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
-| `FR-AS-005` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
+| `FR-AS-004` | `requirements/FR.md` | MAPPED | Autonomy Learning | `specs/AUTONOMY_STABILITY.md` + `models/AutonomyLearning.md` | `UT-AS-004` | `evidence/unit/UT-AS-004/` |
+| `FR-AS-005` | `requirements/FR.md` | MAPPED | Autonomy Trust | `specs/AUTONOMY_STABILITY.md` + `models/AutonomyLearning.md` | `UT-AS-005` | `evidence/unit/UT-AS-005/` |
 | `FR-AS-006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `IT-LC-011` | `evidence/integration/IT-LC-011/` |
 | `FR-AS-008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |

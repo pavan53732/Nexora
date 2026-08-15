@@ -87,6 +87,30 @@ data class ReasoningSummary(
     val redacted: Boolean
 )
 
+/**
+ * Claim-level evidence binding required by Context Management §7 and NFR-CI-003.
+ * This is a semantic projection; persistence and transport remain downstream.
+ */
+data class ClaimRecord(
+    val claimId: String,
+    val claimText: String,
+    val evidenceRefs: List<String>,
+    val evidenceClass: EvidenceClass,
+    val sourceAuthority: String,
+    val freshnessStatus: FreshnessStatus,
+    val contradictionStatus: ContradictionStatus,
+    val verifierResult: VerifierResult,
+    val confidence: ConfidenceClass,
+    val disposition: ClaimDisposition
+)
+
+enum class EvidenceClass { VERIFIED, DERIVED, ESTIMATED, UNKNOWN }
+enum class FreshnessStatus { FRESH, STALE, UNAVAILABLE }
+enum class ContradictionStatus { NONE, DETECTED, UNRESOLVED }
+enum class VerifierResult { PASSED, FAILED, NOT_RUN }
+enum class ConfidenceClass { HIGH, MEDIUM, LOW }
+enum class ClaimDisposition { PRESENT_AS_FACT, PRESENT_AS_UNCERTAIN, CLARIFY, WITHHOLD }
+
 data class ContextSnapshot(
     val snapshotId: String,
     val correlationId: String,
@@ -140,4 +164,5 @@ data class CeilingDecision(
 - `ContextSnapshot` is immutable and reproducible for its tokenizer/model contract.
 - `ProgressSignal` records the state-delta dimensions required by ADR-0009 for semantic progress evaluation; it does not itself change lifecycle state.
 - Effective ceiling validation and rejection follow `specs/CONTEXT_MANAGEMENT.md` §6.1; `effectiveReasoningPolicy` and `ceilingDecision` are recorded in the immutable ContextSnapshot, while provider/device/resource-class ceiling values remain policy-boundary inputs rather than user-overridable settings.
+- `ClaimRecord` is the claim-level evidence projection required by `specs/CONTEXT_MANAGEMENT.md` §7. Every significant user-facing factual claim is dispositioned from its evidence, authority, freshness, contradiction, verifier, and confidence metadata before crossing the user boundary.
 - Failover/restart creates a new `streamId`; `priorStreamId` preserves lineage.

@@ -56,6 +56,12 @@
 - `FR-U005` (agent activity feed) → `specs/TERMINAL.md` (§Boundary Violation Response — denied actions surfaced).
 - `FR-GT-001`..`006` (git grounding) preserved — terminal session does not affect git grounding rules.
 
+## Agent Intelligence Deepening
+- `FR-AS-004` → `specs/AUTONOMY_STABILITY.md` §4 and `models/AutonomyLearning.md`; lessons retain provenance/evidence, require approval for planning, and cannot grant permissions. Validation `UT-AS-004` (Planned).
+- `FR-AS-005` → `specs/AUTONOMY_STABILITY.md` §5 and `models/AutonomyLearning.md`; trust is scoped to agent/workspace, may offer a mode, but user selection and security boundaries remain authoritative. Validation `UT-AS-005` (Planned).
+- `NFR-CI-003` → `specs/CONTEXT_MANAGEMENT.md` §7, `models/Inference.md` (`ClaimRecord`), `specs/DATABASE_SCHEMA.md` (`claim_record`), `protocols/Agent-Protocol.md`, and `docs/api/Agent-API.md`; validation `UT-EV-007`, `E2E-REL-009` (Planned).
+- `NFR-CI-004` → Agent Runtime final completion revalidates the acceptance vector after repair and answer synthesis; validation `UT-AS-010`, `E2E-REL-007` (Planned).
+
 ## S5 — Multi-Instance Pipes
 - `FR-MI-001`..`010` (discovery, transport, same-machine orchestration, pairing, cross-instance delegation, heartbeats, broadcast, security gates, failure handling, settings surface) → `specs/PIPES.md` (canonical) + `state-machines/InstanceLifecycle.md` (canonical states) + `models/Instance.md` (derived).
 - `FR-AG-001`/`002` (coordinator role, no direct agent calls) → preserved across pipes via `architecture/MULTI_AGENT_SYSTEM.md` §Cross-Instance Extension.

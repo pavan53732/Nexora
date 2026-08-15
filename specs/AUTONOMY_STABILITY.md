@@ -98,6 +98,13 @@ User or policy approves → skill updated/created
 Lessons are also retrieved during planning (Context Builder pulls relevant lessons for
 similar tasks), so the application literally gets smarter with use.
 
+The semantic lesson projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
+A lesson MUST retain agent/workspace scope, source execution provenance, evidence references,
+approval-for-planning status, and retirement status. Lesson content MUST NOT grant permissions,
+change sandbox policy, bypass approval, or directly select an autonomy mode. Learned-skill
+proposals remain subject to the existing Skill Registry validation and user/policy approval
+boundary.
+
 ## 5. Trust Growth (FR-AS-005)
 
 Autonomy expands with a **trust score** instead of jumping straight to autopilot:
@@ -112,6 +119,13 @@ Autonomy expands with a **trust score** instead of jumping straight to autopilot
 - Trust is per agent + per workspace; resets are explicit (user can reset trust).
 - Autonomy mode selection: `Manual / Assisted / Autopilot` (FR-S016) is *offered* by
   the trust score, *decided* by the user.
+
+The semantic trust projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
+Trust is scoped to `(agentId, workspaceId)` and retains update/reset provenance. The score
+scale, update increments, decay, thresholds, and reset baseline remain unselected by this
+specification. Trust may offer a mode but MUST NOT override user selection, permission
+scopes, classifier denial, human approval, workspace isolation, or provider/device/resource
+ceilings. Android degraded mode may force `Manual` independently of trust.
 
 ## 6. Verification Gates (FR-AS-006)
 

@@ -333,7 +333,7 @@ The Evidence & Validation Engine assigns a structured confidence and verificatio
 
 ### Claim-to-Evidence Binding
 
-Every significant user-facing factual claim MUST have a claim record containing a stable claim identifier, evidence references, evidence class, source authority, freshness status, contradiction status, verifier result, confidence classification, and user-facing disposition. A general evidence list or provider self-confidence is not sufficient to establish claim support.
+Every significant user-facing factual claim MUST have a claim record containing a stable claim identifier, evidence references, evidence class, source authority, freshness status, contradiction status, verifier result, confidence classification, and user-facing disposition. A general evidence list or provider self-confidence is not sufficient to establish claim support. The derived `ClaimRecord` projection is defined in `../models/Inference.md`, persisted as the standalone `claim_record` artifact in `../specs/DATABASE_SCHEMA.md`, and carried or referenced by terminal Agent protocol/API events; validation is planned through `UT-EV-007` and `E2E-REL-009`.
 
 Claims classified `UNKNOWN`, contradicted, or below the applicable confidence gate MUST NOT be presented as verified fact. They MUST be clarified, explicitly labeled as uncertain analysis, or withheld. Claim records preserve provenance without persisting unrestricted private chain-of-thought.
 

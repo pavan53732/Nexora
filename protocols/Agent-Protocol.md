@@ -61,10 +61,12 @@ Agent progress projects provider events without redefining provider wire semanti
 | `ToolCallReady` | Fully assembled, schema-valid Tool call is ready for authorization. |
 | `InferenceReconnecting` | Native resume attempt in progress; provisional output remains partial. |
 | `InferenceRestarted` | New stream attempt with priorStreamId lineage; never byte-spliced. |
-| `InferenceTerminal` | Final committed response, usage, evidence, and finish reason. |
+| `InferenceTerminal` | Final committed response, usage, claim-level evidence records, and finish reason; no claim crosses the user boundary without its required ClaimRecord disposition. |
 | `InferenceFailed` | Canonical error and explicit partial-output state. |
 | `InferenceCancelled` | Cancellation committed across Agent, Provider, and Tool children. |
 
 Every inference event carries `requestId`, `streamId`, `correlationId`, `taskId`,
-`sequence`, and provisional/terminal status. Agent consumers deduplicate by
-`(streamId, sequence)`; durable task lifecycle events continue using entity version.
+`sequence`, and provisional/terminal status. An `InferenceTerminal` payload MUST carry
+or reference the `ClaimRecord` entries produced by the Evidence & Validation Engine.
+Agent consumers deduplicate by `(streamId, sequence)`; durable task lifecycle events
+continue using entity version.

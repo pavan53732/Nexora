@@ -108,6 +108,7 @@ data class AgentInferenceEvent(
 - `version` is the durable state version used for optimistic reads and event deduplication.
 - `resumeToken` MUST be opaque and only present when resumable progress or event streaming is supported.
 - Child tasks and delegated work MUST be represented explicitly through `childTaskIds` and `delegatedAgentIds`; hidden fan-out is not allowed at the contract boundary.
+- A terminal inference event carrying a user-facing factual response MUST carry or reference `ClaimRecord` entries with the evidence, authority, freshness, contradiction, verifier, confidence, and disposition metadata required by `specs/CONTEXT_MANAGEMENT.md` §7. Generic payload encoding does not remove this semantic requirement.
 
 ## Overview
 

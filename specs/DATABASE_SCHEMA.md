@@ -314,6 +314,24 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | retentionScope | TEXT | |
 | createdAt | TEXT | |
 
+### `claim_record`
+| Column | Type | Notes |
+|--------|------|-------|
+| claimId | TEXT PK | Stable claim identifier |
+| workspaceId | TEXT FK | Tenant scope |
+| executionId | TEXT NULL FK → execution.executionId | Source execution, when applicable |
+| snapshotId | TEXT FK → context_snapshot.id | Immutable context/evidence snapshot used for the claim |
+| claimText | TEXT | User-facing claim text or canonical claim representation |
+| evidenceRefsJson | TEXT | Evidence references supporting the claim |
+| evidenceClass | TEXT | `VERIFIED`, `DERIVED`, `ESTIMATED`, or `UNKNOWN` |
+| sourceAuthority | TEXT | Authority governing the supporting evidence |
+| freshnessStatus | TEXT | Freshness classification at validation time |
+| contradictionStatus | TEXT | Contradiction classification at validation time |
+| verifierResult | TEXT | Verification result recorded before boundary crossing |
+| confidence | TEXT | `HIGH`, `MEDIUM`, or `LOW` |
+| disposition | TEXT | Present as fact, present as uncertain, clarify, or withhold |
+| createdAt | TEXT | |
+
 ---
 
 ## Security & Audit

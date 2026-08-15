@@ -210,8 +210,13 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
     val verified = evidenceEngine.verify(draft, reasoningPolicy)
     val repaired = boundedRepairIfNeeded(verified, reasoningPolicy)
     val answer = answerSynthesizer.create(repaired)
-    completionGate.requireSatisfied(answer)
-    saveCheckpoint(state.withTurn(answer))
+    val finalClaims = evidenceEngine.bindAndValidateClaims(answer, snapshot)
+    completionGate.requireSatisfied(
+        answer = answer,
+        acceptanceProgress = state.acceptanceProgress,
+        claimRecords = finalClaims
+    )
+    saveCheckpoint(state.withTurn(answer, finalClaims))
     return TurnResult(answer)
 }
 ```
@@ -223,6 +228,7 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
 - Provider failover never silently concatenates output from distinct streams.
 - Reasoning and repair remain inside explicit technical token/call/time and safety ceilings; usage and cost telemetry do not impose an internal credit or financial stop.
 - Durable reasoning output is a redacted `ReasoningSummary`, not unrestricted private chain-of-thought.
+- Final acceptance-criterion status and claim-to-evidence bindings are revalidated after bounded repair and final answer synthesis; an earlier draft verification does not authorize a changed final answer.
 
 ### Semantic Progress & Anti-Replay (mandated by ADR-0009; mirrored in AUTONOMY_STABILITY.md §9.5)
 

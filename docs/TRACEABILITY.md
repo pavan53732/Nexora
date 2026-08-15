@@ -44,6 +44,7 @@ When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model
 | NFR-REL-012 Exactly-once discipline | `specs/AUTONOMY_STABILITY.md` | `models/Execution.md`, `protocols/Execution-Protocol.md`, `docs/api/Runtime-API.md` | `IT-LC-009..013/016..019` (Planned) | PARTIAL |
 | FR-P014..019 Typed streaming, resume, routing, and failover lineage | `architecture/PROVIDER_SYSTEM.md`, `state-machines/ProviderStreamLifecycle.md` | `models/Inference.md`, `models/Provider.md`, `protocols/Provider-Protocol.md`, `docs/api/Provider-API.md`, `sdk/ProviderSDK.md` | `UT-STREAM-001..004`, `UT-ROUTE-001`, `IT-STREAM-001..008`, `E2E-STREAM-001..003` (Planned) | PARTIAL |
 | FR-RN-009..012 Bounded reasoning, critic/verifier, summary privacy, calibrated confidence | `specs/CONTEXT_MANAGEMENT.md` | `architecture/AGENT_RUNTIME.md`, `models/Inference.md`, `protocols/Agent-Protocol.md`, `docs/api/Agent-API.md`, `sdk/AgentSDK.md` | `UT-REASON-001..003`, `IT-REASON-001..004`, `E2E-REASON-001..002` (Planned) | PARTIAL |
+| FR-AS-004..005 Learning lessons and trust growth | `specs/AUTONOMY_STABILITY.md` | `models/AutonomyLearning.md`, `models/Skill.md`, `architecture/MEMORY_SYSTEM.md`, `security/PermissionModel.md` | `UT-AS-004`, `UT-AS-005` (Planned) | PARTIAL |
 | FR-CM-010..012 ContextSnapshot, retrieval diversity, and compaction lineage | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md`, `models/Inference.md` | `UT-CONTEXT-001..002`, `IT-CONTEXT-001..002`, `E2E-CONTEXT-001` (Planned) | PARTIAL |
 | NFR-PERF-011/012 Stream backpressure and cancellation budgets | `docs/PERFORMANCE_BUDGET.md` | `protocols/Provider-Protocol.md`, `sdk/ProviderSDK.md` | `PERF-STREAM-003/004` (Planned) | PARTIAL |
 | NFR-REL-014/015 Ordered streaming and lineage | `state-machines/ProviderStreamLifecycle.md` | `architecture/PROVIDER_SYSTEM.md`, `protocols/Provider-Protocol.md`, `models/Inference.md` | `UT-STREAM-001..004`, `IT-STREAM-004..007`, `RT-STREAM-001..002` (Planned) | PARTIAL |
@@ -97,8 +98,8 @@ No executable implementation or runnable test is claimed by this traceability se
 |---|---|---|
 | NFR-CI-001 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `architecture/MEMORY_SYSTEM.md` |
 | NFR-CI-002 | `specs/CONTEXT_MANAGEMENT.md` | `architecture/MEMORY_SYSTEM.md`, `architecture/TOOL_SYSTEM.md` |
-| NFR-CI-003 | `specs/CONTEXT_MANAGEMENT.md` | `models/Inference.md`, `testing/E2ETests.md` (`E2E-REL-009`) |
-| NFR-CI-004 | `architecture/AGENT_RUNTIME.md` | `specs/AUTONOMY_STABILITY.md`, `models/Inference.md`, `architecture/RUNTIME.md`, `specs/DATABASE_SCHEMA.md`, `testing/E2ETests.md` (`E2E-REL-007`) |
+| NFR-CI-003 | `specs/CONTEXT_MANAGEMENT.md` | `models/Inference.md` (`ClaimRecord`), `specs/DATABASE_SCHEMA.md` (`claim_record`), `protocols/Agent-Protocol.md`, `docs/api/Agent-API.md`, `testing/E2ETests.md` (`E2E-REL-009`) |
+| NFR-CI-004 | `architecture/AGENT_RUNTIME.md` | `specs/AUTONOMY_STABILITY.md`, `models/Inference.md`, `architecture/RUNTIME.md`, `specs/DATABASE_SCHEMA.md`, `testing/cases/UnitTestCases.md` (`UT-AS-010`), `testing/E2ETests.md` (`E2E-REL-007`) |
 | NFR-CI-005 | `specs/CONTEXT_MANAGEMENT.md` | `models/Inference.md`, `architecture/AGENT_RUNTIME.md`, `specs/DATABASE_SCHEMA.md` |
 | NFR-REL-004 | `architecture/AGENT_RUNTIME.md` | `specs/EXECUTION_LIFECYCLE.md`, `decisions/DEC-7-retry-attempt-state.md` |
 | NFR-REL-016 | `architecture/AGENT_RUNTIME.md` | `architecture/RUNTIME.md`, `specs/DATABASE_SCHEMA.md`, `architecture/TOOL_SYSTEM.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `testing/E2ETests.md` (`E2E-REL-001..009`) |
