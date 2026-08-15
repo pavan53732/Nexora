@@ -61,9 +61,9 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | ID | Threat | Component | Severity | Mitigation | Status |
 |----|--------|-----------|----------|------------|--------|
 | TM-001 | Malicious plugin package impersonates a trusted publisher | Plugin System | Critical | Signature verification against trusted author certs; checksum validation on install | Partial |
-| TM-002 | API key theft via memory dump or insecure storage | Provider System | Critical | Android Keystore with hardware-backed encryption; keys never in plain text in app memory | Mitigated |
-| TM-003 | Impersonated provider response (MITM) | Provider System | High | Certificate pinning for known provider endpoints; TLS 1.3 enforcement | Mitigated |
-| TM-004 | Spoofed inter-agent message from untrusted workspace | Agent System | Medium | Message authentication tokens per workspace; workspace ID validation on every IPC call | Mitigated |
+| TM-002 | API key theft via memory dump or insecure storage | Provider System | Critical | Android Keystore with hardware-backed encryption; keys never in plain text in app memory | OPEN/DEFERRED |
+| TM-003 | Impersonated provider response (MITM) | Provider System | High | Certificate pinning for known provider endpoints; TLS 1.3 enforcement | OPEN/DEFERRED |
+| TM-004 | Spoofed inter-agent message from untrusted workspace | Agent System | Medium | Message authentication tokens per workspace; workspace ID validation on every IPC call | OPEN/DEFERRED |
 
 ### Tampering
 
@@ -71,25 +71,25 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 |----|--------|-----------|----------|------------|--------|
 | TM-005 | Modified plugin binary post-install | Plugin System | Critical | Integrity check on every load (hash comparison with install-time manifest) | Partial |
 | TM-006 | Sandbox escape via path traversal or symlink | Sandbox | Critical | Canonical path resolution; block all symlinks pointing outside workspace; chroot-style mount namespace | Partial |
-| TM-007 | Configuration file manipulation by other apps on rooted device | Storage | High | App-private storage only (`/data/data/com.nexora.app`); no world-readable files | Mitigated |
+| TM-007 | Configuration file manipulation by other apps on rooted device | Storage | High | App-private storage only (`/data/data/com.nexora.app`); no world-readable files | OPEN/DEFERRED |
 | TM-008 | Tampered memory entries to mislead agent reasoning | Memory System | Medium | Write-intent logging; hash chain on memory entries; read-only archival | Planned security completion |
 
 ### Repudiation
 
 | ID | Threat | Component | Severity | Mitigation | Status |
 |----|--------|-----------|----------|------------|--------|
-| TM-009 | Agent action with no audit trail | Agent Runtime | High | Every tool invocation logged with timestamp, agent ID, tool, parameters, result, and permission decision | Mitigated |
-| TM-010 | User denies having granted a permission | Permission System | Medium | Immutable permission grant log stored in Room database with creation timestamps | Mitigated |
+| TM-009 | Agent action with no audit trail | Agent Runtime | High | Every tool invocation logged with timestamp, agent ID, tool, parameters, result, and permission decision | OPEN/DEFERRED |
+| TM-010 | User denies having granted a permission | Permission System | Medium | Immutable permission grant log stored in Room database with creation timestamps | OPEN/DEFERRED |
 | TM-011 | Plugin denies having performed a destructive action | Plugin System | Medium | Plugin operations logged in a separate append-only audit table | Partial |
 
 ### Information Disclosure
 
 | ID | Threat | Component | Severity | Mitigation | Status |
 |----|--------|-----------|----------|------------|--------|
-| TM-012 | Memory content leaked to other apps via IPC or content provider | Memory System | Critical | No content providers exposed; all inter-process communication via bound services with signature permission | Mitigated |
-| TM-013 | API keys exposed in Logcat | Provider System | High | ProGuard/R8 stripping; `Log.wtf` for security events only; no key material in any log statement | Mitigated |
-| TM-014 | Provider response leaking sensitive user content to logs | Provider System | Medium | Log level gating; prompt/response bodies logged at DEBUG only, stripped in release builds | Mitigated |
-| TM-015 | Workspace files readable by other apps (backup) | Storage | High | `allowBackup=false` in manifest; Android auto-backup exclusion rules | Mitigated |
+| TM-012 | Memory content leaked to other apps via IPC or content provider | Memory System | Critical | No content providers exposed; all inter-process communication via bound services with signature permission | OPEN/DEFERRED |
+| TM-013 | API keys exposed in Logcat | Provider System | High | ProGuard/R8 stripping; `Log.wtf` for security events only; no key material in any log statement | OPEN/DEFERRED |
+| TM-014 | Provider response leaking sensitive user content to logs | Provider System | Medium | Log level gating; prompt/response bodies logged at DEBUG only, stripped in release builds | OPEN/DEFERRED |
+| TM-015 | Workspace files readable by other apps (backup) | Storage | High | `allowBackup=false` in manifest; Android auto-backup exclusion rules | OPEN/DEFERRED |
 | TM-016 | Plugin reads workspace memory of a different workspace | Plugin System | High | Plugin loaded in caller's classloader; no cross-workspace file handles; path validation on every I/O call | Partial |
 | TM-026 | Context intended for provider A is delivered to provider B (data-flow leak) | Provider System | High | Every request tagged with the active profile ID; single routing path through `ProviderRouter`; cross-provider delivery rejected | Partial |
 | TM-027 | Provider plugin reads another provider's API key or configuration | Provider System | Critical | Per-provider `SecureKeyStore` aliases; provider code receives only its own key reference; isolated classloaders | Partial |
@@ -109,9 +109,9 @@ This document applies the **STRIDE** methodology to identify threats across Nexo
 | ID | Threat | Component | Severity | Mitigation | Status |
 |----|--------|-----------|----------|------------|--------|
 | TM-022 | Sandbox escape grants access to device filesystem | Sandbox | Critical | All file I/O mediated by `SandboxFileSystem`; no raw `java.io.File` access from plugins or tools | Partial |
-| TM-023 | Plugin requests and receives excessive permissions | Plugin System | High | Least-privilege manifest; user reviews each scope at install; no `REQUEST_INSTALL_PACKAGES` ever granted | Mitigated |
-| TM-024 | Agent exceeds granted permissions via tool chaining | Agent System | High | Permission check on every individual tool call, not just the first; no implicit permission inheritance across chain steps | Mitigated |
-| TM-025 | Malicious provider response injects tool invocations | Provider System | Medium | Provider output is treated as data, not code; tool calls validated against registry before execution | Mitigated |
+| TM-023 | Plugin requests and receives excessive permissions | Plugin System | High | Least-privilege manifest; user reviews each scope at install; no `REQUEST_INSTALL_PACKAGES` ever granted | OPEN/DEFERRED |
+| TM-024 | Agent exceeds granted permissions via tool chaining | Agent System | High | Permission check on every individual tool call, not just the first; no implicit permission inheritance across chain steps | OPEN/DEFERRED |
+| TM-025 | Malicious provider response injects tool invocations | Provider System | Medium | Provider output is treated as data, not code; tool calls validated against registry before execution | OPEN/DEFERRED |
 | TM-028 | Provider plugin performs arbitrary network calls to exfiltrate data | Provider System | High | Provider HTTP clients confined to their configured `baseUrl`; `network:*` grants enforced by `PermissionManager`; no raw sockets exposed to provider code | Partial |
 | TM-029 | Rogue mDNS advertisement impersonates a legitimate Nexora instance | Pipe Discovery | High | Pairing requires user-confirmed fingerprint match (Ed25519 public key, QR or 6-word code); discovery is listener-only — no trust is derived from TXT record content before pairing (`specs/PIPES.md` §3, §4) | Partial |
 | TM-030 | Unauthorized pairing to a hostile instance via spoofed fingerprint | Pipe Pairing | Critical | Fingerprint confirmed on both ends; `instance:pair` is `ASK` by default; pairing record binds fingerprint + alias + workspace set; `NXR-6009` on mismatch (`specs/PIPES.md` §3; `FR-MI-004`, `FR-MI-008`) | Partial |

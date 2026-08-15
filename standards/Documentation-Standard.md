@@ -24,3 +24,18 @@
 - Include code examples in Kotlin
 - Include diagrams in ASCII art
 - Cross-link related documents
+
+## Implementation-Ready Contract Rule
+
+Documentation is the design boundary for the future Android application. Significant behavior MUST be specified before source implementation begins; implementation MUST NOT infer missing semantics from a convenient component, a related identifier, or the absence of a documented prohibition.
+
+Each normative contract SHOULD make its evidence and boundaries explicit:
+
+- identify the canonical owner and distinguish canonical, supporting, derived, decision, explanatory, proposal, and historical text;
+- define the relevant identity, inputs, outputs, preconditions, postconditions, lifecycle/state effects, ownership, authorization, persistence, recovery, cancellation, timeout, retry, concurrency, resource, privacy, audit, and observable-outcome rules;
+- preserve distinctions between independent entities, states, identifiers, responsibilities, and lifecycle phases unless a canonical source explicitly relates them;
+- project canonical behavior consistently into models, protocols, APIs, SDKs, registries, UI, requirements, and planned validation without creating a second authority;
+- classify unsupported or non-derivable behavior as `UNKNOWN`, `OPEN/DEFERRED`, `PROPOSAL`, or `OWNER DECISION REQUIRED` rather than promoting inference into normative behavior; and
+- link every requirement to its canonical owner, primary contract, derived implementation surfaces, concrete planned validation case, and evidence path or documented evidence exception under [../docs/TRACEABILITY_RULES.md](../docs/TRACEABILITY_RULES.md).
+
+A documentation change that materially affects a lifecycle, protocol, API, security rule, persistence contract, requirement, registry identity, or recovery behavior MUST update the affected projections and traceability in the same change or record an explicit gap. Planned validation is not executed evidence, and documentation MUST NOT claim implementation, runtime, device, or test completion before the corresponding evidence exists.

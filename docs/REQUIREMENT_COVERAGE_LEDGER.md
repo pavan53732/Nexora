@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 175 requirement rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. `NFR-PERF-006` and `NFR-REL-004` remain duplicated in the requirements authority with distinct meanings, so their single ledger rows are provisional until the requirements authority resolves those identity collisions.
+This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 177 requirement rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. The previously duplicated context-integrity meanings are now represented by the distinct canonical identities `NFR-CI-006` and `NFR-CI-007`; `NFR-PERF-006` remains battery impact and `NFR-REL-004` remains data persistence.
 
 ## Functional Requirements
 
@@ -300,6 +300,8 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-CI-003` | `requirements/NFR.md` | MAPPED | Evidence Engine | `specs/CONTEXT_MANAGEMENT.md` | `UT-EV-007` | `evidence/unit/UT-EV-007/` |
 | `NFR-CI-004` | `requirements/NFR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `UT-AS-010` | `evidence/unit/UT-AS-010/` |
 | `NFR-CI-005` | `requirements/NFR.md` | MAPPED | Context + Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-RN-013` | `evidence/unit/UT-RN-013/` |
+| `NFR-CI-006` | `requirements/NFR.md` | MAPPED | Agent Runtime + Provider | `architecture/AGENT_RUNTIME.md` | `UT-REASON-001`, `E2E-RN-001` | `evidence/unit/UT-REASON-001/`, `evidence/e2e/E2E-RN-001/` |
+| `NFR-CI-007` | `requirements/NFR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `UT-AS-010` | `evidence/unit/UT-AS-010/` |
 | `NFR-USE-001` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-002` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-003` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |

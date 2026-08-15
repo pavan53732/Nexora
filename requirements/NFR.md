@@ -128,14 +128,14 @@
 | NFR-ENV-007 | Environment reset and upgrade preserve workspace files outside the overlay | 100% | VFS bind-mount test |
 
 
-## Context Integrity and Bounded Execution
+## Context Integrity, Bounded Execution, and Execution-Mode Selection
 
 | ID | Requirement |
 |---|---|
 | NFR-CI-001 | Canonical conversation history must remain recoverable independently of summaries or compacted context views. |
 | NFR-CI-002 | Read-time context assembly must preserve provenance and authority distinctions between conversation, memory, evidence, requirements, constraints, decisions, tool results, and execution state. |
-| NFR-REL-004 | Iterative reasoning and execution loops must use bounded-progress controls with explicit retry, step, and time limits. |
-| NFR-PERF-006 | The runtime must prefer the minimum sufficient execution mode (FAST, NORMAL, DEEP, VERIFY, RECOVER) rather than using deep reasoning by default. |
 | NFR-CI-003 | Significant user-facing factual claims must retain one-to-one evidence, authority, freshness, contradiction, verifier, confidence, and disposition metadata. |
 | NFR-CI-004 | Semantic progress must be evaluated against declared acceptance criteria; irrelevant changes must not reset zero-progress detection. |
 | NFR-CI-005 | Reasoning and execution settings must not exceed non-overridable provider, device, and resource-class safety ceilings. |
+| NFR-CI-006 | The runtime must prefer the minimum sufficient execution mode (FAST, NORMAL, DEEP, VERIFY, RECOVER) rather than using deep reasoning by default. |
+| NFR-CI-007 | Iterative reasoning and execution loops must use bounded-progress controls with explicit retry, step, and time limits. |

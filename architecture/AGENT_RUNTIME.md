@@ -337,6 +337,8 @@ sealed class AgentStep {
 }
 ```
 
+`AgentStep.Thinking` and its `reflection` value are in-memory control-flow placeholders in this pseudocode, not a persistence schema, protocol field, API response, export field, or user-visible history artifact. Implementations MUST NOT serialize unrestricted internal reasoning, hidden prompts, raw provider continuation state, or raw untrusted content from this step into `AgentCheckpoint`, execution history, or UI. Durable and user-visible reasoning remains limited to the existing redacted `ReasoningSummary` and structured evidence, decision, uncertainty, and verification artifacts defined by [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md) §6.2.
+
 ## Token Budgeting
 
 ```kotlin

@@ -42,6 +42,7 @@
 | Context assembly, ReasoningPolicy, ContextSnapshot, grounding, and reasoning-artifact privacy | `specs/CONTEXT_MANAGEMENT.md` | `architecture/RUNTIME.md` (Context Builder), `architecture/AGENT_RUNTIME.md`, `architecture/MEMORY_SYSTEM.md`, `models/Inference.md`, `specs/DATABASE_SCHEMA.md`, `protocols/Agent-Protocol.md`, `docs/api/Agent-API.md`, `docs/adr/ADR-0008-Typed-Inference-Streaming.md` |
 | Autonomy learning lessons and trust-state projection | `specs/AUTONOMY_STABILITY.md` | `models/AutonomyLearning.md`, `models/Skill.md`, `architecture/MEMORY_SYSTEM.md`, `security/PermissionModel.md`, `testing/cases/UnitTestCases.md` |
 | No internal credit or cost gating | `decisions/DEC-25-no-internal-credit-cost-gating.md` | `requirements/FR.md`, `architecture/AGENT_RUNTIME.md`, `architecture/PROVIDER_SYSTEM.md`, `specs/CONTEXT_MANAGEMENT.md`, `models/Inference.md`, `docs/api/Provider-API.md`, `specs/AI_PROVIDERS.md`, `docs/PRODUCT_PRINCIPLES.md`, `docs/ROADMAP.md`, `specs/TERMINAL.md`, `security/ThreatModel.md`, `requirements/RISKS.md` |
+| Non-functional requirement identity separation | `decisions/DEC-43-requirement-identity-separation.md` + `requirements/NFR.md` | `docs/REQUIREMENT_COVERAGE_LEDGER.md`, `docs/TRACEABILITY.md`, `docs/FR_NFR_MAPPING.md`, `architecture/AGENT_RUNTIME.md`, `docs/api/Runtime-API.md`, `docs/DOCUMENTATION_COMPLETENESS_INVENTORY.md` |
 | Android-first Product Vision positioning | `decisions/DEC-26-android-first-product-positioning.md` | `docs/PRODUCT_VISION.md`, `docs/PRODUCT_PRINCIPLES.md` |
 | Concrete requirement owner labels | `decisions/DEC-27-concrete-requirement-owner-labels.md` | `docs/REQUIREMENT_COVERAGE_LEDGER.md`, `testing/cases/RegressionTestCases.md`, `standards/Coding-Standard.md`, `VERSIONING.md`, `docs/ENVIRONMENT_SETUP.md` |
 | ROADMAP terminology normalization | `decisions/DEC-28-roadmap-terminology-normalization.md` | `docs/ROADMAP.md`, `ui/Navigation.md`, `architecture/PLUGIN_SYSTEM.md`, `sdk/PluginSDK.md`, `models/Plugin.md`, `registry/PLUGINS.md` |
@@ -101,6 +102,7 @@
 | Concurrent file-lock ownership | `architecture/WORKFLOW_ENGINE.md` (§Execution Model) | `architecture/RUNTIME.md` (§Resource Manager), `architecture/MULTI_AGENT_SYSTEM.md` (§SA-3) |
 | Plugin trust and revocation | `architecture/PLUGIN_SYSTEM.md` | `state-machines/PluginLifecycle.md`, `registry/PLUGINS.md`, `sdk/PluginSDK.md` |
 | Browser page/action state | `specs/BROWSER.md` | `specs/BACKGROUND_EXECUTION.md`, `architecture/TOOL_SYSTEM.md` (§Browser tools), `architecture/TOOL_SYSTEM.md` (§Operation-Level Side-Effect Recovery) |
+| Documentation governance and implementation-ready contract discipline | `standards/Documentation-Standard.md` + `docs/TRACEABILITY_RULES.md` | `docs/DOCUMENTATION_COMPLETENESS_INVENTORY.md`, `docs/TRACEABILITY.md`, `docs/REQUIREMENT_COVERAGE_LEDGER.md` |
 
 ## Contract Derivation
 

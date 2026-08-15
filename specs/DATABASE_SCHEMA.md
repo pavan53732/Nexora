@@ -173,6 +173,8 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 | phase | TEXT | |
 | occurredAt | TEXT | |
 
+`execution_checkpoint.historyLogJson` is a structured execution-recovery and audit projection. It MUST NOT contain unrestricted internal model reasoning, hidden system prompts, raw untrusted content, credentials, raw provider continuation state, or other private provider artifacts. Durable/user-visible reasoning remains limited to the redacted `reasoning_summary` contract and structured evidence/provenance records.
+
 ### `task`
 | Column | Type | Notes |
 |--------|------|-------|
