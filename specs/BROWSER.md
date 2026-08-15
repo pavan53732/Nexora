@@ -63,6 +63,16 @@ Browser automation is exposed to the agent loop via specialized tools (`TOOL-2xx
 
 ---
 
+## 3.1 Side-Effect and Recovery Contract
+
+Browser operations remain ordinary Tool invocations for authorization, correlation, idempotency, timeout, cancellation, audit, and recovery. This specification does not create a new Browser permission scope, lifecycle state, error code, or reconciliation mechanism.
+
+`browser_click`, `browser_type`, and `browser_evaluate` are potentially externally side-effecting operations. `browser_open` is navigation state change and may trigger remote page effects; it therefore follows the same uncertain-completion rule when the host bridge has dispatched the request. `browser_screenshot` and `browser_extract` are observation-oriented, but still preserve the standard Tool invocation identity and correlation metadata.
+
+If the WebView bridge, process, or network transport fails after dispatch and completion is not confirmed, the Tool result MUST remain `UNKNOWN_COMPLETION` under [../architecture/TOOL_SYSTEM.md](../architecture/TOOL_SYSTEM.md) §Operation-Level Side-Effect Recovery. The runtime MUST NOT silently replay a potentially mutating operation. Reconciliation uses the existing provider/status lookup, deterministic compensation, or explicit manual-reconciliation contract declared by the operation owner. A confirmed authorization denial remains `NXR-2003` with its canonical subreason and no WebView action is dispatched.
+
+Browser operation history MUST preserve the existing `toolCallId`, idempotency key, `correlationId`, target/selector metadata in redacted form, dispatch status, completion state, reconciliation evidence, and final disposition through the existing ToolInvocation and audit contracts. The WebView bridge does not become a second lifecycle owner.
+
 ## 4. Bridge Data Contracts (Kotlin)
 
 ### Browser Navigation Request

@@ -26,9 +26,10 @@ Runtime Executor          Authorization Gate          Sandbox Runner
 ```
 
 1. **Authorization Gate**: The complete authorization gate (see `security/PermissionModel.md`) validates the Tool descriptor, resolves every required scope through PermissionScopeRegistry, denies unknown/effective-DENY scopes, aggregates ASK into validated approval transaction, applies ClassifierPolicy, and optionally evaluates the Classifier. Authorization denial returns `NXR-2003` with authoritative subreason (`UNKNOWN_SCOPE`, `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`). Invalid descriptors return `NXR-2005` with `INVALID_SCOPE_DECLARATION`. No Tool side effect occurs before complete authorization.
-2. **Process Spawn**: The sandbox manager allocations sandbox memory/disk slices and spawns the tool runner inside proot.
-3. **Execution & Stream**: The tool runs, streams real-time stdout/stderr into the activity feed (for long-running terminal scripts), and commits file snapshot modifications.
-4. **Outcome Publication**: The sandbox manager collects exit codes, transforms exceptions into `CanonicalErrorEnvelope` records, and dispatches the `ToolExecuted` event onto the Event Bus. A Tool sandbox-policy violation, including Tool-originated filesystem path escape, returns `NXR-2009`.
+2. **Cross-layer denial projection (DEC-35):** On `USER_DENIED` or approval-expiry `POLICY_DENIAL`, the Tool boundary returns the existing `NXR-2003` denial result without a side effect and does not publish successful `ToolExecuted` semantics. The owning Task commits `WaitingApproval → Failed`; a participating Agent may independently publish `AgentStatusChanged` to `Paused`. A later attempt requires a new approval transaction.
+3. **Process Spawn**: The sandbox manager allocates sandbox memory/disk slices and spawns the tool runner inside proot.
+4. **Execution & Stream**: The tool runs, streams real-time stdout/stderr into the activity feed (for long-running terminal scripts), and commits file snapshot modifications.
+5. **Outcome Publication**: The sandbox manager collects exit codes, transforms exceptions into `CanonicalErrorEnvelope` records, and dispatches the `ToolExecuted` event onto the Event Bus. A Tool sandbox-policy violation, including Tool-originated filesystem path escape, returns `NXR-2009`.
 
 ## Message Shapes
 

@@ -22,7 +22,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Switching.** Selecting a different workspace triggers the current workspace to pause: running agents are checkpointed, then the new workspace is loaded through the same flow.
 
-**Deletion.** `WorkspaceManager.delete(id)` first confirms with the user, stops all running agents within the workspace, deletes the sandbox directory, performs a cascading DB delete, and publishes `WorkspaceDeleted`.
+**Deletion.** `WorkspaceManager.delete(id)` first confirms with the user, stops all running agents within the workspace, deletes the sandbox directory, performs a cascading DB delete, and publishes `WorkspaceDeleted` only after cleanup is complete. If cleanup fails, NXR-7007 records Sandbox recovery and queues deferred purge; Workspace lifecycle state remains unchanged and no `WorkspaceDeleted` success event is published.
 
 **Error Recovery.** If sandbox directory creation fails, error code NXR-7001 is raised. Directory allocation terminates and the Workspace remains uncreated; canonical Sandbox recovery retries sandbox creation.
 
@@ -38,7 +38,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Completion.** When the goal is achieved, the loop terminates, state becomes `Completed`, a summary is persisted, a notification is sent to the user, and the `ForegroundService` stops.
 
-**Failure & Cancellation.** Unrecoverable errors set state to `Failed`, store error details, notify the user, and offer a retry option. User-initiated cancellation sets a flag checked at every iteration, allowing graceful shutdown with partial results saved.
+**Failure & Cancellation.** Unrecoverable errors set state to `Failed`, store error details, notify the user, and offer a retry option. User-initiated cancellation sets a flag checked at every iteration, allowing graceful shutdown with partial results saved. For an approval denial or expiry, the Tool/Permission boundary returns `NXR-2003` without side effects; the owning Task fails, while the participating Agent may pause for later user-directed work under DEC-35. A later attempt requires a new authorization transaction.
 
 ---
 
@@ -66,7 +66,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Registration & Configuration.** A provider is added to `ProviderManager` with its config (API key, base URL, model). The API key is encrypted via `SecureKeyStore` and the full config is persisted to `DataStore`.
 
-**Health & Failover.** Periodic `provider.healthCheck()` calls update the provider state to `Healthy`, `Degraded`, or `Unhealthy`. If a provider becomes unhealthy, `ProviderManager` automatically switches to the next configured provider and publishes `ProviderSwitched`.
+**Health & Failover.** Periodic health observations update the independent persisted `ProviderHealth` predicate to `Healthy`, `Degraded`, or `Unhealthy`; they do not change administrative `ProviderStatus`. `HealthMonitor` records health and `ProviderRouter` may change future route selection or publish `ProviderSwitched` according to the provider routing contract. Administrative lifecycle transitions remain owned by `ProviderLifecycle` and use `ProviderStatus` only.
 
 **Use & Removal.** Runtime code calls `ProviderManager.getActiveProvider()` to route completion and streaming requests while monitoring latency and errors. Removing a provider deletes its config and clears the key from the keystore.
 
@@ -90,7 +90,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Optimization.** When battery is low, checkpoint frequency is reduced, non-essential work is paused, and the user is notified of the throttle.
 
-**Stop & Restore.** On agent completion, failure, or cancellation the service stops, the notification is removed, and the wake lock is released. Checkpointed executions follow the canonical checkpoint-resume path in `specs/BACKGROUND_EXECUTION.md`. A Task that was in ephemeral `RetryPending` is not reconstructed as RetryPending; DEC-7 process-death recovery uses eligible R4 evidence, preserves the existing Execution, reconciles the Task to `Queued`, and then returns it to normal scheduling.
+**Stop & Restore.** On agent completion, failure, or cancellation the service stops, the notification is removed, and the wake lock is released. Checkpointed executions follow the canonical checkpoint-resume path in `specs/BACKGROUND_EXECUTION.md`. Autonomous background terminal sessions are bound to their parent Task/Execution and effective deadline under DEC-34; parent cancellation, terminal state, or deadline expiry invokes terminal termination/checkpoint recovery, and missing or terminal parents are reconciled without adding lifecycle states. A Task that was in ephemeral `RetryPending` is not reconstructed as RetryPending; DEC-7 process-death recovery uses eligible R4 evidence, preserves the existing Execution, reconciles the Task to `Queued`, and then returns it to normal scheduling.
 
 
 > **S3 — Lifecycle specification (Option A):** All 4 lifecycle files (`WorkspaceLifecycle.md`, `SessionLifecycle.md`, `MemoryLifecycle.md`, `TerminalSessionLifecycle.md`) now contain expanded state definitions, transition rules, and dependency references. Three new canonical state-machine companions added in `state-machines/`: `WorkspaceLifecycle.md` (Created/Active/Suspended/Archived/Deleted), `MemoryLifecycle.md` (Recorded/Indexed/Retrieved/Retained/Expired/Deleted), `TerminalSessionLifecycle.md` (Created/Attached/Running/Detached/Closed/Failed). Canonical ownership preserved (`docs/CANONICAL_SOURCES.md` updated; `ARCHITECTURE.md` references updated). `DECISION_LOG.md` DL-027 (S3 lifecycle fill — Option A), DL-029 (S3-E state machines); `CHANGELOG.md` updated; `FR_NFR_MAPPING.md` references `FR-EL-007` (parallelism), `FR-AS-007` (idempotent recovery), `FR-M001` (memory lifecycle), `FR-TE001` (terminal session).

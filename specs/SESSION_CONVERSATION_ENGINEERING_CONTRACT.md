@@ -231,8 +231,10 @@ This specification does not alter DEC-13 through DEC-21. It only closes implemen
 - Recovery must not implicitly restore unrelated task, execution, provider, workspace, or external state.
 - Recovery semantics remain non-destructive and idempotent where already established by the canonical checkpoint documents.
 
-### Unresolved choices
+### Bounded downstream choices
 
-- Storage technology.
-- Numeric retention duration, quota values, cleanup scheduling, and concrete deletion mechanics beyond DEC-23.
-- Any behavior not already decided by DEC-13 through DEC-24 or the checkpoint documents.
+- Storage technology and schema implementation.
+- Concrete DAO, migration, transaction, serialization, cleanup authorization, and scheduler mechanics.
+- Any behavior not already decided by DEC-13 through DEC-24, DEC-31, or the checkpoint documents remains outside this semantic contract and must not redefine those authorities.
+
+DEC-31 has selected the operational checkpoint policy: a default 30-day retention window for superseded checkpoints, a default quota of 100 retained checkpoints per workspace, and idempotent daily cleanup with transactional dependency-protection rechecks and audit recording.

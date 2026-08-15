@@ -35,11 +35,11 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | Trigger | From | To | Guard |
 |---------|------|----|-------|
 | `submit()` | Draft | Pending | Task schema valid |
-| `enqueue()` | Pending | Queued | Dependency references are valid, dependency graph is acyclic, and all dependencies completed; effective deadline has not expired |
+| `enqueue()` | Pending | Queued | Dependency references are valid, dependency graph is acyclic, and all dependencies completed; effective deadline has not expired; invalid references/cycles reject with `NXR-1014` and leave the Task unchanged |
 | `start()` | Queued / RetryPending | Running | Agent available; when the source is `RetryPending`, the existing retry backoff has elapsed and the TaskScheduler authorizes the start. |
 | `block(dependency)` | Running | Blocked | Dependency not yet completed |
 | `unblock()` | Blocked | Running | Dependency resolved |
-| `dependencyFailed()` | Pending / Blocked | Failed | A required dependency entered terminal `Failed` or `Cancelled` state |
+| `dependencyFailed()` | Pending / Blocked | Failed | A required dependency entered terminal `Failed` or `Cancelled` state; `NXR-1015` / `Server` |
 | `requestEscalation(question)` | Running | BlockedAwaitingInput | Loop escalation triggered or capability gap identified |
 | `resolveEscalation(answer)` | BlockedAwaitingInput | Running | User input received; resumes from checkpoint |
 | `requestApproval()` | Running | WaitingApproval | Action exceeds autonomy scope |
@@ -49,13 +49,17 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | `fail(error)` | Running | Failed | Error is non-retryable |
 | `fail(error)` | Running | RetryPending | Error is retryable && retries < max |
 | `expire()` | WaitingApproval | Failed | Approval transaction expired; canonical `NXR-2003` / `POLICY_DENIAL`; no automatic approval or retry |
-| `expire()` | Pending / Blocked / BlockedAwaitingInput | Failed | Effective deadline reached; canonical deadline failure; no retry unless a separate retryable failure rule applies |
+| `expire()` | Pending / Blocked / BlockedAwaitingInput | Failed | Effective deadline reached; `NXR-1016` / `Infrastructure`; no retry unless a separate retryable failure rule applies |
 | `cancel()` | * | Cancelled | — |
 | `retry()` | RetryPending | Queued | Backoff elapsed |
 
 ### DEC-30 Liveness Projections
 
-The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected without lifecycle mutation. A failed dependency propagates a terminal dependency failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`, and approval expiry uses `NXR-2003` / `POLICY_DENIAL`; both terminate the task through `Failed` without automatic retry. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
+The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected with `NXR-1014` / `Client` without lifecycle mutation. A failed dependency propagates `NXR-1015` / `Server` and terminal failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`, and approval expiry uses `NXR-2003` / `POLICY_DENIAL`; both terminate the task through `Failed` without automatic retry. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed` with `NXR-1016` / `Infrastructure`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
+
+### DEC-35 Approval Projection
+
+The PermissionModel/Tool boundary owns the authorization result and returns `NXR-2003` with `USER_DENIED` or `POLICY_DENIAL`. The Task remains authoritative for operation outcome: approval denial or expiry commits `WaitingApproval → Failed`, performs no Tool side effect, and does not retry automatically. An Agent participating in the Task may independently transition to `Paused` under DEC-35; that Agent projection does not resume, complete, or change the failed Task.
 
 ### Invalid Transitions
 

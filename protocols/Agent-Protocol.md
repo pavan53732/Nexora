@@ -20,6 +20,8 @@
 4. Runtime publishes events only after durable state transitions are committed.
 5. Agent returns a terminal `TaskProjection` or canonical error outcome.
 
+When a Tool approval transaction is denied or expires, the protocol preserves one correlated outcome: Tool `NXR-2003` denial with its subreason and no side effect; Task `Failed`; and, when the participating Agent remains available, Agent `Paused`. The Agent pause does not resume or alter the failed Task. Any later operation requires a new approval transaction and is not an automatic retry.
+
 ## Message Rules
 
 Every protocol message tied to task execution MUST include:

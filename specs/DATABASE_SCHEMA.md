@@ -177,8 +177,13 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 | status | TEXT | Maps TaskStatus |
 | effectiveDeadline | TEXT | Immutable effective task deadline inherited by waits and child operations |
 | retryNotBefore | TEXT NULL | Retry backoff boundary; direct start cannot bypass scheduler authorization |
+| latestErrorJson | TEXT NULL | Redacted `CanonicalErrorEnvelope`; DEC-33 codes `NXR-1014`/`NXR-1015`/`NXR-1016` are persisted with lifecycle effect and correlation ID |
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
+
+### Background Terminal Persistence Requirements (DEC-34)
+
+This schema does not select a dedicated `terminal_session` table. Wherever a persisted TerminalSession representation is implemented, an autonomous background session MUST retain `taskId`, `executionId`, `workspaceId`, `correlationId`, `effectiveDeadline`, `restoreCheckpoint`, `status`, and cleanup disposition sufficient to reconcile missing, terminal, cancelled, or expired parents. Concrete table names, columns beyond these semantic requirements, DAO operations, migrations, and transaction mechanics remain implementation choices.
 
 ### `execution_replay` (append-only)
 

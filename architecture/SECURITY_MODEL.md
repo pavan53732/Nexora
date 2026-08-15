@@ -102,7 +102,7 @@ The following guarantees apply to every provider and provider profile:
 | **Data-flow isolation** | Context assembled for provider A is delivered only to provider A's endpoint. Every request is tagged with the active profile ID; delivery through any other provider is rejected by the router. |
 | **Code isolation** | Provider implementations (Phase 8 plugins, e.g. PLG-018) run in isolated classloaders with no access to app internals, other provider instances, or workspace data — except through the permissioned `ToolContext` surface (same rule as plugin sandboxing, NFR-SEC-009). |
 | **Network confinement** | Provider HTTP clients connect only to their configured `baseUrl` (defaults per PROV-001…009). No arbitrary outbound connections from provider code without an explicit `network:*` grant. TLS 1.3 + certificate pinning (NFR-SEC-004). |
-| **Crash isolation** | A provider failure, timeout, or OOM cannot take down the host app or other providers — bounded retries with backoff and health-based routing (see ProviderLifecycle: Healthy → Degraded → Unhealthy → failover). |
+| **Crash isolation** | A provider failure, timeout, or OOM cannot take down the host app or other providers — bounded retries with backoff and health-based routing. `ProviderHealth` (`Healthy`/`Degraded`/`Unhealthy`) is an independent routing predicate; administrative `ProviderStatus` lifecycle remains governed by `ProviderLifecycle`. |
 | **Auditability** | Every provider call is recorded: profile, workspace, agent, model, token usage (observability, FR-P009). |
 
 ## Inference Stream Trust Boundary

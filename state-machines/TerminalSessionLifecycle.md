@@ -82,6 +82,10 @@ stateDiagram-v2
     Failed --> [*]
 ```
 
+## DEC-34 Background Session Binding
+
+A background terminal session is represented only by the existing `RUNNING` or `DETACHED` states. When created by autonomous execution, its persisted execution metadata MUST include the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline. Parent cancellation, parent terminal state, or deadline expiry invokes the existing termination/checkpoint path; an idempotent reconciliation closes or fails sessions whose parent is missing, terminal, or expired. No `SUSPENDED`, `RESTORED`, or `ORPHANED` lifecycle state is created.
+
 ## Normative Transition Contract
 
 Every transition in this state machine MUST be treated as an atomic command. The

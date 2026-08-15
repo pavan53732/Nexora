@@ -14,3 +14,9 @@
 | RT-LIVE-003 | RT-LIVE | RetryPending direct start preserves backoff and scheduler authorization | Task Lifecycle | Planned | `evidence/regression/RT-LIVE-003/` | 2026-08-15 |
 | RT-LIVE-004 | RT-LIVE | Agent Completing finalization transition remains explicit and terminal commit is guarded | Agent Lifecycle | Planned | `evidence/regression/RT-LIVE-004/` | 2026-08-15 |
 | RT-LIVE-005 | RT-LIVE | Failure/cancellation/denial/missing-draft paths cannot regress into successful completion | Agent Runtime | Planned | `evidence/regression/RT-LIVE-005/` | 2026-08-15 |
+| RT-LIVE-006 | RT-LIVE | Invalid dependency, unsatisfied dependency, and effective-deadline expiry use NXR-1014/NXR-1015/NXR-1016 with no unauthorized retry or Task mutation | Task + Runtime | Planned | `evidence/regression/RT-LIVE-006/` | 2026-08-15 |
+| RT-WS-002 | RT-WS | NXR-7007 cleanup failure leaves Workspace lifecycle unchanged and preserves deferred Sandbox cleanup recovery | Workspace + Sandbox | Planned | `evidence/regression/RT-WS-002/` | 2026-08-15 |
+| RT-PROVIDER-002 | RT-PROVIDER | ProviderStatus and ProviderHealth remain independent across unhealthy, disabled, and removed projections | Provider Layer | Planned | `evidence/regression/RT-PROVIDER-002/` | 2026-08-15 |
+| RT-TERM-002 | RT-TERM | Background terminal parent binding, deadline expiry, cancellation, restart, and missing-parent cleanup preserve canonical terminal states | Terminal + Runtime | Planned | `evidence/regression/RT-TERM-002/` | 2026-08-15 |
+| RT-BROWSER-001 | RT-BROWSER | Browser side-effect timeout remains UNKNOWN_COMPLETION and is not silently replayed without reconciliation | Browser + Tool System | Planned | `evidence/regression/RT-BROWSER-001/` | 2026-08-15 |
+| RT-AUTH-001 | RT-AUTH | Approval denial preserves NXR-2003/no side effect, Task Failed, Agent Paused, and new-transaction-only continuation | Security + Agent Runtime | Planned | `evidence/regression/RT-AUTH-001/` | 2026-08-15 |

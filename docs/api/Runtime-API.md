@@ -17,12 +17,16 @@ The Runtime API governs workspace orchestration, session isolation, transactiona
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
 | `createWorkspace`| Workspace `Created` | Stable workspace projection | Initialization failed (`NXR-7001`), database corrupt (`NXR-9001`) | Safe (Idempotent) | Validates unique owner scope; establishes isolated directory structure | Storage and folder isolation tests |
-| `startExecution` | Execution `Created → Running` | Execution projection with correlation ID | Checkpoint failed (`NXR-1003`), service denied (`NXR-1012`), not initialized (`NXR-1013`) | Safe (Idempotent Key) | Spawns foreground CPU wake locks inside isolated processes; validates target task | Foreground service and task start tests |
+| `startExecution` | Execution `Created → Running` | Execution projection with correlation ID | Checkpoint failed (`NXR-1003`), service denied (`NXR-1012`), not initialized (`NXR-1013`) | Safe (Idempotent Key) | Spawns foreground CPU wake locks inside isolated processes; validates target task | Foreground service and task-start tests |
 | `checkpoint` | No lifecycle change | Confirmed checkpoint ID with timestamp | Serialization failed (`NXR-1003`), disk full (`NXR-7003`) | Safe to retry | Performs transactional WAL commit of execution snapshot variables | Checkpoint and rollback tests |
 | `resumeExecution` | Interrupted nonterminal Execution remains/returns `RUNNING` | Same-ID projection with higher version | Corrupt checkpoint (`NXR-1004`), stale version, terminal target | Idempotency key required | Same `executionId`/`correlationId`; checkpoint required | `IT-LC-001..005`, `IT-LC-018/020` |
 | `retryExecution` | New `CREATED → RUNNING` Execution; predecessor unchanged | New-ID projection with `priorExecutionId` | Missing/nonterminal predecessor, cyclic lineage, idempotency conflict | Idempotency key required | Terminal predecessor remains terminal | `IT-LC-006..010`, `IT-LC-016/017/019` |
 
 Every API call MUST carry a `correlationId`.
+
+### Background terminal binding (DEC-34)
+
+Autonomous background terminal work is not an unbound Runtime operation. The created TerminalSession projection MUST carry the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline. Parent cancellation, terminal state, or deadline expiry invokes the existing terminal termination/checkpoint path; requests without a parent Task/Execution are rejected before process creation. Reconciliation closes or fails sessions whose parent is missing, terminal, or expired.
 
 ## Contract Shapes
 
@@ -111,4 +115,5 @@ interface RuntimeApi {
 | `checkpoint` | `NXR-1003` (Save Failed) | Retry once; if persistent, transition workspace to `SUSPENDED` status. |
 | `resumeExecution` | `NXR-1004` (Restore Failed) | Keep identity stable; reject terminal/stale targets; fall back only to a valid checkpoint. |
 | `retryExecution` | Canonical validation/conflict envelope | Require terminal predecessor, create new ID once per idempotency key, preserve acyclic lineage. |
+| Task queue/dependency/deadline validation | `NXR-1014` (Task dependency invalid), `NXR-1015` (Task dependency unsatisfied), `NXR-1016` (Task deadline expired) | Scheduler rejects invalid dependency graphs without Task mutation; TaskLifecycle fails dependent Tasks or deadline-expired waits through the existing `Failed` effect; no automatic retry or deadline renewal. |
 | | `NXR-3004` (Task Timeout) | Gracefully abort active runner; capture partial log outputs. |

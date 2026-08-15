@@ -59,10 +59,14 @@ Rules:
   handoff ([MULTI_AGENT_SYSTEM](../architecture/MULTI_AGENT_SYSTEM.md)).
 - **Bounded waiting** — each task has an effective deadline inherited by dependency
   waits, approval waits, clarification waits, delegated children, and provider
-  `Retry-After` waits. `Pending`, `Blocked`, and `BlockedAwaitingInput` expire to
-  `Failed` when that deadline is reached. Approval denial uses `NXR-2003` /
-  `USER_DENIED` and transitions `WaitingApproval` to `Failed`; it does not silently
-  resume or remain pending.
+  `Retry-After` waits.   `Pending`, `Blocked`, and `BlockedAwaitingInput` expire to
+  `Failed` when that deadline is reached, using `NXR-1016` under DEC-33. Invalid
+  dependency references or cycles are rejected with `NXR-1014`; terminally failed
+  dependencies propagate `NXR-1015` to dependent Tasks. Approval denial uses
+  `NXR-2003` / `USER_DENIED` and transitions `WaitingApproval` to `Failed`; approval
+  expiry uses `NXR-2003` / `POLICY_DENIAL`. These outcomes do not silently resume,
+  renew the deadline, or remain pending.
+
 
 ## 2. Scheduled Jobs
 
@@ -265,4 +269,4 @@ Every request, decision, approval, delegation, start, progress update, notificat
 - **Phase 8**: Plugin-provided scheduled jobs and background extensions.
 
 
-> **S4 — Terminal session restore in background execution:** Background tasks (`run_background`, `terminal_run_background`) reference terminal session state (`TerminalSession.status`, `restoreCheckpoint`, `sessionBufferReplay`) per `specs/TERMINAL.md` (§Restore Behavior). Session restore aligns with `FR-AS-007` (idempotent recovery) + `NFR-REL-012` (exactly-once) + `FR-M013` (user preferences for persistence). Checkpoint saved on `SUSPENDED` transition; restored on `Restored` transition (`lifecycle/TerminalSessionLifecycle.md` — S3 filled). See `docs/DECISION_LOG.md` DL-028.
+> **S4 — Terminal session restore in background execution:** Background tasks (`run_background`, `terminal_run_background`) reference terminal session state (`TerminalSession.status`, `restoreCheckpoint`, `sessionBufferReplay`) per `specs/TERMINAL.md` (§Restore Behavior). Under DEC-34, every autonomous background TerminalSession also carries the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline; parent cancellation, terminal state, or deadline expiry invokes the existing termination/checkpoint path, and missing or terminal parents are reconciled without a new state. Session restore aligns with `FR-AS-007` (idempotent recovery) + `NFR-REL-012` (exactly-once) + `FR-M013` (user preferences for persistence). A checkpoint is saved while the canonical session is `Detached` with `suspended=true`; restoration follows the existing `Detached → Attached → Running` path (`state-machines/TerminalSessionLifecycle.md`). See `docs/DECISION_LOG.md` DL-028 and DEC-34.

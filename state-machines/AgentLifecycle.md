@@ -75,13 +75,17 @@ To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly
 | `resume()` | Paused | Running | — |
 | `requestApproval()` | Running | WaitingApproval | Action exceeds autonomy level |
 | `approve()` | WaitingApproval | Running | — |
-| `deny()` | WaitingApproval | Paused | — |
+| `deny()` | WaitingApproval | Paused | `NXR-2003` with `USER_DENIED` or `POLICY_DENIAL`; the Agent remains available for later user-directed work, while the owning Task commits `Failed` under DEC-35 |
 | `reflect()` | Running | Reflecting | Reflection policy enabled |
 | `complete()` | Reflecting / Running | Completing | Acceptance/evidence gate passed; finalization required. |
 | `finalize()` | Completing | Completed | Artifacts and required memory/history persistence committed; resources released; terminal event ready. |
 | `fail(error)` | * | Failed | Non-recoverable exception |
 | `cancel()` | * | Cancelled | — |
 | `retry()` | Failed | Ready | Max retries not exceeded; creates a new runtime incarnation/version and execution identity while preserving the failed predecessor and stable registered `agentId` |
+
+### DEC-35 Approval Projection
+
+Authorization remains owned by the PermissionModel/Tool boundary. When an approval transaction for a Tool call is denied or expires, the ToolInvocation produces the existing `NXR-2003` non-success result with its denial subreason and no side effect. The owning Task transitions `WaitingApproval → Failed`; the Agent may transition `WaitingApproval → Paused` to remain available for later user-directed work. Agent `Paused` does not resume the denied Task or report success. A later operation requires a new authorization transaction and existing Agent guards.
 
 ### Invalid Transitions
 

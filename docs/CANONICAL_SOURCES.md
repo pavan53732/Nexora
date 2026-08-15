@@ -34,7 +34,7 @@
 | Session–Conversation association lifecycle semantics | `decisions/DEC-20-session-conversation-association-lifecycle.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Session–Conversation continuation and recovery semantics | `decisions/DEC-21-session-conversation-continuation-recovery.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | BranchLineage artifact ownership | `decisions/DEC-22-branch-lineage-artifact-ownership.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `docs/TRACEABILITY.md` |
-| Conversation checkpoint retention, deletion, quota, cleanup, and dependency safety | `decisions/DEC-23-conversation-checkpoint-retention-deletion-policy.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `state-machines/ConversationCheckpointLifecycle.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `docs/TRACEABILITY.md` |
+| Conversation checkpoint retention, deletion, quota, cleanup, and dependency safety | `decisions/DEC-23-conversation-checkpoint-retention-deletion-policy.md` + `decisions/DEC-31-branch-lineage-and-checkpoint-operational-policy.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `state-machines/ConversationCheckpointLifecycle.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `docs/TRACEABILITY.md` |
 | Conversation-local metadata semantic boundary | `decisions/DEC-24-conversation-local-metadata-boundary.md` | `decisions/DEC-13-conversation-identity-persistence.md`, `architecture/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `docs/TRACEABILITY.md` |
 | Conversation checkpoint lifecycle | `state-machines/ConversationCheckpointLifecycle.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md` |
 | Checkpoint, recovery, and resume | `specs/BACKGROUND_EXECUTION.md` | `architecture/RUNTIME.md` (§Checkpoint System), `architecture/AGENT_RUNTIME.md` (saveCheckpoint), `state-machines/TaskLifecycle.md` |
@@ -47,6 +47,9 @@
 | ROADMAP terminology normalization | `decisions/DEC-28-roadmap-terminology-normalization.md` | `docs/ROADMAP.md`, `ui/Navigation.md`, `architecture/PLUGIN_SYSTEM.md`, `sdk/PluginSDK.md`, `models/Plugin.md`, `registry/PLUGINS.md` |
 | Execution-failure class binding | `decisions/DEC-29-execution-failure-class-binding.md` + `specs/EXECUTION_LIFECYCLE.md` | `errors/ERROR_CODES.md`, `state-machines/TaskLifecycle.md`, `architecture/RUNTIME.md`, `models/Execution.md`, `architecture/TOOL_SYSTEM.md`, applicable Provider/Sandbox/Plugin protocols and APIs, `testing/cases/UnitTestCases.md` |
 | Agent-loop liveness, retry, external-wait, provider-wait, and delegation-depth policy | `decisions/DEC-30-agent-loop-liveness-and-retry-bounds.md` + owning lifecycle/protocol authorities | `state-machines/TaskLifecycle.md`, `state-machines/AgentLifecycle.md`, `state-machines/ProviderStreamLifecycle.md`, `architecture/AGENT_RUNTIME.md`, `architecture/RUNTIME.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `docs/api/Tool-API.md`, `testing/*` |
+| Task dependency, unsatisfied-dependency, and deadline error identities | `decisions/DEC-33-task-liveness-error-identities.md` + `errors/ERROR_CODES.md` | `state-machines/TaskLifecycle.md`, `models/Task.md`, `architecture/RUNTIME.md`, `docs/api/Runtime-API.md`, `specs/BACKGROUND_EXECUTION.md`, `docs/TRACEABILITY.md`, `testing/*` |
+| Background terminal session liveness and parent binding | `decisions/DEC-34-background-terminal-session-liveness.md` + `state-machines/TerminalSessionLifecycle.md` | `specs/TERMINAL.md`, `models/TerminalSession.md`, `architecture/RUNTIME.md`, `docs/api/Runtime-API.md`, `specs/BACKGROUND_EXECUTION.md`, `specs/DATABASE_SCHEMA.md`, `testing/*` |
+| Approval denial cross-layer projection | `decisions/DEC-35-approval-denial-cross-layer-projection.md` + owning lifecycle/protocol authorities | `security/PermissionModel.md`, `state-machines/TaskLifecycle.md`, `state-machines/AgentLifecycle.md`, `protocols/Tool-Protocol.md`, `protocols/Agent-Protocol.md`, `docs/api/Tool-API.md`, `architecture/RUNTIME.md`, `testing/*` |
 | BranchLineage operational policy | `decisions/DEC-31-branch-lineage-and-checkpoint-operational-policy.md` + `state-machines/BranchLineageLifecycle.md` | `models/BranchLineage.md`, `models/Conversation.md`, `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `decisions/DEC-22-branch-lineage-artifact-ownership.md`, `decisions/DEC-23-conversation-checkpoint-retention-deletion-policy.md`, `specs/DATABASE_SCHEMA.md` |
 | Workflow scope and monitoring surface | `decisions/DEC-32-workflow-scope-and-monitoring-surface.md` | `architecture/WORKFLOW_ENGINE.md`, `state-machines/WorkflowLifecycle.md`, `ui/Navigation.md`, `ui/Components.md`, `docs/ROADMAP.md` |
 | Event bus | `architecture/RUNTIME.md` (§Core Interfaces — EventBus) | `docs/MODULE_BOUNDARIES.md` (shared module) |
@@ -70,7 +73,7 @@
 | Full Environment behavior | `specs/FULL_ENVIRONMENT.md` | `docs/ENVIRONMENT_SETUP.md`, `docs/PERFORMANCE_BUDGET.md`, `specs/TERMINAL.md` |
 | Workspace lifecycle | `state-machines/WorkspaceLifecycle.md` | `lifecycle/WorkspaceLifecycle.md`, `models/Workspace.md`, `docs/LIFECYCLES.md` |
 | Memory lifecycle | `state-machines/MemoryLifecycle.md` | `lifecycle/MemoryLifecycle.md`, `models/Memory.md` |
-| Terminal session lifecycle | `state-machines/TerminalSessionLifecycle.md` | `lifecycle/TerminalSessionLifecycle.md`, `models/TerminalSession.md`, `specs/TERMINAL.md` |
+| Terminal session lifecycle | `state-machines/TerminalSessionLifecycle.md` | `lifecycle/TerminalSessionLifecycle.md`, `models/TerminalSession.md`, `specs/TERMINAL.md`, `decisions/DEC-34-background-terminal-session-liveness.md` |
 | Task lifecycle | `state-machines/TaskLifecycle.md` | `models/Task.md`, `specs/EXECUTION_LIFECYCLE.md`, `docs/LIFECYCLES.md`, `protocols/Execution-Protocol.md` |
 | Session lifecycle | `state-machines/SessionLifecycle.md` | `lifecycle/SessionLifecycle.md`, `models/Session.md`, `docs/LIFECYCLES.md`, `specs/SESSION_CONVERSATION_RUNTIME_RECOVERY.md` |
 | Conversation domain model projection | `decisions/DEC-13-conversation-identity-persistence.md` | `models/Conversation.md`, `docs/SESSION_CONVERSATION_IMPLEMENTATION_HANDOFF.md` |
@@ -90,7 +93,7 @@
 | Multi-agent delegation ownership | `architecture/MULTI_AGENT_SYSTEM.md` | `protocols/Agent-Protocol.md`, `registry/AGENTS.md`, `registry/AGENT_MATRIX.md` |
 | Concurrent file-lock ownership | `architecture/WORKFLOW_ENGINE.md` (§Execution Model) | `architecture/RUNTIME.md` (§Resource Manager), `architecture/MULTI_AGENT_SYSTEM.md` (§SA-3) |
 | Plugin trust and revocation | `architecture/PLUGIN_SYSTEM.md` | `state-machines/PluginLifecycle.md`, `registry/PLUGINS.md`, `sdk/PluginSDK.md` |
-| Browser page/action state | `specs/BROWSER.md` | `specs/BACKGROUND_EXECUTION.md`, `architecture/TOOL_SYSTEM.md` (§Browser tools) |
+| Browser page/action state | `specs/BROWSER.md` | `specs/BACKGROUND_EXECUTION.md`, `architecture/TOOL_SYSTEM.md` (§Browser tools), `architecture/TOOL_SYSTEM.md` (§Operation-Level Side-Effect Recovery) |
 
 ## Contract Derivation
 

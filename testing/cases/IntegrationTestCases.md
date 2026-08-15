@@ -82,3 +82,7 @@
 | IT-LIVE-003 | IT-LIVE | RetryPending cannot start before backoff and scheduler authorization | Task Scheduler + Runtime | Planned | `evidence/integration/IT-LIVE-003/` | 2026-08-15 |
 | IT-LIVE-004 | IT-LIVE | Agent Completing finalizes artifacts and resources before Completed commit | Agent Runtime | Planned | `evidence/integration/IT-LIVE-004/` | 2026-08-15 |
 | IT-LIVE-005 | IT-LIVE | Stream failure, cancellation, missing draft, and denied Tool call route to non-success effects without completion synthesis | Agent + Provider + Tool | Planned | `evidence/integration/IT-LIVE-005/` | 2026-08-15 |
+| IT-LIVE-006 | IT-LIVE | Invalid dependency, unsatisfied dependency, and effective-deadline expiry persist NXR-1014/NXR-1015/NXR-1016 and the selected Task effects | Task + Runtime | Planned | `evidence/integration/IT-LIVE-006/` | 2026-08-15 |
+| IT-TERM-001 | IT-TERM | Background TerminalSession inherits parent identity/deadline and reconciles cancellation, terminal parent, expiry, and restart | Terminal + Runtime | Planned | `evidence/integration/IT-TERM-001/` | 2026-08-15 |
+| IT-BROWSER-001 | IT-BROWSER | WebView bridge interruption preserves UNKNOWN_COMPLETION and prevents silent replay of potentially mutating browser operations | Browser + Tool System | Planned | `evidence/integration/IT-BROWSER-001/` | 2026-08-15 |
+| IT-AUTH-001 | IT-AUTH | Approval denial/expiry emits NXR-2003, prevents side effects, commits Task Failed, and independently projects Agent Paused | Security + Agent + Task | Planned | `evidence/integration/IT-AUTH-001/` | 2026-08-15 |

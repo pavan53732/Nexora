@@ -390,6 +390,8 @@ enum class PolicySource { AGENT_OVERRIDE, WORKSPACE_OVERRIDE, GLOBAL_POLICY, SCO
 
 enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, MALFORMED_APPROVAL, CLASSIFIER_DENIAL, INVALID_SCOPE_DECLARATION }
 
+The PermissionModel owns resolution of these denial reasons and approval-transaction validity. Under [DEC-35](../decisions/DEC-35-approval-denial-cross-layer-projection.md), it does not own the resulting Task or Agent lifecycle projection: the Tool boundary returns `NXR-2003` without side effects, TaskLifecycle commits the Task failure effect, and AgentLifecycle may project availability as `Paused`.
+
 data class ClassifierWorkspacePolicy(
     val enabled: Boolean = true,
     val includedToolIds: Set<String> = emptySet(),

@@ -156,7 +156,7 @@ Loop back to Planner (reflect and plan next step)
 
 ### Bounded progression projections
 
-The runtime composition layer MUST route, but does not replace, the canonical Task lifecycle transitions. Before queueing, task dependencies are validated as an acyclic graph. A failed dependency propagates terminal failure to dependent tasks; approval denial produces `NXR-2003` / `USER_DENIED` and a `WaitingApproval → Failed` Task transition; and the effective task deadline bounds `Pending`, `Blocked`, and `BlockedAwaitingInput`, whose expiry transitions to `Failed`. Provider `Retry-After` waits are honored only within the parent task effective deadline; an exhausted deadline produces terminal failure rather than an indefinite wait. Delegation depth is bounded at 4 by the multi-agent coordination authority. These are projections of canonical subsystem contracts, not new runtime states or a new loop owner.
+The runtime composition layer MUST route, but does not replace, the canonical Task lifecycle transitions. Before queueing, task dependencies are validated as an acyclic graph; invalid references or cycles return `NXR-1014` without Task mutation. A failed dependency returns `NXR-1015` and propagates terminal failure to dependent tasks. Approval denial produces `NXR-2003` / `USER_DENIED` and a `WaitingApproval → Failed` Task transition; the participating Agent may independently project `WaitingApproval → Paused` under DEC-35. The effective task deadline bounds `Pending`, `Blocked`, and `BlockedAwaitingInput`, whose expiry returns `NXR-1016` and transitions to `Failed`. Provider `Retry-After` waits are honored only within the parent task effective deadline; an exhausted deadline produces `NXR-1016` rather than an indefinite wait. Delegation depth is bounded at 4 by the multi-agent coordination authority. These are projections of canonical subsystem contracts, not new runtime states or a new loop owner.
 
 ## Inference-Turn Composition
 
@@ -168,7 +168,9 @@ No new monolithic AI-pipeline owner is introduced (ADR-0008).
 
 ## Background Execution
 
-Long-running tasks use Android's **Foreground Service** to survive app minimization.
+Long-running tasks use Android's **Foreground Service** to survive app minimization. Under DEC-34, every autonomous background terminal session is bound to its parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline. Parent cancellation, terminal state, or deadline expiry invokes the existing terminal termination/checkpoint path; an idempotent reconciliation closes or fails sessions with missing, terminal, or expired parents. Unbound autonomous background terminal requests are rejected before process creation.
+
+Under DEC-35, runtime correlation preserves the Tool `NXR-2003` denial, Task `Failed` outcome, and independent Agent `Paused` projection without collapsing their lifecycle authorities. A later operation is a new authorization transaction, not an automatic retry.
 
 ```kotlin
 class AgentExecutionService : LifecycleService() {
@@ -276,7 +278,7 @@ defined in `models/Execution.md`:
   new `executionId` (ADR-0009 Decision #5; TaskLifecycle `resolveEscalation`
   transition).
 - **Committed terminal `FAILED`/`CANCELLED`/`COMPLETED`:** never transition back to `RUNNING`. Explicit retry/restart creates a new `executionId`; parent/prior execution linkage and correlation policy preserved.
-- **Unrecoverable failure:** commit `FAILED`; no same-identity resume.
+- **Unrecoverable failure:** commit `FAILED`; no same-identity resume. DEC-33 uses `NXR-1014` for invalid Task dependency references/cycles, `NXR-1015` for unsatisfied terminal dependencies, and `NXR-1016` for effective-deadline expiry.
 - **Android ANR (Application Not Responding):** `AgentExecutionService` MUST commit a checkpoint on the 6 s / 10 s ANR threshold (foreground / background), emit `TASK_SUSPENDED`, and suspend execution. Service restart or watchdog resumes from the checkpoint without user-visible crash data (NFR-REL-002, ADR-0009 Decision #7). The `executionId` and `correlationId` are preserved across the ANR/resume cycle; `version` increments at resume.
 
 ### Phase Mapping

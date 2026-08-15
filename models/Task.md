@@ -90,4 +90,4 @@ data class CanonicalErrorEnvelope(
 
 ### Error Envelope Propagation
 
-When a task fails (transitioning to `FAILED` or `RETRY_PENDING`), the terminal or transient error MUST be mapped into a `CanonicalErrorEnvelope`. This envelope is stored in the `latestError` field of the Task and propagated across all API and protocol boundaries. It guarantees that the exact recovery rules, retryability, and lifecycle effects are accessible to calling orchestrators and user interfaces alike.
+When a task fails (transitioning to `FAILED` or `RETRY_PENDING`), the terminal or transient error MUST be mapped into a `CanonicalErrorEnvelope`. This envelope is stored in the `latestError` field of the Task and propagated across all API and protocol boundaries. Under DEC-33, invalid dependency references or cycles use `NXR-1014`, unsatisfied terminal dependencies use `NXR-1015`, and effective-deadline expiry uses `NXR-1016`; the lifecycle effect remains owned by TaskLifecycle. The envelope guarantees that exact recovery rules, retryability, and lifecycle effects are accessible to calling orchestrators and user interfaces alike.

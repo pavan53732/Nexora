@@ -11,6 +11,9 @@ data class TerminalSession(
     val id: String,
     val workspaceId: String,
     val correlationId: String?,
+    val taskId: String? = null,              // required for autonomous background sessions (DEC-34)
+    val executionId: String? = null,        // required for autonomous background sessions (DEC-34)
+    val effectiveDeadline: Instant? = null, // inherited parent deadline for background sessions (DEC-34)
     val status: TerminalSessionStatus,
     val sandboxId: String,
     val startedAt: Instant,
@@ -37,7 +40,7 @@ enum class TerminalSessionStatus {
 
 ## Terminal Session Semantics
 
-Terminal session lifecycle authority is defined in [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md). The canonical state machine is [state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md). Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state.
+Terminal session lifecycle authority is defined in [lifecycle/TerminalSessionLifecycle.md](../lifecycle/TerminalSessionLifecycle.md). The canonical state machine is [state-machines/TerminalSessionLifecycle.md](../state-machines/TerminalSessionLifecycle.md). Terminal session lifecycle is subordinate to sandbox and tool execution policy. A terminal session MAY participate in a correlated task or tool-call execution, but it MUST NOT become the primary authority for task or execution lifecycle state. Under DEC-34, every autonomous background session MUST carry `taskId`, `executionId`, `workspaceId`, `correlationId`, and the inherited `effectiveDeadline`; an unbound background request is rejected before process creation. Interactive foreground sessions may leave the parent fields null.
 
 
 > **S4 — Terminal specification fully specified:** Execution model (PTY vs subprocess), working-dir boundary, output caps, timeout discipline, restore behavior, isolation rules. See `specs/TERMINAL.md` (§Execution Model, §Security & Isolation). Lifecycle authority: `lifecycle/TerminalSessionLifecycle.md` (S3 — filled). Registry sync: `registry/TOOLS.md` (`TOOL-020`..`023`) + `TOOL_MATRIX.md` (terminal capabilities).

@@ -147,7 +147,7 @@ Concrete storage mapping, table layout, blob layout, serialization, and referenc
 
 Retention, deletion, and cleanup policy are not determined by Conversation identity alone and are not changed by Session closure, Session expiration, or Session recreation.
 
-This document does not select numeric retention duration, deletion authorization workflow, physical cleanup timing, or cleanup scheduling. DEC-23 governs checkpoint deletion safety and branch/source dependency protection; concrete persistence and operations mechanisms remain downstream.
+DEC-31 selects the checkpoint operational policy: superseded checkpoints use a default 30-day retention window, each workspace has a default retained-checkpoint quota of 100, and an idempotent daily cleanup job rechecks lineage/dependency protection before deletion and records protected skips. DEC-23 and DEC-31 continue to govern deletion safety and branch/source dependency protection. Concrete persistence, DAO, transaction, scheduling, and physical cleanup mechanisms remain downstream implementation choices.
 
 ## Authorization boundary
 

@@ -71,6 +71,9 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | NXR-1011 | Service not bound | Infrastructure | Android service binding failed (e.g. foreground service) | Retry bind; check Android battery optimisation settings |
 | NXR-1012 | Foreground service denied | Infrastructure | OS denied the foreground service notification permission | Request notification permission from user; fall back to in-process execution |
 | NXR-1013 | Runtime not initialized | Server | Core runtime components were accessed before `NexoraRuntime.init()` completed | Ensure startup sequence completes before exposing UI |
+| NXR-1014 | Task dependency invalid | Client | Task contains an unknown dependency reference or a dependency cycle discovered before queueing | Correct the dependency graph; do not queue or mutate the Task |
+| NXR-1015 | Task dependency unsatisfied | Server | A referenced dependency reached terminal `FAILED` or `CANCELLED`, making the dependent Task unsatisfiable | Fail the dependent Task; do not automatically retry the failed dependency |
+| NXR-1016 | Task deadline expired | Infrastructure | Task effective deadline was reached while waiting, blocked, awaiting approval, or awaiting provider retry | Commit the existing `Failed` effect, checkpoint recoverable state where applicable, and do not renew the deadline or retry budget |
 
 ---
 
@@ -242,7 +245,7 @@ To eliminate responsibility gaps and satisfy Critical Finding 2, every public in
 | **`PluginManager`** | `installPlugin` | `NXR-6002` | Client | Safe | Never | Transition to `FAILED` | Plugin System: checksum/signature check failed, delete partial files, notify user |
 | | `activatePlugin`| `NXR-6003` | Server | Unsafe | Conditional (re-check SDK) | Rollback to `INACTIVE` | Plugin System: rollback exported capability registrations to prior state |
 | **`WorkspaceManager`**| `createWorkspace` | `NXR-7001` | Server | Unsafe | Safe | `NO_CHANGE` | Sandbox: wipe temp / clean up workspace caches, retry sandbox creation |
-| | `deleteWorkspace` | `NXR-7007` | Server | Safe (Idempotent) | Conditional | Transition to `DELETED` | Sandbox: queue deferred background purge of workspace directories |
+| | `deleteWorkspace` | `NXR-7007` | Server | Safe (Idempotent) | Conditional | `NO_CHANGE` | Sandbox: queue deferred background purge of workspace directories; Workspace deletion may be retried after cleanup succeeds |
 | **`WorkflowEngine`** | `executeWorkflow` | `NXR-1002` | Server | Unsafe | Safe | Transition to `FAILED` | Orchestration: cancel downstream tasks, release locks, report failure |
 
 ---

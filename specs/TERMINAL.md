@@ -42,9 +42,7 @@ new durable states:
   `Running`; the checkpoint is reloaded and (if `sessionBufferReplay`) input buffer is
   replayed. There is no separate `Restored` status — restore is a transition, recorded as a
   lifecycle event, not a durable state.
-- **Background**: `run_background` is simply a `Running`/`Detached` session with no
-  interactive timeout; it lives until the process exits or the workspace shuts down
-  (technical timeout, resource, or liveness handling under `FR-AS-003` applies; financial cost or internal credits do not kill it).
+- **Background**: `run_background` creates a `Running`/`Detached` session bound to the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline under DEC-34. It has no separate interactive timeout, but it cannot outlive parent cancellation, parent terminal state, or deadline expiry. Expiry and cancellation use the existing termination/checkpoint path; an idempotent cleanup reconciliation removes sessions whose parent is terminal, missing, or expired. Unbound autonomous background requests are rejected before process creation. Financial cost or internal credits do not kill it.
 
 State fields (`models/TerminalSession.md` — updated for S4):
 
@@ -53,6 +51,9 @@ data class TerminalSession(
     val id: String,
     val workspaceId: String,
     val correlationId: String?,
+    val taskId: String? = null,              // required for autonomous background sessions (DEC-34)
+    val executionId: String? = null,        // required for autonomous background sessions (DEC-34)
+    val effectiveDeadline: Instant? = null, // inherited parent deadline for background sessions (DEC-34)
     val status: TerminalSessionStatus,  // CREATED, ATTACHED, RUNNING, DETACHED, CLOSED, FAILED (canonical — state-machines/TerminalSessionLifecycle.md)
     val sandboxId: String,
     val executionMode: ExecutionMode,   // SUBPROCESS or PTY (S4 — new field)
@@ -90,7 +91,7 @@ Every terminal session applies timeout rules (`FR-AS-002` heartbeat + `FR-AS-009
 
 - **Interactive PTY (`terminal_run`)**: `timeoutMs = 300_000` (5 minutes) default; configurable per workspace (`models/Workspace.md` `sandboxLimits.sessionTimeoutMs`). If timeout reached, the session is **checkpointed** (`restoreCheckpoint` set, `FR-AS-007`) and the foreground I/O **detaches**: durable status becomes `Detached` with `suspended = true` (not a `Suspended` state). The process stays alive; output continues buffered. The user may `reattach()` → `Running` (restore) or `close()` (terminate).
 - **Subprocess (`run_command`)**: `timeoutMs = 60_000` (60 seconds) default; non-configurable for security (`FR-S016` autonomy modes: `Manual` requires shorter timeout; `Assisted` allows longer with user confirmation). Timeout triggers bounded repair (`FR-AS-001`): process killed (`FR-TE004` `terminal_kill`); error returned (`NXR-*`); user notified (`FR-U011` chat feed).
-- **Background (`run_background`)**: no interactive timeout; background session lives until process exits or workspace shutdown; technical timeout, resource, or liveness handling follows `FR-AS-003`, while financial cost or internal credits do not kill the task.
+- **Background (`run_background`)**: no separate interactive timeout; the session inherits the parent Task effective deadline and cancellation under DEC-34. It is reconciled when the parent is terminal, missing, or expired and cannot continue after parent deadline/cancellation. Technical timeout, resource, or liveness handling follows `FR-AS-003`, while financial cost or internal credits do not kill the task.
 - **Timeout audit**: timeout events logged (`FR-TL015`); timeout-triggered kills recorded as `FR-AS-003` technical-boundary events (`FR-A010` real-time monitoring shows technical limit usage per request/session/provider/model).
 
 ### Restore Behavior (S4 — fully specified)
@@ -129,7 +130,7 @@ The grant expires on task completion, cancellation, effective deadline, explicit
 ## References (S4 — full spec dependencies)
 
 - `state-machines/TerminalSessionLifecycle.md` (canonical lifecycle authority — `Created/Attached/Running/Detached/Closed/Failed`). `lifecycle/TerminalSessionLifecycle.md` is the DERIVED narrative; in case of discrepancy the state machine wins.
-- `models/TerminalSession.md` (updated: `executionMode`, `workingDirBoundary`, `outputCapBytes`, `timeoutMs`, `restoreCheckpoint`, `sessionBufferReplay`).
+- `models/TerminalSession.md` (updated: `executionMode`, `workingDirBoundary`, `outputCapBytes`, `timeoutMs`, `restoreCheckpoint`, `sessionBufferReplay`, and DEC-34 parent binding fields).
 - `security/SandboxPolicy.md` (sandbox isolation aligns with terminal execution model).
 - `architecture/TOOL_SYSTEM.md` (§Terminal category: `run_command`, `run_script`, `run_background`, `kill_process`, `terminal_session_create`/`list`/`kill`).
 - `registry/TOOLS.md` (`TOOL-020`..`023` + new terminal session tools).
