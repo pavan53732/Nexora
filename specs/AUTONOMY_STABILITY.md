@@ -124,8 +124,9 @@ The semantic trust projection is defined in [../models/AutonomyLearning.md](../m
 Trust is scoped to `(agentId, workspaceId)` and retains update/reset provenance. The score
 scale, update increments, decay, thresholds, and reset baseline remain unselected by this
 specification. Trust may offer a mode but MUST NOT override user selection, permission
-scopes, classifier denial, human approval, workspace isolation, or provider/device/resource
-ceilings. Android degraded mode may force `Manual` independently of trust.
+scopes, applicable canonical denial or classification outcomes, human approval, workspace
+isolation, or provider/device/resource ceilings. Android degraded mode may force `Manual`
+independently of trust. The retired local classifier is not part of this contract.
 
 ## 6. Verification Gates (FR-AS-006)
 

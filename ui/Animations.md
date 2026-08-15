@@ -30,9 +30,9 @@ Protocol. Animation MUST NOT imply that provisional text is verified or committe
 
 ## Activity, Approval, Error, and Recovery States
 
-Progress, connecting, reconnecting, backpressure, permission approval, classifier denial,
-partial failure, unknown completion, reconciliation, cancellation, checkpoint recovery, and
-terminal states MUST remain understandable without motion. Use explicit text/icon/state
+Progress, connecting, reconnecting, backpressure, permission approval, canonical denial
+outcomes, partial failure, unknown completion, reconciliation, cancellation, checkpoint
+recovery, and terminal states MUST remain understandable without motion. Use explicit text/icon/state
 semantics from `ui/Components.md`; animation is only a supplementary presentation cue.
 
 When `reduceMotion` is enabled, suppress blinking cursors, scale/slide transitions, and

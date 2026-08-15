@@ -139,7 +139,7 @@ AI Provider ---complete---> AI Response (text + tool_calls)
 Tool Manager ---route---> Complete Authorization Gate
     |
     v
-Permission Manager + ASK Approval + Classifier Policy ---authorize---> Allowed/Denied
+Permission Manager + ASK Approval + explicit DENY + audit ---authorize---> Allowed/Denied
     |
     v
 Executor ---execute only after Allowed---> Tool Result

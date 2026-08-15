@@ -60,8 +60,9 @@ user-selected mode remains authoritative.
 enum class AutonomyMode { MANUAL, ASSISTED, AUTOPILOT }
 ```
 
-Trust state must not weaken `PermissionModel`, classifier denial, workspace
-isolation, provider/device/resource ceilings, or human approval gates. Degraded
+Trust state must not weaken `PermissionModel`, applicable canonical denial or
+classification outcomes, workspace isolation, provider/device/resource ceilings, or human
+approval gates. The retired local classifier is not part of the active trust contract. Degraded
 Android background execution may force `MANUAL` as specified by
 `specs/BACKGROUND_EXECUTION.md`; trust cannot override that degradation rule.
 

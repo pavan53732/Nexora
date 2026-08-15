@@ -12,10 +12,10 @@
 | IT-TOOL-002 | IT-TOOL | TOOL-408 validates both required scopes before side effects | Tool + Security | Planned | `evidence/integration/IT-TOOL-002/` | 2026-08-06 |
 | IT-TOOL-003 | IT-TOOL | Aggregated approval spans PermissionManager and ToolExecutor | Tool + Security | Planned | `evidence/integration/IT-TOOL-003/` | 2026-08-06 |
 | IT-TOOL-004 | IT-TOOL | Malformed approval cannot cross authorization boundary | Tool + Security | Planned | `evidence/integration/IT-TOOL-004/` | 2026-08-06 |
-| IT-TOOL-005 | IT-TOOL | Approved ASK proceeds to selected classifier | Tool + Security | Planned | `evidence/integration/IT-TOOL-005/` | 2026-08-06 |
-| IT-TOOL-006 | IT-TOOL | Classifier DENY prevents sandbox/tool side effects | Tool + Security | Planned | `evidence/integration/IT-TOOL-006/` | 2026-08-06 |
-| IT-TOOL-007 | IT-TOOL | Policy DENY prevents classifier and execution | Tool + Security | Planned | `evidence/integration/IT-TOOL-007/` | 2026-08-06 |
-| IT-TOOL-008 | IT-TOOL | Classifier skip reason preserved in audit | Tool + Security | Planned | `evidence/integration/IT-TOOL-008/` | 2026-08-06 |
+| IT-TOOL-005 | IT-TOOL | Approved ASK proceeds through complete authorization to Tool execution | Tool + Security | Planned | `evidence/integration/IT-TOOL-005/` | 2026-08-06 |
+| IT-TOOL-006 | IT-TOOL | Canonical authorization denial prevents sandbox/Tool side effects | Tool + Security | Planned | `evidence/integration/IT-TOOL-006/` | 2026-08-06 |
+| IT-TOOL-007 | IT-TOOL | Policy DENY prevents authorization success and Tool execution | Tool + Security | Planned | `evidence/integration/IT-TOOL-007/` | 2026-08-06 |
+| IT-TOOL-008 | IT-TOOL | Authorization outcome and deterministic reason are preserved in audit | Tool + Security | Planned | `evidence/integration/IT-TOOL-008/` | 2026-08-06 |
 | IT-TOOL-009 | IT-TOOL | Authorization correlation/toolCall IDs preserved | Tool + Security | Planned | `evidence/integration/IT-TOOL-009/` | 2026-08-06 |
 | IT-LC-001 | IT-LC | Checkpoint resume retains executionId | Runtime | Planned | `evidence/integration/IT-LC-001/` | 2026-08-06 |
 | IT-LC-002 | IT-LC | Checkpoint resume increments version | Runtime | Planned | `evidence/integration/IT-LC-002/` | 2026-08-06 |
@@ -33,9 +33,9 @@
 | IT-LC-014 | IT-LC | Session close drains/detaches active execution | Runtime + Session | Planned | `evidence/integration/IT-LC-014/` | 2026-08-06 |
 | IT-LC-015 | IT-LC | ToolStatus transition and tool-call execution remain separate | Tool | Planned | `evidence/integration/IT-LC-015/` | 2026-08-06 |
 | IT-TOOL-010 | IT-TOOL | Invalid permission declaration rejected during registration | Tool + Security | Planned | `evidence/integration/IT-TOOL-010/` | 2026-08-06 |
-| IT-TOOL-011 | IT-TOOL | Classifier policy selects workspace-opted tool | Tool + Security | Planned | `evidence/integration/IT-TOOL-011/` | 2026-08-06 |
+| IT-TOOL-011 | IT-TOOL | Workspace policy precedence governs authorization for an opted tool | Tool + Security | Planned | `evidence/integration/IT-TOOL-011/` | 2026-08-06 |
 | IT-TOOL-012 | IT-TOOL | Approved ASK creates complete ResolvedPermission projection | Tool + Security | Planned | `evidence/integration/IT-TOOL-012/` | 2026-08-06 |
-| IT-TOOL-013 | IT-TOOL | Classifier denial maps through Tool API/Protocol to NXR-2003 | Tool + Security | Planned | `evidence/integration/IT-TOOL-013/` | 2026-08-06 |
+| IT-TOOL-013 | IT-TOOL | Canonical authorization denial maps through Tool API/Protocol to NXR-2003 | Tool + Security | Planned | `evidence/integration/IT-TOOL-013/` | 2026-08-06 |
 | IT-TOOL-014 | IT-TOOL | Authorization audit preserves toolCallId/correlationId | Tool + Security | Planned | `evidence/integration/IT-TOOL-014/` | 2026-08-06 |
 | IT-LC-016 | IT-LC | Retry ExecutionProjection includes priorExecutionId | Runtime | Planned | `evidence/integration/IT-LC-016/` | 2026-08-06 |
 | IT-LC-017 | IT-LC | Retry predecessor linkage is acyclic | Runtime | Planned | `evidence/integration/IT-LC-017/` | 2026-08-06 |

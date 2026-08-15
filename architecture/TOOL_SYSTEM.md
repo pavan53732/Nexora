@@ -166,7 +166,7 @@ Complete Authorization Gate (see security/PermissionModel.md)
   → Deny unknown or effective-DENY scopes
   → Aggregate ASK scopes, validate approval transaction
   → Build ResolvedPermission projections
-  → ClassifierPolicy selection and optional Classifier evaluation
+  → Confirm the complete PermissionModel authorization result and audit decision
   → Return Allowed only after every gate passes
     |
     v
@@ -192,8 +192,10 @@ Authorization denial returns `NXR-2003` with subreason (`UNKNOWN_SCOPE`,
 `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`). Invalid
 Tool descriptors, including duplicate/unknown scope declarations or missing risk metadata,
 are rejected with `NXR-2005` before `REGISTERED`. No Tool side effect occurs before
-complete authorization. Authorization denial does not change ToolStatus. Classifier
-`DENY` is final for the current call.
+complete authorization. Authorization denial does not change ToolStatus. The established
+`CLASSIFIER_DENIAL` value is retained for compatibility with the existing error vocabulary
+and any separately authorized future classification boundary; no local classifier is active
+or invoked under DEC-42.
 
 Risk levels are canonical Tool metadata: `LOW` is read-only/local, `MEDIUM` is bounded
 workspace mutation, `HIGH` covers network/process/plugin/remote/destructive operations,

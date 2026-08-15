@@ -60,9 +60,10 @@ Nexora enforces strict security boundaries. The AI never touches the host system
 ## Permission Flow
 
 > **Note:** PermissionModel (`security/PermissionModel.md`) owns authorization semantics,
-> including multi-scope evaluation, aggregated ASK approval, classifier policy, and
-> complete audit. This document projects the canonical behavior for the security-architecture
-> view only. Any divergence is documentation drift — PermissionModel is authoritative.
+> including multi-scope evaluation, aggregated ASK approval, explicit DENY, fail-closed
+> policy resolution, and complete audit. This document projects the canonical behavior for
+> the security-architecture view only. Any divergence is documentation drift — PermissionModel
+> is authoritative. The retired local classifier is not part of the active authorization path.
 
 Tool authorization, in order:
 
@@ -71,9 +72,12 @@ Tool authorization, in order:
 3. Aggregates ASK scopes into one approval transaction.
 4. Validates exact one-to-one approval outcomes (duplicate, missing, extra, or
    transaction-ID mismatch returns MALFORMED_APPROVAL).
-5. If all scopes pass, applies ClassifierPolicy selection.
-6. If selected, executes classifier; classifier DENY is final for the call.
-7. Returns Allowed only after every gate passes; tool execution begins only then.
+5. If all scopes pass, confirms the complete PermissionModel authorization result and audit decision.
+6. Returns Allowed only after every active authorization requirement passes; tool execution begins only then.
+
+DEC-42 retires the local classifier. `CLASSIFIER_DENIAL` remains only as preserved compatibility
+or separately authorized future classification vocabulary; no local classifier is selected or
+executed by the current architecture.
 
 ## API Key Encryption
 

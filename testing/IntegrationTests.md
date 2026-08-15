@@ -8,7 +8,7 @@ Integration tests validate subsystem interactions and cross-layer contract prese
 
 - `IT-CONTRACT-*` — cross-layer envelope and lifecycle preservation
 - `IT-AGENT-*` — agent/runtime/task integration
-- `IT-TOOL-*` — tool, sandbox, and permission integration (including multi-scope TOOL-408 enforcement, classifier gate ordering)
+- `IT-TOOL-*` — tool, sandbox, and permission integration (including multi-scope TOOL-408 enforcement, scope-resolution ordering, approval-transaction validation, explicit denial, audit, and no-side-effect-before-Allowed behavior)
 - `IT-PROVIDER-*` — provider completion and streaming
 - `IT-PLUGIN-*` — plugin lifecycle and rollback
 - `IT-MEMORY-*` — memory persistence and retrieval
@@ -37,7 +37,7 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-PROVIDER-001` provider streaming returns ordered terminal semantics
 - `IT-PLUGIN-001` plugin activation registers capabilities transactionally
 - `IT-CONTRACT-001` runtime replay or retry preserves correlation and durable versions
-- `IT-TOOL-002..014` complete authorization, classifier ordering, error mapping, and correlation preservation
+- `IT-TOOL-002..014` complete authorization ordering, error mapping, and correlation preservation
 - `IT-LC-001..020` Session/Execution/ToolStatus integration, same-ID resume, terminal retry lineage, and replay safety
 - `IT-MODEL-001..003` model-catalog snapshot immutability, unsupported-capability handling, and provider-native reasoning continuation compatibility
 - `IT-TOOLDISC-001..003` bounded candidate projection, descriptor examples/permissions, stale or unknown-scope fail-closed behavior, selection telemetry, and MCP tool/resource/prompt separation
@@ -52,7 +52,7 @@ Required journeys include:
 
 - a non-Terminal agent requesting Terminal and being denied or delegated according to the current capability matrix;
 - a restricted agent delegating terminal work to an eligible worker with complete handoff context;
-- a task-scoped Terminal escalation passing matrix, permission, approval, classifier, sandbox, schema, timeout, output-cap, and resource gates;
+- a task-scoped Terminal escalation passing matrix, permission, approval, sandbox, schema, timeout, output-cap, and resource gates;
 - a task-scoped Background escalation passing checkpoint, progress, notification, cancellation, Android lifecycle, and degraded-mode prerequisites;
 - expiry at task completion, deadline, cancellation, explicit revocation, and terminal failure;
 - revocation during an active subprocess, PTY, provider call, or background child, with cancellation propagation and checkpoint preservation;
