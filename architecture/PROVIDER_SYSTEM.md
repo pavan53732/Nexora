@@ -37,11 +37,8 @@ enum class ProviderType {
     ANTHROPIC,           // Claude family
     GEMINI,              // Google AI
     GROQ,                // Fast inference
-    OPENROUTER,           // Unified gateway
-    OLLAMA,              // Local model server
-    LM_STUDIO,           // Local model server
-    LOCAL_GGUF,          // GGUF loaded by a separate Nexora-managed on-device worker (DEC-39)
-    CUSTOM               // User-defined endpoints
+    OPENROUTER,           // Unified external gateway
+    CUSTOM               // User-defined external/cloud endpoints
 }
 
 enum class ProviderCapability {
@@ -173,11 +170,8 @@ owned by `state-machines/ProviderStreamLifecycle.md`.
 | **Anthropic** | REST API | Chat, Streaming, Tool Calling, Vision |
 | **Gemini** | Google AI REST | Chat, Streaming, Tool Calling, Vision, Embeddings |
 | **Groq** | REST API | Chat, Streaming, Tool Calling |
-| **OpenRouter** | Unified API | Chat, Streaming, Tool Calling, Vision |
-| **Ollama** | Local REST | Chat, Streaming, Tool Calling, Vision, Embeddings |
-| **LM Studio** | Local REST | Chat, Streaming, Tool Calling |
-| **Local GGUF** | Managed on-device worker process | Chat, Streaming |
-| **Custom** | User-defined | Varies |
+| **OpenRouter** | Unified external API | Chat, Streaming, Tool Calling, Vision |
+| **Custom** | User-defined external/cloud endpoint | Varies |
 
 ## Provider Configuration
 
@@ -230,7 +224,7 @@ scale defined in [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md
 ## Phase Mapping
 
 - **Phase 1**: Define `AIProvider` interface, `ProviderRegistry`, configuration models.
-- **Phase 5**: Implement all 9 providers. Streaming. Health checks.
+- **Phase 5**: Implement the active cloud/external provider adapters. Streaming. Health checks. Local AI providers are out of scope under DEC-41.
 - **Phase 8**: Providers as plugins. Custom provider SDK.
 
 

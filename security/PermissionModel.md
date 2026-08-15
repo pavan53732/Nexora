@@ -68,7 +68,7 @@ The permission model does not grant Terminal or Background access universally. T
 
 An escalation request is not a permission scope, permanent agent override, lifecycle state, or Tool identity. It is a bounded authorization projection tied to `workspaceId`, `taskId`, execution lineage, requesting `agentId`, requested capability, purpose, affected Tool IDs or operation class, required scopes, effective deadline, resource/concurrency limits, cancellation policy, and revocation condition. It MUST be rejected when the request exceeds the task acceptance criteria, workspace policy, autonomy mode, sandbox limits, or remaining execution deadline.
 
-A temporary grant does not bypass scope resolution. Terminal use still requires `sandbox:execute` and applicable `sandbox:read`/`sandbox:write`; background use still requires the existing notification, checkpoint, resource, cancellation, and Android lifecycle contracts. Network, device, plugin, MCP, browser, and sensitive-action scopes remain independent. The classifier remains an additional gate where selected, and `DENY` remains final for the current authorization attempt.
+A temporary grant does not bypass scope resolution. Terminal use still requires `sandbox:execute` and applicable `sandbox:read`/`sandbox:write`; background use still requires the existing notification, checkpoint, resource, cancellation, and Android lifecycle contracts. Network, device, plugin, MCP, browser, and sensitive-action scopes remain independent. Permission scope resolution and explicit `DENY` remain final for the current authorization attempt.
 
 A grant is valid only for the identified task and execution lineage. It expires at task completion, cancellation, effective deadline, explicit revocation, or terminal failure, whichever occurs first. It cannot be transferred to another task or agent, and it cannot be reused as a durable agent override. Revocation or expiry while a child operation is active MUST propagate cancellation through the existing runtime path and preserve checkpoint, audit, and non-success classification rules.
 
@@ -112,12 +112,9 @@ suspend fun checkPermission(
         )
     }
 
-    // Empty permission list — scopes pass; classifier may still apply
+    // Empty permission list — authorization proceeds without a local AI classifier.
     if (scopeIds.isEmpty()) {
-        return finalizeAuthorizationAfterScopes(
-            tool, workspaceId, agentId,
-            resolvedPermissions = emptyList()
-        )
+        return PermissionResult.Allowed
     }
 
     val pendingApprovals = mutableListOf<PendingApproval>()
@@ -228,52 +225,10 @@ suspend fun checkPermission(
                 errorCode = "NXR-2003"
             )
         }
-        // Approved ASK scopes — continue to classifier evaluation
+        // Approved ASK scopes continue directly to execution authorization.
         // DEC-36: an approval transaction that expires before a valid
         // authorization outcome is committed is classified as POLICY_DENIAL;
         // an explicit user rejection remains USER_DENIED.
-    }
-
-    return finalizeAuthorizationAfterScopes(
-        tool = tool, workspaceId = workspaceId, agentId = agentId,
-        resolvedPermissions = resolvedPermissions
-    )
-}
-
-private suspend fun finalizeAuthorizationAfterScopes(
-    tool: Tool,
-    workspaceId: String,
-    agentId: String?,
-    resolvedPermissions: List<ResolvedPermission>
-): PermissionResult {
-    val classifierSelection = if (classifierEnabled) {
-        classifierPolicy.shouldEvaluate(
-            tool = tool, workspaceId = workspaceId, agentId = agentId,
-            resolvedPermissions = resolvedPermissions
-        )
-    } else {
-        ClassifierSelection(evaluate = false, reason = ClassifierSelectionReason.CLASSIFIER_DISABLED)
-    }
-
-    if (classifierSelection.evaluate) {
-        val eval = classifier.evaluate(tool, workspaceId, agentId)
-        auditClassifierEvaluation(
-            tool = tool, workspaceId = workspaceId, agentId = agentId,
-            evaluation = eval, reason = classifierSelection.reason
-        )
-        if (eval.decision == ClassifierDecision.DENY) {
-            return PermissionResult.Denied(
-                scopeId = eval.primaryScopeId ?: "classifier",
-                reason = DenialReason.CLASSIFIER_DENIAL,
-                errorCode = "NXR-2003"
-            )
-        }
-    } else {
-        auditClassifierSkipped(
-            tool = tool, workspaceId = workspaceId, agentId = agentId,
-            reason = classifierSelection.reason,
-            resolvedPermissions = resolvedPermissions
-        )
     }
 
     return PermissionResult.Allowed
@@ -395,16 +350,6 @@ enum class DenialReason { UNKNOWN_SCOPE, POLICY_DENIAL, USER_DENIED, MALFORMED_A
 
 The PermissionModel owns resolution of these denial reasons and approval-transaction validity. Under [DEC-35](../decisions/DEC-35-approval-denial-cross-layer-projection.md), it does not own the resulting Task or Agent lifecycle projection: the Tool boundary returns `NXR-2003` without side effects, TaskLifecycle commits the Task failure effect, and AgentLifecycle may project availability as `Paused`.
 
-data class ClassifierWorkspacePolicy(
-    val enabled: Boolean = true,
-    val includedToolIds: Set<String> = emptySet(),
-    val includedScopeIds: Set<String> = emptySet()
-)
-
-interface ClassifierWorkspacePolicyStore {
-    fun get(workspaceId: String): ClassifierWorkspacePolicy
-}
-
 data class ResolvedPermission(
     val scopeId: String,
     val declaredDefault: PermissionDecision,
@@ -418,66 +363,6 @@ enum class FinalPermissionOutcome {
     APPROVED_BY_USER
 }
 
-data class ClassifierEvaluation(
-    val decision: ClassifierDecision,
-    val modelVersion: String,
-    val riskScore: Float?,
-    val reasonCodes: List<String>,
-    val primaryScopeId: String?
-)
-
-enum class ClassifierDecision { ALLOW, DENY }
-
-interface ClassifierPolicy {
-    fun shouldEvaluate(
-        tool: Tool,
-        workspaceId: String,
-        agentId: String?,
-        resolvedPermissions: List<ResolvedPermission>
-    ): ClassifierSelection
-}
-
-class DefaultClassifierPolicy(
-    private val workspacePolicies: ClassifierWorkspacePolicyStore
-) : ClassifierPolicy {
-    override fun shouldEvaluate(
-        tool: Tool,
-        workspaceId: String,
-        agentId: String?,
-        resolvedPermissions: List<ResolvedPermission>
-    ): ClassifierSelection {
-        val policy = workspacePolicies.get(workspaceId)
-        if (!policy.enabled) return ClassifierSelection(false, ClassifierSelectionReason.CLASSIFIER_DISABLED)
-        if (tool.id in policy.includedToolIds) return ClassifierSelection(true, ClassifierSelectionReason.WORKSPACE_TOOL_OPT_IN)
-        if (resolvedPermissions.any { it.scopeId in policy.includedScopeIds }) {
-            return ClassifierSelection(true, ClassifierSelectionReason.WORKSPACE_SCOPE_OPT_IN)
-        }
-        if (resolvedPermissions.any {
-                it.declaredDefault == PermissionDecision.ASK ||
-                it.declaredDefault == PermissionDecision.DENY
-            }) {
-            return ClassifierSelection(true, ClassifierSelectionReason.SCOPE_RISK_POLICY)
-        }
-        if (tool.riskLevel in setOf(ToolRiskLevel.HIGH, ToolRiskLevel.CRITICAL)) {
-            return ClassifierSelection(true, ClassifierSelectionReason.TOOL_RISK_POLICY)
-        }
-        return ClassifierSelection(false, ClassifierSelectionReason.NOT_SELECTED)
-    }
-}
-
-data class ClassifierSelection(
-    val evaluate: Boolean,
-    val reason: ClassifierSelectionReason
-)
-
-enum class ClassifierSelectionReason {
-    CLASSIFIER_DISABLED,
-    WORKSPACE_TOOL_OPT_IN,
-    WORKSPACE_SCOPE_OPT_IN,
-    SCOPE_RISK_POLICY,
-    TOOL_RISK_POLICY,
-    NOT_SELECTED
-}
 ```
 
 ## Permission Audit Schema
@@ -488,7 +373,7 @@ Room table. Every authorization event records:
 | Field | Description |
 |---|---|
 | `auditEventId` | Unique event identity |
-| `eventType` | One of: `SCOPE_RESOLVED`, `SCOPE_ALLOWED`, `SCOPE_DENIED`, `APPROVAL_REQUESTED`, `APPROVAL_APPROVED`, `APPROVAL_DENIED`, `APPROVAL_MALFORMED`, `CLASSIFIER_SELECTED`, `CLASSIFIER_SKIPPED`, `CLASSIFIER_ALLOWED`, `CLASSIFIER_DENIED`, `AUTHORIZATION_ALLOWED`, `AUTHORIZATION_DENIED`, `INVALID_TOOL_DESCRIPTOR` |
+| `eventType` | One of: `SCOPE_RESOLVED`, `SCOPE_ALLOWED`, `SCOPE_DENIED`, `APPROVAL_REQUESTED`, `APPROVAL_APPROVED`, `APPROVAL_DENIED`, `APPROVAL_MALFORMED`, `AUTHORIZATION_ALLOWED`, `AUTHORIZATION_DENIED`, `INVALID_TOOL_DESCRIPTOR` |
 | `toolId` | Tool descriptor ID |
 | `toolCallId` | Per-call identity |
 | `correlationId` | Cross-system correlation |
@@ -501,10 +386,6 @@ Room table. Every authorization event records:
 | `finalOutcome` | `ALLOWED_BY_POLICY`, `APPROVED_BY_USER` |
 | `denialReason` | `UNKNOWN_SCOPE`, `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`, `INVALID_SCOPE_DECLARATION` |
 | `approvalTransactionId` | ASK transaction ID when applicable |
-| `classifierSelectionReason` | `CLASSIFIER_DISABLED`, `WORKSPACE_TOOL_OPT_IN`, `WORKSPACE_SCOPE_OPT_IN`, `SCOPE_RISK_POLICY`, `TOOL_RISK_POLICY`, `NOT_SELECTED` |
-| `classifierModelVersion` | Classifier model version |
-| `classifierDecision` | `ALLOW`, `DENY` |
-| `riskScore` | Optional classifier risk score |
 | `occurredAt` | Timestamp |
 | `sanitizedDetails` | Redacted additional context |
 
@@ -621,99 +502,15 @@ The following defaults are the single authoritative values:
 | `instance:delegate` | `ASK` | Cross-instance task delegation (TOOL-408) |
 | Any undeclared scope | `DENY` | Unknown scopes denied unconditionally |
 
-### Relationship to the Classifier
+## Security Classifier Boundary (DEC-42)
 
-If the optional on-device classifier (see §Optional On-Device Auto-Approval Classifier) is enabled:
+The optional on-device TFLite auto-approval classifier is retired from the active architecture. Nexora does not bundle, load, execute, or manage TFLite, ONNX, GGUF, or other local AI model files for authorization or any other AI-model function.
 
-- The classifier may add an independent `DENY` gate after scope resolution.
-- It does **not** change the declared scope default.
-- Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
-- The classifier cannot bypass `ASK` or `DENY` scopes.
-- Classifier `DENY` is final for the current authorization attempt and cannot be overridden by ordinary approval. A durable, authorized, audited policy change applies only to a new authorization attempt.
+Authorization remains fail-closed through the existing PermissionModel scope hierarchy, explicit `DENY`, `ASK` approval transactions, user decisions, policy evaluation, and audit logging. `ToolExecutor.execute()` runs only after the existing permission and approval flow returns `Allowed`. No classifier `ALLOW` override, bypass, or new permission state is introduced.
 
-## Optional On-Device Auto-Approval Classifier (TFLite)
+A future cloud safety-classification service requires a separate decision covering privacy, egress, latency, availability, error mapping, and fail-closed behavior. It is not part of the current contract.
 
-> **Status:** CANONICAL specification for independent safety layer (added G2 — 2026-08-06).  
-> **Purpose:** User vigilance (`FR-S016` `Manual`/`Assisted` mode) cannot be the only safety mechanism — `~93%` of approvals become automatic (`approval fatigue`). The classifier provides an independent, non-user-dependent layer that can `DENY` obviously risky calls, reducing dependence on user attention.
-
-### Design Constraints
-
-- **Authorization-gate layer:** Scope resolution and ASK approval run first; classifier selection/evaluation runs next; `ToolExecutor.execute()` runs only after both stages allow the call. The classifier does **not** replace user approval (`FR-S016`).
-- **Optional:** User can disable the classifier in `Workspace Settings` (`FR-W005`); default is `ENABLED` (safety-by-default).
-- **On-device (`TFLite`)**: No network dependency; no external service.
-
-### Classifier Pipeline Position
-
-The classifier evaluates **after** all permission scopes are satisfied — never after a canonical denial:
-
-```
-Resolve all scopes
-    ↓
-Unknown scope? → return Denied (classifier not invoked)
-    ↓
-Any policy DENY? → return Denied (classifier not invoked)
-    ↓
-Collect and resolve ASK approvals
-    ↓
-Any ASK rejected? → return Denied (classifier not invoked)
-    ↓
-All scopes satisfied → optional classifier evaluation
-    ↓
-Classifier DENY? → audit + return Denied
-    ↓
-Classifier ALLOW? → execute
-```
-
-### Scope Selection
-
-| Condition | Classifier behavior |
-|---|---|
-| Unknown scope | Permission denial; classifier not invoked |
-| Any effective policy decision is DENY | Permission denial; classifier not invoked |
-| Any ASK scope is rejected | Permission denial; classifier not invoked |
-| All ASK scopes approved | Classifier evaluates if risk policy/config selects the call |
-| All scopes ALLOW | Classifier evaluates only if risk policy/config selects the call |
-| Classifier disabled | Skip classifier after permissions pass |
-
-Selection precedence is deterministic: disabled → workspace Tool opt-in → workspace
-scope opt-in → satisfied scope with canonical `ASK`/`DENY` default → Tool
-`HIGH`/`CRITICAL` risk level → not selected. Scope ordering does not affect the result.
-Changing classifier configuration is a separate durable, authorized, audited settings
-operation and affects only a new authorization attempt.
-
-### Classifier Behavior
-
-- **Input**: `Tool` (`requiredPermissions`, `parameters` JSON Schema), `context` (`workspaceId`, `agentId`, `executionHistory` — `FR-TL015` audit trail), `userAutonomyMode` (`FR-S016`: `Manual`/`Assisted`/`Autopilot`).
-- **Output**: `PermissionResult.Denied` (auto-deny) or `PermissionResult.Allowed` (pass through — does not bypass ASK or DENY scopes).
-- Classifier `ALLOW` means "no classifier objection" — not automatic permission approval.
-- Classifier `DENY` is final for the current tool call and cannot be overridden by ordinary user approval.
-- The classifier does **not** change the declared scope default in the scope table.
-
-### Relationship to Permission Resolution
-
-The classifier is invoked **after** the complete permission authorization flow
-(`checkPermission` in this document), but before `ToolExecutor.execute()`.
-Conceptually:
-
-```
-authorizeToolCall()
-  = permission resolution (checkPermission)
-  + ASK approval
-  + optional classifier (ClassifierPolicy.shouldEvaluate → Classifier.evaluate)
-
-ToolExecutor.execute() runs only after authorizeToolCall() returns Allowed.
-```
-
-The classifier is part of the authorization gate, not a separate module boundary.
-It operates on the resolved permission state and cannot retroactively change
-permission decisions.
-
-### Traceability
-
-- `security/PermissionModel.md`: Updated (§Explicit Risk-Based Scope Defaults + §Classifier).
-- `specs/CONTEXT_MANAGEMENT.md`: `FR-EV-002` structured confidence — `LOW` triggers `ASK`, which aligns with classifier behavior; `FR-EV-003` zero-assumption mode — classifier enforces zero-assumption by denying unverified high-risk calls.
-- `FR.md`: References preserved (`FR-S016` autonomy modes; `FR-S001`..`FR-S028` sandbox isolation; `FR-EV-001`..`FR-EV-006` evidence engine).
-- `docs/DECISION_LOG.md`: `DL-022` logs the original decision (superseded by DL-034 for scope defaults).
+Historical DL-022/DL-034 classifier wording is preserved as historical decision record; it is not active implementation authority after DEC-42.
 
 ---
 

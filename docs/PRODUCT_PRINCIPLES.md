@@ -38,12 +38,9 @@ agent plans, uses tools, iterates, and completes the goal autonomously.
 
 ### PP-002 — Provider-Agnostic
 
-Nexora is provider-agnostic. A single abstraction supports **OpenAI-compatible APIs,
-Anthropic, Gemini, OpenRouter, local models (Ollama, LM Studio, GGUF), and custom
-endpoints**. The runtime never depends on a specific provider; users bring their own
-keys and models, and can switch per workspace.
+Nexora is provider-agnostic within a **cloud/external provider boundary**. A single abstraction supports **OpenAI-compatible APIs, Anthropic, Gemini, Groq, OpenRouter, and custom external endpoints**. The runtime never depends on a specific provider; users bring their own provider keys and can switch cloud profiles per workspace. Local AI models and local inference runtimes are out of scope under DEC-41 and DEC-42.
 
-- Sources: [ADR-0005](../docs/adr/ADR-0005-Provider-Abstraction.md) · [specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md) · [PROV-001–009](../registry/PROVIDERS.md)
+- Sources: [ADR-0005](../docs/adr/ADR-0005-Provider-Abstraction.md) · [DEC-41](../decisions/DEC-41-cloud-only-ai-provider-scope.md) · [specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md)
 
 ### PP-003 — Tool-Based Execution
 
@@ -161,12 +158,11 @@ because of internal credits or financial cost.
 
 - Sources: [DEC-25](../decisions/DEC-25-no-internal-credit-cost-gating.md) · [AGENT_RUNTIME → TokenBudget](../architecture/AGENT_RUNTIME.md) · [FR-P009](../requirements/FR.md)
 
-### PP-014 — Offline-Capable
+### PP-014 — Offline Workspace Access
 
-Core features work without network. Local providers (Ollama, LM Studio, GGUF) keep
-agents useful offline; workspace data is always available locally.
+Workspace data and supported non-inference operations remain available without network. Agent inference, planning, embeddings, and provider-backed execution require an eligible cloud provider connection; local AI models are not used as an offline fallback.
 
-- Sources: [NFR-REL-006](../requirements/NFR.md) · [CONSTRAINTS → AI Providers](../requirements/CONSTRAINTS.md)
+- Sources: [DEC-41](../decisions/DEC-41-cloud-only-ai-provider-scope.md) · [NFR-REL-006](../requirements/NFR.md) · [CONSTRAINTS → AI Providers](../requirements/CONSTRAINTS.md)
 
 ### PP-015 — First-Run Onboarding
 
@@ -184,7 +180,7 @@ first goal**. The app explains itself in minutes, then gets out of the way.
 | Not a chatbot | A chat UI exists, but execution is the product (PP-001) |
 | Not a terminal app | The shell is internal (PP-005); no user-facing terminal screen or tab |
 | Not an OS / ROM / VM | An app on Android (ADR-0001, README) |
-| Not a wrapper around a web AI service | Native, local-first, plugin-based (PP-002, PP-006, PP-014) |
+| Not a wrapper around a web AI service | Agent-first, sandboxed, provider-agnostic across external cloud APIs, plugin-based (PP-002, PP-006, PP-014) |
 | Not a static tool collection | Tools exist to serve agents (PP-003) |
 | Not an infrastructure UI | Sandbox, runtimes, and engine have no primary screens (ADR-0006) |
 
@@ -210,7 +206,7 @@ your pocket."*
 | PP-011 Checkpoint & resume | — | AGENT_RUNTIME | — | NFR-REL-001/002 |
 | PP-012 Observable by default | — | SYSTEM_DESIGN | — | FR-U005, FR-TL015 |
 | PP-013 Token usage & cost transparency | DEC-25 | AGENT_RUNTIME | AI_PROVIDERS | FR-P009 |
-| PP-014 Offline-capable | — | — | — | NFR-REL-006 |
+| PP-014 Offline workspace access | DEC-41 | — | — | NFR-REL-006 |
 | PP-015 First-run onboarding | — | — | — | NFR-USE-004 |
 
 ---

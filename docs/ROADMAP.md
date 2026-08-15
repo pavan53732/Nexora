@@ -74,9 +74,9 @@ Priority: File System, Terminal, Search, Workspace, Git, Network, Memory, Packag
 
 ## Phase 5 — AI Providers
 
-**Goal:** Provider abstraction + 9 providers.
+**Goal:** Provider abstraction + cloud/external providers.
 
-OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom.
+OpenAI-compatible external APIs, Anthropic, Gemini, Groq, OpenRouter, and Custom external endpoints.
 
 - Typed sequenced inference events and exactly-one terminal contract (FR-P014/015)
 - Bounded backpressure, cancellation, reconnect, and stream lineage (FR-P016/017/019)

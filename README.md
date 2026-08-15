@@ -61,7 +61,7 @@ Chats are one artifact within a workspace. This scales much better as the applic
 - **Agent-Driven Execution** — agents automatically use the terminal, runtimes (Python/Node), Git, and SQLite inside an isolated sandbox — no infrastructure UI.
 - **Sandboxed Execution** — AI never touches the host system directly (internal by design).
 - **Tool System** — 28 tool categories, 300-500 individual tools, all agent-invoked and plugin-based.
-- **Multi-Provider AI** — OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom.
+- **Multi-Provider AI** — Cloud/external OpenAI-compatible APIs, Anthropic, Gemini, Groq, OpenRouter, and Custom external endpoints.
 - **Typed inference streaming** — sequenced events, bounded backpressure, cancellation, resume lineage, committed Tool-call assembly, and exactly-one terminal behavior.
 - **Bounded deep reasoning** — executable ReasoningPolicy, critic/verifier gates, evidence-calibrated confidence, redacted ReasoningSummary, and reproducible ContextSnapshot.
 - **Memory System** — Session, project, and long-term memory with semantic search.
@@ -79,7 +79,7 @@ Chats are one artifact within a workspace. This scales much better as the applic
 | 2 | Core Runtime (agent loop) | Upcoming |
 | 3 | Sandbox (VFS, terminal, runtimes) | Upcoming |
 | 4 | Tools (generic interface + tools) | Upcoming |
-| 5 | AI Providers (9 providers) | Upcoming |
+| 5 | Cloud AI Providers | Upcoming |
 | 6 | Memory (persistent memory) | Upcoming |
 | 7 | Autonomous Agents (16 types) | Upcoming |
 | 8 | Plugin Marketplace | Upcoming |

@@ -58,31 +58,14 @@ Detailed specification for each AI provider integration. All providers implement
 - **Models**: Access to 100+ models via unified API.
 - **Note**: OpenAI-compatible protocol.
 
-### Ollama
+### Unsupported local AI provider boundary (out of scope)
 
-- **Base URL**: Configurable (default: `http://localhost:11434`)
-- **Auth**: None (local).
-- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings.
-- **Models**: Any model pulled via `ollama pull`.
-
-### LM Studio
-
-- **Base URL**: Configurable (default: `http://localhost:1234`)
-- **Auth**: None (local).
-- **Capabilities**: Chat, Streaming, Tool Calling.
-- **Models**: Any GGUF model loaded in LM Studio.
-
-### Local GGUF
-
-- **Implementation**: A Nexora-managed separate on-device worker process loads GGUF through an approved runtime such as llama.cpp or mlc-llm; the Android application process does not load GGUF directly (DEC-39).
-- **Auth**: None (local).
-- **Capabilities**: Chat, Streaming.
-- **Models**: Any GGUF file subject to worker architecture, memory, sandbox, and resource limits.
+Local AI providers, local model files, and local model runtimes are not supported and are out of scope under DEC-41. Active provider profiles must resolve to an external/cloud endpoint under DEC-41; localhost, loopback, app-private, and on-device model endpoints are invalid.
 
 ### Custom
 
-- **Base URL**: User-defined.
-- **Auth**: User-defined (headers, query params, bearer).
+- **Base URL**: User-defined external/cloud URL only; localhost, loopback, app-private, and on-device endpoints are invalid.
+- **Auth**: User-defined external-provider authentication (headers, query params, bearer).
 - **Capabilities**: User-declared.
 - **Protocol**: User selects OpenAI-compatible or Anthropic format.
 
@@ -93,8 +76,8 @@ switchable provider configuration:
 
 | Field | Description |
 |-------|-------------|
-| **Name** | Human-readable profile name (e.g. "OpenAI Work", "Local Fast"). |
-| **Provider type** | One of the 9 supported types (PROV-001…009). |
+| **Name** | Human-readable profile name (e.g. "OpenAI Work", "Fast Cloud"). |
+| **Provider type** | One of the active cloud/external ProviderType values under DEC-41. |
 | **API key** | Per-profile key, stored encrypted via `SecureKeyStore` (never plaintext, never logged — NFR-SEC-005). |
 | **Endpoint** | Configurable base URL (defaults per provider; required for custom endpoints). |
 | **Model** | Default model for the profile; selectable from the provider model catalog (FR-P006). |
@@ -106,8 +89,7 @@ switchable provider configuration:
 
 Rules:
 
-- **Unlimited profiles per provider** — e.g. multiple OpenAI profiles with different
-  keys, or a cloud profile and a local profile (Ollama/LM Studio/GGUF) side by side.
+- **Unlimited profiles per provider** — e.g. multiple cloud-provider profiles with different keys or external endpoints side by side.
 - **Profiles are independent** — create, edit, duplicate, delete, or switch without
   affecting other profiles.
 - **Per-workspace default** — a workspace's `settings.default_provider` /
@@ -159,7 +141,7 @@ financial cost.
 ## Phase Mapping
 
 - **Phase 1**: Profile model, configuration UI, encrypted key storage.
-- **Phase 5**: All 9 providers implemented; streaming; health checks; profile switching.
+- **Phase 5**: Active cloud/external providers implemented; streaming; health checks; profile switching. Local AI providers are out of scope under DEC-41.
 - **Phase 8**: Providers installable as plugins.
 
 ---
@@ -171,7 +153,7 @@ financial cost.
 > **Gating:** Existing permission scopes (`security/PermissionModel.md`): `device:camera` (`DENY` default), `device:storage` (`DENY` default), `device:notifications` (`ASK` default). No new scopes added — G5 uses existing scopes.  
 > **Mapping:** `Android Device` category (`architecture/TOOL_SYSTEM.md` §Category 18) extended with streaming behavior (not new category): `device_camera_stream` (`TOOL-403`) supports continuous camera stream (`Streaming` flag `✓`) for live agent observation; `device_audio_stream` (`TOOL-404`) supports real-time microphone-audio stream (`Streaming` flag `✓` — aligns with `ai_transcribe` `TOOL-101` which already supports streaming). The non-streaming capture tools remain `device_camera` (`TOOL-302`) and `device_audio` (`TOOL-303`).
 > **Autonomy control (`FR-S016`):** Real-time device I/O requires `Manual` or `Assisted` autonomy mode (`FR-S016`); `Autopilot` mode cannot invoke `device:*` scopes without explicit user confirmation (`FR-AS-005` — trust growth requires successful history before `Autopilot` grants `device:*`).  
-> **Security (`security/PermissionModel.md` — G2 deny-by-default):** `device:camera` and `device:microphone` remain `DENY` by default; user must explicitly grant (`ALLOW`) through workspace settings (`FR-W005`) or agent-level override; the optional `AutoApprovalClassifier` (`security/PermissionModel.md` §Auto-Approval Classifier) can `DENY` risky device calls even if `ALLOW` is granted (independent safety layer).
+> **Security (`security/PermissionModel.md` — deny-by-default, DEC-42):** `device:camera` and `device:microphone` remain `DENY` by default; user must explicitly grant (`ALLOW`) through workspace settings (`FR-W005`) or agent-level override. No local AI classifier is invoked; existing PermissionModel scope, ASK, DENY, and audit controls remain authoritative.
 > **Phase:** Phase 5 or later (`docs/ROADMAP.md` — optional; does not change phase mapping; `Android Device` category exists; streaming support exists via `Streaming` capability in `registry/TOOL_MATRIX.md`).  
 > **Evidence classification:** `VERIFIED` (`Grok` / `MiniMax Hailuo` voice/camera patterns — verified by public sources); `ENGINEERING INFERENCE` (extension of existing `Android Device` category with `Streaming` flag — standard capability mapping, no new interface); `UNKNOWN` (exact model accuracy for real-time voice transcription — future work; streaming mechanism exists, model selection is provider-level — `specs/AI_PROVIDERS.md` Phase 5 covers vision; real-time transcription aligns with `ai_transcribe` `TOOL-101` and `ai_speech` `TOOL-102`).  
-> **Traceability (G5 — Documentation Updates Only):** `architecture/TOOL_SYSTEM.md` updated (§Category 18 — streaming note); `security/PermissionModel.md` unchanged (`device:*` scopes preserved, `DENY` default preserved, `AutoApprovalClassifier` applies); `docs/DECISION_LOG.md`: `DL-024` logs the decision; `docs/REQUIREMENT_COVERAGE_LEDGER.md`: no new `FR-` / `NFR-` IDs (G5 is optional roadmap extension of existing `FR-S001`..`FR-S028` — device access; `FR-P009` — token tracking includes streaming; `FR-A010` — real-time monitoring includes device events); `docs/TRACEABILITY.md`: not updated (optional feature; no new contract; existing device/access contracts sufficient).
+> **Traceability (G5 — Documentation Updates Only):** `architecture/TOOL_SYSTEM.md` updated (§Category 18 — streaming note); `security/PermissionModel.md` preserves `device:*` scopes and `DENY` defaults under DEC-42 without a local AI classifier; `docs/DECISION_LOG.md`: `DL-024` logs the decision; `docs/REQUIREMENT_COVERAGE_LEDGER.md`: no new `FR-` / `NFR-` IDs (G5 is optional roadmap extension of existing `FR-S001`..`FR-S028` — device access; `FR-P009` — token tracking includes streaming; `FR-A010` — real-time monitoring includes device events); `docs/TRACEABILITY.md`: not updated (optional feature; no new contract; existing device/access contracts sufficient).

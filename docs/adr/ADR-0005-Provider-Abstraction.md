@@ -6,7 +6,7 @@
 
 ## Context
 
-Nexora must support 9+ AI providers (OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom). Each has a different API format, authentication method, and capability set.
+Nexora must support multiple external/cloud AI providers (OpenAI-compatible APIs, Anthropic, Gemini, Groq, OpenRouter, and Custom external endpoints). Each has a different API format, authentication method, and capability set. Local AI providers are out of scope under DEC-41.
 
 Two approaches:
 

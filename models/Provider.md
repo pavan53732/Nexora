@@ -55,7 +55,7 @@ data class ModelDescriptor(
 
 enum class ModelLifecycleStatus { ACTIVE, DEPRECATED, RETIRED }
 enum class LatencyClass { ULTRA_LOW, LOW, BALANCED, HIGH, UNKNOWN }
-enum class DataLocality { ON_DEVICE, LOCAL_NETWORK, EXTERNAL }
+enum class DataLocality { EXTERNAL } // DEC-41: active AI providers are external/cloud only
 
 enum class ProviderStatus {
     REGISTERED,

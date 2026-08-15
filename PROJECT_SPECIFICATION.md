@@ -383,7 +383,7 @@ Nexora/
 | **2** | Core Runtime | Agent execution loop | Planner, executor, tool manager, event bus, checkpoints |
 | **3** | Sandbox | Isolated execution | Virtual FS, terminal, process manager, Python/Node |
 | **4** | Tools | Tool interface + foundational tools | 50+ tools across 8 categories |
-| **5** | AI Providers | Provider abstraction + 9 providers | All 9 providers, streaming, health checks |
+| **5** | Cloud AI Providers | Provider abstraction + active cloud/external providers | Cloud/external provider adapters, streaming, health checks, profile switching; no local AI providers |
 | **6** | Memory | Persistent memory system | Session, project, long-term, semantic search |
 | **7** | Autonomous Agents | Built-in agent types | 16 agents, multi-agent coordination |
 | **8** | Plugin Marketplace | Everything is a plugin | Plugin SDK, Nexora Hub, community plugins |

@@ -414,7 +414,7 @@ All commands executed successfully with expected outputs.
 
 - **Enable SQLCipher encryption** for workspace database isolation.
 - **Implement Sandbox Manager** (`architecture/SANDBOX.md`) with resource limits, audit logging, and process isolation.
-- **Configure multi-provider AI integration** (`specs/AI_PROVIDERS.md`) — verify network connectivity and SSL certificates for all 9 providers.
+- **Configure cloud-provider AI integration** (`specs/AI_PROVIDERS.md`) — verify network connectivity and SSL certificates for the active external/cloud providers.
 
 ---
 
@@ -447,9 +447,9 @@ The environment is verified suitable for future AI provider integration (Step 4 
 | Gemini | `curl` + SSL ready | ✅ Ready (404 without key — expected) |
 | Groq | SSL / network ready | ✅ Ready |
 | OpenRouter | Network / SSL ready | ✅ Ready |
-| Ollama | Local runtime check (`python3`, `curl`) | ✅ Ready |
-| LM Studio | No external dependency for setup | ✅ Ready |
-| Custom Providers | Python HTTP libraries (`urllib`, `requests` available) | ✅ Ready |
+| Custom external providers | Python HTTP libraries (`urllib`, `requests` available) | ✅ Ready |
+
+Local AI providers, local model runtimes, localhost AI endpoints, and model files are not part of the active environment or source setup under DEC-41/DEC-42.
 
 No API keys were configured or stored. Key storage will use Android Keystore (as specified in `security/SECURITY_MODEL.md`) when integration begins in Phase 5.
 

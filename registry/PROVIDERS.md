@@ -17,7 +17,7 @@
 | `reasoningEfforts` | Supported canonical reasoning effort values |
 | `supportsTools` / `supportsCitations` | Typed event capabilities |
 | `inputCostPerMillion` / `outputCostPerMillion` | Route-planning cost metadata |
-| `dataLocality` | `ON_DEVICE`, `LOCAL_NETWORK`, or `EXTERNAL` |
+| `dataLocality` | `EXTERNAL` for every active AI provider under DEC-41 |
 | `usageAccountingLevel` | Usage support detail |
 | `minContractVersion` | Minimum compatible API/SDK contract version |
 

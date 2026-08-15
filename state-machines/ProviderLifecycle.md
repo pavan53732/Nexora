@@ -11,7 +11,7 @@
 > Depends on: [../architecture/PROVIDER_SYSTEM.md](../architecture/PROVIDER_SYSTEM.md).
 > Referenced by: [../models/Provider.md](../models/Provider.md), [../protocols/Provider-Protocol.md](../protocols/Provider-Protocol.md).
 
-A **Provider** in Nexora represents an external AI model endpoint (OpenAI, Anthropic, local Ollama, etc.) that agents use for inference. The Provider Lifecycle manages registration, configuration, health monitoring, and routing eligibility. It does not represent an individual inference stream; per-stream state, backpressure, reconnect, cancellation, and terminal behavior are owned by [ProviderStreamLifecycle.md](ProviderStreamLifecycle.md).
+A **Provider** in Nexora represents an external/cloud AI model endpoint (OpenAI, Anthropic, Gemini, Groq, OpenRouter, or an eligible Custom external endpoint) that agents use for inference. Local AI model endpoints are out of scope under DEC-41. The Provider Lifecycle manages registration, configuration, health monitoring, and routing eligibility. It does not represent an individual inference stream; per-stream state, backpressure, reconnect, cancellation, and terminal behavior are owned by [ProviderStreamLifecycle.md](ProviderStreamLifecycle.md).
 
 ## Administrative Lifecycle (ProviderStatus)
 

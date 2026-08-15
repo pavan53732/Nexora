@@ -102,8 +102,8 @@ The sandbox uses a single bundled Full Environment based on a Debian-slim rootfs
 │   ├── providers/                  # AI provider configs (encrypted keys)
 │   └── settings/                   # Global app settings
 └── cache/
-    ├── embeddings/                 # Vector embedding cache
-    └── models/                     # Cached local models
+    ├── embeddings/                 # Vector embedding cache from external provider calls
+    └── provider_catalog/           # Cached external-provider model metadata; no model weights
 ```
 
 

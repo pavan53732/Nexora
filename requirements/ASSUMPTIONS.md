@@ -12,7 +12,7 @@
 |-----------|--------|
 | RAM | Device has >= 4GB RAM available to the app |
 | Processor | ARM64 (AArch64) architecture — no 32-bit support required |
-| Storage | >= 1GB free storage for app data, sandboxes, and local models |
+| Storage | >= 1GB free storage for app data, sandboxes, checkpoints, caches, and workspace data; no local AI model files are stored |
 | Android version | Android 14 (API 34) or later with Material Design 3 / Material You support |
 | Google Play Services | Available on device (reserved for future Firebase integration) |
 
@@ -38,7 +38,7 @@
 | Assumption | Detail |
 |-----------|--------|
 | External services | AI providers (OpenAI, Anthropic, etc.) are third-party SaaS with their own SLAs |
-| Local models | Ollama and LM Studio run as separate user-managed local-server processes; GGUF runs in a separate Nexora-managed on-device worker process under DEC-39 |
+| AI inference locality | All AI inference, generation, embeddings, and model-backed routing use external cloud providers; no local AI model runtime or model file is present under DEC-41/DEC-42 |
 | API stability | Provider APIs follow their published specs; breaking changes are infrequent |
 | Stream terminals | Provider adapters can detect native completion or synthesize a canonical failure; transport close alone is not trusted as success |
 | Resume support | Native cursor resume is provider/model specific; unsupported providers restart with lineage or fail partial |

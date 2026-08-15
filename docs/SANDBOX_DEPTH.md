@@ -175,7 +175,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 | **WASM micro-sandboxes** | Run untrusted plugins/scripts as WASM modules via **wasmi** (interpreter, Apache-2.0) — memory-safe, no JIT | ~1–2 MB/ABI; aligns with [ENVIRONMENT_SETUP §9.6](./ENVIRONMENT_SETUP.md) |
 | **IsolatedProcess services** | Risky one-off workloads (parsing untrusted files) in `android:isolatedProcess` — true separate UID, no permissions | 0 MB; API 34 OK |
 | **Sandbox template marketplace** | Environment-as-code templates shared via plugins/Nexora Hub (Phase 8) | plugin-sized |
-| **Offline autonomy** | Sandbox + local models (Ollama/LM Studio/GGUF) → fully autonomous without internet; offline mode (NFR-REL-006) | local model size on device |
+| **Offline workspace continuity** | Cloud-provider outage degrades to cached/non-inference workspace operations and read-only access; no local AI inference or model files (NFR-REL-006, DEC-41) | workspace/cache storage only |
 | **Cross-workspace data governance** | DLP on export/import: egress scanning for secrets/keys; export manifest with checksums; quarantine of imported archives | — |
 
 ---
@@ -198,7 +198,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 | 12 | WASM micro-sandboxes | 7+ | Advanced | — | — |
 | 13 | IsolatedProcess services | 7+ | Advanced | — | — |
 | 14 | Template marketplace | 8 | Advanced | — | — |
-| 15 | Offline autonomy | 7+ | Advanced | — | — |
+| 15 | Offline workspace continuity | 7+ | Advanced | NFR-REL-006 | — |
 | 16 | Export data governance | 8 | Advanced | — | — |
 
 ## 6. Phase Mapping
@@ -209,7 +209,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
   FR-S017 encryption; prompt-injection containment; watchdog/self-healing.
 - **Phase 5 (Full Environment finish):** FR-S018 per-agent sandboxes; checkpoint integrity.
 - **Phase 7–8 (future sandbox capabilities; not alternative environment tiers):** WASM micro-sandboxes, isolatedProcess, template
-  marketplace, offline autonomy, export governance.
+  marketplace, offline workspace continuity, export governance.
 
 
 ### 2.7 Bundled Rootfs & Full Environment (FR-S019…S028)

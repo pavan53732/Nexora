@@ -92,7 +92,7 @@
 
 | ID | Requirement | Priority | Phase |
 |----|-------------|----------|-------|
-| FR-P001 | Register providers (OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom) | Must | 0 |
+| FR-P001 | Register cloud/external providers (OpenAI, Anthropic, Gemini, Groq, OpenRouter, Custom external endpoint) | Must | 0 |
 | FR-P002 | Switch active provider per workspace | Must | 0 |
 | FR-P003 | Provider health check and connectivity test | Must | 1 |
 | FR-P004 | Streaming responses with real-time UI update | Must | 1 |
@@ -287,7 +287,7 @@
 | FR-AS-005 | Trust growth — per-agent/per-workspace trust score adjusts autonomy mode; success raises it, failures lower it; explicit reset | Should | 4 |
 | FR-AS-006 | Verification gates — step validation criteria are hard gates; executor blocks next step until pass or classified failure; resumed agents re-validate | Must | 2 |
 | FR-AS-007 | Idempotency & exactly-once recovery — tools declare idempotency; replay log; non-idempotent calls reconciled from tool history, never replayed | Must | 2 |
-| FR-AS-008 | Degradation ladder — provider failover → local model → offline mode → read-only; each descent announced and logged | Must | 2 |
+| FR-AS-008 | Cloud-only degradation ladder — primary cloud provider → alternate eligible cloud provider/profile → cached prior result or supported non-inference workspace operation → read-only + notification; each descent announced and logged | Must | 2 |
 | FR-AS-009 | Fault-injection testing — scripted chaos scenarios (kill mid-task, kill on non-idempotent call, network loss, provider storm, disk-full, OOM, double restart, summarization churn) runnable in CI | Should | 4 |
 
 

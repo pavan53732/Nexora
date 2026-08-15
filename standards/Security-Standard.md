@@ -20,7 +20,7 @@
 ## Network Security
 - All provider connections use HTTPS.
 - Certificate pinning for known providers.
-- No HTTP connections (except localhost for Ollama/LM Studio).
+- No HTTP provider connections. Active AI providers use external HTTPS endpoints with certificate pinning where supported; localhost, loopback, app-private, and on-device AI endpoints are not eligible under DEC-41.
 
 ## Plugin Security
 - Plugins declare required permissions in their manifest.

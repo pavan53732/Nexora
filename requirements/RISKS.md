@@ -15,7 +15,7 @@
 | RISK-005 | Minimal-foundation APK exceeds its 50MB target | Medium | Low | ProGuard/R8 obfuscation; tree-shaking unused resources; keep Full Environment assets outside the minimal-foundation variant | Build Lead |
 | RISK-006 | Plugin API instability forces frequent plugin rewrites | Medium | High | Semantic versioning; deprecation warnings; compatibility shims; plugin API review board | Platform Lead |
 | RISK-007 | Memory pressure from concurrent agent execution causes OOM | Medium | High | Per-agent memory budgets; LRU eviction for cached data; monitoring with `MemoryInfo` thresholds | Runtime Lead |
-| RISK-008 | AI provider rate limiting blocks user workflows | High | Medium | Exponential backoff with jitter; provider fallback chain; local model option for critical tasks | Provider Lead |
+| RISK-008 | Cloud AI provider rate limiting blocks user workflows | High | Medium | Exponential backoff with jitter; alternate eligible cloud-provider profile chain; cached/non-inference workspace operations; read-only notification | Provider Lead |
 | RISK-009 | Google Play policy changes restrict agent/tool capabilities | Low | High | Monitor policy updates; design features to comply; maintain direct APK distribution channel | Product Lead |
 | RISK-010 | User data loss due to corruption or unintended deletion | Low | High | WAL journaling; encrypted backup/restore; undo for destructive operations; crash recovery tests | Data Lead |
 | RISK-011 | Multi-agent coordination deadlock | Medium | Medium | Timeout on delegation handoff; cycle detection in dependency graph; deadlock monitor coroutine | Agent Lead |

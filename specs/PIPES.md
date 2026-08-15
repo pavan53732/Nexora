@@ -132,7 +132,7 @@ Broadcast is a coordinator-only operation for fan-out announcements (e.g., "work
 | Workspace scoping | A pipe is bound to exactly one exposed workspace; cross-workspace routing is rejected (`NXR-1002` variant) |
 | Credential firewall | Provider keys, `SecureKeyStore` aliases, and user secrets are never serializable into pipe payloads (enforced by DLP scan on outbound bodies, NFR-SEC-013 extended to pipes) |
 | Untrusted payloads | All inbound payloads wrapped as untrusted context segments (FR-CM-006); tool calls inside payloads validated against the registry before execution (TM-025) |
-| Auto-approval classifier | The optional TFLite classifier (PermissionModel §Auto-Approval Classifier) can `DENY` a pipe delegation even when the acceptance mode would allow it |
+| Authorization gate | Pipe delegation is evaluated by the existing PermissionModel scope hierarchy, acceptance mode, ASK approval transaction, explicit DENY, and audit contract; no local AI classifier is invoked (DEC-42) |
 | Egress confinement | Pipe sockets connect only to the paired endpoint (NFR-SEC-012 network confinement applied to pipe clients); discovery sockets are mDNS-only |
 | Audit | Every pipe event → `permission_audit_log`-adjacent pipe audit stream (FR-TL015). The canonical `permission_audit_log` is non-evictable; a derived 90-day operational view may be surfaced for routine review but MUST NOT delete/mutate the source rows (see `security/PermissionModel.md` §Permission Audit Trail) |
 

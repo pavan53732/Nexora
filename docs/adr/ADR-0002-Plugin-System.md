@@ -6,9 +6,9 @@
 
 ## Context
 
-Nexora is projected to have 300-500 tools, 10-20 agent types, 9+ AI providers, and an open-ended set of capabilities. If all of these are built into the core application, the codebase becomes monolithic, untestable, and impossible for the community to extend.
+Nexora is projected to have 300-500 tools, 10-20 agent types, multiple cloud AI providers, and an open-ended set of capabilities. If all of these are built into the core application, the codebase becomes monolithic, untestable, and impossible for the community to extend.
 
-Additionally, not all users need all capabilities. A user who only uses OpenAI should not carry the code for Ollama, LM Studio, and GGUF. A user who doesn't need browser automation should not have a WebView dependency.
+Additionally, not all users need all capabilities. A user who only uses one cloud provider should not carry adapters for every other cloud provider. A user who doesn't need browser automation should not have a WebView dependency. Local AI provider adapters and model runtimes are out of scope under DEC-41 and DEC-42.
 
 ## Decision
 

@@ -42,7 +42,7 @@
 
 | Constraint | Detail |
 |-----------|--------|
-| Server-side components | **None.** All logic runs on-device or via API calls to external AI providers |
+| Server-side components | **None owned by Nexora.** Local app logic runs on-device; AI inference runs only through API calls to external cloud providers |
 | Root access | **Not required.** App must function on stock, unrooted devices |
 | Inter-module communication | Direct dependencies are permitted only through public interfaces along the canonical module graph; EventBus is used for published domain/runtime events and subscriptions |
 | Persistent data location | **App private storage only.** No external storage writes without explicit user action |
@@ -67,8 +67,8 @@
 | Constraint | Detail |
 |-----------|--------|
 | Provider model | External API calls only — providers are not bundled with the app |
-| Supported providers | OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom endpoint |
-| Local models | Ollama and LM Studio use separate local-server processes; GGUF uses a separate Nexora-managed on-device worker process and is not loaded in the main Android process |
+| Supported providers | OpenAI, Anthropic, Gemini, Groq, OpenRouter, and Custom external/cloud endpoint |
+| Local AI models | None. Ollama, LM Studio, GGUF, TFLite, ONNX, and other local AI-model runtimes/files are out of scope under DEC-41 and DEC-42 |
 | Stream abstraction | Provider-native SSE/WebSocket/HTTP formats must normalize to the canonical typed stream; Agent Runtime never depends on provider wire formats |
 | Stream buffering | Unbounded stream buffers are prohibited; semantic/control events must not be dropped |
 | Reasoning artifacts | Raw private chain-of-thought is not required, logged, exported, or persisted; only redacted ReasoningSummary artifacts cross durable boundaries |

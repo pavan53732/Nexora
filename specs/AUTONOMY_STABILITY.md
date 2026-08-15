@@ -170,16 +170,15 @@ safely under the replay policy (see [../architecture/RUNTIME.md](../architecture
 Never a blank crash — degrade gracefully down the ladder, announcing each step:
 
 ```
-1. Primary provider    → healthy (ProviderLifecycle)
-2. Provider failover   → next profile (auto, health-based)
-3. Local model         → Ollama / LM Studio / GGUF (offline-capable)
-4. Offline mode        → read-only workspace access (NFR-REL-006)
-5. Read-only + notify  → degrade features, never crash (NFR-REL-005)
+1. Primary cloud provider        → healthy (ProviderLifecycle)
+2. Cloud provider failover       → next eligible cloud profile (auto, health-based)
+3. Cached/non-inference operation → prior result or supported local workspace operation where available
+4. Offline workspace mode        → read-only workspace access (NFR-REL-006)
+5. Read-only + notify             → degrade features, never crash (NFR-REL-005)
 ```
 
-Each descent is logged (`degradation_event`) and surfaced in the activity feed. The
-ladder is per-workspace configurable (some workspaces may prefer "fail fast" for
-critical tasks).
+Each descent is logged (`degradation_event`) and surfaced in the activity feed. The ladder is per-workspace configurable (some workspaces may prefer "fail fast" for
+critical tasks). No ladder step invokes a local AI model; agent inference, planning, embeddings, and provider-backed execution require an eligible cloud provider connection (DEC-41).
 
 ## 9. Timeout & Concurrency Discipline
 
