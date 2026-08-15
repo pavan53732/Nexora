@@ -126,6 +126,16 @@ Progressive summarization prevents context overflows while preserving critical p
 - **Idempotency & Fidelity Check**: Before the summarized chunk is persisted, a validation pass checks that no core plan variables or status parameters were dropped or mutated. If drift is detected, the compaction is rolled back, and a warning is logged.
 - **Resume Reconstruction (FR-CM-004)**: Upon agent resume from a crash, the context window is reconstructed from the `Checkpoint + Summary + semantic memories`. The raw, unsummarized history is never replayed.
 
+### Long-Horizon Task and Artifact Projection
+
+Long-running work MUST be reconstructable without relying on the model’s conversational recall alone. CAL therefore maintains a derived long-horizon projection over the existing `Task`, `Workflow`, `Execution`, `ContextSnapshot`, execution-checkpoint, `Memory`, `ClaimRecord`, and artifact records. This projection is not a new lifecycle, identity, or ownership authority; it is a resumable view assembled from the owning artifacts.
+
+For each active long-running task, the projection MUST preserve the current goal, phase/step status, acceptance-criteria status, active constraints, locked decisions, open clarification questions, evidence gaps, delegated-child summaries, artifact references, latest verified outputs, unresolved failures, next eligible action, and the source checkpoint or execution identity from which each item was derived. Large outputs SHOULD remain as permissioned artifact references rather than being copied repeatedly through coordinator or conversation context.
+
+Compaction MUST preserve this projection before compressing older conversational or execution detail. A reconstructed context MUST be able to identify what was completed, what was only proposed, what evidence is still missing, which delegated work is active or failed, which artifacts are authoritative, and what action is safe to perform next. If reconstruction cannot establish those facts, the runtime MUST pause for clarification or recovery rather than infer continuity.
+
+When a clean sub-agent context is created for an independent delegated task, the handoff MUST carry the relevant projection subset, evidence references, constraints, acceptance criteria, and artifact destinations. The sub-agent MUST return structured results and artifact references; the coordinator MUST not treat an unreferenced free-form summary as equivalent to persisted evidence.
+
 ---
 
 ## 4. Context Tagging, Metadata, & Trust Isolation (FR-CM-006)

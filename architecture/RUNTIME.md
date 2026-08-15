@@ -192,6 +192,32 @@ data class AgentCheckpoint(
 )
 ```
 
+## Correlated Agent Trace
+
+Observability is owned by the Runtime’s existing Observability module. It MUST expose one
+correlated trace projection for each execution without becoming a second owner of Task,
+Execution, Provider, Tool, Agent, Permission, Context, or Evidence semantics.
+
+The trace MUST correlate, when present, the stable `workspaceId`, `taskId`, `executionId`,
+`agentId`, `correlationId`, `requestId`, `streamId`/`priorStreamId`, provider profile and
+exact model identity, model-catalog snapshot, provider contract version, prompt/config
+version, Tool descriptor ID/version, Tool invocation identity, approval transaction,
+context snapshot/checkpoint, sub-agent graph, evidence/ClaimRecord references, reasoning
+policy and provider-effort mapping, timestamps, queue/active/Tool/provider latency,
+usage metadata, retry/failover lineage, canonical error envelope, and final disposition.
+
+Trace records MUST distinguish planned, attempted, observed, verified, incomplete, and
+failed outcomes. They MUST preserve plan-versus-actual and claim-to-evidence relationships
+and MUST NOT persist private chain-of-thought. Provider-native continuation artifacts are
+opaque adapter state and are referenced only according to the Provider Protocol privacy and
+retention rules.
+
+Trace correlation is diagnostic and evaluative. It MUST NOT infer lifecycle transitions
+from a log message, provider category, model confidence, or latency observation. Lifecycle
+changes remain owned by the canonical state machine or operation owner. Trace export MUST
+respect workspace permissions, sensitive-content redaction, retention policy, and the
+existing audit/security rules.
+
 ## ExecutionStatus Lifecycle
 
 The Executor owns ExecutionStatus lifecycle semantics. The canonical state set is

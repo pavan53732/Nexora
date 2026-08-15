@@ -37,3 +37,10 @@ Run on release candidates and on any contract-affecting change.
 
 `RT-STREAM-001..002` and `RT-REASON-001` protect adapter event normalization,
 non-stream fallback adaptation, and reasoning-policy/summary contract compatibility.
+
+`RT-MODEL-001..002` MUST protect model-catalog snapshot identity, capability negotiation,
+model deprecation handling, and provider-contract compatibility without mutating in-flight
+route plans. `RT-REASON-002` MUST protect provider-native reasoning continuation privacy
+and incompatible-failover rejection. `RT-TOOLDISC-001` MUST protect bounded discovery,
+canonical Tool identity, stale-descriptor fail-closed behavior, and MCP tool/resource/prompt
+primitive separation.

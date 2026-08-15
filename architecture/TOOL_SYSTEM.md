@@ -201,7 +201,9 @@ and `CRITICAL` covers device-sensitive or security-critical irreversible operati
 
 ## Tool Registration
 
-Tools are registered at startup (built-in) or dynamically (plugins).
+Tools are registered at startup (built-in) or dynamically (plugins and negotiated MCP sources).
+The registry remains the sole authority for Tool identity, descriptor lifecycle, permission
+scope IDs, and version compatibility.
 
 ```kotlin
 class ToolRegistry {
@@ -215,16 +217,42 @@ class ToolRegistry {
 }
 ```
 
+### Agent-Visible Tool Discovery Projection
+
+The registry MAY expose a bounded discovery projection instead of placing the complete
+352-tool catalog into every model request. Discovery is a selection and presentation
+projection; it MUST NOT create a second Tool identity catalog or bypass the ToolStatus,
+permission, sandbox, schema, or version checks.
+
+A discovery projection SHOULD rank candidates using user intent, task phase, required
+capabilities, workspace policy, current ToolStatus/health, risk level, freshness, prior
+selection outcomes, and explicit alternatives. It SHOULD return the canonical descriptor
+plus concise usage guidance, required preconditions, representative valid/invalid examples,
+edge cases, boundaries from similarly named Tools, and any known failure signatures. These
+are agent-computer-interface metadata and do not change `Tool.id`, `Tool.version`, schema,
+or authorization semantics.
+
+Discovery MUST be observable. The execution history SHOULD record the candidate set,
+selected Tool ID/version, rejected alternatives and reasons, descriptor snapshot, and
+whether the selection was followed by schema repair, authorization denial, timeout,
+unknown completion, or semantic progress. This permits tool-selection evaluation without
+turning a model preference into a lifecycle transition.
+
+The discovery layer MUST fail closed when a descriptor is stale, incompatible, missing a
+known permission scope, or not available in the current workspace. A model MUST receive a
+clear incompatibility or repair result rather than an invented Tool name or silently
+substituted side effect.
+
 ## MCP Client (Model Context Protocol Client)
 
 > **Status:** CANONICAL specification for MCP integration (added G4 — 2026-08-06).  
 > **Verified research reference:** Industry precedent verified — Claude (Anthropic), Mistral Vibe (Mistral AI), Kimi CLI (Moonshot AI), MiniMax Hailuo (MiniMax) all document stdio + Streamable HTTP transport support, capability negotiation, and tool/resource/prompt primitives (`bitdoze.com` 2026-07-24; `mcp.directory` 2026-07-09; `aihackers.net` 2026-07-03; `blog.4sapi.com` 2026-07-07).  
 > **Position:** MCP servers are an additional **tool SOURCE** (alongside built-in and plugin tools) — they do **NOT** replace the `Tool` interface, `ToolRegistry`, or `PluginSDK`.  
-> **Mapping:** Every MCP primitive (`tool`, `resource`, `prompt`) maps onto the existing `Tool` contract (`id`, `name`, `description`, `parameters`, `requiredPermissions`, `execute` → `ToolResult`).  
+> **Mapping:** MCP `tool`, `resource`, and `prompt` remain distinct protocol primitives. An MCP `tool` is projected into the existing `Tool` contract for invocation. An MCP `resource` is a permissioned context/data read and an MCP `prompt` is a structured prompt/workflow template; their protocol semantics, provenance, authorization, and cache/freshness behavior MUST NOT be reinterpreted as arbitrary Tool side effects. The existing `mcp_read_resource` and `mcp_get_prompt` registry entries are adapters for those primitives, not proof that a resource or prompt has Tool identity.
 > **Transport:** `stdio` (subprocess) and `Streamable HTTP` (SSE-compatible over HTTPS) — both registered via `mcp_connect_stdio` (`TOOL-397`) and `mcp_connect_http` (`TOOL-398`).  
-> **Capability negotiation:** `mcp_list_caps` (`TOOL-399`) performs handshake; results stored per workspace in `workspace.json` settings (`FR-W005`).  
+> **Capability negotiation:** `mcp_list_caps` (`TOOL-399`) performs handshake; results stored per workspace in `workspace.json` settings (`FR-W005`). The negotiated capability set MUST distinguish tools, resources, prompts, elicitation, progress/cancellation, and optional asynchronous task support; unsupported capabilities are not silently treated as supported.
 > **Permission model:** MCP connections require `network:http` (for HTTP transport) and `plugin:install` (when registering external server capabilities) — both default `ASK` (`security/PermissionModel.md` §Explicit Risk-Based Scope Defaults). Each discovered MCP tool inherits the server's declared `requiredPermissions`; if not declared, defaults to `DENY`. Unknown scopes are always denied.
-> **Result flow:** MCP tool results (`mcp_call_tool` `TOOL-400`) return through the standard `ToolResult.Success` / `ToolResult.Error` pipeline (`protocols/Tool-Protocol.md`); no special error envelope — canonical error codes (`NXR-2004`, `NXR-7004`) apply. Authorization requirements are represented by the `ToolInvocation` status `PENDING_AUTHORIZATION`, not a `ToolResult` variant.
+> **Result flow:** MCP tool results (`mcp_call_tool` `TOOL-400`) return through the standard `ToolResult.Success` / `ToolResult.Error` pipeline (`protocols/Tool-Protocol.md`); no special error envelope — canonical error codes (`NXR-2004`, `NXR-7004`) apply. Resource and prompt results preserve their MCP primitive, provenance, freshness, and authorization metadata before entering Context Management. Authorization requirements are represented by the `ToolInvocation` status `PENDING_AUTHORIZATION`, not a `ToolResult` variant.
 > **Sandbox:** MCP client process runs inside the workspace sandbox (`sandbox:execute` scope required) with the same filesystem/network/process limits (`security/SandboxPolicy.md`); no host-level access granted by transport choice.  
 > **Phase:** Phase 5 (same phase as AI provider integrations — `specs/AI_PROVIDERS.md` Phase 5 mapping applies).  
 >

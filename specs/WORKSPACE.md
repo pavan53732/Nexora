@@ -56,7 +56,7 @@ Workspace
   "settings": {
     "default_agent": "coder",
     "default_provider": "openai",
-    "default_model": "gpt-4o",
+    "default_model": "selected-from-provider-catalog",
     "sandbox_limits": {
       "max_memory_mb": 512,
       "max_disk_mb": 1024,

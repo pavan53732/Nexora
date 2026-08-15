@@ -17,6 +17,10 @@ End-to-end tests validate user-visible workflows across the full stack.
 - `E2E-REASON-*` — bounded reasoning and reasoning-privacy journeys
 - `E2E-CONTEXT-*` — reproducible context and crash-reconstruction journeys
 - `E2E-REL-*` — Android, provider, Tool, anti-loop, multi-agent, and claim-evidence reliability journeys
+- `E2E-MODEL-*` — model-catalog, capability-negotiation, provider-version, and routing journeys
+- `E2E-TOOLDISC-*` — dynamic Tool discovery, selection, descriptor-quality, and repair journeys
+- `E2E-LONG-*` — long-horizon compaction, artifact handoff, resume, and reconstruction journeys
+- `E2E-MM-*` — negotiated multimodal, realtime, audio, screen, and computer-action journeys
 
 ## Framework Stack
 
@@ -59,6 +63,41 @@ Use deterministic fixtures and explicit readiness checks.
 ## Agent Orchestration E2E Journeys
 
 `E2E-ORCH-*` orchestration flows should verify cross-agent correlation continuity.
+
+## Model, Tool, Long-Horizon, and Multimodal Journeys
+
+The following journeys are required to establish capability behavior rather than only
+transport success. They MUST record the model/provider catalog snapshot, adapter contract
+version, prompt/config version, requested and negotiated capabilities, exact Tool
+ID/version, context/checkpoint identity, trace correlation, and final disposition.
+
+- `E2E-MODEL-001`: route selection records an exact model descriptor and catalog snapshot;
+  a refreshed or deprecated catalog does not mutate an in-flight route.
+- `E2E-MODEL-002`: unsupported hard capabilities produce explicit incompatibility or
+  policy-approved fallback; no computer-use, multimodal, reasoning, or evidence capability
+  is silently dropped.
+- `E2E-MODEL-003`: provider-native reasoning continuation is preserved only within the
+  compatible provider/model/adapter contract and is not replayed across incompatible
+  failover.
+- `E2E-TOOLDISC-001`: a large registry is reduced to a bounded candidate projection with
+  canonical IDs, examples, edge cases, boundaries, and required permissions.
+- `E2E-TOOLDISC-002`: stale, incompatible, unknown-scope, or unavailable descriptors fail
+  closed and never result in an invented Tool or silent substitution.
+- `E2E-TOOLDISC-003`: candidate set, selection, rejected alternatives, descriptor version,
+  repair, authorization, and progress outcome are available in the correlated trace.
+- `E2E-LONG-001`: context compaction and crash resume reconstruct goal, phase status,
+  acceptance criteria, evidence gaps, delegated work, artifacts, and next safe action.
+- `E2E-LONG-002`: large delegated outputs are returned through permissioned artifact
+  references with provenance rather than repeated free-form copying.
+- `E2E-LONG-003`: reconstruction pauses rather than infers continuity when authoritative
+  task/artifact state is missing, stale, or incompatible.
+- `E2E-MM-001`: negotiated multimodal/audio/screen/computer-action events obey capability,
+  permission, approval, cancellation, size, ordering, and terminal rules.
+- `E2E-MM-002`: unsupported or unauthorized advanced event families fail closed and are not
+  silently reduced to text or treated as successful side effects.
+
+These journeys are planned evidence obligations. Their presence does not claim that the
+runtime implementation or provider/device validation already exists.
 
 ## Canonical Contract Evidence
 

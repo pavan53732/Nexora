@@ -54,7 +54,15 @@ enum class ProviderCapability {
     REASONING,  // bounded reasoning policy support
     NATIVE_STREAM_RESUME,
     CITATIONS,
-    REASONING_SUMMARY_STREAM
+    REASONING_SUMMARY_STREAM,
+    MODEL_CATALOG,
+    WEB_SEARCH,
+    FILE_SEARCH,
+    CODE_EXECUTION,
+    COMPUTER_USE,
+    MULTIMODAL_FUNCTION_CALLING,
+    REALTIME_AUDIO,
+    AUDIO_TRANSCRIPTION
 }
 ```
 
@@ -105,6 +113,36 @@ internal credit or financial-cost gate.
 A persisted `ProviderRoutePlan` records selected profile/model, ranked candidates,
 required capabilities, technical route constraints, fallback policy, and selection reason.
 Routing is deterministic for the same catalog/health/policy snapshot.
+
+## Model-Catalog and Capability-Negotiation Contract
+
+A provider profile MUST bind each execution route to a model-catalog snapshot. A snapshot records the provider identifier, exact model identifier or pinned model version, retrieval time, catalog source, contract version, and the capability metadata used for routing. A provider alias MAY be used for discovery, but a persisted `ProviderRoutePlan` MUST record the exact selected model identifier and the snapshot identity used to select it.
+
+Each model descriptor MUST distinguish at least the following dimensions rather than collapsing them into a single `REASONING` or `TOOL_CALLING` flag:
+
+- input and output modalities, including text, image, audio, video, and multimodal tool responses;
+- context-window and maximum-output limits;
+- supported reasoning/effort levels, adaptive versus fixed thinking behavior, and provider-specific parameter names;
+- tool capabilities, including function calling, web search, file search, code execution, computer use, and realtime I/O where supported;
+- stream mode, event families, cancellation, native resume, and continuation requirements;
+- data locality, availability, rate-limit class, observed latency class, and reliability history;
+- model lifecycle status, including active, deprecated, and retired catalog entries.
+
+The router MUST perform capability negotiation against the selected model descriptor before request construction. A route is eligible only when the model descriptor satisfies the hard request requirements and the adapter can represent the required capabilities without silently dropping them. If a provider cannot represent a requested capability, the router MUST either select a compatible candidate under the existing fallback policy or return the canonical unsupported-capability outcome; it MUST NOT silently downgrade computer use, multimodal output, provider-native reasoning continuation, or required evidence behavior.
+
+A route plan MUST preserve the capability snapshot, exact model identifier, provider adapter version, reasoning mapping, requested modalities, and fallback compatibility decision. Provider catalog refresh MUST NOT mutate an in-flight route plan. Model deprecation or retirement affects new route selection; an existing execution retains its recorded model identity and contract version and follows the existing recovery/version-compatibility rules.
+
+### Provider-Native Reasoning and Continuation State
+
+The canonical `ReasoningPolicy` and `ReasoningEffort` remain Nexora-owned policy projections. Provider adapters own translation into provider-specific effort parameters, adaptive-thinking controls, reasoning-token budgets, thought signatures, or equivalent continuation artifacts.
+
+Provider-native continuation state is distinct from `ReasoningSummary`, `ClaimRecord`, and private raw chain-of-thought. When a provider requires an opaque continuation artifact for multi-turn reasoning, the adapter MUST carry it only through the provider protocol, bind it to the request/stream/model identity, apply provider expiry and integrity rules, and exclude private reasoning content from user-visible or durable reasoning summaries. A provider adapter MUST declare whether continuation is required, optional, unsupported, resumable, or invalidated by model/provider failover.
+
+A provider fallback MUST NOT replay provider-native reasoning state into a different provider unless an explicit compatible translation contract exists. Otherwise the fallback starts a new provider stream with a new stream identity and preserves only the canonical context, claims, citations, Tool state, and lineage allowed by the existing recovery contract.
+
+### Advanced Capability Boundary
+
+Computer use, web/file search, code execution, realtime audio, transcription, image generation, and multimodal function responses are optional negotiated capabilities, not universal properties of `AIProvider`. Their availability MUST be represented in the model descriptor and enforced by the normal authorization, sandbox, approval, stream, and evidence contracts. A provider that supports text streaming alone MUST remain a valid provider; advanced capability absence is not a lifecycle failure.
 
 ## Typed Streaming Contract
 

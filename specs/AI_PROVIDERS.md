@@ -19,27 +19,28 @@ Detailed specification for each AI provider integration. All providers implement
 - **Covers**: OpenAI, DeepSeek, Together AI, Fireworks, and any OpenAI-API-compatible endpoint.
 - **Base URL**: Configurable (default: `https://api.openai.com/v1`)
 - **Auth**: Bearer token (API key).
-- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings, Reasoning (e.g. o-series).
-- **Models**: User-configurable. Default: `gpt-4o`.
-- **Protocol**: REST API with JSON. Streaming via Server-Sent Events.
+- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings, Reasoning, and any additional capabilities advertised by the selected model descriptor.
+- **Models**: User-configurable and selected from the provider catalog; examples must not be treated as pinned defaults because provider catalogs change.
+- **Protocol**: REST API with JSON. Streaming via Server-Sent Events or the provider-declared stream transport.
+- **Current capability examples**: OpenAI’s current catalog exposes model-specific reasoning levels, long context, Functions, Web search, File search, Computer use, realtime reasoning/tool-use, speech, transcription, and image models. Adapter support remains subject to the canonical model-catalog negotiation contract.
 
 ### Anthropic
 
-- **Covers**: Claude 3.5 Sonnet, Claude 3 Opus, Claude 3 Haiku.
+- **Covers**: Anthropic Claude model families exposed by the current provider catalog; model names and availability are catalog data, not permanent architecture constants.
 - **Base URL**: `https://api.anthropic.com`
 - **Auth**: `x-api-key` header.
-- **Capabilities**: Chat, Streaming, Tool Calling, Vision.
-- **Models**: `claude-sonnet-4-20250514`, `claude-3-opus-20240229`.
-- **Protocol**: REST API. Anthropic-specific tool format.
+- **Capabilities**: Chat, Streaming, Tool Calling, Vision, and model-specific adaptive or extended thinking where advertised.
+- **Models**: Selected from the provider catalog; current first-party documentation distinguishes Fable 5, Opus 5, Sonnet 5, and Haiku 4.5 tiers with different latency, context, output, and thinking characteristics.
+- **Protocol**: REST API. Anthropic-specific tool and reasoning-state format; adapters MUST preserve opaque provider continuation artifacts only within the provider contract and MUST NOT expose private reasoning as durable user-visible content.
 
 ### Gemini
 
-- **Covers**: Gemini Pro, Gemini Flash, Gemini Ultra.
+- **Covers**: Gemini model families exposed by the current provider catalog; model names and availability are catalog data, not permanent architecture constants.
 - **Base URL**: `https://generativelanguage.googleapis.com`
 - **Auth**: API key as query parameter.
-- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings.
-- **Models**: `gemini-1.5-pro`, `gemini-1.5-flash`.
-- **Protocol**: Google AI REST API with `generateContent`.
+- **Capabilities**: Chat, Streaming, Tool Calling, Vision, Embeddings, structured outputs, code execution, Search/URL grounding, multimodal function responses, and model-specific thinking levels where advertised.
+- **Models**: Selected from the provider catalog; current first-party documentation describes Gemini 3.7 Flash as a 1M-context, 64K-output model with low/medium/high thinking levels and agentic multi-step execution.
+- **Protocol**: Google AI REST/Interactions API. Adapters MUST preserve provider-required turn identifiers and thought signatures according to the selected model contract.
 
 ### Groq
 
@@ -99,7 +100,9 @@ switchable provider configuration:
 | **Model** | Default model for the profile; selectable from the provider model catalog (FR-P006). |
 | **Streaming** | Per-profile streaming toggle (FR-P004); streamed via `Flow<StreamEnvelope>` (FR-P014, see [../models/Inference.md](../models/Inference.md)). |
 | **Parameters** | Temperature, max tokens, stop sequences, and other provider params. |
-| **Capabilities** | The profile's declared `ProviderCapability` set (chat, streaming, tool calling, vision, embeddings). |
+| **Capabilities** | The profile's negotiated `ProviderCapability` set, including modalities, reasoning levels, tool families, search/file/code/computer-use, realtime I/O, citations, stream/resume behavior, and evidence requirements. |
+| **Catalog snapshot** | Exact model identifier/version, retrieval time, provider catalog source, adapter contract version, and capability metadata used for the active route. |
+| **Reasoning continuation** | Provider-specific adaptive-thinking or opaque continuation metadata, never raw private chain-of-thought; retained only under the provider adapter’s integrity, expiry, and privacy rules. |
 
 Rules:
 
@@ -113,6 +116,16 @@ Rules:
 - **A profile maps to a `ProviderConfig`** (see [models/Provider.md](../models/Provider.md))
   plus a SecureKeyStore key reference.
 
+## Model-Catalog and Capability Negotiation
+
+A profile MUST NOT treat a provider name as proof that every model in that provider supports the same capabilities. Before a route is accepted, the adapter MUST resolve a model descriptor from the current provider catalog and negotiate the requested hard capabilities, modalities, context/output limits, reasoning effort, stream mode, cancellation, resume, data locality, and provider contract version.
+
+Catalog refresh is separate from an in-flight route. A refreshed catalog may change new-route eligibility, deprecation status, or available model choices, but it MUST NOT mutate the model identity or capability snapshot already recorded on an active execution. Unsupported advanced capabilities MUST produce an explicit incompatibility outcome or a policy-approved fallback; they MUST NOT be silently discarded.
+
+### Provider-Native Reasoning State
+
+`ReasoningPolicy`, `ReasoningEffort`, `ReasoningSummary`, `ClaimRecord`, and provider-native continuation state are distinct. Provider adapters own mapping from the canonical policy to provider-specific thinking levels, effort parameters, reasoning-token budgets, thought signatures, or equivalent opaque continuation artifacts. Raw private chain-of-thought is not persisted or exposed. Provider-native continuation state is bound to provider/model/request/stream identity and is not replayed across provider failover unless a compatible translation contract exists.
+
 ## Typed Stream and Reasoning Adapter Requirements (ADR-0008)
 
 Every provider/model profile declares context/output limits, tokenizer, Tool/citation/
@@ -124,6 +137,11 @@ streaming emit a synthetic canonical Started/delta/Terminal sequence.
 
 | Native behavior | Canonical projection |
 |---|---|
+| Provider thought signature or opaque continuation artifact | Adapter-owned provider state, bound to provider/model/request/stream identity; never raw private chain-of-thought |
+| Adaptive or level-based thinking control | Canonical `ReasoningPolicy`/`ReasoningEffort` projection plus recorded provider mapping |
+| Web/file search or code execution result | Tool/citation/evidence events with source and provenance metadata |
+| Multimodal function response | Capability-negotiated typed payload; unsupported media is not silently reduced to text |
+| Realtime audio/transcription event | Capability-negotiated audio event family with permission, cancellation, and terminal semantics |
 | SSE/WebSocket text delta | `TextDelta` with monotonic sequence |
 | Provider reasoning summary | Redacted `ReasoningSummaryDelta`; raw private reasoning excluded |
 | Function/tool fragments | Started/ArgumentsDelta/Committed assembly contract |

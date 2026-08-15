@@ -243,6 +243,22 @@ max_parallel_agents = min(
 | **Deadlock detection** | A waits-for graph over file write-locks + pending delegation futures is monitored by the coordinator; cycles abort the youngest child and report to the Master Agent (FR-MA-005) |
 | **Delegation timeout** | Every delegation carries an explicit deadline; on expiry the coordinator aborts the child, logs `NXR-3011`, and resumes the parent (FR-MA-003) |
 
+#### Adaptive Delegation Effort
+
+The concurrency cap is a safety/resource ceiling, not an instruction to use the maximum number of agents. Before fan-out, the coordinator MUST classify the requested work using the existing task goal, acceptance criteria, dependency graph, evidence requirements, available tools, workspace resource limits, and expected breadth/depth. It SHOULD select the smallest delegation set that can cover independent work and SHOULD increase parallelism only when additional lanes are expected to add distinct evidence or artifacts.
+
+The coordinator MUST prevent duplicate delegation by recording each child objective, scope boundary, source/tool focus, and expected artifact. A new child with overlapping scope requires an explicit re-plan reason. The coordinator MUST stop spawning when the acceptance criteria are satisfied, the evidence target is met, the remaining work is dependency-bound, or the expected information gain is lower than the remaining resource and time cost.
+
+Effort allocation MUST remain non-financial and technical. It may use token, call, time, CPU, memory, battery, concurrency, and provider/resource ceilings, but it MUST NOT introduce internal credit or financial-cost gating contrary to DEC-25. Cost metadata remains observational.
+
+#### Asynchronous Results and Artifact Handoff
+
+Independent children MAY complete out of order. The coordinator MUST accept partial results, preserve each result’s child execution identity and provenance, and continue eligible independent work without waiting for an unrelated slow child. A child result is not complete merely because text was returned: it MUST identify plan-versus-actual status, acceptance-criteria effects, evidence references, artifact references, unresolved questions, failures, and recommended next action.
+
+Large outputs SHOULD be persisted as permissioned artifacts and returned by stable references. The coordinator MUST NOT repeatedly copy large child outputs through conversation context when an artifact reference preserves the source, version, permissions, and integrity. Artifact promotion and merge remain governed by the existing workspace/file-lock and workflow authorities.
+
+The coordinator MUST expose coordination telemetry sufficient to explain child count, fan-out reason, dependency edges, queue time, active time, tool calls, duplicate-scope suppression, partial-result arrivals, artifact references, cancellation, timeout, merge conflict, and final end-state. Telemetry is observability data; it MUST NOT silently redefine Task, Execution, Agent, or Artifact lifecycle states.
+
 #### Deadlock Watchdog Algorithm (ADR-0009, Decision #6)
 
 The `CoordinatorAgent` runs a periodic watchdog coroutine (default interval: 5 s) that

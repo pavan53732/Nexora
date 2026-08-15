@@ -32,6 +32,8 @@ data class StreamEnvelope(
     val correlationId: String,
     val providerProfileId: String,
     val modelId: String,
+    val modelCatalogSnapshotId: String,
+    val providerContractVersion: String,
     val sequence: Long,
     val emittedAt: Instant,
     val resumeToken: String?,
@@ -39,10 +41,35 @@ data class StreamEnvelope(
 )
 
 sealed interface StreamEvent {
-    data class Started(val contextTokens: Int) : StreamEvent
+    data class Started(
+        val contextTokens: Int,
+        val modelCatalogSnapshotId: String,
+        val requestedModalities: Set<String>,
+        val negotiatedCapabilities: Set<ProviderCapability>
+    ) : StreamEvent
     data class TextDelta(val text: String) : StreamEvent
     data class ReasoningSummaryDelta(val text: String) : StreamEvent
     data class CitationDelta(val citations: List<Citation>) : StreamEvent
+    data class MultimodalPartDelta(
+        val mediaType: String,
+        val dataRef: String,
+        val isFinalPart: Boolean
+    ) : StreamEvent
+    data class AudioDelta(
+        val mediaType: String,
+        val dataRef: String,
+        val direction: AudioDirection
+    ) : StreamEvent
+    data class ScreenFrameDelta(
+        val frameRef: String,
+        val width: Int,
+        val height: Int
+    ) : StreamEvent
+    data class ComputerAction(
+        val actionId: String,
+        val actionType: String,
+        val approvalRequired: Boolean
+    ) : StreamEvent
     data class ToolCallStarted(val toolCallId: String, val toolName: String) : StreamEvent
     data class ToolArgumentsDelta(val toolCallId: String, val jsonFragment: String) : StreamEvent
     data class ToolCallCommitted(val toolCall: ToolCall) : StreamEvent
@@ -52,6 +79,8 @@ sealed interface StreamEvent {
     data class Failed(val error: CanonicalErrorEnvelope, val partialOutput: Boolean) : StreamEvent
     data class Cancelled(val actor: String, val reason: String?) : StreamEvent
 }
+
+enum class AudioDirection { INPUT, OUTPUT }
 ```
 
 ## Ordering and Integrity
@@ -63,6 +92,14 @@ sealed interface StreamEvent {
 5. Socket/HTTP/SSE closure without a canonical terminal event is `NXR-4017`.
 6. Every event is size-limited, UTF-8 validated, schema validated, and tied to the authenticated stream identity.
 7. Terminal usage is authoritative; accumulated deltas are reconciled and mismatch is audited.
+8. `modelCatalogSnapshotId`, `providerContractVersion`, and negotiated capabilities remain
+   immutable for the stream lineage; a failover records a new snapshot and model identity.
+9. `MultimodalPartDelta`, `AudioDelta`, `ScreenFrameDelta`, and `ComputerAction` are
+   capability-scoped. Unsupported or unauthorized event families fail closed and are not
+   silently reduced to text.
+10. Provider-native thought signatures or continuation artifacts remain adapter-owned
+    opaque state. They MUST NOT be emitted as raw stream events or persisted as
+    `ReasoningSummaryDelta` content.
 
 ## Tool-Call Assembly
 
@@ -145,7 +182,9 @@ data class TokenUsageRecord(
 
 - Technical capacity and usage reservations are established before transport opens and reconciled only from a committed terminal or canonical failure record. This is not an internal credit, spending-wallet, or financial-cost gate; provider usage and estimated cost remain observational metadata.
 - Provider adapters map native event formats to this contract without exposing provider-specific logic to Agent Runtime.
-- Private chain-of-thought is not emitted; only provider-approved, redacted `ReasoningSummaryDelta` may cross the boundary.
+- Private chain-of-thought and provider-native continuation artifacts are not emitted; only provider-approved, redacted `ReasoningSummaryDelta` may cross the boundary.
+- Advanced multimodal/realtime/computer-use events require negotiated capabilities and
+  the existing permission, sandbox, approval, cancellation, and evidence controls.
 - `NXR-4007` represents general stream transport failure; `NXR-4013..4017` identify canonical stream-contract failures.
 
 

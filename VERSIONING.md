@@ -83,6 +83,18 @@ The runtime validates `minSdkVersion ≤ currentSdkVersion ≤ maxSdkVersion` on
 
 Provider interfaces are treated as **stable contracts**. Typed inference streaming (ADR-0008) introduces a new provider stream contract version rather than reinterpreting legacy chunks. Adapters declare `minContractVersion`; legacy complete/non-stream adapters are wrapped into a canonical Started/delta/Terminal sequence, while native typed-stream adapters implement the new interface. Provider configuration objects carry a `version` field for migration when the config schema evolves.
 
+### 5.1 Run-Level Compatibility Snapshot
+
+Every non-trivial execution MUST record the versions that determine its behavior: app/runtime contract, provider adapter, exact model identifier or pinned snapshot, model-catalog snapshot, prompt/configuration, Tool descriptor/schema, permission-policy projection, and relevant context/checkpoint schema versions. This snapshot is diagnostic and compatibility metadata; it does not create a new lifecycle identity.
+
+An in-flight execution retains its recorded snapshot across checkpoint resume. Catalog refresh, model deprecation, prompt edits, Tool updates, or policy updates affect new route selection according to their owning contracts; they MUST NOT silently mutate the meaning of an already-running execution. If a resumed execution cannot safely consume its persisted snapshot, the runtime MUST pause for a canonical compatibility/recovery outcome rather than silently reinterpret prior state.
+
+Provider-native reasoning continuation artifacts are valid only for the provider/model/adapter contract that created them and for the expiry/integrity rules declared by that provider. They MUST NOT be replayed across incompatible model or provider changes. A compatible resume keeps the same execution and stream lineage according to the existing lifecycle rules; an incompatible retry follows the existing explicit retry/new-identity rules.
+
+### 5.2 Deployment and Rollback Boundary
+
+A release that changes prompts, Tool schemas, provider adapters, model routing, permission policy, or execution recovery behavior MUST be evaluated against the agent regression and evidence suites before promotion. Running executions require compatibility-aware draining, pause, resume, or rollback behavior; a deployment MUST NOT assume that a process restart alone preserves semantic compatibility.
+
 ## 6. Version Format Summary
 
 | Artifact | Format | Example |

@@ -11,16 +11,24 @@ data class Provider(
     val id: String,
     val version: String,
     val name: String,
-    val capabilities: List<String>,
-    val supportedModels: List<String>,
+    val capabilities: Set<ProviderCapability>,
+    val supportedModels: List<ModelDescriptor>,
+    val modelCatalogSnapshotId: String,
+    val modelCatalogRetrievedAt: Instant,
+    val providerContractVersion: String,
     val supportsStreaming: Boolean,
     val streamResumeMode: StreamResumeMode,
+    val supportedInputModalities: Set<String>,
+    val supportedOutputModalities: Set<String>,
     val contextWindowTokens: Int,
     val maxOutputTokens: Int,
     val tokenizerId: String,
     val reasoningEfforts: Set<String>,
+    val supportsAdaptiveThinking: Boolean,
+    val supportsProviderReasoningContinuation: Boolean,
     val supportsTools: Boolean,
     val supportsCitations: Boolean,
+    val observedLatencyClass: LatencyClass,
     val inputCostPerMillion: Double?,
     val outputCostPerMillion: Double?,
     val dataLocality: DataLocality,
@@ -31,6 +39,22 @@ data class Provider(
 )
 
 // StreamResumeMode is defined in models/Inference.md.
+// ProviderCapability is owned by architecture/PROVIDER_SYSTEM.md.
+data class ModelDescriptor(
+    val modelId: String,
+    val pinnedVersion: String?,
+    val contextWindowTokens: Int,
+    val maxOutputTokens: Int,
+    val reasoningEfforts: Set<String>,
+    val supportsAdaptiveThinking: Boolean,
+    val capabilities: Set<ProviderCapability>,
+    val streamResumeMode: StreamResumeMode,
+    val contractVersion: String,
+    val lifecycleStatus: ModelLifecycleStatus
+)
+
+enum class ModelLifecycleStatus { ACTIVE, DEPRECATED, RETIRED }
+enum class LatencyClass { ULTRA_LOW, LOW, BALANCED, HIGH, UNKNOWN }
 enum class DataLocality { ON_DEVICE, LOCAL_NETWORK, EXTERNAL }
 
 enum class ProviderStatus {
@@ -53,7 +77,7 @@ enum class ProviderHealth {
 
 ## Lifecycle and Health Semantics
 
-Provider request execution is correlated by `correlationId` and provider-scoped request ID. Usage accounting, terminal markers, and canonical error envelopes are part of the durable contract even when the upstream provider omits optional fields.
+Provider request execution is correlated by `correlationId` and provider-scoped request ID. Each execution also records the model-catalog snapshot, exact model descriptor, provider contract version, requested modalities, reasoning-effort mapping, and any opaque provider-native continuation reference used by the adapter. Usage accounting, terminal markers, and canonical error envelopes are part of the durable contract even when the upstream provider omits optional fields. Provider-native continuation state is not raw private chain-of-thought and is not replayed across incompatible provider failover.
 
 ### Administrative Status vs. Operational Health
 

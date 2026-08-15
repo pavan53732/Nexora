@@ -21,7 +21,11 @@
 | `checkHealth` | Updated provider health | NXR-4001/4009 | Safe | Does not expose credentials | Health/failover tests |
 
 Every request carries `requestId`, `correlationId`, workspace identity, profile/model
-identity, and an idempotency key where the operation can create or resume work.
+identity, the model-catalog snapshot and provider contract version used for negotiation,
+requested modalities, and an idempotency key where the operation can create or resume work.
+A provider-native reasoning continuation reference is opaque adapter state: it is bound to
+the provider/model/request/stream identity, is not raw private chain-of-thought, and MUST
+NOT be replayed across provider failover without a compatible translation contract.
 
 ## Request and Routing Shapes
 
@@ -33,9 +37,13 @@ data class ProviderCompletionRequest(
     val agentId: String,
     val providerProfileId: String?,
     val modelId: String?,
+    val modelCatalogSnapshotId: String,
+    val providerContractVersion: String,
     val contextSnapshotId: String,
     val requiredCapabilities: Set<ProviderCapability>,
+    val requestedModalities: Set<String>,
     val reasoningPolicy: ReasoningPolicy,
+    val providerReasoningContinuationRef: String?,
     val maxTokens: Int,
     val tools: List<ToolDescriptor> = emptyList(),
     val idempotencyKey: String
@@ -43,6 +51,8 @@ data class ProviderCompletionRequest(
 
 data class RouteConstraints(
     val requiredCapabilities: Set<ProviderCapability>,
+    val requestedModalities: Set<String>,
+    val requiredReasoningEffort: ReasoningEffort?,
     val maxLatencyMs: Long?,
     val localOnly: Boolean,
     val fallbackPolicy: StreamFallbackPolicy
@@ -103,6 +113,10 @@ interface ProviderApi {
 - `ToolArgumentsDelta` is never executable; only `ToolCallCommitted` crosses to Tool API.
 - `resumeStream` is exposed only for `NATIVE_CURSOR`; emulated restart uses a new request and `priorStreamId`.
 - Mid-stream failover never silently combines provider outputs.
+- Provider-native continuation artifacts are adapter-owned and are not exposed as
+  `ReasoningSummary` or `ClaimRecord` content.
+- A requested advanced capability that is unavailable or unrepresentable is an explicit
+  route incompatibility or policy-approved fallback; it is never silently discarded.
 - Backpressure is bounded; overflow returns `NXR-4013`.
 
 ## Error Mapping
