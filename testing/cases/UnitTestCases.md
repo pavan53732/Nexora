@@ -46,3 +46,8 @@
 | UT-ESC-003 | UT-ESC | Validate Terminal and Background grants expire at completion, cancellation, deadline, revocation, or terminal failure | Runtime | Planned | `evidence/unit/UT-ESC-003/` | 2026-08-15 |
 | UT-ESC-004 | UT-ESC | Validate grant transfer across task, agent, workspace, or execution lineage is rejected | Security + Agent Runtime | Planned | `evidence/unit/UT-ESC-004/` | 2026-08-15 |
 | UT-ESC-005 | UT-ESC | Validate expiry/revocation preserves deadline, failure ledger, checkpoint, unknown-completion, and non-success semantics | Runtime + Recovery | Planned | `evidence/unit/UT-ESC-005/` | 2026-08-15 |
+| UT-LIVE-001 | UT-LIVE | Validate STALLED failover guard consumes bounded budget and preserves new stream lineage | Provider Stream | Planned | `evidence/unit/UT-LIVE-001/` | 2026-08-15 |
+| UT-LIVE-002 | UT-LIVE | Validate NXR-2002 timeout sets UNKNOWN_COMPLETION and blocks retry until reconciliation/idempotency authorization | Tool + Recovery | Planned | `evidence/unit/UT-LIVE-002/` | 2026-08-15 |
+| UT-LIVE-003 | UT-LIVE | Validate RetryPending direct start rejects before backoff elapsed or scheduler authorization | Task Lifecycle | Planned | `evidence/unit/UT-LIVE-003/` | 2026-08-15 |
+| UT-LIVE-004 | UT-LIVE | Validate Agent Completing finalization guard commits Completed only after required persistence and resource release | Agent Lifecycle | Planned | `evidence/unit/UT-LIVE-004/` | 2026-08-15 |
+| UT-LIVE-005 | UT-LIVE | Validate failed/cancelled stream, denied Tool, missing draft, and failed completion gate cannot return success | Agent Runtime | Planned | `evidence/unit/UT-LIVE-005/` | 2026-08-15 |

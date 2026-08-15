@@ -18,6 +18,7 @@ Integration tests validate subsystem interactions and cross-layer contract prese
 - `IT-LONG-*` — context compaction, task/artifact reconstruction, checkpoint resume, and delegated artifact handoff
 - `IT-MM-*` — negotiated multimodal/realtime stream events and permission/terminal behavior
 - `IT-ESC-*` — selective capability enforcement, delegation, task-scoped escalation, expiry, revocation, and cancellation
+- `IT-LIVE-*` — bounded liveness, stream-stall failover, timeout reconciliation, retry backoff, completion finalization, and non-success routing
 
 ## Framework Stack
 

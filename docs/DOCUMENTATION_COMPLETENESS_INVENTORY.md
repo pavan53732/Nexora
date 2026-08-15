@@ -56,6 +56,11 @@ The following are not silently promoted to architecture decisions:
 - Android process restoration, scheduling, background execution mechanism, and deployment packaging: **DOWNSTREAM/IMPLEMENTATION CHOICE** subject to the existing Android/application boundary documentation;
 - retention durations, cleanup timing, quotas, operational metrics, and migration execution procedures: **UNRESOLVED/DOWNSTREAM** where no canonical source selects values or mechanisms;
 - ownership questions not explicitly established by a decision or canonical architecture document: **OWNER DECISION REQUIRED**, with no owner inferred from terminology.
+- Task dependency liveness: **OPEN/DEFERRED / OWNER DECISION REQUIRED** for general Task dependency-cycle validation, failed/abandoned dependency propagation, and Blocked age/deadline disposition; Workflow graph validation is not silently reused as Task authority.
+- Task approval denial and external-wait expiry: **OPEN/DEFERRED / OWNER DECISION REQUIRED** because Task has no canonical denial transition and neither `WaitingApproval` nor `BlockedAwaitingInput` has a selected automatic expiry/final disposition.
+- Agent failure retry identity: **OPEN/DEFERRED / OWNER DECISION REQUIRED** because AgentLifecycle describes `Failed` as terminal while also permitting `retry() → Ready`; no identity or transition policy is selected here.
+- Provider rate-limit wait bounds: **OPEN/DEFERRED / OWNER DECISION REQUIRED** for missing/invalid `Retry-After`, maximum queue age, and final escalation/failure disposition; no financial or internal-credit gate is implied.
+- Delegation depth: **OPEN/DEFERRED / BOUNDED IMPLEMENTATION CHOICE** because concurrency, deadline, duplicate-scope, and deadlock controls exist but no distinct maximum nesting-depth rule is selected.
 
 ## Contradiction and stale-claim handling
 

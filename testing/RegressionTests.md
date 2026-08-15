@@ -58,3 +58,15 @@ route plans. `RT-REASON-002` MUST protect provider-native reasoning continuation
 and incompatible-failover rejection. `RT-TOOLDISC-001` MUST protect bounded discovery,
 canonical Tool identity, stale-descriptor fail-closed behavior, and MCP tool/resource/prompt
 primitive separation.
+
+`RT-LIVE-001` MUST protect the explicit ProviderStream `STALLED → RECONNECTING` failover guard and stalled-failover budget.
+
+`RT-LIVE-002` MUST protect NXR-2002 unknown-completion reconciliation and prohibit generic timeout replay without operation-level authorization.
+
+`RT-LIVE-003` MUST protect RetryPending backoff enforcement so direct start cannot bypass the scheduler guard.
+
+`RT-LIVE-004` MUST protect the Agent `Completing → Completed` finalize transition and reject completion before required persistence/resource-release guards.
+
+`RT-LIVE-005` MUST protect non-success routing for stream failure/cancellation, denied Tool calls, missing committed drafts, and unsatisfied completion gates.
+
+Task dependency-cycle handling, Task approval denial/expiry, Agent failure retry identity, provider rate-limit wait bounds, and delegation depth remain OPEN/DEFERRED owner boundaries until explicitly selected.

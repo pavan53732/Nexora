@@ -237,6 +237,16 @@ suspend fun runTurn(message: UserMessage, state: AgentState): TurnResult {
 }
 ```
 
+The pseudocode above is a successful-turn path, not permission to continue after an
+unsuccessful stream or Tool call. If the stream reaches `Failed` or `Cancelled`, the
+runtime MUST route to the existing failure/cancellation effect, preserve partial output
+and checkpoint state as applicable, and MUST NOT call `requireCommittedDraft()` or the
+completion gate as if a successful draft existed. If authorization is not `Allowed`, the
+runtime MUST apply the existing denial/approval/escalation contract and MUST NOT execute
+the Tool or treat the absent Tool result as progress. If a committed draft is unavailable,
+verification or synthesis fails, or the completion gate is unsatisfied, the runtime MUST
+use the existing bounded recovery, escalation, or terminal failure path before returning.
+
 ### Turn Invariants
 
 - Cancellation propagates Agent → ProviderRouter → adapter → Tool children.

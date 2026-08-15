@@ -30,6 +30,7 @@
 | `capacityAvailable` | `BACKPRESSURED` | `OPEN` | Queue below low-water mark; ordering preserved. |
 | `transportLost` | `OPEN` / `BACKPRESSURED` | `RECONNECTING` | Native resume supported, cursor valid, retry budget remains. |
 | `stalled` | `CONNECTING` / `OPEN` / `BACKPRESSURED` / `RECONNECTING` | `STALLED` | No first-byte within deadline OR no semantic event within inter-token window. |
+| `failover` | `STALLED` | `RECONNECTING` | Stalled-failover budget remains; create a new route/stream lineage or use the configured provider restart policy; preserve committed context and `priorStreamId`. |
 | `resumed` | `RECONNECTING` | `OPEN` | Same `streamId`; next sequence follows last committed sequence. |
 | `resumeRejected` | `RECONNECTING` | `FAILED` | Commit `NXR-4014`; partial output remains explicitly partial. |
 | `terminal` | `OPEN` / `BACKPRESSURED` | `COMPLETED` | Terminal sequence contiguous; usage reconciled; no incomplete tool call. |

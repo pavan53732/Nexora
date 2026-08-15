@@ -22,6 +22,7 @@ End-to-end tests validate user-visible workflows across the full stack.
 - `E2E-LONG-*` — long-horizon compaction, artifact handoff, resume, and reconstruction journeys
 - `E2E-MM-*` — negotiated multimodal, realtime, audio, screen, and computer-action journeys
 - `E2E-ESC-*` — selective capability enforcement, delegation, task-scoped escalation, expiry, revocation, and recovery journeys
+- `E2E-LIVE-*` — end-to-end liveness, stall failover, timeout reconciliation, retry backoff, approval/blocked waits, finalization, and terminal outcomes
 
 ## Framework Stack
 

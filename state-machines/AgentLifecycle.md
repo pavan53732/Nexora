@@ -77,7 +77,8 @@ To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly
 | `approve()` | WaitingApproval | Running | — |
 | `deny()` | WaitingApproval | Paused | — |
 | `reflect()` | Running | Reflecting | Reflection policy enabled |
-| `complete()` | Reflecting / Running | Completing | — |
+| `complete()` | Reflecting / Running | Completing | Acceptance/evidence gate passed; finalization required. |
+| `finalize()` | Completing | Completed | Artifacts and required memory/history persistence committed; resources released; terminal event ready. |
 | `fail(error)` | * | Failed | Non-recoverable exception |
 | `cancel()` | * | Cancelled | — |
 | `retry()` | Failed | Ready | Max retries not exceeded |

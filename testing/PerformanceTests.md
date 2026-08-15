@@ -12,6 +12,7 @@ Performance tests validate latency, throughput, resource usage, background execu
 - `PERF-MEM-*` — memory retrieval and ranking
 - `PERF-BG-*` — background execution stability
 - `PERF-ESC-*` — capability-matrix, delegation, escalation, expiry, revocation, and cancellation benchmarks
+- `PERF-LIVE-*` — stall/failover, timeout reconciliation, retry backoff, deadline, repair, and terminal-disposition benchmarks
 
 ## Framework Stack
 

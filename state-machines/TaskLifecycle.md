@@ -36,7 +36,7 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 |---------|------|----|-------|
 | `submit()` | Draft | Pending | Task schema valid |
 | `enqueue()` | Pending | Queued | All dependencies completed |
-| `start()` | Queued / RetryPending | Running | Agent available |
+| `start()` | Queued / RetryPending | Running | Agent available; when the source is `RetryPending`, the existing retry backoff has elapsed and the TaskScheduler authorizes the start. |
 | `block(dependency)` | Running | Blocked | Dependency not yet completed |
 | `unblock()` | Blocked | Running | Dependency resolved |
 | `requestEscalation(question)` | Running | BlockedAwaitingInput | Loop escalation triggered or capability gap identified |

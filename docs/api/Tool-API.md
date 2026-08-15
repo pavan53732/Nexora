@@ -94,7 +94,7 @@ interface ToolApi {
 |---|---|---|
 | `registerTool` | `NXR-2005` (Invalid descriptor), `NXR-2006` (Not Registered), `NXR-2010` (Incompatible) | Reject registration; state remains `DISCOVERED`; never prompt for descriptor repair. |
 | `executeTool` | `NXR-2001` (Not Found) | Reject call; no lifecycle change. |
-| | `NXR-2002` (Timeout) | Kill process; return partial outputs; trigger exponential backoff retry. |
+| | `NXR-2002` (Timeout) | Kill process; return partial outputs; preserve `UNKNOWN_COMPLETION` when the operation outcome is not confirmed; reconcile before retrying, and retry only when the operation’s idempotency and retry policy authorize it. |
 | | `NXR-2003` (Authorization Denied) | ToolInvocation status → `PENDING_AUTHORIZATION` for an effective `ASK` decision; the owning Task/Agent lifecycle may transition to `WaitingApproval` and resume on approve. Unknown, policy, malformed, user, or classifier denial returns `ToolResult.Error` without side effects according to the canonical subreason. Approval is never represented as a `ToolResult` variant. |
 | | `NXR-2004` (Execution Failed) | Log exception; run agent bounded self-correction loop. |
 | | `NXR-2005` (Invalid Parameters) | Return schema validation errors back to agent for repair. |
