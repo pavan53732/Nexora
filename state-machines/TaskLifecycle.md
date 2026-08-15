@@ -48,18 +48,18 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | `complete()` | Running | Completed | Result validated |
 | `fail(error)` | Running | Failed | Error is non-retryable |
 | `fail(error)` | Running | RetryPending | Error is retryable && retries < max |
-| `expire()` | WaitingApproval | Failed | Approval transaction expired; canonical `NXR-2003` / `POLICY_DENIAL`; no automatic approval or retry |
+| `expire()` | WaitingApproval | Failed | Approval transaction expired; exact `NXR-2003` subreason remains OPEN/DEFERRED pending compatible canonical identity; no automatic approval or retry |
 | `expire()` | Pending / Blocked / BlockedAwaitingInput | Failed | Effective deadline reached; `NXR-1016` / `Infrastructure`; no retry unless a separate retryable failure rule applies |
 | `cancel()` | * | Cancelled | — |
 | `retry()` | RetryPending | Queued | Backoff elapsed |
 
 ### DEC-30 Liveness Projections
 
-The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected with `NXR-1014` / `Client` without lifecycle mutation. A failed dependency propagates `NXR-1015` / `Server` and terminal failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`, and approval expiry uses `NXR-2003` / `POLICY_DENIAL`; both terminate the task through `Failed` without automatic retry. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed` with `NXR-1016` / `Infrastructure`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
+The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected with `NXR-1014` / `Client` without lifecycle mutation. A failed dependency propagates `NXR-1015` / `Server` and terminal failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`; approval expiry also terminates the Task through `Failed` without automatic retry, but its exact `NXR-2003` subreason remains OPEN/DEFERRED because the canonical taxonomy does not establish an approval-expired identity. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed` with `NXR-1016` / `Infrastructure`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
 
 ### DEC-35 Approval Projection
 
-The PermissionModel/Tool boundary owns the authorization result and returns `NXR-2003` with `USER_DENIED` or `POLICY_DENIAL`. The Task remains authoritative for operation outcome: approval denial or expiry commits `WaitingApproval → Failed`, performs no Tool side effect, and does not retry automatically. An Agent participating in the Task may independently transition to `Paused` under DEC-35; that Agent projection does not resume, complete, or change the failed Task.
+The PermissionModel/Tool boundary owns the authorization result and returns `NXR-2003` with its canonical subreason. `USER_DENIED` is established for explicit denial; the approval-expiry subreason remains OPEN/DEFERRED because `POLICY_DENIAL` is defined for effective policy DENY. The Task remains authoritative for operation outcome: approval denial or expiry commits `WaitingApproval → Failed`, performs no Tool side effect, and does not retry automatically. An Agent participating in the Task may independently transition to `Paused` under DEC-35; that Agent projection does not resume, complete, or change the failed Task.
 
 ### Invalid Transitions
 
@@ -87,7 +87,7 @@ stateDiagram-v2
     Running --> WaitingApproval : requestApproval()
     WaitingApproval --> Running : approve()
     WaitingApproval --> Failed : deny() [NXR-2003 / USER_DENIED]
-    WaitingApproval --> Failed : expire() [NXR-2003 / POLICY_DENIAL]
+    WaitingApproval --> Failed : expire() [NXR-2003 / subreason OPEN-DEFERRED]
     Running --> Completed : complete()
     Completed --> [*]
     Running --> Failed : fail(non-retryable)

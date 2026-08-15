@@ -112,8 +112,8 @@ interface RuntimeApi {
 | `createWorkspace` | `NXR-7001` (Creation Failed) | Terminate directory allocation; state remains uncreated. |
 | `startExecution` | `NXR-1012` (FGS Denied) | Log warning; request notification permissions; fallback to in-process execution. |
 | | `NXR-1013` (Not Initialized) | Fail startup; wait for `NexoraRuntime.init()` to complete. |
-| `checkpoint` | `NXR-1003` (Save Failed) | Retry once; if persistent, transition workspace to `SUSPENDED` status. |
+| `checkpoint` | `NXR-1003` (Save Failed) | Retry once; if persistent, preserve the prior valid checkpoint, mark the workspace unhealthy as specified by the canonical error recovery, and make no Workspace lifecycle transition. |
 | `resumeExecution` | `NXR-1004` (Restore Failed) | Keep identity stable; reject terminal/stale targets; fall back only to a valid checkpoint. |
 | `retryExecution` | Canonical validation/conflict envelope | Require terminal predecessor, create new ID once per idempotency key, preserve acyclic lineage. |
 | Task queue/dependency/deadline validation | `NXR-1014` (Task dependency invalid), `NXR-1015` (Task dependency unsatisfied), `NXR-1016` (Task deadline expired) | Scheduler rejects invalid dependency graphs without Task mutation; TaskLifecycle fails dependent Tasks or deadline-expired waits through the existing `Failed` effect; no automatic retry or deadline renewal. |
-| | `NXR-3004` (Task Timeout) | Gracefully abort active runner; capture partial log outputs. |
+| Task timeout identity | No canonical Task-specific `NXR-*` identity is established by the error catalog; preserve the Task deadline contract through `NXR-1016` where applicable and do not reuse the Agent-specific `NXR-3004`. | No additional Task-timeout error mapping is asserted here. |

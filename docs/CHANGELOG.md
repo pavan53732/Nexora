@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Corrected
+
+- Post-audit documentation corrections: aligned PTY restore wording with the canonical `Detached → Attached → Running` TerminalSession path; removed the unsupported Task-timeout label from `NXR-3004`; reconciled checkpoint `NXR-1003` recovery with the no-Workspace-lifecycle-change contract; linked the canonical checkpoint lifecycle to DEC-31’s selected retention, quota, and cleanup policy; and recorded the approval-expiry `NXR-2003` subreason as OPEN/DEFERRED because no compatible canonical identity is established. Documentation-only; no DEC-* or source implementation files were changed.
+
 ### Added
 - Agent reliability hardening documentation: fixed duplicate Tool timeout and Context freshness declarations; added hierarchical deadline propagation, acceptance-criteria progress vectors, claim-to-evidence binding, non-overridable reasoning ceilings, operation-level unknown-completion reconciliation, deterministic multi-agent conflict abstention, new NFR-REL-016..018 and NFR-CI-003..005 coverage mappings, and E2E-REL-001..009 Android/agent fault-injection journeys. These are specification and planned-evidence updates only; no runtime implementation or executed test evidence is claimed.
 

@@ -1,7 +1,7 @@
 # Conversation Checkpoint Lifecycle — Nexora
 
 > **Status: CANONICAL** for ConversationCheckpoint lifecycle.
-> Semantic ownership: Conversation/Session responsibility established by DEC-10; retention, deletion, quota, cleanup, and branch-dependency safety are governed by DEC-23.
+> Semantic ownership: Conversation/Session responsibility established by DEC-10; DEC-23 governs semantic deletion safety and branch-dependency guards, while DEC-31 selects the operational retention, quota, and cleanup policy within those guards.
 
 ## States
 
@@ -29,7 +29,7 @@ Invalid transitions leave persisted state unchanged. Concurrent transitions requ
 - `Superseded → Expired`: retention policy expires it.
 - `Superseded → Invalidated`: integrity or lineage validation fails.
 
-No transition deletes the source conversation as a consequence of rollback. Expiration or invalidation prevents normal checkpoint use but does not by itself perform physical deletion. Under DEC-23, physical deletion is permitted only after `Expired` or `Invalidated`, no recorded BranchLineage depends on the checkpoint, and required audit/retention obligations are satisfied. Quota rejection and cleanup must preserve protected Conversations and BranchLineage artifacts.
+No transition deletes the source conversation as a consequence of rollback. Expiration or invalidation prevents normal checkpoint use but does not by itself perform physical deletion. Under DEC-23, physical deletion is permitted only after `Expired` or `Invalidated`, no recorded BranchLineage depends on the checkpoint, and required audit/retention obligations are satisfied. DEC-31 supplies the selected 30-day superseded-retention, 100-retained-checkpoint per-workspace quota, and daily idempotent cleanup policy within those safety guards. Quota rejection and cleanup must preserve protected Conversations and BranchLineage artifacts.
 
 ## Invariants
 
