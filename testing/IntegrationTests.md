@@ -13,6 +13,10 @@ Integration tests validate subsystem interactions and cross-layer contract prese
 - `IT-PLUGIN-*` — plugin lifecycle and rollback
 - `IT-MEMORY-*` — memory persistence and retrieval
 - `IT-LC-*` — lifecycle integration (Session transitions, checkpoint resume identity, terminal retry identity, ToolStatus integration)
+- `IT-MODEL-*` — model-catalog snapshots, capability negotiation, provider-contract compatibility, and route immutability
+- `IT-TOOLDISC-*` — bounded Tool discovery, descriptor quality, stale-descriptor rejection, and MCP primitive separation
+- `IT-LONG-*` — context compaction, task/artifact reconstruction, checkpoint resume, and delegated artifact handoff
+- `IT-MM-*` — negotiated multimodal/realtime stream events and permission/terminal behavior
 
 ## Framework Stack
 
@@ -33,6 +37,10 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-CONTRACT-001` runtime replay or retry preserves correlation and durable versions
 - `IT-TOOL-002..014` complete authorization, classifier ordering, error mapping, and correlation preservation
 - `IT-LC-001..020` Session/Execution/ToolStatus integration, same-ID resume, terminal retry lineage, and replay safety
+- `IT-MODEL-001..003` model-catalog snapshot immutability, unsupported-capability handling, and provider-native reasoning continuation compatibility
+- `IT-TOOLDISC-001..003` bounded candidate projection, descriptor examples/permissions, stale or unknown-scope fail-closed behavior, selection telemetry, and MCP tool/resource/prompt separation
+- `IT-LONG-001..003` long-horizon projection preservation across compaction/resume, artifact-reference handoff, and pause-on-ambiguous reconstruction
+- `IT-MM-001..002` negotiated multimodal/audio/screen/computer-action event validation, authorization, backpressure, cancellation, and terminal behavior
 
 ## S13 Traceability
 
@@ -68,6 +76,7 @@ Integration suites SHOULD explicitly validate:
 - `IT-STREAM-001..008` validate adapter normalization, backpressure, cancellation, resume, failover lineage, usage, and Tool commit barriers.
 - `IT-REASON-001..004` validate effort routing, verifier/critic, OFF behavior, and bounded repair.
 - `IT-CONTEXT-001..002` validate model-aware ContextSnapshot assembly and resume lineage.
+- All newly listed model, Tool-discovery, long-horizon, and multimodal cases are `Planned`; their presence does not claim runtime implementation or executed evidence.
 
 - `IT-CONV-001..007` — conversation checkpoint and branching integration (immutability, source preservation, stale/expired rejection, conflicting mutation rejection, interrupted branch safety, no external side-effect reversal)
 - `IT-SKILL-001..006` — skill registry/runtime integration (validation, acquisition, binding, revocation, automatic selection, permission inheritance)

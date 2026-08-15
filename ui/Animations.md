@@ -24,7 +24,21 @@
 | Progress bar | Indeterminate | Linear | Task execution |
 
 ## Streaming Text
-AI responses stream token-by-token. The text view appends characters as they arrive. No animation needed — the natural token flow IS the animation.
+AI responses stream through provisional and committed states. The text view may append/coalesce
+visible deltas, but durable event order and terminal state are controlled by the Provider
+Protocol. Animation MUST NOT imply that provisional text is verified or committed.
+
+## Activity, Approval, Error, and Recovery States
+
+Progress, connecting, reconnecting, backpressure, permission approval, classifier denial,
+partial failure, unknown completion, reconciliation, cancellation, checkpoint recovery, and
+terminal states MUST remain understandable without motion. Use explicit text/icon/state
+semantics from `ui/Components.md`; animation is only a supplementary presentation cue.
+
+When `reduceMotion` is enabled, suppress blinking cursors, scale/slide transitions, and
+nonessential progress motion. Preserve status text, focus order, citations, approval actions,
+error details, recovery actions, and terminal outcome information. Never use animation as the
+only indication that an agent acted, a Tool ran, a permission changed, or a stream completed.
 
 ## Terminal
 Terminal output appears instantly (no animation). The terminal should feel responsive and immediate.
