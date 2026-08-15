@@ -120,6 +120,10 @@ surfaces in the workflow engine (Phase 8 plugin scheduling).
 
 > **DEC-7:** BootReceiver does **not** reconstruct RetryPending state or restore its previous deadline. RetryPending is ephemeral and is lost on process death. BootReceiver is the startup trigger; eligible durable R4 evidence is reconciled through the separate process-death recovery responsibility. That recovery returns the Task to `Queued` and does not resume a checkpoint; checkpoint recovery remains the separate path described above. See [DEC-7](../decisions/DEC-7-retry-attempt-state.md) §DEC-7.7–DEC-7.12.
 
+### Android trigger and reconciliation boundary
+
+Process death, app termination, reboot, OEM termination, Doze or App Standby deferral, battery degradation, and force-stop are platform/runtime triggers or conditions; they are not additional Task or Execution lifecycle states. A trigger or condition MUST NOT by itself be interpreted as successful completion, cancellation, failure, or permission to replay an uncertain side effect. The durable Task/Execution state, checkpoint identity, effective deadline, and idempotency rules remain governed by their existing canonical authorities. When a later eligible runtime start or reconciliation path is available, it MUST inspect that durable state and apply the existing resume, queue, cancellation, failure, or retry rules; it MUST NOT renew a deadline, create a new lifecycle state, or silently replay an unresolved operation. This clarification is a recovery and validation boundary, not a new Android implementation contract.
+
 ## 4. Notifications
 
 | Notification | When | Channel |
