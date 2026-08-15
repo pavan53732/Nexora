@@ -98,7 +98,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | Subreason | Meaning | Prompt? | Recovery |
 |---|---|---|---|
 | `UNKNOWN_SCOPE` | Tool declares an unregistered scope ID | No | Repair descriptor; reject registration/invocation |
-| `POLICY_DENIAL` | Effective Agent/Workspace/Global/default policy is `DENY` | No automatic prompt | Change policy only through authorized settings |
+| `POLICY_DENIAL` | Effective Agent/Workspace/Global/default policy is `DENY`, or an approval transaction expires before a valid authorization outcome is committed under DEC-36; an expiry is not an explicit user rejection and does not alter the direct policy-DENY meaning | No automatic prompt | Change policy only through authorized settings, or require a new approval transaction after expiry |
 | `USER_DENIED` | User rejected an `ASK` approval | No | Stop; retry only through a new user action |
 | `MALFORMED_APPROVAL` | Approval transaction is missing, duplicate, extra, empty, or mismatched | No | Reject, security-audit, never execute |
 | `CLASSIFIER_DENIAL` | Selected classifier denied the authorized call | No | Final for this attempt; a later attempt re-runs authorization |

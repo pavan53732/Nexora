@@ -229,6 +229,9 @@ suspend fun checkPermission(
             )
         }
         // Approved ASK scopes — continue to classifier evaluation
+        // DEC-36: an approval transaction that expires before a valid
+        // authorization outcome is committed is classified as POLICY_DENIAL;
+        // an explicit user rejection remains USER_DENIED.
     }
 
     return finalizeAuthorizationAfterScopes(
