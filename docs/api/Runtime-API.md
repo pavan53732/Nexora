@@ -12,7 +12,7 @@
 
 ## Normative Operation Contract
 
-The Runtime API governs workspace orchestration, session isolation, transactionally-safe task execution, checkpoint save/restore, and background execution services backed by the Android WorkManager.
+The Runtime API exposes workspace orchestration, session isolation, transactionally-safe task execution, checkpoint save/restore, and background execution services backed by the Android WorkManager. It does not acquire ownership of the single-agent loop, multi-agent delegation, or workflow graph semantics; those remain governed by `architecture/AGENT_RUNTIME.md`, `architecture/MULTI_AGENT_SYSTEM.md`, and `architecture/WORKFLOW_ENGINE.md` respectively.
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
@@ -27,6 +27,12 @@ Every API call MUST carry a `correlationId`.
 ### Background terminal binding (DEC-34)
 
 Autonomous background terminal work is not an unbound Runtime operation. The created TerminalSession projection MUST carry the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline. Parent cancellation, terminal state, or deadline expiry invokes the existing terminal termination/checkpoint path; requests without a parent Task/Execution are rejected before process creation. Reconciliation closes or fails sessions whose parent is missing, terminal, or expired.
+
+### Adaptive orchestration projection
+
+`startExecution`, checkpoint, resume, and terminal projections participate in the existing adaptive orchestration chain: objective and constraints are compiled into a plan; the plan is decomposed and dependency-checked; eligible work is allocated sequentially or in parallel; observations and evidence are aggregated; conflicts or failed verification return to the owning bounded repair/re-plan path; and only the existing completion gates may produce a successful terminal outcome. The Runtime API exposes the resulting Task/Execution/checkpoint projections and correlation/version data; it does not create a second orchestration state machine or replace the ownership of Agent Runtime, Multi-Agent, Workflow, Tool, Provider, Context, Evidence, or lifecycle authorities.
+
+The reconstructable state needed for long-running or delegated work is assembled from the existing Task, Workflow, Execution, ContextSnapshot, checkpoint, Memory, ClaimRecord, and artifact records as specified by `specs/CONTEXT_MANAGEMENT.md` §3. The API MUST preserve the source identity and provenance of those projections when returning or restoring execution state.
 
 ## Contract Shapes
 
@@ -56,6 +62,8 @@ data class CheckpointState(
     val occurredAt: Instant
 )
 ```
+
+The `historyLog` field is an execution-recovery and audit projection. It MUST NOT be interpreted as unrestricted model reasoning, hidden system prompts, raw untrusted content, or provider-native private continuation state. User-visible reasoning remains limited to the existing redacted `ReasoningSummary` contract.
 
 ### Execution Recovery Shapes
 
