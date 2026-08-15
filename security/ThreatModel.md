@@ -155,6 +155,8 @@ A threat MAY remain Partial or planned security-completion only if all four fiel
 | **Acceptance Criterion** | A single observable, pass/fail condition that proves the mitigation works (e.g., "SEC-SBX-001 passes on API 34 emulator"). |
 | **Residual Risk** | The specific attack vector still possible until the target phase, and the compensating control in the interim. |
 
+The following rows currently lack all four deferral fields and therefore remain explicit OPEN/DEFERRED security-completion bookkeeping gaps: TM-002, TM-003, TM-004, TM-007, TM-009, TM-010, TM-012, TM-013, TM-014, TM-015, TM-023, TM-024, and TM-025. No owner, target phase, acceptance criterion, or residual risk is inferred for these rows. They MUST NOT be described as fully mitigated until the required fields are supported by repository evidence and the planned validation is executed.
+
 | Threat ID | STRIDE Category | Mitigating Control & Specification Source | Platform Enforcement Point | Expected Denial / Containment Behavior | Validation Case ID | Owner | Target Phase | Acceptance Criterion | Residual Risk |
 |---|---|---|---|---|---|---|---|---|---|
 | **TM-001** | Spoofing | JWK/APK signature check (`PluginLifecycle.md`) | `PluginManager.install` | Block ClassLoader load; raise `NXR-6009`; delete payload | `SEC-PLUGIN-001` | plugin | 6 | SEC-PLUGIN-001 passes on API 34 emulator | Unsigned plugin could load if cert pin bypassed; compensating: runtime hash check on every load |

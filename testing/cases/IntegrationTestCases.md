@@ -3,7 +3,7 @@
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | IT-CONTRACT-001 | IT-CONTRACT | Validate cross-layer correlation continuity | Core Runtime | Planned | `evidence/integration/IT-CONTRACT-001/` | 2026-08-04 |
-| IT-CONTRACT-002 | IT-CONTRACT | Validate lifecycle event ordering after durable commit | Core Runtime | Planned | `evidence/integration/IT-CONTRACT-002/` | 2026-08-04 |
+| IT-CONTRACT-002 | IT-CONTRACT | Validate lifecycle event ordering after durable commit, including workflow/step transitions and existing approval, retry, deadline, cancellation, checkpoint, and reconciliation projections | Core Runtime | Planned | `evidence/integration/IT-CONTRACT-002/` | 2026-08-04 |
 | IT-AGENT-001 | IT-AGENT | Validate agent task start with durable projection | Agent Runtime | Planned | `evidence/integration/IT-AGENT-001/` | 2026-08-04 |
 | IT-TOOL-001 | IT-TOOL | Validate permission and sandbox checks before tool side effects | Tooling + Sandbox | Planned | `evidence/integration/IT-TOOL-001/` | 2026-08-04 |
 | IT-PROVIDER-001 | IT-PROVIDER | Validate provider stream terminal marker semantics | Provider Layer | Planned | `evidence/integration/IT-PROVIDER-001/` | 2026-08-04 |

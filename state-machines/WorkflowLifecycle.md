@@ -99,6 +99,18 @@ Each emitted lifecycle event MUST carry: `entityId`, `entityType`, `fromState`, 
 
 An invalid transition MUST return a canonical error without changing persisted state, emitting a success event, or executing target-state side effects. The error MUST identify current state, requested trigger, entity ID, and correlation ID in redacted structured details.
 
+## Cross-Layer Contract Boundaries
+
+The Workflow lifecycle owns workflow-level state transitions and step-state progression; it does not replace the existing PermissionModel, TaskLifecycle, Execution lifecycle, Tool System, Provider System, or Android background authorities.
+
+A `WaitForApproval` step uses the existing PermissionModel approval transaction and audit contract. Approval denial and approval expiry use the existing Task/Agent effects and canonical `NXR-2003` mappings; they do not create a new Workflow state, error identity, retry path, or authorization bypass. A step is completed only after the approved operation produces a valid result under its existing acceptance conditions. Resume remains subject to the existing effective deadline, idempotency, cancellation, and checkpoint contracts.
+
+Workflow error strategies select graph behavior only. `RETRY`, `SKIP`, `ABORT`, and `FALLBACK` do not override canonical error identity, Task/Execution lifecycle effects, Tool/Provider retry rules, operation-level idempotency, deadline inheritance, or cancellation propagation. Workflow retry and iteration progress are durable workflow data and must not reset the parent Task retry budget, failure ledger, deadline, or execution lineage.
+
+A step with `UNKNOWN_COMPLETION` remains unresolved until the Tool System reconciliation contract resolves the side effect. The Workflow lifecycle MUST NOT mark it successful, skip it, or replay it solely because a timeout or transport interruption occurred. Recoverable workflow state is checkpointed through the existing execution/checkpoint protocol.
+
+Validation distinguishes invalid dependency cycles from explicitly bounded `Iterative` edges. Unbounded or ambiguous cycles fail validation before execution; bounded iteration uses the existing `maxIterations` and/or `convergenceCondition` fields.
+
 ## Implementation Notes
 
 The `WorkflowEngine` class manages the graph traversal and step dispatching. It uses a topological sort to determine execution order (treating iteration edges specially) and maintains an in-memory `StepStatusMap`. Workflow state is persisted to the `workflow` table in Room; step sub-states are stored in the `workflow_step` table. The engine is coroutine-based — each `stepStart()` launches a child job so that independent parallel branches execute concurrently, with structured concurrency ensuring cancellation propagates to all children.

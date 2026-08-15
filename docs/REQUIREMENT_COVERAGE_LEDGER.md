@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 315 ledger rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence.
+This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 175 requirement rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. `NFR-PERF-006` and `NFR-REL-004` remain duplicated in the requirements authority with distinct meanings, so their single ledger rows are provisional until the requirements authority resolves those identity collisions.
 
 ## Functional Requirements
 

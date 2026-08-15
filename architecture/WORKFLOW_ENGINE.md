@@ -102,6 +102,18 @@ The engine uses a **step dependency graph** that supports bounded cycles for ite
 
 > **Concurrency cap inheritance:** Parallel lanes inherit the dynamic resource-budgeted cap defined in `MULTI_AGENT_SYSTEM.md` SA-3 (`min(memory_budget/per_agent_est, cpu_cores, configurable_max)`, default 3, high-end 8–16). The Workflow Engine does not enforce the cap directly; it relies on the `ResourceManager` (`RUNTIME.md`) and the Multi-Agent Coordinator (`MULTI_AGENT_SYSTEM.md`) to limit active sub-agent count per workspace.
 
+## Cross-Layer Contract Boundaries
+
+The Workflow Engine owns graph validation, step readiness, branching, bounded iteration, workflow-level error-strategy selection, and the workflow lifecycle transition command. It does not replace the authority of the participating Task, Execution, Tool, Provider, Permission, or Android background contracts.
+
+A `WaitForApproval` step MUST use the existing PermissionModel approval transaction and audit contract. The Workflow Engine records the step as waiting through the existing workflow progression and does not create a new permission scope, approval type, lifecycle state, or error identity. Approval denial and approval expiry retain the existing Task/Agent effects and canonical `NXR-2003` mappings defined by the PermissionModel, TaskLifecycle, and approval decisions. A valid approval does not itself complete the step; the step completes only after the authorized operation satisfies its existing result and acceptance conditions. Resume remains subject to the existing effective deadline, idempotency, cancellation, and checkpoint contracts.
+
+Workflow `RETRY`, `SKIP`, `ABORT`, and `FALLBACK` strategies select graph behavior only. Error identity and shared recovery metadata remain owned by `errors/ERROR_CODES.md`; legal Task and Execution effects remain owned by their lifecycle authorities; Tool and Provider retry legality remains owned by their Tool/Provider contracts; and operation-level idempotency remains owned by the operation owner. Workflow retry counters and iteration progress MUST be persisted with the workflow state and MUST NOT reset the parent deadline, Task retry budget, failure ledger, or execution lineage.
+
+A workflow step that produces `UNKNOWN_COMPLETION` MUST remain unresolved until the Tool System reconciliation contract resolves the side effect. The Workflow Engine MUST NOT replay, skip, or mark that step successful merely because a timeout or transport interruption occurred. Cancellation and deadline expiry propagate through the existing Task → Execution → child operation contracts, and recoverable workflow state is checkpointed through the existing execution/checkpoint protocol.
+
+Workflow validation MUST distinguish invalid dependency cycles from explicitly bounded `Iterative` edges. A dependency cycle is invalid unless it is represented by an `Iterative` step with an explicit `maxIterations` and/or `convergenceCondition`. Unbounded or ambiguous cycles fail validation before execution; this clarification does not create a new lifecycle state or graph type.
+
 ## Phase Mapping
 
 - **Phase 2**: Basic linear and parallel workflows.

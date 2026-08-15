@@ -103,3 +103,10 @@ enum class StepStatus {
 - The engine evaluates step readiness topologically using the step dependencies (`dependsOn`).
 - Independent parallel lanes run concurrently in separate coroutine scopes.
 - Workflow cancellation or catastrophic step failures without fallback trigger rolling cascading aborts of all active children, transitioning the overall status to `FAILED` or `CANCELLED` and releasing resource locks.
+
+### Cross-Layer Contract Projection
+
+- `WaitForApproval` uses the existing PermissionModel approval transaction and audit contract. Approval denial and approval expiry retain the existing Task/Agent effects and canonical `NXR-2003` mappings; they do not create a new Workflow state, permission scope, error identity, or automatic retry path. The step completes only after the authorized operation produces a valid result under its existing acceptance conditions.
+- `RETRY`, `SKIP`, `ABORT`, and `FALLBACK` select workflow graph behavior only. Canonical error identity, Task/Execution lifecycle effects, Tool/Provider retry legality, operation idempotency, effective deadlines, cancellation, and checkpoint persistence remain governed by their owning authorities. Workflow retry and iteration progress must not reset parent retry budgets, deadlines, failure lineage, or execution identity.
+- A Tool step with `UNKNOWN_COMPLETION` remains unresolved until Tool System reconciliation resolves the side effect. The model must not project that step as successful, skipped, or safely replayable solely because a timeout or transport interruption occurred.
+- Dependency validation rejects unbounded or ambiguous cycles. Bounded cycles are represented only by `Iterative` steps with the existing `maxIterations` and/or `convergenceCondition` fields.
