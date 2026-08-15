@@ -17,8 +17,8 @@ Runtime Executor          Authorization Gate          Sandbox Runner
        │                          ├─ validate descriptor     │
        │                          ├─ resolve every scope     │
        │                          ├─ validate ASK transaction│
-       │                          ├─ select classifier policy│
-       │                          └─ evaluate if selected    │
+       │                          ├─ confirm authorization   │
+       │                          ├─ record audit decision   │
        │<── ALLOWED / DENIED ─────┤                          │
        │                                                     │
        ├── execute ─────────────────────────────────────────>│

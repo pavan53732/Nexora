@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 313 ledger rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence.
+This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 315 ledger rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence.
 
 ## Functional Requirements
 
@@ -295,6 +295,8 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-REL-016` | `requirements/NFR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `UT-CONTRACT-006` | `evidence/unit/UT-CONTRACT-006/` |
 | `NFR-REL-017` | `requirements/NFR.md` | MAPPED | Tool + Runtime | `architecture/TOOL_SYSTEM.md` | `UT-TOOL-006` | `evidence/unit/UT-TOOL-006/` |
 | `NFR-REL-018` | `requirements/NFR.md` | MAPPED | Android Runtime | `specs/BACKGROUND_EXECUTION.md` | `E2E-REL-001..005` | `evidence/e2e/E2E-REL-001..005/` |
+| `NFR-CI-001` | `requirements/NFR.md` | MAPPED | Context + Conversation/Session | `specs/CONTEXT_MANAGEMENT.md` | `E2E-LONG-001`, `E2E-CONTEXT-001` | `evidence/e2e/E2E-LONG-001/`, `evidence/e2e/E2E-CONTEXT-001/` |
+| `NFR-CI-002` | `requirements/NFR.md` | MAPPED | Context + Memory | `specs/CONTEXT_MANAGEMENT.md` | `UT-CONTEXT-001`, `UT-CONTEXT-002`, `E2E-CONTEXT-001`, `E2E-LONG-002` | `evidence/unit/UT-CONTEXT-001/`, `evidence/unit/UT-CONTEXT-002/`, `evidence/e2e/E2E-CONTEXT-001/`, `evidence/e2e/E2E-LONG-002/` |
 | `NFR-CI-003` | `requirements/NFR.md` | MAPPED | Evidence Engine | `specs/CONTEXT_MANAGEMENT.md` | `UT-EV-007` | `evidence/unit/UT-EV-007/` |
 | `NFR-CI-004` | `requirements/NFR.md` | MAPPED | Agent Runtime | `architecture/AGENT_RUNTIME.md` | `UT-AS-010` | `evidence/unit/UT-AS-010/` |
 | `NFR-CI-005` | `requirements/NFR.md` | MAPPED | Context + Runtime | `specs/CONTEXT_MANAGEMENT.md` | `UT-RN-013` | `evidence/unit/UT-RN-013/` |

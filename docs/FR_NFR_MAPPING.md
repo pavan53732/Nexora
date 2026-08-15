@@ -90,7 +90,7 @@
 
 ## S13 — Authorization and Execution Recovery Contract Synchronization
 
-- `FR-S016` → `security/PermissionModel.md` complete multi-scope approval/classifier authorization; validation `SEC-PERM-003..066`, `IT-TOOL-002..014` (Planned).
+- `FR-S016` → `security/PermissionModel.md` complete multi-scope permission resolution, approval, denial, and audit authorization; validation `SEC-PERM-003..066`, `IT-TOOL-002..014` (Planned).
 - `FR-TL015` → Permission Audit Schema + Tool Protocol/API correlation; validation `SEC-PERM-023/044/045/052/062..065`, `IT-TOOL-008/009/014` (Planned).
 - `FR-TL001`..`015` → `architecture/TOOL_SYSTEM.md`, `models/Tool.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md`, `errors/ERROR_CODES.md`; validation `IT-TOOL-001..014` (Planned).
 - `FR-AS-007` → same-ID `RESUME`, new-ID `RETRY_AFTER_TERMINAL`, `priorExecutionId`, and reconciliation in Runtime/Background/Autonomy/Execution Protocol/Runtime API; validation `SEC-LC-EXEC-002..004`, `IT-LC-001..013/016..020` (Planned).
