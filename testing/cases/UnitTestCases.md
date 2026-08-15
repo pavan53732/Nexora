@@ -41,3 +41,8 @@
 | UT-SKILL-004 | UT-SKILL | Validate replacement requires explicit compatibility validation | Skill Registry | Planned | `evidence/unit/UT-SKILL-004/` | 2026-08-12 |
 | UT-SKILL-005 | UT-SKILL | Validate skill metadata cannot grant permissions | Skill Registry + Security | Planned | `evidence/unit/UT-SKILL-005/` | 2026-08-12 |
 | UT-SKILL-006 | UT-SKILL | Validate skill-use authorization remains tool/security controlled | Agent Runtime + Security | Planned | `evidence/unit/UT-SKILL-006/` | 2026-08-12 |
+| UT-ESC-001 | UT-ESC | Validate escalation request requires task, workspace, agent, execution-lineage, purpose, capability, scope, deadline, and revocation fields | Agent Runtime | Planned | `evidence/unit/UT-ESC-001/` | 2026-08-15 |
+| UT-ESC-002 | UT-ESC | Validate unsupported static capability is rejected or routed to delegation without matrix mutation | Agent Runtime + Multi-Agent | Planned | `evidence/unit/UT-ESC-002/` | 2026-08-15 |
+| UT-ESC-003 | UT-ESC | Validate Terminal and Background grants expire at completion, cancellation, deadline, revocation, or terminal failure | Runtime | Planned | `evidence/unit/UT-ESC-003/` | 2026-08-15 |
+| UT-ESC-004 | UT-ESC | Validate grant transfer across task, agent, workspace, or execution lineage is rejected | Security + Agent Runtime | Planned | `evidence/unit/UT-ESC-004/` | 2026-08-15 |
+| UT-ESC-005 | UT-ESC | Validate expiry/revocation preserves deadline, failure ledger, checkpoint, unknown-completion, and non-success semantics | Runtime + Recovery | Planned | `evidence/unit/UT-ESC-005/` | 2026-08-15 |

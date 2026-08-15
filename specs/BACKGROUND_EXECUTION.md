@@ -234,6 +234,18 @@ If the user refuses battery optimization (or OEM denies auto-start and the user 
 
 ---
 
+## 8.4 Task-Scoped Background Capability Escalation
+
+Background execution is not universal across agent types. The static agent capability matrix remains the dispatch boundary. When a non-background-capable agent needs a long-running operation, the coordinator MUST delegate to an eligible worker or request a task-scoped escalation through the existing permission and approval flow.
+
+A background escalation is bound to one `workspaceId`, `taskId`, execution lineage, requesting `agentId`, purpose, affected operation class or canonical Tool IDs, effective deadline, resource/concurrency limits, notification policy, checkpoint requirement, cancellation rule, and revocation condition. It is not a new Task or Execution lifecycle state, does not mutate the static matrix, and does not grant unrestricted Terminal, network, device, plugin, MCP, browser, or sensitive-action access.
+
+Before starting background work, the runtime MUST verify the existing background prerequisites: checkpointability, cancellation propagation, progress publication, notification behavior, resource limits, Android foreground-service/WorkManager eligibility, and applicable permission/classifier decisions. If a prerequisite is unavailable, the request fails closed, is delegated, or remains in the existing user-clarification/approval path; it MUST NOT silently run in the background.
+
+The grant expires at task completion, cancellation, effective deadline, explicit revocation, terminal failure, or Android/runtime degradation that prevents the declared contract. Expiry or revocation MUST checkpoint recoverable state, propagate cancellation to descendant provider and Tool operations, publish the existing activity/notification outcome, and preserve the existing incomplete, cancelled, failed, or degraded classification. It MUST NOT reset the deadline or create a fresh retry budget.
+
+Every request, decision, approval, delegation, start, progress update, notification, expiry, revocation, cancellation, checkpoint, and final disposition MUST be included in the existing execution history, permission audit trail, and correlated runtime trace. The activity feed and notification surface MUST distinguish requested, delegated, approved, denied, active, degraded, expired, revoked, cancelled, and completed outcomes.
+
 ## Phase Mapping
 
 - **Phase 1**: Task interface + queue contracts; `TaskScheduler` interface;

@@ -207,10 +207,19 @@ policy and provider-effort mapping, timestamps, queue/active/Tool/provider laten
 usage metadata, retry/failover lineage, canonical error envelope, and final disposition.
 
 Trace records MUST distinguish planned, attempted, observed, verified, incomplete, and
-failed outcomes. They MUST preserve plan-versus-actual and claim-to-evidence relationships
-and MUST NOT persist private chain-of-thought. Provider-native continuation artifacts are
-opaque adapter state and are referenced only according to the Provider Protocol privacy and
+failed outcomes. They MUST preserve plan-versus-actual and claim-to-evidence
+relationships and MUST NOT persist private chain-of-thought. Provider-native continuation
+artifacts are opaque adapter state and are referenced only according to the Provider Protocol privacy and
 retention rules.
+
+When task-scoped execution-capability escalation or delegation is used, the same trace MUST
+also preserve the requester, delegated worker when applicable, requested capability, purpose,
+affected Tool IDs or operation class, required scope decisions, approval transaction, grant
+lifetime, effective deadline, resource/concurrency limits, grant use, expiry or revocation,
+cancellation propagation, and final disposition. This is diagnostic and audit metadata only;
+it MUST NOT become a new Task or Execution lifecycle state, mutate the static agent matrix, or
+infer success from a grant or approval.
+
 
 Trace correlation is diagnostic and evaluative. It MUST NOT infer lifecycle transitions
 from a log message, provider category, model confidence, or latency observation. Lifecycle

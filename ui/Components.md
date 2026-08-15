@@ -46,6 +46,7 @@ successful completion.
 | `CitationUpdateCard` | Source and freshness/provenance references tied to the applicable claim or evidence record. |
 | `TaskCard` / `ActivityCard` | Planned-versus-actual progress, current phase, acceptance progress, checkpoint/recovery notice, escalation, incomplete outcome, or terminal result. |
 | `PermissionDialog` | Requested scopes, risk context, approval/denial result, classifier denial when applicable, and no implication that approval bypasses sandbox or policy denial. |
+| `TaskCard` / `AgentCard` / `ActivityCard` | Task-scoped capability request and delegation state: requested, delegated, approved, denied, active, expired, revoked, cancelled, and completed; includes requesting agent, target worker when applicable, purpose, lifetime/deadline, and final disposition without presenting a temporary grant as a permanent capability. |
 
 ### Interaction and Accessibility Rules
 

@@ -62,6 +62,18 @@ Resolution order — first match wins:
 
 If no layer defines a decision, the scope's **default** (table above) is used.
 
+## Task-Scoped Execution Capability Escalation
+
+The permission model does not grant Terminal or Background access universally. The static agent capability matrix is evaluated before authorization, and a capability absent from the current agent profile MUST be delegated to an eligible agent or requested through a task-scoped escalation handled by the existing authorization flow.
+
+An escalation request is not a permission scope, permanent agent override, lifecycle state, or Tool identity. It is a bounded authorization projection tied to `workspaceId`, `taskId`, execution lineage, requesting `agentId`, requested capability, purpose, affected Tool IDs or operation class, required scopes, effective deadline, resource/concurrency limits, cancellation policy, and revocation condition. It MUST be rejected when the request exceeds the task acceptance criteria, workspace policy, autonomy mode, sandbox limits, or remaining execution deadline.
+
+A temporary grant does not bypass scope resolution. Terminal use still requires `sandbox:execute` and applicable `sandbox:read`/`sandbox:write`; background use still requires the existing notification, checkpoint, resource, cancellation, and Android lifecycle contracts. Network, device, plugin, MCP, browser, and sensitive-action scopes remain independent. The classifier remains an additional gate where selected, and `DENY` remains final for the current authorization attempt.
+
+A grant is valid only for the identified task and execution lineage. It expires at task completion, cancellation, effective deadline, explicit revocation, or terminal failure, whichever occurs first. It cannot be transferred to another task or agent, and it cannot be reused as a durable agent override. Revocation or expiry while a child operation is active MUST propagate cancellation through the existing runtime path and preserve checkpoint, audit, and non-success classification rules.
+
+Every request, delegation, approval, grant, denial, use, expiry, revocation, and final disposition MUST be appended to the existing permission audit trail and correlated execution trace. The audit projection MUST identify the requester, delegated worker when applicable, capability, scope decisions, approval transaction, lifetime, and resulting Tool/execution outcome. This section changes no scope default and introduces no new scope identifier.
+
 ## Runtime Permission Request Flow
 
 ```kotlin

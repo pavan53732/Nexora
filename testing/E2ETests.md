@@ -21,6 +21,7 @@ End-to-end tests validate user-visible workflows across the full stack.
 - `E2E-TOOLDISC-*` — dynamic Tool discovery, selection, descriptor-quality, and repair journeys
 - `E2E-LONG-*` — long-horizon compaction, artifact handoff, resume, and reconstruction journeys
 - `E2E-MM-*` — negotiated multimodal, realtime, audio, screen, and computer-action journeys
+- `E2E-ESC-*` — selective capability enforcement, delegation, task-scoped escalation, expiry, revocation, and recovery journeys
 
 ## Framework Stack
 
@@ -98,6 +99,20 @@ ID/version, context/checkpoint identity, trace correlation, and final dispositio
 
 These journeys are planned evidence obligations. Their presence does not claim that the
 runtime implementation or provider/device validation already exists.
+
+## Controlled Execution Escalation Journeys
+
+The following journeys MUST verify that capability escalation expands task execution only within bounded authorization and does not make every agent universally privileged.
+
+- `E2E-ESC-001`: a non-Terminal-capable agent requests terminal work and is denied or delegates to an eligible worker; no invented Tool call or silent capability acquisition occurs.
+- `E2E-ESC-002`: a restricted agent delegates terminal work with complete handoff context; the worker executes in its own isolated overlay and the coordinator merges only permissioned artifacts.
+- `E2E-ESC-003`: a task-scoped Terminal grant passes matrix, permission, approval, classifier, sandbox, schema, timeout, output-cap, resource, and audit gates; the grant cannot be reused by another task or agent.
+- `E2E-ESC-004`: a task-scoped Background grant satisfies checkpoint, progress, notification, cancellation, Android lifecycle, resource, and degraded-mode prerequisites; missing prerequisites fail closed or delegate.
+- `E2E-ESC-005`: grant expiry at completion, deadline, cancellation, explicit revocation, terminal failure, and runtime degradation produces checkpoint, cancellation, audit, activity-feed, and notification outcomes without resetting the deadline.
+- `E2E-ESC-006`: revocation during an active subprocess, PTY, provider call, or background child propagates cancellation; unknown completion remains unresolved until reconciliation and no silent success is reported.
+- `E2E-ESC-007`: escalation exceeding acceptance criteria, workspace policy, autonomy mode, remaining deadline, sandbox limits, or resource limits is denied and cannot mutate the static agent matrix.
+
+These journeys are planned evidence obligations. Their presence does not claim Android implementation or executed device evidence.
 
 ## Canonical Contract Evidence
 

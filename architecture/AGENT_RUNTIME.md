@@ -167,6 +167,22 @@ When a bounded-progress violation is detected, the runtime MUST either:
 3. fall back to a different provider/tool strategy, or
 4. terminate with explicit incomplete/blocked status.
 
+## Controlled Execution-Capability Escalation
+
+The static capability matrix remains authoritative for ordinary dispatch. An agent MUST NOT acquire Terminal, Background, Delegate, or any other capability merely because the shared runtime can perform that operation. When a task requires a capability not granted to the current agent type, the runtime has only two permitted paths: delegate the work to an eligible agent, or create a task-scoped capability-escalation request through the existing authorization and approval flow.
+
+A capability-escalation request is a bounded execution projection, not a new agent type, Tool identity, permission scope, lifecycle state, or permanent matrix mutation. It MUST include the requesting `agentId`, `taskId`, `workspaceId`, requested capability, stated purpose, affected Tool IDs or operation class, required permission scopes, effective deadline, maximum execution/concurrency limits, cancellation policy, and revocation condition. The request MUST be rejected when the requested capability is outside the task's declared acceptance criteria, workspace policy, sandbox limits, or applicable autonomy mode.
+
+The orchestrator MUST evaluate the request against the current agent capability matrix before any escalation path is considered. Delegation to an eligible agent is preferred when the work can remain within the existing role boundary. A direct temporary grant requires the existing permission resolution, approval, classifier, sandbox, resource, and audit gates; it MUST NOT bypass any of them. A grant is valid only for the identified task and execution lineage, expires at the earliest of task completion, cancellation, effective deadline, explicit revocation, or terminal failure, and cannot be reused by another task or agent.
+
+Terminal escalation MUST continue to use the existing `sandbox:execute` and applicable `sandbox:read`/`sandbox:write` scopes. Background escalation MUST additionally satisfy the existing background-runtime requirements for checkpointing, cancellation, progress notification, resource limits, Android lifecycle handling, and degraded-mode behavior. A capability grant does not authorize host filesystem, unrestricted device, network, plugin, MCP, browser, or sensitive-app access; those remain separately governed by their existing permissions and classifiers.
+
+Every request, decision, approval, delegation, grant, denial, use, cancellation, expiry, and revocation MUST be represented in the existing execution history, permission audit trail, and correlated agent trace. The user-visible activity feed MUST distinguish requested, approved, denied, delegated, active, expired, revoked, and completed outcomes without presenting a temporary grant as a permanent role capability. Unsupported capability requests MUST fail closed or be delegated; the agent MUST NOT invent a Tool, scope, approval, or successful execution result.
+
+The escalation path MUST preserve the existing bounded-progress and deadline contracts. It MUST NOT restart a task's full deadline, reset the failure ledger, clear acceptance progress, or bypass unknown-completion reconciliation. If the grant expires or is revoked while a child operation is active, cancellation propagates through the existing Agent → ProviderRouter → Tool children path, recoverable state is checkpointed, and the final outcome remains incomplete, cancelled, failed, or otherwise non-successful unless the existing completion gate is satisfied.
+
+This section defines execution authorization behavior only. The static per-agent capability inventory remains owned by `registry/AGENT_MATRIX.md`; Tool identity and execution remain owned by `architecture/TOOL_SYSTEM.md`; permission decisions remain owned by `security/PermissionModel.md`; containment remains owned by `security/SandboxPolicy.md`; background lifecycle behavior remains owned by `specs/BACKGROUND_EXECUTION.md`; and multi-agent delegation remains owned by `architecture/MULTI_AGENT_SYSTEM.md`.
+
 ## Agent Loop
 
 ```kotlin

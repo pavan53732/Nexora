@@ -17,6 +17,7 @@ Integration tests validate subsystem interactions and cross-layer contract prese
 - `IT-TOOLDISC-*` — bounded Tool discovery, descriptor quality, stale-descriptor rejection, and MCP primitive separation
 - `IT-LONG-*` — context compaction, task/artifact reconstruction, checkpoint resume, and delegated artifact handoff
 - `IT-MM-*` — negotiated multimodal/realtime stream events and permission/terminal behavior
+- `IT-ESC-*` — selective capability enforcement, delegation, task-scoped escalation, expiry, revocation, and cancellation
 
 ## Framework Stack
 
@@ -41,6 +42,24 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-TOOLDISC-001..003` bounded candidate projection, descriptor examples/permissions, stale or unknown-scope fail-closed behavior, selection telemetry, and MCP tool/resource/prompt separation
 - `IT-LONG-001..003` long-horizon projection preservation across compaction/resume, artifact-reference handoff, and pause-on-ambiguous reconstruction
 - `IT-MM-001..002` negotiated multimodal/audio/screen/computer-action event validation, authorization, backpressure, cancellation, and terminal behavior
+
+## Controlled Execution Escalation Integration Coverage
+
+The integration suite MUST verify that selective agent capabilities remain enforced while eligible work can be delegated or temporarily escalated through existing gates.
+
+Required journeys include:
+
+- a non-Terminal agent requesting Terminal and being denied or delegated according to the current capability matrix;
+- a restricted agent delegating terminal work to an eligible worker with complete handoff context;
+- a task-scoped Terminal escalation passing matrix, permission, approval, classifier, sandbox, schema, timeout, output-cap, and resource gates;
+- a task-scoped Background escalation passing checkpoint, progress, notification, cancellation, Android lifecycle, and degraded-mode prerequisites;
+- expiry at task completion, deadline, cancellation, explicit revocation, and terminal failure;
+- revocation during an active subprocess, PTY, provider call, or background child, with cancellation propagation and checkpoint preservation;
+- denial when escalation exceeds workspace policy, acceptance criteria, remaining deadline, sandbox limits, or autonomy mode;
+- proof that a temporary grant cannot transfer to another task, agent, workspace, or execution lineage and cannot mutate the static matrix;
+- correlated audit and trace records for request, decision, approval, use, expiry/revocation, cancellation, and final disposition.
+
+These cases validate documentation-defined behavior only until Android implementation and device execution evidence exist.
 
 ## S13 Traceability
 

@@ -11,6 +11,7 @@ Performance tests validate latency, throughput, resource usage, background execu
 - `PERF-PROV-*` — provider streaming responsiveness
 - `PERF-MEM-*` — memory retrieval and ranking
 - `PERF-BG-*` — background execution stability
+- `PERF-ESC-*` — capability-matrix, delegation, escalation, expiry, revocation, and cancellation benchmarks
 
 ## Framework Stack
 
@@ -33,6 +34,24 @@ Performance regressions SHOULD be compared against explicit thresholds or baseli
 ## Run Schedule
 
 Run regularly for release candidates and performance-sensitive changes.
+
+## Controlled Execution Escalation Benchmarks
+
+The performance suite MUST measure bounded execution escalation without treating broader privilege as a performance optimization.
+
+Required benchmark dimensions include:
+
+- capability-matrix and delegation decision latency;
+- temporary Terminal grant authorization and approval-round-trip latency;
+- temporary Background grant startup, checkpoint, notification, and WorkManager handoff latency;
+- cancellation propagation and descendant-drain latency after expiry or revocation;
+- CPU, memory, disk, battery, thermal, process, and network impact of delegated and escalated work;
+- queue wait and active time for eligible workers under concurrent escalation requests;
+- duplicate-request suppression and transfer-rejection overhead;
+- checkpoint persistence and recovery latency when a grant expires during active work;
+- trace and audit write overhead without loss of correlation or security events.
+
+Results MUST be reported by agent type, requested capability, device class, Android version, workspace limits, autonomy mode, provider/tool route, concurrency level, and outcome. The benchmark MUST include denial, delegation, approval, expiry, revocation, cancellation, degradation, and successful completion paths. These are planned evidence obligations until implementation and device measurements exist.
 
 ## Canonical Contract Evidence
 

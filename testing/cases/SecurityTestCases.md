@@ -97,3 +97,9 @@
 | SEC-STREAM-008 | SEC-STREAM | Oversized event fails without unbounded allocation | Security + Provider | Planned | `evidence/security/SEC-STREAM-008/` | 2026-08-06 |
 | SEC-STREAM-009 | SEC-STREAM | Slow consumer preserves semantic events under backpressure | Security + Provider | Planned | `evidence/security/SEC-STREAM-009/` | 2026-08-06 |
 | SEC-STREAM-010 | SEC-STREAM | Reasoning budget exhaustion escalates without runaway | Security + Reasoning | Planned | `evidence/security/SEC-STREAM-010/` | 2026-08-06 |
+| SEC-ESC-001 | SEC-ESC | Unsupported Terminal/Background capability cannot be self-granted by an agent | Security + Agent Runtime | Planned | `evidence/security/SEC-ESC-001/` | 2026-08-15 |
+| SEC-ESC-002 | SEC-ESC | Task-scoped escalation cannot transfer across agent, task, workspace, or execution lineage | Security + Agent Runtime | Planned | `evidence/security/SEC-ESC-002/` | 2026-08-15 |
+| SEC-ESC-003 | SEC-ESC | Terminal escalation still enforces sandbox scopes, classifier, path, network, process, output, and timeout controls | Security + Terminal + Sandbox | Planned | `evidence/security/SEC-ESC-003/` | 2026-08-15 |
+| SEC-ESC-004 | SEC-ESC | Background escalation cannot bypass checkpoint, notification, cancellation, resource, Android lifecycle, or degraded-mode controls | Security + Background Runtime | Planned | `evidence/security/SEC-ESC-004/` | 2026-08-15 |
+| SEC-ESC-005 | SEC-ESC | Expiry/revocation cancels active descendants, preserves checkpoint/audit lineage, and cannot reset deadlines or retry budgets | Security + Recovery | Planned | `evidence/security/SEC-ESC-005/` | 2026-08-15 |
+| SEC-ESC-006 | SEC-ESC | Escalation request, approval, use, denial, expiry, revocation, and final disposition are redacted and audit-correlated | Security + Observability | Planned | `evidence/security/SEC-ESC-006/` | 2026-08-15 |

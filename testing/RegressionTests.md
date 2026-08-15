@@ -33,6 +33,20 @@ Plugin compatibility testing SHOULD include activation rollback and exported cap
 
 Run on release candidates and on any contract-affecting change.
 
+## Controlled Execution Escalation Compatibility
+
+`RT-ESC-001` MUST protect the static agent capability matrix: unsupported Terminal or Background requests are denied or delegated and cannot silently acquire capability.
+
+`RT-ESC-002` MUST protect task-scoped grant binding to workspace, task, agent, and execution lineage; grants cannot transfer, persist as agent overrides, or mutate the matrix.
+
+`RT-ESC-003` MUST protect the requirement that Terminal and Background escalation still passes existing permission, approval, classifier, sandbox, resource, deadline, notification, checkpoint, and cancellation gates.
+
+`RT-ESC-004` MUST protect expiry and revocation behavior: active descendants are cancelled, recoverable state is checkpointed, deadline and failure ledgers are not reset, and final outcomes are not silently marked successful.
+
+`RT-ESC-005` MUST protect audit and correlated trace records for request, decision, approval, delegation, use, expiry/revocation, cancellation, and final disposition.
+
+All escalation regression cases are planned until implementation and executed evidence exist.
+
 ## Typed Inference Compatibility
 
 `RT-STREAM-001..002` and `RT-REASON-001` protect adapter event normalization,
