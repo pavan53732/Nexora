@@ -8,7 +8,7 @@
 
 # Module Boundaries
 
-**Rule #1: Everything is a service behind an interface. UI never talks directly to implementations.**
+**Rule #1: Everything is a service behind an interface. UI never talks directly to implementations. Consumers may call public interfaces along the allowed dependency graph; EventBus carries published domain/runtime events and is not the sole invocation mechanism (DEC-40).**
 
 | Module | Package | Responsibilities | Public API | Allowed Deps | Forbidden Deps |
 |---|---|---|---|---|---|

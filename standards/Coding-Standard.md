@@ -10,9 +10,10 @@
 - No other languages in the main codebase
 
 ## Architecture
-- Clean Architecture: `android/` → `core/` → `runtime/` → domain modules
-- Each module has: `model/`, `repository/`, `usecase/` (where applicable)
-- Dependency direction: android → core → runtime → tools/agents/providers (never reverse)
+- Canonical module graph: `ui` → `application`/`shared`, with application composition over `services`, `runtime`, `tools`, `providers`, `memory`, `agents`, `workflows`, `plugins`, `sandbox`, `storage`, and `security` according to `docs/MODULE_BOUNDARIES.md` and `docs/DEPENDENCY_GRAPH.md`.
+- Every cross-module dependency uses a public interface; consumers must not import concrete implementation classes. Hilt binds interfaces to implementations at the application composition boundary (DEC-40).
+- `shared` remains a leaf module. Dependencies are acyclic and follow the canonical allowed/forbidden matrix; EventBus is event transport and does not replace direct public-interface calls.
+- Each module may use `model/`, `repository/`, and `usecase/` subpackages where applicable; package layout must not introduce obsolete `core` or `domain` modules.
 
 ## Naming
 - Classes: `PascalCase` (`ToolRegistry`, `AgentLoop`)

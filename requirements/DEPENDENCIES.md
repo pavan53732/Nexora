@@ -10,8 +10,8 @@
 
 | Dependency | Version | Purpose |
 -----------|---------|--------|
-| Android SDK | API 34 | Target platform APIs |
-| Build Tools | 34.0.0 | AAPT2, D8, R8 compilation |
+| Android SDK | API 34 (current min/compile/target baseline; DEC-37) | Target platform APIs |
+| Build Tools | 34.0.0 | AAPT2, D8, R8 compilation for the API-34 baseline |
 | Platform Tools | Latest | ADB, debugging |
 
 ## Language & Build

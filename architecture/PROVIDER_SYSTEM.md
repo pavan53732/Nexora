@@ -40,7 +40,7 @@ enum class ProviderType {
     OPENROUTER,           // Unified gateway
     OLLAMA,              // Local model server
     LM_STUDIO,           // Local model server
-    LOCAL_GGUF,          // Direct GGUF loading
+    LOCAL_GGUF,          // GGUF loaded by a separate Nexora-managed on-device worker (DEC-39)
     CUSTOM               // User-defined endpoints
 }
 
@@ -176,7 +176,7 @@ owned by `state-machines/ProviderStreamLifecycle.md`.
 | **OpenRouter** | Unified API | Chat, Streaming, Tool Calling, Vision |
 | **Ollama** | Local REST | Chat, Streaming, Tool Calling, Vision, Embeddings |
 | **LM Studio** | Local REST | Chat, Streaming, Tool Calling |
-| **Local GGUF** | Direct loading | Chat, Streaming |
+| **Local GGUF** | Managed on-device worker process | Chat, Streaming |
 | **Custom** | User-defined | Varies |
 
 ## Provider Configuration

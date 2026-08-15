@@ -111,7 +111,29 @@ data class ExecutionStatusChangedEvent(
     val occurredAt: Instant,
     val errorEnvelope: CanonicalErrorEnvelope? = null
 )
+
+data class TaskSuspendedEvent(
+    val eventId: String,
+    val correlationId: String,
+    val taskId: String,
+    val executionId: String,
+    val checkpointId: String,
+    val version: Long,
+    val cause: String,
+    val occurredAt: Instant
+)
+
+data class CheckpointSavedEvent(
+    val eventId: String,
+    val correlationId: String,
+    val executionId: String,
+    val checkpointId: String,
+    val version: Long,
+    val occurredAt: Instant
+)
 ```
+
+`TaskSuspendedEvent` is an execution/checkpoint event, not a new Task or Execution lifecycle state. `cause` records the existing platform/runtime trigger (for example, ANR safeguard or service handoff). `CheckpointSavedEvent` is emitted only after the checkpoint transaction commits. Both events are at-least-once and deduplicated by `(executionId, version, event type)`.
 
 ## Protocol Conformance Rules
 

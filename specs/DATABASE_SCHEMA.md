@@ -115,10 +115,17 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 ### `agent`
 | Column | Type | Notes |
 |--------|------|-------|
-| id | TEXT PK | |
+| id | TEXT PK | Stable registered Agent identity |
 | workspaceId | TEXT FK | |
-| type | TEXT | |
-| configJson | TEXT | |
+| version | INTEGER | Monotonic durable Agent lifecycle version; increments before lifecycle event publication |
+| name | TEXT | |
+| type | TEXT | Maps AgentType |
+| description | TEXT | |
+| declaredSkillsJson | TEXT | Ordered declared skill identifiers |
+| requiredPermissionsJson | TEXT | Required permission scope identifiers; does not grant permission |
+| supportsDelegation | INTEGER | 0/1 capability declaration |
+| supportsBackgroundExecution | INTEGER | 0/1 capability declaration |
+| configJson | TEXT | Additional implementation configuration; must not replace required lifecycle/version columns |
 | status | TEXT | Maps AgentStatus |
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
@@ -138,6 +145,7 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 | agentId | TEXT FK → agent.id | |
 | correlationId | TEXT | |
 | status | TEXT | Maps ExecutionStatus (CREATED/RUNNING/COMPLETED/FAILED/CANCELLED) |
+| latestErrorJson | TEXT NULL | Redacted `CanonicalErrorEnvelope`; preserves code, category, retryability, idempotency, lifecycle effect, recovery owner, correlation, and details |
 | phase | TEXT | Maps ExecutionPhase |
 | version | INTEGER | Monotonic; checkpoint/resume increments |
 | checkpointId | TEXT NULL | FK → execution_checkpoint.id |
@@ -174,8 +182,16 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 | correlationId | TEXT | Correlated task operations |
 | parentTaskId | TEXT NULL FK → task.id | Delegation/parent lineage; NULL for root task |
 | dependsOnTaskIdsJson | TEXT | Validated dependency references; graph must be acyclic before queueing |
+| goal | TEXT | User/task goal |
+| inputJson | TEXT | Structured task input |
+| outputJson | TEXT NULL | Structured successful output |
+| childTaskIdsJson | TEXT | Child Task identities; derived from parentTaskId relationships and maintained as a projection |
+| delegatedAgentIdsJson | TEXT | Delegated Agent identities |
+| priority | TEXT | Maps TaskPriority |
 | status | TEXT | Maps TaskStatus |
+| version | INTEGER | Monotonic durable Task lifecycle version; optimistic guard and event-deduplication key |
 | effectiveDeadline | TEXT | Immutable effective task deadline inherited by waits and child operations |
+| completedAt | TEXT NULL | Terminal completion timestamp |
 | retryNotBefore | TEXT NULL | Retry backoff boundary; direct start cannot bypass scheduler authorization |
 | latestErrorJson | TEXT NULL | Redacted `CanonicalErrorEnvelope`; DEC-33 codes `NXR-1014`/`NXR-1015`/`NXR-1016` are persisted with lifecycle effect and correlation ID |
 | createdAt | TEXT | |
@@ -203,6 +219,8 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | idempotent | INTEGER | 0/1 — mirrors `Tool.isIdempotent` at call time |
 | resultRef | TEXT | Reference to `tool_call.resultJson` / outcome |
 | status | TEXT | Maps ToolInvocationStatus at completion |
+| completionState | TEXT | Maps ToolCompletionState; preserves UNKNOWN_COMPLETION until reconciliation |
+| reconciliationEvidenceRefsJson | TEXT | Evidence references supporting reconciliation or manual-reconciliation requirement |
 | occurredAt | TEXT | |
 
 > **Retention reconciliation:** `permission_audit_log` is the authoritative audit trail
@@ -231,6 +249,8 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | executionId | TEXT NULL FK → execution.executionId | |
 | parametersJson | TEXT | |
 | status | TEXT | Maps ToolInvocationStatus |
+| completionState | TEXT | Maps ToolCompletionState; UNKNOWN_COMPLETION is not confirmed success/failure |
+| reconciliationEvidenceRefsJson | TEXT | Evidence references used to resolve completion certainty |
 | idempotent | INTEGER | 0/1 — mirrors `Tool.isIdempotent` at call time (FR-AS-007) |
 | resultJson | TEXT NULL | |
 | startedAt | TEXT | |

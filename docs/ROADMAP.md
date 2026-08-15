@@ -113,7 +113,7 @@ Plugin SDK, Nexora Hub, tools/providers/agents as plugins.
 |--------|--------|
 | Tool count | 300-500 |
 | Agent types | 10-20 |
-| APK size | Under 50 MB |
+| APK size | Minimal foundation under 50 MB; Full Environment architecture-specific delivery under the DEC-38 80 MB gate |
 | Cold start | Target under 2 seconds; warning threshold 3 seconds |
 | Memory (idle) | Idle RSS under 512 MB (canonical target per NFR-PERF-005) |
 | First-task time | Under 2 minutes |

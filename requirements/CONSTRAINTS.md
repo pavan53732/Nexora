@@ -34,7 +34,7 @@
 | Constraint | Detail |
 |-----------|--------|
 | Min API level | 34 (Android 14) |
-| Target API level | 34 |
+| Target API level | 34 (current baseline; future upgrades require an explicit decision) |
 | Compile API level | 34 |
 | Rationale | Predictable behavior, modern APIs (photo picker, predictive back, granular permissions) |
 
@@ -44,14 +44,14 @@
 |-----------|--------|
 | Server-side components | **None.** All logic runs on-device or via API calls to external AI providers |
 | Root access | **Not required.** App must function on stock, unrooted devices |
-| Inter-module communication | **Event bus only.** No direct dependencies between feature modules |
+| Inter-module communication | Direct dependencies are permitted only through public interfaces along the canonical module graph; EventBus is used for published domain/runtime events and subscriptions |
 | Persistent data location | **App private storage only.** No external storage writes without explicit user action |
 
 ## Size
 
 | Constraint | Detail |
 |-----------|--------|
-| APK size target | < 50MB base (without plugins or downloaded models) |
+| APK size target | Minimal foundation variant < 50MB base; Full Environment builds use the architecture-specific AAB delivery gate selected by DEC-38 |
 | Rationale | Fast downloads, low storage impact, Play Store compliance |
 
 ## Security
@@ -68,7 +68,7 @@
 |-----------|--------|
 | Provider model | External API calls only — providers are not bundled with the app |
 | Supported providers | OpenAI, Anthropic, Gemini, Groq, OpenRouter, Ollama, LM Studio, GGUF, Custom endpoint |
-| Local models | Ollama, LM Studio, GGUF run as separate on-device processes, not embedded |
+| Local models | Ollama and LM Studio use separate local-server processes; GGUF uses a separate Nexora-managed on-device worker process and is not loaded in the main Android process |
 | Stream abstraction | Provider-native SSE/WebSocket/HTTP formats must normalize to the canonical typed stream; Agent Runtime never depends on provider wire formats |
 | Stream buffering | Unbounded stream buffers are prohibited; semantic/control events must not be dropped |
 | Reasoning artifacts | Raw private chain-of-thought is not required, logged, exported, or persisted; only redacted ReasoningSummary artifacts cross durable boundaries |

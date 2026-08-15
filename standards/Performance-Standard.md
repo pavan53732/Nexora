@@ -15,7 +15,7 @@
 | First AI token (streaming) | < 1 000ms target (canonical per NFR-PERF-008 / PERFORMANCE_BUDGET.md) |
 | Stream cancellation propagation | < 250ms P95 |
 | Stream queue wait | < 100ms P95; no dropped semantic/control events |
-| APK size (base) | < 50 MB |
+| APK size (minimal foundation base) | < 50 MB; Full Environment delivery uses DEC-38’s 80 MB architecture-specific gate |
 | Memory (idle) | < 512 MB RSS (canonical per NFR-PERF-005) |
 | Memory (active agent) | 256 MB target / 384 MB warning / 512 MB critical (canonical per PERFORMANCE_BUDGET.md) |
 | ANR rate | < 0.05% |

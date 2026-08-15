@@ -83,8 +83,9 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 
 | Metric | Target | Warning | Critical | Measurement Method | Phase |
 |---|---|---|---|---|---|
-| Base APK (no providers, no plugins) | 30 MB | 40 MB | 50 MB | Gradle build output | Alpha |
-| With all bundled resources | 45 MB | 55 MB | 60 MB | Gradle build output | Alpha |
+| Minimal foundation APK (no Full Environment, providers, or plugins) | 30 MB | 40 MB | 50 MB | Gradle build output | Alpha |
+| Minimal foundation with its bundled resources | 45 MB | 55 MB | 60 MB | Gradle build output | Alpha |
+| Full Environment architecture-specific delivery artifact | 60 MB | 70 MB | 80 MB | AAB/APK per-ABI delivered artifact | Phase 3/release |
 
 ---
 
@@ -111,13 +112,15 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 
 ### APK Size Impact
 
-| Variant | Size |
-|---|---:|
-| Base app with bundled Full Environment | ~75 MB |
-| + x86_64 rootfs asset | ~95 MB |
-| **Recommended AAB delivery** | **~80 MB download, architecture-specific delivery** |
+DEC-38 governs release-size measurement for the Full Environment. The minimal foundation gates above apply only when the Full Environment assets are excluded. Full Environment release gates apply to the architecture-specific artifact delivered to the user.
 
-Mitigation: Android App Bundle delivery should split by architecture so users receive only the required ABI assets.
+| Variant | Size / gate |
+|---|---:|
+| Base app with bundled Full Environment | ~75 MB estimate; measured per ABI |
+| Aggregate build with x86_64 rootfs asset | ~95 MB aggregate; not a user delivery gate |
+| **Architecture-specific AAB/APK delivery** | **80 MB critical release gate** |
+
+Android App Bundle delivery MUST split by architecture so users receive only the required ABI assets. CI MUST report both aggregate build size and architecture-specific delivered size; only the latter is the Full Environment release gate.
 
 
 ## Latency-Critical Path vs Background Work

@@ -21,6 +21,8 @@ Nexora uses a single sandbox environment model: a bundled **Full Environment** b
 |---|---|---|---|---|---|
 | **Full Environment** | **~50–70 MB compressed** | **glibc** | **`apt` (Debian)** | **Yes** | **Yes** |
 
+The architecture-specific delivery-size policy is governed by DEC-38. The bundled Full Environment remains the selected execution environment; size gates are measured on the ABI-specific delivered AAB/APK artifact rather than an aggregate multi-ABI package.
+
 ## 2. Purpose
 
 The Full Environment enables a real Linux userland inside Nexora so agents can execute standard commands, install packages, run native tooling, and use Python/npm workflows with high compatibility.
@@ -181,9 +183,9 @@ Package downloads and installed artifacts count toward workspace quota. Package 
 
 The bundled Debian rootfs contains OSS components with license obligations. Nexora must ship attribution and source-offer information with the APK and provide an in-app OSS licenses view before store distribution.
 
-## 6. W^X Compatibility (`targetSdk=36`)
+## 6. W^X Compatibility (`targetSdk=34` current baseline)
 
-Nexora uses `targetSdk=36` for Google Play compliance. Android 10+ enforces W^X
+Nexora uses `targetSdk=34` for the current Android build baseline under DEC-37. Devices running newer Android releases may still enforce newer W^X and foreground-execution behavior; those runtime compatibility rules do not change the current target SDK. Android 10+ enforces W^X
 (write-xor-execute) via SELinux and seccomp — no memory page can be both writable
 and executable. This breaks programs that do JIT compilation (e.g., Node.js V8).
 

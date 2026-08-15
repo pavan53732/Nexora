@@ -38,7 +38,7 @@
 | Assumption | Detail |
 |-----------|--------|
 | External services | AI providers (OpenAI, Anthropic, etc.) are third-party SaaS with their own SLAs |
-| Local models | Ollama, LM Studio, and GGUF run as separate on-device processes managed by the user |
+| Local models | Ollama and LM Studio run as separate user-managed local-server processes; GGUF runs in a separate Nexora-managed on-device worker process under DEC-39 |
 | API stability | Provider APIs follow their published specs; breaking changes are infrequent |
 | Stream terminals | Provider adapters can detect native completion or synthesize a canonical failure; transport close alone is not trusted as success |
 | Resume support | Native cursor resume is provider/model specific; unsupported providers restart with lineage or fail partial |

@@ -506,6 +506,8 @@ git commit -m "docs: add environment setup documentation
 - [x] **Step 6:** Complete environment verified (`java`, `javac`, `sdkmanager`, `adb`, `gradle`, `kotlinc`, `python3`, `pip3`, `git`); environment variables (`JAVA_HOME`, `ANDROID_HOME`, `ANDROID_SDK_ROOT`, `PATH`) configured correctly.
 - [x] **Step 7:** Documentation (`docs/ENVIRONMENT_SETUP.md`) created and committed. Embedded runtime strategy document ( reconstructed and committed (S9, 2026-08-06).
 
+**Source-start re-verification:** The recorded Phase-0 verification is historical environment evidence. Before Android source bootstrap, the active implementation environment MUST re-verify JDK 21, Gradle 8.10.2, Kotlin, Android SDK/build tools API 34, ADB, and the required environment variables. The current baseline follows DEC-37 (API 34) and DEC-38 (architecture-specific Full Environment delivery gate).
+
 ### 15.2 What Was NOT Done (As Instructed)
 
 - [ ] **No Android project scaffold created.** (`android/` directory does not yet contain `build.gradle.kts`, `settings.gradle.kts`, or source files).
@@ -538,6 +540,6 @@ The environment is fully verified and documented. When instructed to proceed:
 
 ---
 
-*Document version: 1.0 
-Created: 2026-08-05 
-Status: COMPLETE — Environment Ready for Phase 1 (Android Scaffold)*
+*Document version: 1.1
+Created: 2026-08-05
+Status: COMPLETE — Phase-0 documentation and historical toolchain verification recorded; active toolchain re-verification required before Phase 1 Android scaffold*

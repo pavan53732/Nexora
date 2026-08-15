@@ -33,7 +33,7 @@ Plugins can:
 ## Consequences
 
 ### Positive
-- **Small core**: The APK base size stays under 50 MB.
+- **Small core**: The minimal-foundation APK base stays under 50 MB; Full Environment delivery is governed separately by DEC-38’s architecture-specific size gate.
 - **Extensibility**: The community can add capabilities without modifying core.
 - **Selective installation**: Users only install what they need.
 - **Independent versioning**: Plugins can be updated independently of the app.

@@ -8,7 +8,7 @@
 
 # Module Dependency Graph
 
-**Architectural rule #1:** Everything is a service behind an interface. UI never talks directly to implementations.
+**Architectural rule #1:** Everything is a service behind an interface. UI never talks directly to implementations. Direct dependencies follow the public-interface graph below; EventBus carries published domain/runtime events and is not the sole mechanism for invoking service interfaces (DEC-40).
 
 ## Dependency Hierarchy
 

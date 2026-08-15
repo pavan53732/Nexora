@@ -43,6 +43,8 @@ Client retries MUST preserve the same `idempotencyKey` when resubmitting the sam
 | `TaskProgress` | Agent completes a step | `{correlationId, taskId, workspaceId, stepIndex, totalSteps, description, version}` |
 | `ToolExecuted` | Agent invokes a tool | `{correlationId, taskId, toolCallId, toolId, durationMs, success, version}` |
 | `AgentError` | Agent encounters a terminal or surfaced error | `{correlationId, agentId, taskId, code, retryability, lifecycleEffect, recoverable, version}` |
+| `TaskSuspended` | Execution/checkpoint subsystem suspends active work for an existing platform/runtime trigger | `{correlationId, taskId, executionId, checkpointId, cause, version}`; owned by `Execution-Protocol`, not an Agent or Task lifecycle state |
+| `CheckpointSaved` | Execution checkpoint transaction commits successfully | `{correlationId, executionId, checkpointId, version}`; owned by `Execution-Protocol` and emitted only after durable commit |
 
 Events are at-least-once and MUST be deduplicated by `(entityId, version, transition)`.
 

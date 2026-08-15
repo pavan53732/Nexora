@@ -74,10 +74,10 @@ Detailed specification for each AI provider integration. All providers implement
 
 ### Local GGUF
 
-- **Implementation**: Direct GGUF model loading via llama.cpp or mlc-llm.
+- **Implementation**: A Nexora-managed separate on-device worker process loads GGUF through an approved runtime such as llama.cpp or mlc-llm; the Android application process does not load GGUF directly (DEC-39).
 - **Auth**: None (local).
 - **Capabilities**: Chat, Streaming.
-- **Models**: Any GGUF file.
+- **Models**: Any GGUF file subject to worker architecture, memory, sandbox, and resource limits.
 
 ### Custom
 
