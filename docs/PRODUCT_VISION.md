@@ -167,4 +167,4 @@ Workspace
 
 ### Key Differentiator
 
-Nexora is the **only** application designed specifically for **Android** as a first-class target, not a port or wrapper.
+Nexora is an application designed specifically for **Android** as a first-class target, not a port or wrapper.

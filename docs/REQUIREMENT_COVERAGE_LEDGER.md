@@ -304,23 +304,23 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-USE-004` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-005` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `NFR-USE-006` | `requirements/NFR.md` | MAPPED | UI/UX | `ui/Typography.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
-| `NFR-MAINT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-MAINT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-MAINT-003` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-MAINT-004` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-MAINT-005` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-001` | `requirements/NFR.md` | MAPPED | Coding Standards | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-002` | `requirements/NFR.md` | MAPPED | Coding Standards | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-003` | `requirements/NFR.md` | MAPPED | Coding Standards | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-004` | `requirements/NFR.md` | MAPPED | Coding Standards | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-MAINT-005` | `requirements/NFR.md` | MAPPED | Coding Standards | `standards/Coding-Standard.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
 | `NFR-SCALE-001` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-002` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-003` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-004` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-SCALE-005` | `requirements/NFR.md` | MAPPED | Performance | `standards/Performance-Standard.md` | `PERF-EXEC-001` | `evidence/performance/PERF-EXEC-001/` |
 | `NFR-COMP-001` | `requirements/NFR.md` | MAPPED | API Contracts | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-COMPAT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-COMPAT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-COMPAT-003` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-COMPAT-004` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
-| `NFR-PORT-001` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `docs/ENVIRONMENT_SETUP.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
-| `NFR-PORT-002` | `requirements/NFR.md` | MAPPED | Platform Infrastructure | `docs/ENVIRONMENT_SETUP.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-COMPAT-001` | `requirements/NFR.md` | MAPPED | Compatibility & Versioning | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-COMPAT-002` | `requirements/NFR.md` | MAPPED | Compatibility & Versioning | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-COMPAT-003` | `requirements/NFR.md` | MAPPED | Compatibility & Versioning | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-COMPAT-004` | `requirements/NFR.md` | MAPPED | Compatibility & Versioning | `VERSIONING.md` | `RT-CONTRACT-001` | `evidence/regression/RT-CONTRACT-001/` |
+| `NFR-PORT-001` | `requirements/NFR.md` | MAPPED | Environment & Portability | `docs/ENVIRONMENT_SETUP.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `NFR-PORT-002` | `requirements/NFR.md` | MAPPED | Environment & Portability | `docs/ENVIRONMENT_SETUP.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `NFR-ENV-001` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `NFR-ENV-002` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `NFR-ENV-003` | `requirements/NFR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |

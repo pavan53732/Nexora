@@ -19,13 +19,13 @@
 **Goal:** Bootable app with navigation, theme, settings, core interfaces. No AI yet.
 
 - Android project scaffold (Kotlin, Gradle, Material 3)
-- Navigation framework (workspace-first, no infrastructure tabs)
+- Workspace-first navigation (bottom navigation, workspace tabs, side drawer, and deep links)
 - Agent-first chat UI (goal entry, streaming responses, activity feed)
 - Theme system (dark mode first, Material You)
 - Settings screen
 - Workspace Manager (create, switch, archive, delete)
 - File Manager (browse virtual file system)
-- Plugin Framework interfaces
+- Plugin interface, capability registration, and SDK contracts
 - Runtime interfaces (planner, executor, tool manager contracts)
 - Tool interfaces (generic Tool contract)
 - AI Provider interfaces (provider abstraction)
