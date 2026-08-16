@@ -81,7 +81,7 @@ To resolve semantic ambiguity and ensure behavioral equivalence, Nexora strictly
 | `finalize()` | Completing | Completed | Artifacts and required memory/history persistence committed; resources released; terminal event ready. |
 | `fail(error)` | * | Failed | Non-recoverable exception |
 | `cancel()` | * | Cancelled | — |
-| `retry()` | Failed | Ready | Max retries not exceeded; creates a new runtime incarnation/version and execution identity while preserving the failed predecessor and stable registered `agentId` |
+| `retry()` | Failed | Ready | Max incarnations not exceeded (default 3 per registered agent per task, matching NXR-1005's restart limit); creates a new runtime incarnation/version and execution identity while preserving the failed predecessor and stable registered `agentId` |
 
 ### DEC-35 Approval Projection
 
@@ -151,7 +151,7 @@ An invalid transition MUST return a canonical error without changing persisted s
 
 ## Implementation Notes
 
-The lifecycle is enforced by `AgentStateMachine` in the core module. Every state transition fires an `AgentStateEvent` onto the shared event bus, enabling logging, metrics, and UI reactivity. Guards are evaluated synchronously on the caller thread; async validation should complete before invoking the trigger.
+The lifecycle is enforced by `AgentStateMachine` in the runtime module. Every state transition fires an `AgentStateEvent` onto the shared event bus, enabling logging, metrics, and UI reactivity. Guards are evaluated synchronously on the caller thread; async validation should complete before invoking the trigger.
 
 ### Delegation and Sub-Agent State
 

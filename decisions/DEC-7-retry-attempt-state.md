@@ -150,7 +150,7 @@ The first valid reconciliation commits one recovery result. A later observation 
 
 **Classification:** ARCHITECTURE DECISION; schema placement is documented, not implemented.
 
-**Caveat:** This decision does not define entity names, columns, indexes, keys, DAO operations, migrations, SQL, or retention duration. Those remain future implementation/specification work.
+**Caveat:** The storage shape of this artifact (entity name, columns, keys, indexes, and status semantics) is defined by the `recovery_evidence` table in `specs/DATABASE_SCHEMA.md`. Concrete DAO operations, migrations, SQL, and post-reconciliation retention duration remain future implementation/specification work.
 
 **Implementation status:** NOT IMPLEMENTED; documentation-only architecture closure.
 

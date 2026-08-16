@@ -121,7 +121,7 @@ details.
 
 ## Implementation Notes
 
-Enforced by `TerminalSessionStateMachine` in the core module. Every transition fires a
+Enforced by `TerminalSessionStateMachine` in the runtime module. Every transition fires a
 `TerminalSessionStateEvent` on the event bus. Subprocess/PTY management and sandbox
 isolation are owned by [../specs/TERMINAL.md](../specs/TERMINAL.md) and
 [../architecture/SANDBOX.md](../architecture/SANDBOX.md); this file owns only terminal

@@ -59,16 +59,18 @@ The semantic persistence requirements are:
 
 ### `conversation`
 
-The authoritative relational schema for Conversations, fulfilling DEC-13, DEC-15, and DEC-21 storage requirements.
+The authoritative relational schema for Conversations. It stores the durable identity and lineage fields required by DEC-13 (durable immutable Conversation identity), DEC-9/DEC-22 (branch provenance references), and DEC-21 (continuation with preserved identity). Lifecycle status is governed by `state-machines/ConversationLifecycle.md`; the semantic contract remains owned by `architecture/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md`, and DEC-13 through DEC-21. This table does not select Session–Conversation relationship identity (DEC-17) and does not establish conversation-local metadata fields beyond DEC-24's semantic categories.
 
 | Column | Type | Notes |
 |--------|------|-------|
-| id | TEXT PK | Stable conversation ID |
+| id | TEXT PK | Stable durable immutable Conversation identity (DEC-13) |
 | workspaceId | TEXT FK → workspace.id | Tenant scope |
-| sessionId | TEXT NULL | Associated session ID |
-| title | TEXT | Conversation title |
-| status | TEXT | Active / archived / deleted status |
-| version | INTEGER | Monotonic version |
+| sessionId | TEXT NULL | Implementation projection of the active Session–Conversation association (DEC-19/DEC-21); not a relationship identity (DEC-17) |
+| sourceConversationId | TEXT NULL | Rollback source Conversation reference (DEC-9 lineage) |
+| sourceCheckpointId | TEXT NULL | Rollback source checkpoint reference (DEC-9 lineage) |
+| latestCheckpointId | TEXT NULL | Most recent ConversationCheckpoint reference |
+| status | TEXT | Maps ConversationStatus (ACTIVE/ARCHIVED/DELETED) per `state-machines/ConversationLifecycle.md` |
+| recordVersion | INTEGER | Monotonic version; optimistic guard and event-deduplication key |
 | createdAt | TEXT | ISO-8601 UTC |
 | updatedAt | TEXT | ISO-8601 UTC |
 | correlationId | TEXT | Correlation trace ID |
@@ -85,8 +87,11 @@ The authoritative relational schema for background terminal sessions, fulfilling
 | taskId | TEXT FK → task.id | Parent task binding |
 | executionId | TEXT | Parent execution binding |
 | correlationId | TEXT | Correlation trace ID |
-| status | TEXT | TerminalSessionStatus (Detached/Attached/Running/Terminated) |
+| status | TEXT | Maps TerminalSessionStatus (CREATED/ATTACHED/RUNNING/DETACHED/CLOSED/FAILED) per `state-machines/TerminalSessionLifecycle.md` |
+| suspended | INTEGER | 0/1 — `Detached` with `suspended=true` marks an interactive-timeout detach (not a separate state) |
+| restoreCheckpoint | TEXT NULL | Checkpoint ID for FR-AS-007 restore path |
 | effectiveDeadline | TEXT | ISO-8601 UTC deadline |
+| cleanupDisposition | TEXT | Reconciliation outcome recorded by the DEC-34 cleanup worker (e.g. parent-terminal, parent-missing, deadline-expired, cleanup-failed) before orphan process removal |
 | createdAt | TEXT | ISO-8601 UTC |
 | updatedAt | TEXT | ISO-8601 UTC |
 | INDEX idx_terminal_session_task | — | Supports parent binding and reconciliation |
@@ -162,7 +167,24 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 
 ## Execution & Recovery
 
-> **DEC-7 R4 placement:** Durable process-death recovery evidence is a dedicated Room recovery-evidence artifact, conceptually separate from the `task`, `execution`, `execution_checkpoint`, `execution_replay`, and lifecycle-history stores. It is not durable RetryPending state. This documentation establishes semantic placement only; entity names, columns, keys, indexes, DAO operations, migrations, SQL, and retention duration are not defined or implemented here. Unreconciled evidence must remain available until the recovery outcome is durably established.
+> **DEC-7 R4 placement:** Durable process-death recovery evidence is a dedicated Room recovery-evidence artifact, conceptually separate from the `task`, `execution`, `execution_checkpoint`, `execution_replay`, and lifecycle-history stores. It is not durable RetryPending state. The `recovery_evidence` table below defines its storage shape; eligibility, idempotency, and reconciliation semantics remain owned by `decisions/DEC-7-retry-attempt-state.md` (DEC-7.7 through DEC-7.12). Unreconciled evidence must remain available until the recovery outcome is durably established.
+
+### `recovery_evidence` (DEC-7 R4)
+
+The dedicated process-death recovery-evidence artifact selected by DEC-7.12. Each row records one eligible R4 observation; reconciliation commits exactly one recovery result per Task/Execution pair (DEC-7.9).
+
+| Column | Type | Notes |
+|--------|------|-------|
+| evidenceId | TEXT PK | Stable evidence identity |
+| taskId | TEXT FK → task.id | Affected Task identified by the evidence |
+| executionId | TEXT FK → execution.executionId | Preserved existing Execution identified by the evidence |
+| workspaceId | TEXT FK | Tenant scope |
+| correlationId | TEXT | Correlated recovery operations |
+| retryPendingProvenance | TEXT | Durable proof of the relevant RetryPending provenance required by DEC-7.9 eligibility |
+| status | TEXT | Maps RecoveryEvidenceStatus (UNRECONCILED/RECONCILED/REJECTED); first valid reconciliation commits one result, later conflicting observations are REJECTED as stale |
+| occurredAt | TEXT | ISO-8601 UTC evidence observation time |
+| reconciledAt | TEXT NULL | Set when reconciliation durably commits the recovery outcome |
+| INDEX idx_recovery_evidence_task_status | — | Supports startup reconciliation scan for unreconciled evidence |
 
 ### `execution`
 | Column | Type | Notes |
@@ -493,8 +515,10 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | dependsOnJson | TEXT | |
 | bodyStepsJson | TEXT NULL | Iterative loop body |
 | maxIterations | INTEGER NULL | |
+| iterationIndex | INTEGER NOT NULL DEFAULT 0 | Durable iterative-step progress; incremented before the iteration event is published |
 | convergenceCondition | TEXT NULL | |
 | createdAt | TEXT | |
+| updatedAt | TEXT | |
 
 ---
 

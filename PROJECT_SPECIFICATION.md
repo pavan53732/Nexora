@@ -345,7 +345,6 @@ Nexora/
 │   ├── TOOL_MATRIX.md
 │   └── AGENT_MATRIX.md
 ├── android/                # Planned implementation module (Phase 1; not present in the current documentation-only snapshot)
-├── core/                   # Core interfaces and abstractions
 ├── runtime/                # Planned implementation module (Phase 2; not present in the current documentation-only snapshot)
 ├── sandbox/                # Planned implementation module (Phase 3; not present in the current documentation-only snapshot)
 ├── tools/                  # Planned implementation module (Phase 4; not present in the current documentation-only snapshot)

@@ -117,7 +117,7 @@ details.
 
 ## Implementation Notes
 
-Enforced by `MemoryStateMachine` in the core module. Every transition fires a
+Enforced by `MemoryStateMachine` in the runtime module. Every transition fires a
 `MemoryStateEvent` on the event bus. Vector/FTS indexing and storage are owned by
 [../architecture/MEMORY_SYSTEM.md](../architecture/MEMORY_SYSTEM.md); this file owns only
 memory state.

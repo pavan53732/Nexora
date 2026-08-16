@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 177 requirement rows are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. The previously duplicated context-integrity meanings are now represented by the distinct canonical identities `NFR-CI-006` and `NFR-CI-007`; `NFR-PERF-006` remains battery impact and `NFR-REL-004` remains data persistence.
+This ledger makes requirement coverage explicit before detailed owner-to-contract mapping is completed. Each requirement is marked `UNMAPPED` until it has a primary owner, derived contracts, validation case IDs, and evidence reference in `docs/TRACEABILITY.md`. **Current corpus state:** all 327 requirement rows (245 FR + 82 NFR) are `MAPPED`; this records documentation-level coverage and does not claim source implementation or executed evidence. The previously duplicated context-integrity meanings are now represented by the distinct canonical identities `NFR-CI-006` and `NFR-CI-007`; `NFR-PERF-006` remains battery impact and `NFR-REL-004` remains data persistence.
 
 ## Functional Requirements
 
@@ -144,6 +144,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-S024` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `FR-S025` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `FR-S026` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
+| `FR-S027` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `FR-S028` | `requirements/FR.md` | MAPPED | Sandbox | `specs/FULL_ENVIRONMENT.md` | `RT-MIG-001` | `evidence/regression/RT-MIG-001/` |
 | `FR-TE001` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
 | `FR-TE002` | `requirements/FR.md` | MAPPED | Sandbox | `specs/TERMINAL.md` | `IT-TOOL-001` | `evidence/integration/IT-TOOL-001/` |
@@ -245,6 +246,15 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-MI-008` | `requirements/FR.md` | MAPPED | Security | `security/PermissionModel.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
 | `FR-MI-009` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-MI-010` | `requirements/FR.md` | MAPPED | UI/UX | `specs/PIPES.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-CB001` | `requirements/FR.md` | MAPPED | Conversation/Session | `architecture/CONVERSATION_CHECKPOINTS.md` | `UT-CONV-001`, `IT-CONV-001` | `evidence/unit/UT-CONV-001/`, `evidence/integration/IT-CONV-001/` |
+| `FR-CB002` | `requirements/FR.md` | MAPPED | Conversation/Session | `architecture/CONVERSATION_CHECKPOINTS.md` | `UT-CONV-002` | `evidence/unit/UT-CONV-002/` |
+| `FR-CB003` | `requirements/FR.md` | MAPPED | Conversation/Session | `architecture/CONVERSATION_CHECKPOINTS.md` | `UT-CONV-004`, `IT-CONV-002` | `evidence/unit/UT-CONV-004/`, `evidence/integration/IT-CONV-002/` |
+| `FR-CB004` | `requirements/FR.md` | MAPPED | Conversation/Session + Security | `architecture/CONVERSATION_CHECKPOINTS.md` | `UT-CONV-003`, `IT-CONV-003` | `evidence/unit/UT-CONV-003/`, `evidence/integration/IT-CONV-003/` |
+| `FR-CB005` | `requirements/FR.md` | MAPPED | Conversation/Session | `architecture/CONVERSATION_CHECKPOINTS.md` | `UT-CONV-005`, `IT-CONV-005` | `evidence/unit/UT-CONV-005/`, `evidence/integration/IT-CONV-005/` |
+| `FR-CB006` | `requirements/FR.md` | MAPPED | Conversation/Session + Runtime | `architecture/CONVERSATION_CHECKPOINTS.md` | `UT-CONV-006`, `IT-CONV-006`, `IT-CONV-007` | `evidence/unit/UT-CONV-006/`, `evidence/integration/IT-CONV-006/`, `evidence/integration/IT-CONV-007/` |
+| `FR-SK001` | `requirements/FR.md` | MAPPED | Skill Registry | `decisions/DEC-11-skill-lifecycle.md` | `UT-SKILL-001` | `evidence/unit/UT-SKILL-001/` |
+| `FR-SK002` | `requirements/FR.md` | MAPPED | Agent Runtime + Skill Registry | `decisions/DEC-11-skill-lifecycle.md` | `UT-SKILL-002` | `evidence/unit/UT-SKILL-002/` |
+| `FR-SK003` | `requirements/FR.md` | MAPPED | Security + Skill Registry | `decisions/DEC-11-skill-lifecycle.md` | `UT-SKILL-003`, `SEC-PERM-001` | `evidence/unit/UT-SKILL-003/`, `evidence/security/SEC-PERM-001/` |
 
 ## Non-Functional Requirements
 
@@ -336,4 +346,3 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 ## Completion Rule
 
 A row may move from `UNMAPPED` only when the requirement is linked to a canonical primary artifact, at least one validation case, and an evidence path or an explicitly recorded reason why evidence is not yet available.
-| `FR-S027` | `requirements/FR.md` | MAPPED | Sandbox | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |

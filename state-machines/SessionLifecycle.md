@@ -48,6 +48,18 @@ EXPIRED
 | `expireNow` | `IDLE` | `EXPIRED` | Authorized admin/system actor |
 | `expireNow` | `ACTIVE` | `EXPIRED` | Authorized actor AND no active nonterminal Task/Execution; otherwise cancel or detach first |
 
+## TTL Defaults
+
+The `idleTimeout` guards use the following default durations; workspace settings MAY shorten them but MUST NOT disable expiration entirely.
+
+| Guard | Default | Meaning |
+|---|---|---|
+| `CREATED → EXPIRED` idle TTL | 24 hours | A created-but-never-started Session with no activity expires after 24 h |
+| `ACTIVE → IDLE` idle TTL | 30 minutes | No active task or agent interaction for 30 min demotes to `IDLE` |
+| `IDLE → EXPIRED` retention TTL | 7 days | An idle Session is retained 7 days from entering `IDLE`, then expires |
+
+`session.expiresAt` (`specs/DATABASE_SCHEMA.md`) records the computed expiry for the current state.
+
 ## Terminal States
 
 `CLOSED` and `EXPIRED` are terminal. No transition exits a terminal state. Reopening a terminal Session creates a new Session identity.
@@ -84,4 +96,4 @@ An invalid transition returns a canonical error without changing persisted state
 
 ## Implementation Notes
 
-The lifecycle is enforced by `SessionStateMachine` in the core module. Guards are evaluated synchronously. Session state is persisted in Room with versioned optimistic concurrency — a conflicting version on commit returns a canonical error.
+The lifecycle is enforced by `SessionStateMachine` in the runtime module. Guards are evaluated synchronously. Session state is persisted in Room with versioned optimistic concurrency — a conflicting version on commit returns a canonical error.

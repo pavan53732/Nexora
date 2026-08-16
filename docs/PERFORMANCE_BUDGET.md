@@ -97,6 +97,43 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 3. **Merge gate** — Any regression exceeding **20 %** from the baseline blocks merge to the release branch. The author must either fix the regression or provide a documented exception with a remediation plan.
 4. **Release gate** — Any metric at or above its **Critical** threshold blocks the release entirely. No exceptions without sign-off from the tech lead.
 
+## Benchmark Result Record
+
+Every benchmark run MUST emit one JSON document per case with the following record shape. Field names are normative; additional fields MAY be appended but MUST NOT replace required fields.
+
+```json
+{
+  "caseId": "PERF-START-001",
+  "suite": "PERF-START",
+  "runId": "string",
+  "occurredAt": "ISO-8601 UTC",
+  "deviceClass": "string",
+  "androidVersion": "string",
+  "buildChannel": "string",
+  "networkCondition": "string",
+  "providerProfileId": "string | null",
+  "modelId": "string | null",
+  "metrics": [
+    {
+      "name": "coldStartMs",
+      "value": 0,
+      "unit": "ms",
+      "percentile": "P50 | P95 | P99 | null",
+      "target": 0,
+      "warning": 0,
+      "critical": 0,
+      "verdict": "PASS | WARNING | CRITICAL"
+    }
+  ],
+  "verdict": "PASS | WARNING | CRITICAL | ERROR",
+  "evidenceRefs": ["evidence/performance/<caseId>/"]
+}
+```
+
+- `metrics[].target/warning/critical` MUST be copied from the budget table row that owns the metric, so a result record is self-contained for threshold evaluation.
+- `verdict` is `CRITICAL` if any metric verdict is `CRITICAL`, `WARNING` if any is `WARNING` and none is `CRITICAL`, otherwise `PASS`; `ERROR` marks a run that could not measure.
+- Latency-sensitive metrics MUST retain P50, P95, and P99 where the case inventory requires percentiles.
+
 
 ## Rootfs & Environment Performance Budget
 

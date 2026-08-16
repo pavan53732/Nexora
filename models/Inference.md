@@ -74,6 +74,20 @@ data class ReasoningPolicy(
 // the Context Management / Agent Runtime policy boundary before this policy is
 // accepted. Cost and usage metadata remain observable outside this execution policy;
 // no internal credit or financial-cost gate is represented here.
+```
+
+**Per-effort-level ceilings (non-overridable).** The table below selects the maximum `ReasoningPolicy` values for each effort level (`specs/CONTEXT_MANAGEMENT.md` §Reasoning Effort Scale). Task, agent, workspace, and global settings MAY reduce any value but MUST NOT increase it; over-ceiling policies are rejected before execution. `maxRepairCycles` never exceeds 3 (FR-AS-003). `maxReasoningTokens` is bounded by `TokenBudget.maxTokensPerRequest` (`architecture/AGENT_RUNTIME.md` §Token Budgeting).
+
+| Effort | maxProviderCalls | maxReasoningTokens | maxToolCalls | maxRepairCycles | verifierPasses | maxWallClockMs |
+|---|---:|---:|---:|---:|---:|---:|
+| `OFF` | 20 | 0 | 50 | 1 | 0 | 600 000 (10 min) |
+| `LOW` | 30 | 2 048 | 75 | 2 | 1 | 1 200 000 (20 min) |
+| `MEDIUM` | 50 | 4 096 | 100 | 3 | 1 | 1 800 000 (30 min) |
+| `HIGH` | 75 | 8 192 | 150 | 3 | 2 | 2 700 000 (45 min) |
+| `X_HIGH` | 100 | 16 384 | 200 | 3 | 2 | 3 600 000 (60 min) |
+| `MAX` | 150 | 32 768 | 300 | 3 | 3 | 5 400 000 (90 min) |
+
+```kotlin
 
 data class ReasoningSummary(
     val summaryId: String,

@@ -33,6 +33,7 @@ enum class ExecutionStatus {
     CANCELLED
 }
 
+// ExecutionPhase is canonically defined here; models/Task.md references this enum.
 enum class ExecutionPhase {
     REQUIREMENT_ANALYSIS,
     PLANNING,
@@ -61,6 +62,8 @@ data class CanonicalErrorEnvelope(
     val details: JsonObject? = null
 )
 ```
+
+> **Canonical envelope ownership:** This is the single model-level definition of `CanonicalErrorEnvelope`; other models (e.g. `models/Task.md`) reference it rather than redefining it. The semantic contract — field responsibilities, categories, and recovery metadata — is owned by [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
 
 
 ## Retry Lineage

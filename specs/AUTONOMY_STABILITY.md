@@ -121,10 +121,11 @@ Autonomy expands with a **trust score** instead of jumping straight to autopilot
 
 | Input | Effect |
 |-------|--------|
-| Successful low-risk calls | + small increment |
-| Successful milestone completions | + larger increment |
-| Verified final results | + large increment |
-| Failed steps, safety violations, denied approvals | − decrement; repeated → autonomy drops a mode (Autopilot → Assisted → Manual) |
+| Successful low-risk calls | +1 |
+| Successful milestone completions | +5 |
+| Verified final results | +10 |
+| Failed steps | −5 |
+| Safety violations, denied approvals | −10; repeated → autonomy drops a mode (Autopilot → Assisted → Manual) |
 
 - Trust is per agent + per workspace; resets are explicit (user can reset trust).
 - Autonomy mode selection: `Manual / Assisted / Autopilot` (FR-S016) is *offered* by
@@ -132,8 +133,11 @@ Autonomy expands with a **trust score** instead of jumping straight to autopilot
 
 The semantic trust projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
 Trust is scoped to `(agentId, workspaceId)` and retains update/reset provenance. The score
-scale, update increments, decay, thresholds, and reset baseline remain unselected by this
-specification. Trust may offer a mode but MUST NOT override user selection, permission
+scale (integer 0–100, default initial baseline 50), the update increments and decrements
+(table above), the mode thresholds (`MANUAL` 0–39, `ASSISTED` 40–74, `AUTOPILOT` 75–100),
+and the explicit-reset baseline (50) are selected by that derived model projection. No
+time-based decay is selected; score changes are event-driven only. Trust may offer a mode
+but MUST NOT override user selection, permission
 scopes, applicable canonical denial or classification outcomes, human approval, workspace
 isolation, or provider/device/resource ceilings. Android degraded mode may force `Manual`
 independently of trust. The retired local classifier is not part of this contract.
@@ -216,7 +220,7 @@ interval = base × 2^attempt × random(0.5…1.5)
 
 - **base**: 1 s for provider calls, 5 s for sandbox process calls (FR-TL005)
 - **attempts**: capped at 3 retries (attempt=0, attempt=1, attempt=2) per [NFR-REL-003](../requirements/NFR.md) (NFR-REL-003 row)
-- **No max interval cap**: the retry interval policy does not impose a ceiling beyond the exponential jitter formula. Provider-stream liveness timers (`firstByteTimeout`, `interTokenTimeout`) are a separate, unconstrained timer domain and do not bound retry backoff delays.
+- **No separate max-interval constant**: the retry interval policy imposes no cap constant beyond the exponential jitter formula. Because attempts are capped at 3, the formula itself bounds every interval: the largest possible interval is `base × 2² × 1.5` — **6 s for provider calls** and **30 s for sandbox process calls**. No retry wait can exceed these derived bounds, and every wait remains bounded by the parent effective deadline (DEC-30). Provider-stream liveness timers (`firstByteTimeout`, `interTokenTimeout`) are a separate, unconstrained timer domain and do not bound retry backoff delays.
 - After all retries exhausted: route through plan repair (§1 item **b**) or task-scoped
   failure ledger `BLACKLISTED_UNTIL_TASK_END` (§9.5); never an unconditional retry.
 - Non-retryable timeouts commit terminal `FAILED` with `latestError` and surface to

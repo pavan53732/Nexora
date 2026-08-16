@@ -16,7 +16,7 @@ Two approaches:
 
 ## Decision
 
-Nexora uses a **provider abstraction layer**. The `AIProvider` interface is defined in `core/`:
+Nexora uses a **provider abstraction layer**. The `AIProvider` interface is defined in the `providers` module (`com.nexora.app.providers`, per `docs/MODULE_BOUNDARIES.md`):
 
 ```kotlin
 interface AIProvider {

@@ -41,6 +41,8 @@ data class AgentOutput(
 )
 ```
 
+> **Referenced types:** `TokenBudget` is defined in [../architecture/AGENT_RUNTIME.md](../architecture/AGENT_RUNTIME.md) (§Token Budgeting); `AgentCheckpoint` is defined in [../architecture/RUNTIME.md](../architecture/RUNTIME.md) (§Checkpoint System); `CanonicalErrorEnvelope` is defined in [../models/Execution.md](../models/Execution.md) with its semantic contract owned by [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
+
 ## Grounding & Anti-Hallucination Enforcements
 
 Custom agents extending the SDK are bound by the Evidence & Validation Engine's anti-hallucination rules:

@@ -13,11 +13,20 @@ data class Conversation(
     val sourceConversationId: String? = null,
     val sourceCheckpointId: String? = null,
     val recordVersion: Long,
+    val status: ConversationStatus,
     val createdAt: Instant,
     val updatedAt: Instant,
     val latestCheckpointId: String? = null
 )
+
+enum class ConversationStatus {
+    ACTIVE,
+    ARCHIVED,
+    DELETED
+}
 ```
+
+`ConversationStatus` lifecycle is canonically owned by `state-machines/ConversationLifecycle.md`; the `conversation` table in `specs/DATABASE_SCHEMA.md` persists it.
 
 ## Purpose
 

@@ -111,7 +111,7 @@ details.
 
 ## Implementation Notes
 
-Enforced by `WorkspaceStateMachine` in the core module. Every transition fires a
+Enforced by `WorkspaceStateMachine` in the runtime module. Every transition fires a
 `WorkspaceStateEvent` on the event bus. Sandbox provisioning/teardown is owned by
 [../architecture/SANDBOX.md](../architecture/SANDBOX.md); this file owns only workspace
 state.

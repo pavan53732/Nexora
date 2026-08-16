@@ -80,8 +80,21 @@ Before queueing a task or workflow step, dependency references MUST be validated
 
 ### Plan and acceptance artifact boundary
 
-`ExecutionPlan` and `PlanStep` are the existing semantic plan projections. Long-running tasks operate as a **Recursive Task Graph** where agents can dynamically spawn sub-plans, split blocked tasks, re-estimate token/time budgets, and prune obsolete branches when requirements shift. Before queueing, each plan step MUST have a stable step identity, objective, dependency position, required capabilities/tools, expected artifact or result, and pass/fail acceptance criteria.
- The Planner may derive criteria from the declared Task goal and constraints, but completion MUST re-check the declared criteria rather than infer success from activity, text output, file count, or provider completion alone. A plan repair MUST preserve the current execution identity and checkpoint lineage while recording the verified failure or changed constraint that justified the revision; a repair is not substantive progress unless it improves an acceptance criterion, relevant evidence, verification result, or declared scope. Concrete storage, DTO, serialization, and plan-version representation remain downstream choices within these semantic invariants.
+`ExecutionPlan` and `PlanStep` are the existing semantic plan projections (defined in `architecture/RUNTIME.md` §ExecutionPlan). Long-running tasks operate as a **Recursive Task Graph** where agents can dynamically spawn sub-plans, split blocked tasks, re-estimate token/time budgets, and prune obsolete branches when requirements shift. Before queueing, each plan step MUST have a stable step identity, objective, dependency position, required capabilities/tools, expected artifact or result, and pass/fail acceptance criteria.
+
+**AcceptanceCriterion model.** Each declared acceptance criterion carries the following semantic shape; the Agent Runtime owns the vector (`architecture/AGENT_RUNTIME.md` §Agent State):
+
+```kotlin
+data class AcceptanceCriterion(
+    val criterionId: String,          // stable identity within the task
+    val description: String,          // pass/fail condition derived from goal/constraints
+    val source: String                // goal-derived, constraint-derived, or user-declared
+)
+```
+
+`AcceptanceCriterionProgress` (`criterionId`, `status: CriterionStatus`, `evidenceRefs`) tracks each criterion through `UNASSESSED`, `IN_PROGRESS`, `PASSED`, `FAILED` as defined in `architecture/AGENT_RUNTIME.md`. The Planner may derive criteria from the declared Task goal and constraints, but completion MUST re-check the declared criteria rather than infer success from activity, text output, file count, or provider completion alone. Criteria are not supplied by a separate task-start field.
+
+**Persistence home.** The durable projection is carried by the existing checkpoint schema (`specs/DATABASE_SCHEMA.md`): `execution_checkpoint.acceptanceProgressJson` stores the `AcceptanceProgressVector` with evidence references, and `execution_checkpoint.variablesJson` carries the serialized `AgentCheckpoint` state including `plan: ExecutionPlan` (`architecture/RUNTIME.md` §Checkpoint System). Plan repair MUST preserve the current execution identity and checkpoint lineage while recording the verified failure or changed constraint that justified the revision; a repair is not substantive progress unless it improves an acceptance criterion, relevant evidence, verification result, or declared scope. Concrete storage, DTO, serialization, and plan-version representation remain downstream choices within these semantic invariants.
 
 ## 2. Software Engineering Pipeline
 

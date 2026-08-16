@@ -3,8 +3,9 @@
 > This is a derived model projection for the semantic contracts owned by
 > [../specs/AUTONOMY_STABILITY.md](../specs/AUTONOMY_STABILITY.md) and
 > [../requirements/FR.md](../requirements/FR.md) (`FR-AS-004` and `FR-AS-005`).
-> It defines required semantic data, not a selected storage technology, database
-> schema, transport, or numeric trust threshold.
+> It defines required semantic data, including the selected numeric trust scale,
+> increments, thresholds, and reset baseline below. It does not select a storage
+> technology, database schema, or transport.
 
 ## Learning Lesson
 
@@ -67,8 +68,8 @@ Android background execution may force `MANUAL` as specified by
 
 ## Reset and Audit Invariants
 
-An explicit user reset replaces the applicable trust state with the repository's
-selected reset baseline; this model does not select the baseline value. Trust
+An explicit user reset replaces the applicable trust state with the selected reset
+baseline score of 50 (the default initial baseline). Trust
 updates and resets must retain agent identity, workspace identity, source execution
 or user-action provenance, and an audit reference. A lesson approval, rejection,
 retirement, trust update, or reset must be distinguishable from an ordinary task

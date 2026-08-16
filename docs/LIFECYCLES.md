@@ -93,4 +93,18 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 **Stop & Restore.** On agent completion, failure, or cancellation the service stops, the notification is removed, and the wake lock is released. Checkpointed executions follow the canonical checkpoint-resume path in `specs/BACKGROUND_EXECUTION.md`. Autonomous background terminal sessions are bound to their parent Task/Execution and effective deadline under DEC-34; parent cancellation, terminal state, or deadline expiry invokes terminal termination/checkpoint recovery, and missing or terminal parents are reconciled without adding lifecycle states. A Task that was in ephemeral `RetryPending` is not reconstructed as RetryPending; DEC-7 process-death recovery uses eligible R4 evidence, preserves the existing Execution, reconciles the Task to `Queued`, and then returns it to normal scheduling.
 
 
+## 8. Conversation Lifecycle
+
+*See canonical state machine: [../state-machines/ConversationLifecycle.md](../state-machines/ConversationLifecycle.md)*
+
+**Creation.** A Conversation row is created in `ACTIVE` with a durable immutable identity (DEC-13). Rollback from a checkpoint creates a new Conversation identity with recorded source lineage (DEC-9, DEC-22); the source Conversation remains preserved and addressable.
+
+**Active Use.** An `ACTIVE` Conversation accepts new turns and checkpoints. Session association follows DEC-19/DEC-21; Session `CLOSED`/`EXPIRED` ends only the active association, never the Conversation identity (DEC-20).
+
+**Archival.** `archive()` moves the Conversation to `ARCHIVED`: read-only, preserved, excluded from active prompt context by default. `restore()` returns it to `ACTIVE`.
+
+**Deletion.** `delete()` soft-deletes the Conversation into terminal `DELETED`, subject to DEC-23/DEC-31 retention and lineage dependency protection. `DELETED` is terminal.
+
+---
+
 > **S3 — Lifecycle specification (Option A):** All 4 lifecycle files (`WorkspaceLifecycle.md`, `SessionLifecycle.md`, `MemoryLifecycle.md`, `TerminalSessionLifecycle.md`) now contain expanded state definitions, transition rules, and dependency references. Three new canonical state-machine companions added in `state-machines/`: `WorkspaceLifecycle.md` (Created/Active/Suspended/Archived/Deleted), `MemoryLifecycle.md` (Recorded/Indexed/Retrieved/Retained/Expired/Deleted), `TerminalSessionLifecycle.md` (Created/Attached/Running/Detached/Closed/Failed). Canonical ownership preserved (`docs/CANONICAL_SOURCES.md` updated; `ARCHITECTURE.md` references updated). `DECISION_LOG.md` DL-027 (S3 lifecycle fill — Option A), DL-029 (S3-E state machines); `CHANGELOG.md` updated; `FR_NFR_MAPPING.md` references `FR-EL-007` (parallelism), `FR-AS-007` (idempotent recovery), `FR-M001` (memory lifecycle), `FR-TE001` (terminal session).

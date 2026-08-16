@@ -45,41 +45,15 @@ enum class TaskStatus {
     RETRY_PENDING
 }
 
-enum class ExecutionPhase {
-    REQUIREMENT_ANALYSIS,
-    PLANNING,
-    TASK_DECOMPOSITION,
-    AGENT_SELECTION,
-    SKILL_SELECTION,
-    TOOL_SELECTION,
-    DEPENDENCY_RESOLUTION,
-    EXECUTION,
-    BUILD,
-    STATIC_ANALYSIS,
-    TESTING,
-    VERIFICATION,
-    COMPLETION_REPORTING
-}
-
 enum class TaskPriority {
     LOW,
     NORMAL,
     HIGH,
     CRITICAL
 }
-
-data class CanonicalErrorEnvelope(
-    val code: String,              // e.g. "NXR-1005"
-    val category: String,          // Client, Server, Infrastructure
-    val message: String,           // Redacted human-readable explanation
-    val retryability: String,      // NEVER, SAFE, CONDITIONAL
-    val idempotency: String,       // SAFE, UNSAFE, IDEMPOTENT_KEY
-    val lifecycleEffect: String,   // State transition or NO_CHANGE
-    val recoveryOwner: String,     // Component responsible for recovery
-    val correlationId: String,     // Tracing correlation identifier
-    val details: JsonObject? = null // Redacted extra context
-)
 ```
+
+> **Shared type ownership:** `ExecutionPhase` is defined once, canonically, in [Execution.md](./Execution.md); Task's `phase` field references that same enum and MUST NOT be redefined here. `CanonicalErrorEnvelope` is likewise defined once in [Execution.md](./Execution.md) as the model-level shape of the canonical envelope whose semantic contract (fields, categories, recovery metadata) is owned by [../errors/ERROR_CODES.md](../errors/ERROR_CODES.md).
 
 
 > **DEC-7 (2026-08-11):** `TaskStatus.RETRY_PENDING` remains a Task lifecycle state, but retry-attempt indexing is not stored on Task. The authoritative retry-attempt index is `Execution.retryAttempt`, and RetryPending is EPHEMERAL. See [../decisions/DEC-7-retry-attempt-state.md](../decisions/DEC-7-retry-attempt-state.md).

@@ -156,8 +156,19 @@ data class ToolMetadata(
 To prevent inconsistent workspace states when tool calls fail mid-execution, Nexora provides an **Atomic Side-Effect Capability**:
 
 1. **Atomic Operation Bundles:** Mutating tool calls can be grouped into atomic bundles. A failure within a bundle triggers a workspace rollback to the last known-good state, ensuring data consistency.
-2. **Durable Intent Logging:** Mutating operations are recorded in persistent tool invocation records (`models/ToolInvocation.md`, `specs/DATABASE_SCHEMA.md`) before execution. This allows the runtime to reconcile `UNKNOWN_COMPLETION` states during recovery, preventing duplicate side effects or silent failures.
+2. **Durable Intent Logging:** Mutating operations are recorded in persistent tool invocation records (`models/ToolInvocation.md`; persisted via the `tool_call` and append-only `tool_record` tables in `specs/DATABASE_SCHEMA.md`) before execution. This allows the runtime to reconcile `UNKNOWN_COMPLETION` states during recovery, preventing duplicate side effects or silent failures.
 3. **Idempotency Enforcement:** Non-idempotent operations are managed through unique idempotency keys, ensuring that retries do not result in redundant side effects. Exact table serialization remains a downstream implementation choice.
+
+**Persistence mapping.** The Atomic Side-Effect Capability does not require a new table; its durability is carried by existing canonical schema in `specs/DATABASE_SCHEMA.md`:
+
+| Mechanism | Persistence home |
+|---|---|
+| Atomic Operation Bundles (workspace rollback) | Room transaction boundary plus `file_version` history (`blobRef` → sandbox `files/.history/`) for file-state rollback |
+| Durable Intent Logging | `tool_call` (live invocation state) + append-only `tool_record` (durable result meta) |
+| Idempotency Enforcement | `execution_replay.inputHash` dedupe key + `tool_call.idempotent` flag; recovery replays only uncompleted calls |
+| Write-ahead log / transaction kernel | Room's own ACID transaction and WAL journal mode (NFR-REL-001); not a separate table |
+
+The transaction kernel is Room's transaction mechanism itself; no additional write-ahead-log table is introduced.
 
 ## Tool Execution Flow
 

@@ -11,7 +11,7 @@
 - **Instrumented tests**: UI, sandbox, Android-specific behavior. Run on emulator.
 
 ## Coverage
-- Minimum 80% line coverage for `core/` and `runtime/`.
+- Minimum 80% line coverage for `runtime/` (canonical module names per `docs/MODULE_BOUNDARIES.md`).
 - Minimum 60% for `tools/`, `agents/`, `providers/`.
 ## ADR Test Coverage
 
