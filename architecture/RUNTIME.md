@@ -182,7 +182,7 @@ class AgentExecutionService : LifecycleService() {
 
 ## Checkpoint System
 
-Agent state is periodically saved for crash recovery.
+Nexora enforces a **Crash-Only Software Architecture**. Every agent action, tool invocation, and state transition is durably persisted to Room/SQLite before execution. Non-idempotent operations (e.g., network requests, database mutations) require cryptographic **idempotency guardians** (`idempotencyKey`). Agent state is periodically saved for crash recovery.
 
 ```kotlin
 data class AgentCheckpoint(

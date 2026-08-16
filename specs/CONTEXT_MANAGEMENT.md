@@ -119,10 +119,10 @@ To avoid context overflow (`NXR-1006`) and maximize recall accuracy, the context
 
 ## 3. Progressive Summarization Pipeline (FR-CM-003)
 
-Progressive summarization prevents context overflows while preserving critical plan history.
+**Hierarchical Context Compaction & Semantic Memory Distillation** prevents context overflows while preserving critical plan history.
 
 - **Trigger Threshold**: When the active context exceeds 75% of the provider model's max token limit, the oldest 20% of Layer 5 content is selected for compaction.
-- **Rolling Compactor**: A local summarization prompt is run to generate a dense, bulleted Markdown summary of the historical events.
+- **Rolling Compactor**: A local summarization prompt is run to generate a dense, bulleted Markdown summary of the historical events. Older tool outputs and intermediary reasoning steps are automatically distilled into persistent SQLite `memory_lessons` (`TOOL-409`) and knowledge graph entities.
 - **Idempotency & Fidelity Check**: Before the summarized chunk is persisted, a validation pass checks that no core plan variables or status parameters were dropped or mutated. If drift is detected, the compaction is rolled back, and a warning is logged.
 - **Resume Reconstruction (FR-CM-004)**: Upon agent resume from a crash, the context window is reconstructed from the `Checkpoint + Summary + semantic memories`. The raw, unsummarized history is never replayed.
 
@@ -302,7 +302,7 @@ The runtime MUST apply non-overridable safety ceilings for provider calls, reaso
 
 Critic disagreement triggers bounded repair, then clarification/escalation.
 Confidence is derived from evidence coverage, verifier results, contradiction checks,
-and source quality—not provider self-confidence alone (FR-RN-012).
+and source quality—not provider self-confidence alone (FR-RN-012). For long-running projects, the runtime MUST enforce an adversarial validation gate before committing mutating side-effects (e.g., file writes, Git commits, database migrations).
 
 ### Cross-document execution-mode mapping
 

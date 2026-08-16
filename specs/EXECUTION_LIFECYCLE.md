@@ -21,7 +21,7 @@ runtime resolves the full execution context: objective, tasks, agents, skills, t
 plugins, providers, dependencies, permissions, ordering, parallelism, files, external
 resources, validation criteria, error recovery, verification, and follow-up.
 
-This spec defines that complete lifecycle and the software-engineering pipeline.
+This spec defines that complete lifecycle and the software-engineering pipeline, formalizing a **Recursive Task Graph with Dynamic Plan Refinement** for long-running projects.
 Before the Planner creates an ExecutionPlan, a pre-flight Project Introspection
 pass (see [CONTEXT_MANAGEMENT.md](CONTEXT_MANAGEMENT.md) §8, FR-CM-009) reads
 the workspace structure and populates a ProjectContext in working memory. The
@@ -81,7 +81,8 @@ For a root Research Task, DEC-44 defines the admission boundary for research wor
 
 ### Plan and acceptance artifact boundary
 
-`ExecutionPlan` and `PlanStep` are the existing semantic plan projections. Before queueing, each plan step MUST have a stable step identity, objective, dependency position, required capabilities/tools, expected artifact or result, and pass/fail acceptance criteria. The Planner may derive criteria from the declared Task goal and constraints, but completion MUST re-check the declared criteria rather than infer success from activity, text output, file count, or provider completion alone. A plan repair MUST preserve the current execution identity and checkpoint lineage while recording the verified failure or changed constraint that justified the revision; a repair is not substantive progress unless it improves an acceptance criterion, relevant evidence, verification result, or declared scope. Concrete storage, DTO, serialization, and plan-version representation remain downstream choices within these semantic invariants.
+`ExecutionPlan` and `PlanStep` are the existing semantic plan projections. Long-running tasks operate as a **Recursive Task Graph** where agents can dynamically spawn sub-plans, split blocked tasks, re-estimate token/time budgets, and prune obsolete branches when requirements shift. Before queueing, each plan step MUST have a stable step identity, objective, dependency position, required capabilities/tools, expected artifact or result, and pass/fail acceptance criteria.
+ The Planner may derive criteria from the declared Task goal and constraints, but completion MUST re-check the declared criteria rather than infer success from activity, text output, file count, or provider completion alone. A plan repair MUST preserve the current execution identity and checkpoint lineage while recording the verified failure or changed constraint that justified the revision; a repair is not substantive progress unless it improves an acceptance criterion, relevant evidence, verification result, or declared scope. Concrete storage, DTO, serialization, and plan-version representation remain downstream choices within these semantic invariants.
 
 ## 2. Software Engineering Pipeline
 

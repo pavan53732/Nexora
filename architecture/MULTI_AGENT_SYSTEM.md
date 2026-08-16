@@ -15,7 +15,7 @@
 
 ## Overview
 
-Nexora supports multiple collaborating agents within a workspace. Each agent has a specialized role. Agents share memory, workspace, tasks, and execution context.
+Nexora supports **Multi-Agent Hierarchical Delegation with Scratchpad Isolation**. A primary Orchestrator Agent (`AGT-015`) delegates specialized subtasks to domain-specific child agents. Each agent has a specialized role. Agents share memory, workspace, tasks, and execution context.
 
 ## Built-in Agent Roles
 
@@ -86,7 +86,7 @@ The consistent model is a **shared read-only base + private writable overlay + m
   at the end. This is the only path that mutates the shared base.
 - **Result promotion**: completed outputs are promoted from the overlay to the shared
   workspace as **artifacts** (SA-5), never via raw cross-sandbox file access. Promotion is
-  permissioned (the `artifact:read` scope planned in SANDBOX_DEPTH §3.2).
+  permissioned (the `artifact:read` scope planned in SANDBOX_DEPTH §3.2) and requires a **cryptographic/verified artifact promotion** pass where the coordinator validates the artifact against the sub-agent's declared acceptance criteria.
 - **Merge ownership**: the coordinator merges outputs + execution histories in dependency
   order (SA-3); conflicts surface as review findings, not silent overwrites.
 
