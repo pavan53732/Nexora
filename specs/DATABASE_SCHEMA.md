@@ -57,11 +57,39 @@ The semantic persistence requirements are:
 - Session recreation creates a new Session identity; later continuation may preserve Conversation identity while creating a new active association.
 - Process death and application restart do not independently mutate Session–Conversation semantics; persistence must preserve enough state for implementation to distinguish same-Session recovery from new-Session continuation.
 
-This document does **not** currently establish a dedicated `conversation` table, relationship table, or historical association table. Their presence or absence is therefore not yet a selected schema fact in this repository.
+### `conversation`
 
-Implementation may choose concrete schema representation using existing repository patterns, but must not elevate that representation into a new semantic relationship authority. `(sessionId, conversationId)` fields, join rows, or read models may exist as implementation structures without implying a separate relationship identity or lifecycle.
+The authoritative relational schema for Conversations, fulfilling DEC-13, DEC-15, and DEC-21 storage requirements.
 
-Historical association persistence is a downstream implementation choice unless and until a canonical schema section explicitly selects it. Active-association enforcement, continuation support, lineage preservation, and checkpoint integrity are required semantic outcomes; exact relational encoding is not architecturally fixed here.
+| Column | Type | Notes |
+|--------|------|-------|
+| id | TEXT PK | Stable conversation ID |
+| workspaceId | TEXT FK → workspace.id | Tenant scope |
+| sessionId | TEXT NULL | Associated session ID |
+| title | TEXT | Conversation title |
+| status | TEXT | Active / archived / deleted status |
+| version | INTEGER | Monotonic version |
+| createdAt | TEXT | ISO-8601 UTC |
+| updatedAt | TEXT | ISO-8601 UTC |
+| correlationId | TEXT | Correlation trace ID |
+| INDEX idx_conversation_workspace_session | — | Supports session lookup and workspace isolation |
+
+### `terminal_session`
+
+The authoritative relational schema for background terminal sessions, fulfilling DEC-34 durability requirements.
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | TEXT PK | Stable terminal session ID |
+| workspaceId | TEXT FK → workspace.id | Tenant scope |
+| taskId | TEXT FK → task.id | Parent task binding |
+| executionId | TEXT | Parent execution binding |
+| correlationId | TEXT | Correlation trace ID |
+| status | TEXT | TerminalSessionStatus (Detached/Attached/Running/Terminated) |
+| effectiveDeadline | TEXT | ISO-8601 UTC deadline |
+| createdAt | TEXT | ISO-8601 UTC |
+| updatedAt | TEXT | ISO-8601 UTC |
+| INDEX idx_terminal_session_task | — | Supports parent binding and reconciliation |
 
 ### `branch_lineage`
 
@@ -199,9 +227,9 @@ DEC-31 selects the operational policy represented by this table: `RECORDED`/`ACT
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
 
-### Background Terminal Persistence Requirements (DEC-34)
+### Background Terminal Persistence (DEC-34)
 
-This schema does not select a dedicated `terminal_session` table. Wherever a persisted TerminalSession representation is implemented, an autonomous background session MUST retain `taskId`, `executionId`, `workspaceId`, `correlationId`, `effectiveDeadline`, `restoreCheckpoint`, `status`, and cleanup disposition sufficient to reconcile missing, terminal, cancelled, or expired parents. Concrete table names, columns beyond these semantic requirements, DAO operations, migrations, and transaction mechanics remain implementation choices.
+The authoritative relational schema for terminal sessions is defined by the `terminal_session` table above, fulfilling DEC-34 durability requirements. Wherever a persisted TerminalSession representation is implemented, it MUST retain `taskId`, `executionId`, `workspaceId`, `correlationId`, `effectiveDeadline`, `restoreCheckpoint`, `status`, and cleanup disposition sufficient to reconcile missing, terminal, cancelled, or expired parents.
 
 ### `execution_replay` (append-only)
 
@@ -295,7 +323,7 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | sessionId | TEXT NULL | |
 | correlationId | TEXT NULL | |
 | scope | TEXT | Maps MemoryScope (SESSION/WORKSPACE/LONG_TERM) |
-| kind | TEXT | Maps MemoryKind (9 values) |
+| kind | TEXT | Maps MemoryKind (10 values including LESSON) |
 | contentJson | TEXT | |
 | embeddingRef | TEXT NULL | Vector index reference |
 | status | TEXT | Maps MemoryStatus |
@@ -431,6 +459,7 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | pipeStatus | TEXT | Maps PipeStatus |
 | fingerprint | TEXT | Ed25519 public key |
 | workspaceId | TEXT FK | |
+| lastSeenAt | TEXT NULL | Last heartbeat/activity timestamp |
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
 

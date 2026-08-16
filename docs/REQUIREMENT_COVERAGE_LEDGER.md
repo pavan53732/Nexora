@@ -336,3 +336,4 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 ## Completion Rule
 
 A row may move from `UNMAPPED` only when the requirement is linked to a canonical primary artifact, at least one validation case, and an evidence path or an explicitly recorded reason why evidence is not yet available.
+| `FR-S027` | `requirements/FR.md` | MAPPED | Sandbox | `specs/WORKSPACE.md` | `UT-CONTRACT-005` | `evidence/unit/UT-CONTRACT-005/` |

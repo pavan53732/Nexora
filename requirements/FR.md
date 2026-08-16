@@ -194,6 +194,7 @@
 | FR-S024 | Rootfs cache management (LRU eviction, size quotas, reset to clean) | Should | 4 |
 | FR-S025 | Environment template marketplace (pre-configured rootfs recipes: data science, web dev, mobile) | Should | 5 |
 | FR-S026 | Cross-architecture rootfs support (ARM64 primary, x86_64 emulator via QEMU user-mode) | Should | 5 |
+| FR-S027 | Rootfs health check and automatic corruption repair | Should | 5 |
 | FR-S028 | Offline package cache — apt packages cached per workspace for offline reinstall | Could | 4 |
 
 ## Terminal (Internal)
