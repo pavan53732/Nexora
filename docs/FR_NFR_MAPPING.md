@@ -89,7 +89,6 @@
 - Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, 
 
 ## S13 — Authorization and Execution Recovery Contract Synchronization
-
 - `FR-S016` → `security/PermissionModel.md` complete multi-scope permission resolution, approval, denial, and audit authorization; validation `SEC-PERM-003..066`, `IT-TOOL-002..014` (Planned).
 - `FR-TL015` → Permission Audit Schema + Tool Protocol/API correlation; validation `SEC-PERM-023/044/045/052/062..065`, `IT-TOOL-008/009/014` (Planned).
 - `FR-TL001`..`015` → `architecture/TOOL_SYSTEM.md`, `models/Tool.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md`, `errors/ERROR_CODES.md`; validation `IT-TOOL-001..014` (Planned).
@@ -98,7 +97,6 @@
 - No S13 case is `VERIFIED`; all evidence paths are placeholders for `Planned` execution.
 
 ## S14 — Typed Inference, Deep Reasoning, and Context Snapshots
-
 - `FR-P014`..`019` → Provider System + ProviderStreamLifecycle + Provider Protocol/API/SDK; validation `UT-STREAM-001..004`, `UT-ROUTE-001`, `IT-STREAM-001..008`, `E2E-STREAM-001..003` (Planned).
 - `FR-RN-009`..`012` → Context Management + Agent Runtime + Inference model; technical ReasoningPolicy ceilings and the DEC-25 no-credit-gating rule are projected through the model/spec chain; validation `UT-REASON-001..003`, `IT-REASON-001..004`, `E2E-REASON-001..002` (Planned).
 - `FR-CM-010`..`012` → Context Management + Memory System + ContextSnapshot; validation `UT-CONTEXT-001..002`, `IT-CONTEXT-001..002`, `E2E-CONTEXT-001` (Planned).
@@ -108,7 +106,6 @@
 - All S14 validation remains `Planned`; no implementation evidence is claimed.
 
 ## S15 — Agent Reliability Hardening
-
 - `NFR-REL-016` → Agent Runtime hierarchical deadline propagation across provider, Tool, repair, verifier, delegation, cancellation, and checkpoint operations; validation `UT-CONTRACT-006` (Planned).
 - `NFR-REL-017` → Tool System and Tool Protocol operation-level unknown-completion reconciliation; validation `UT-TOOL-006`, `E2E-REL-006` (Planned).
 - `NFR-REL-018` → Background Execution and Android lifecycle fault-injection evidence; validation `E2E-REL-001..005` (Planned).
@@ -118,8 +115,3 @@
 - `NFR-CI-006` → Agent Runtime, Provider System, and Context Management minimum-sufficient execution-mode selection; validation `UT-REASON-001`, `E2E-RN-001` (Planned).
 - `NFR-CI-007` → Agent Runtime bounded-progress controls, retry/step/time limits, anti-treadmill behavior, and escalation; validation `UT-AS-010` (Planned).
 - All S15 validation remains `Planned`; no runtime implementation, executed test, or empirical reliability result is claimed.
-
-## S16 — Normative 250-Item Research Workload
-
-- `NFR-SCALE-006` → DEC-44, Multi-Agent SA-3, Execution Lifecycle, and Performance Budget; maximum 250 distinct admitted leaf research work items per root Research Task and descendant Task lineage, counted once by stable admitted Task identity; item 251 is rejected before child Task creation or queueing; active concurrency remains governed by SA-3 and existing Android/resource/security contracts; validation `E2E-SCALE-250-001`, `E2E-SCALE-250-002`, `PERF-SCALE-250-001` (Planned).
-- All S16 validation remains `Planned`; the external 250-item comparison claim is supporting evidence only and is not Nexora implementation or release evidence.

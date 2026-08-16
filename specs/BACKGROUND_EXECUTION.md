@@ -27,13 +27,14 @@ It is built on four Android pillars:
 - **Checkpointing** for crash recovery and resume
 - **Notifications + Event Bus** for progress and completion signals
 
-## Proactive Android Resource Negotiation Protocol
+## Background Execution Resilience
 
-Nexora implements a **Proactive Android Resource Negotiation Protocol** to maintain background execution resilience against aggressive OS power management (Doze mode, OEM battery savers, thermal throttling):
+Nexora ensures background execution resilience by projecting execution events into the Android system environment:
 
-1. **Expedited Job Promotion:** High-priority background tasks (`critical` / `high`) automatically request Android's expedited WorkManager job status and foreground service promotion to minimize OS scheduling latency.
-2. **Thermal & Battery Telemetry Feedback Loop:** Device telemetry (thermal throttling states, battery percentage, low-power mode) is fed directly into the Agent Runtime reasoning loop. When thermal stress or critical battery levels are detected, the runtime automatically invokes an **Emergency Checkpoint**, reduces active polling, or shifts execution mode from `DEEP`/`NORMAL` to `FAST` until system vitals recover.
-3. **Pre-Termination Hook:** The runtime registers an application lifecycle process-death receiver that intercepts OS termination signals and executes a final, atomic SQLite commit of all in-flight reasoning, task checkpoints, and failure ledgers before process destruction.
+1. **Task-State Projection:** Active background tasks project their state into the Android `ForegroundService` and `WorkManager` environments. High-priority tasks utilize Android's expedited scheduling capabilities to ensure progress during system resource constraints.
+2. **System-Vital Awareness:** The runtime monitors Android system vitals (battery, thermal, and power states). Resource-intensive operations are throttled or checkpointed when system vitals indicate pressure, ensuring task durability and device stability.
+3. **Notification Projection:** Background execution events (start, progress, completion, or approval requirements) are projected into the Android notification system according to the workspace notification policy. This ensures user visibility without requiring active UI threads.
+4. **Durable Termination:** The runtime utilizes Android lifecycle hooks to ensure that in-flight reasoning and task state are durably committed to the workspace persistence layer before process termination.
 
 ## 1. Task Queue
 

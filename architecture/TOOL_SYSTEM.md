@@ -151,13 +151,13 @@ data class ToolMetadata(
 > maps capabilities (read/write/network/permissions/sandbox/streaming) for every tool.
 > Regenerate with `scripts/generate_tool_catalog.py`.
 
-## Distributed Side-Effect Transaction Kernel
+## Atomic Side-Effect Capability
 
-To prevent inconsistent "half-done" workspace states when compound tool calls fail mid-execution, Nexora implements a **Distributed Side-Effect Transaction Kernel**:
+To prevent inconsistent workspace states when tool calls fail mid-execution, Nexora provides an **Atomic Side-Effect Capability**:
 
-1. **Atomic Tool Bundles:** Related mutating tool calls (e.g., file writes coupled with Git commits or database migrations) can be wrapped in an atomic transaction bundle. If any tool invocation in the bundle fails, throws an unhandled exception, or times out, the runtime initiates an automated rollback of all workspace file and database modifications to the pre-transaction checkpoint.
-2. **Write-Ahead Side-Effect Log (WAL):** Every intended mutating operation is durably recorded in a write-ahead transaction log in SQLite before execution. Upon crash recovery, the runtime inspects this WAL to reconcile `UNKNOWN_COMPLETION` states, ensuring that no side-effect is silently duplicated or left uncommitted.
-3. **Cryptographic Idempotency Guardians:** Non-idempotent operations are bound to a strict `idempotencyKey` enforced at the Tool Executor level, ensuring that retries after transport interruptions execute exactly once.
+1. **Atomic Operation Bundles:** Mutating tool calls can be grouped into atomic bundles. A failure within a bundle triggers a workspace rollback to the last known-good state, ensuring data consistency.
+2. **Durable Intent Logging:** Mutating operations are recorded in a durable intent log before execution. This allows the runtime to reconcile `UNKNOWN_COMPLETION` states during recovery, preventing duplicate side effects or silent failures.
+3. **Idempotency Enforcement:** Non-idempotent operations are managed through unique idempotency keys, ensuring that retries do not result in redundant side effects. The specific implementation of keys and logging remains an implementation choice.
 
 ## Tool Execution Flow
 

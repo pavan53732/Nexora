@@ -116,7 +116,7 @@ Delegates to Reviewer Agent -> Reviews changes
 
 For tasks classified as **high-risk, security-critical, or complex architectural changes**, Nexora deepens the mandatory review pass into a **Competitive Multi-Agent Consensus Verification** model:
 1. **Adversarial Red-Teaming:** In addition to the standard Reviewer agent pass, the runtime can spawn an independent "Adversary Agent" whose sole objective is to discover logical flaws, security vulnerabilities, or edge-case failures in the implementation agent's output.
-2. **Cross-Model / Cross-Specialist Agreement:** For critical artifact promotion, the workflow coordinator requires cryptographic and verification agreement between two independent specialist validation passes (e.g., Coder vs Security Auditor) before changes are promoted from the private overlay to the shared workspace base snapshot.
+2. **Cross-Model / Cross-Specialist Agreement:** For critical artifact promotion, the workflow coordinator requires verified agreement between two independent specialist validation passes (e.g., Coder vs Security Auditor) before changes are promoted from the private scope to the shared workspace base snapshot.
 
 ## Mandatory Review Rule (FR-EV-006)
 
@@ -263,14 +263,10 @@ max_parallel_agents = min(
 | **File conflict** | A sub-agent holds a **write-lock per file**; a second writer waits, or the coordinator assigns a copy and merges at the end |
 | Sandbox budgets | Workspace limits split across active sub-agents (`FR-S018`); each sub-agent isolated |
 | Result merging | Coordinator merges outputs + execution histories in dependency order |
-| **Deadlock detection** | A waits-for graph over file write-locks + pending delegation futures is monitored by the coordinator; cycles abort the youngest child and report to the Master Agent (FR-MA-005) |
+| **Deadlock detection** | The coordinator monitors for resource deadlocks and circular dependencies; detection triggers plan repair (FR-AS-001) to ensure progress (FR-MA-005) |
 | **Delegation timeout** | Every delegation carries an explicit deadline; on expiry the coordinator aborts the child, logs `NXR-3011`, and resumes the parent (FR-MA-003) |
 
-#### Normative 250-item research workload (DEC-44)
 
-For a root Research Task, the coordinator may admit at most **250 distinct leaf research work items** across that root Task’s descendant Task lineage. A work item is an existing admitted leaf Task with a distinct bounded objective/scope and acceptance/evidence target; it is counted once by stable admitted Task identity. Sources, claims, citations, artifacts, provider calls, Tool calls, retries, execution attempts, and agents are not counted as work items. Replanning, retry, recovery, or worker reassignment does not increment the count unless the objective/scope is materially new.
-
-This is an admission boundary, not a concurrency grant. Item 251 is rejected before child Task creation or queueing, while already admitted work remains subject to the validated dependency graph, effective deadlines, resource limits, evidence gates, checkpoint/recovery, cancellation, and truthful incomplete/completion reporting. The SA-3 formula and bounds remain unchanged: default 3 sub-agents, high-end 8–16, and dynamic `min(memory_budget / per_agent_memory_estimate, cpu_cores, configurable_max)`. The 250-item boundary does not authorize 250 agents, processes, provider streams, or any bypass of technical or security controls.
 
 #### Adaptive Delegation Effort
 
@@ -288,37 +284,9 @@ Large outputs SHOULD be persisted as permissioned artifacts and returned by stab
 
 The coordinator MUST expose coordination telemetry sufficient to explain child count, fan-out reason, dependency edges, queue time, active time, tool calls, duplicate-scope suppression, partial-result arrivals, artifact references, cancellation, timeout, merge conflict, and final end-state. Telemetry is observability data; it MUST NOT silently redefine Task, Execution, Agent, or Artifact lifecycle states.
 
-#### Deadlock Watchdog Algorithm (ADR-0009, Decision #6)
+#### Supervisory Liveness Capability
 
-The `CoordinatorAgent` runs a periodic watchdog coroutine (default interval: 5 s) that
-maintains a **waits-for graph** `W`:
-
-- **Nodes** are active sub-agents in the workspace queue.
-- **Edges** `A → B` exist when `A` is blocked waiting on:
-  - a file write-lock currently held by `B` (from the per-file `ReentrantReadWriteLock`
-    in `ResourceManager`, RUNTIME.md §Resource Manager), or
-  - a delegation `Future` that `B` has not resolved (e.g. `B` is awaiting its own
-    provider stream or a downstream tool commit).
-- A **cycle** in `W` means a deadlock: every agent in the cycle is waiting on another
-  member and none can progress.
-
-On cycle detection:
-
-1. Identify the **youngest** agent in the cycle (lowest `startedAt`).
-2. Abort that agent's execution coroutine, cancel its in-flight tool/stream calls,
-   and release its held write-locks.
-3. Commit an `execution_checkpoint` (BackgroundExecution §3) so its partial work is
-   recoverable.
-4. Log `NXR-3011` (Agent coordination failed) to the audit trail with the cycle path
-   and the aborted agent's `correlationId`.
-5. Promote the **parent** task (the one that delegated to the cycle) out of the
-   resource deadlock by re-planning its subtask assignment (FR-AS-001 Plan Repair,
-   option **c. Re-plan**) — the parent never waits on the aborted child.
-
-The graph is recomputed from authoritative lock-ownership state in `ResourceManager`
-and the delegation futures table in `ExecutionState` (models/Execution.md). Lock
-state is the single source of truth; stale edges from cancelled agents are pruned on
-each sweep.
+The coordinator role includes a **supervisory liveness capability** to ensure multi-agent progress. It monitors active sub-agents for circular dependencies or resource stalls (e.g., file write-locks or unresolved delegation futures). If a deadlock is detected, the coordinator initiates a plan-repair operation (FR-AS-001) to break the stall, release held resources, and ensure the parent task can progress. Stagnation detection and recovery mechanisms remain implementation choices governed by the existing liveness, deadline, and retry contracts.
 
 #### Delegation Timeout Enforcement
 

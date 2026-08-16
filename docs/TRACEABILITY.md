@@ -127,11 +127,10 @@ No executable implementation or runnable test is claimed by this traceability se
 | NFR-REL-017 | `architecture/TOOL_SYSTEM.md` | `models/ToolInvocation.md`, `protocols/Tool-Protocol.md`, `testing/E2ETests.md` (`E2E-REL-006`) |
 | NFR-REL-018 | `specs/BACKGROUND_EXECUTION.md` | `testing/E2ETests.md` (`E2E-REL-001..005`) |
 | NFR-PERF-006 | `docs/PERFORMANCE_BUDGET.md` | Active-agent battery-impact target; execution-mode selection is separately identified as `NFR-CI-006` |
-| NFR-SCALE-006 | `decisions/DEC-44-normative-250-item-research-workload.md` | `requirements/NFR.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `specs/EXECUTION_LIFECYCLE.md`, `docs/PERFORMANCE_BUDGET.md`, `models/Task.md`, `testing/cases/E2ETestCases.md` (`E2E-SCALE-250-001`, `E2E-SCALE-250-002`), `testing/PerformanceTests.md` (`PERF-SCALE-250-001`) |
-| Proactive Android Resource Negotiation | `specs/BACKGROUND_EXECUTION.md` | `NFR-REL-018`, `NFR-PERF-006`, WorkManager expedited status, Doze/thermal telemetry feedback loop, pre-termination hook |
-| Distributed Side-Effect Transaction Kernel & WAL | `architecture/TOOL_SYSTEM.md` | `NFR-REL-017`, `protocols/Tool-Protocol.md`, `models/ToolInvocation.md`, atomic tool bundles, write-ahead log |
-| Competitive Multi-Agent Consensus Verification | `architecture/MULTI_AGENT_SYSTEM.md` | `NFR-CI-004`, adversarial red-teaming, cross-model/cross-specialist agreement |
-| Cross-Workspace Skill Distillation & Privacy Scrubbing | `specs/AUTONOMY_STABILITY.md` | `models/AutonomyLearning.md`, global lesson generalization (`TOOL-409`), privacy sanitization |
+| Background Execution Resilience | `specs/BACKGROUND_EXECUTION.md` | `NFR-REL-018`, `NFR-PERF-006`, task-state projection, system-vital awareness, notification projection |
+| Atomic Side-Effect Capability | `architecture/TOOL_SYSTEM.md` | `NFR-REL-017`, `protocols/Tool-Protocol.md`, `models/ToolInvocation.md`, atomic operation bundles, durable intent logging |
+| Competitive Multi-Agent Consensus Verification | `architecture/MULTI_AGENT_SYSTEM.md` | `NFR-CI-004`, adversarial red-teaming, verified agreement between specialists |
+| Cross-Workspace Skill Distillation | `specs/AUTONOMY_STABILITY.md` | `models/AutonomyLearning.md`, global lesson generalization (`TOOL-409`), privacy sanitization |
 
 
 | Memory API boundary determination | `architecture/MEMORY_SYSTEM.md`, `protocols/Memory-Protocol.md` | `models/Memory.md`, `lifecycle/MemoryLifecycle.md`, `specs/CONTEXT_MANAGEMENT.md` | No separate `docs/api/Memory-API.md` exists; protocol is the repository contract boundary | RESOLVED (internal subsystem / protocol-sufficient) |
