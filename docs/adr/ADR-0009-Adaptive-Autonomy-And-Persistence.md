@@ -23,7 +23,7 @@ Furthermore, budget and token limits must not serve as artificial hard-stops whe
 3. **Semantic Progress Evaluation (State-Delta)**: `ContextSnapshot` is extended with a `ProgressSignal` (evaluating test results, file modifications, new evidence, and error category shifts). Experiencing N=3 consecutive iterations with zero state-delta triggers loop escalation regardless of syntactic action variations.
 4. **Task-Scoped Failure Ledger**: Agent Runtime maintains a task-scoped failure ledger in working context. After K=3 identical error signatures for a tool call within a task, the runtime enforces strategy mutation or alternate tool selection for that task without mutating global registry descriptors.
 5. **Resumable Escalation (`BlockedAwaitingInput`)**: `TaskLifecycle` adds a canonical `BlockedAwaitingInput` state. When loop escalation or missing user capabilities occur, the agent formulates a targeted clarification query, persists an `ExecutionCheckpoint`, releases execution resources, and enters `BlockedAwaitingInput`. Receiving a user response resumes execution seamlessly from the checkpoint.
-6. **Multi-Agent Deadlock Watchdog**: `MULTI_AGENT_SYSTEM.md` §SA-3 mandates a waits-for graph monitor over file write-locks and delegation futures. Graph cycles automatically abort the youngest sub-agent, release locks, and report to the Workflow Coordinator. Explicit delegation timeouts are required.
+6. **Multi-Agent Supervisory Liveness**: `MULTI_AGENT_SYSTEM.md` §SA-3 mandates a supervisory liveness capability to monitor sub-agents for circular dependencies or resource stalls and initiate plan repair or recovery. Explicit delegation timeouts are required.
 7. **Execution Liveness Heartbeat & ANR Recovery**: Coroutine execution streams emit a mandatory Liveness Heartbeat. Missed heartbeats or Android main-thread ANRs trigger an automated checkpoint commit and background recovery attempt.
 8. **Canonical Jittered Backoff**: All tool invocation retries, sub-agent delegation handoffs, and network reconnects must apply randomized exponential backoff with jitter to eliminate retry storms.
 
@@ -32,7 +32,7 @@ Furthermore, budget and token limits must not serve as artificial hard-stops whe
 - `architecture/AGENT_RUNTIME.md` owns task-scoped failure ledgers and progress-delta escalation rules.
 - `architecture/PROVIDER_SYSTEM.md` and `state-machines/ProviderStreamLifecycle.md` own stalled-stream detection and failover lineage.
 - `state-machines/TaskLifecycle.md` owns the `BlockedAwaitingInput` state and resume semantics.
-- `architecture/MULTI_AGENT_SYSTEM.md` owns the deadlock waits-for watchdog and sub-agent timeouts.
+- `architecture/MULTI_AGENT_SYSTEM.md` owns the supervisory liveness capability and sub-agent timeouts.
 - `specs/CONTEXT_MANAGEMENT.md` owns `ProgressSignal` computation inside `ContextSnapshot`.
 - `specs/BACKGROUND_EXECUTION.md` owns execution liveness heartbeats and ANR checkpoint recovery.
 

@@ -122,7 +122,7 @@ To avoid context overflow (`NXR-1006`) and maximize recall accuracy, the context
 **Hierarchical Context Compaction & Semantic Memory Distillation** prevents context overflows while preserving critical plan history.
 
 - **Trigger Threshold**: When the active context exceeds 75% of the provider model's max token limit, the oldest 20% of Layer 5 content is selected for compaction.
-- **Rolling Compactor**: A local summarization prompt is run to generate a dense, bulleted Markdown summary of the historical events. Older tool outputs and intermediary reasoning steps are automatically distilled into persistent SQLite `memory_lessons` (`TOOL-409`) and knowledge graph entities.
+- **Rolling Compactor**: A local summarization prompt is run to generate a dense, bulleted Markdown summary of the historical events. Older tool outputs and intermediary reasoning steps are distilled into semantic memory projections (`memory_lessons`, `TOOL-409`) and knowledge graph entities, with exact database table persistence remaining a downstream implementation choice.
 - **Idempotency & Fidelity Check**: Before the summarized chunk is persisted, a validation pass checks that no core plan variables or status parameters were dropped or mutated. If drift is detected, the compaction is rolled back, and a warning is logged.
 - **Resume Reconstruction (FR-CM-004)**: Upon agent resume from a crash, the context window is reconstructed from the `Checkpoint + Summary + semantic memories`. The raw, unsummarized history is never replayed.
 

@@ -49,12 +49,11 @@ data class AutonomyTrustState(
 )
 ```
 
-`TrustScore` is an opaque domain value in this documentation phase; its scale,
-update increments, thresholds, decay, and persistence mechanics are not selected by
-this model. Successful verified milestones may contribute positively and failed
-steps, safety violations, or denied approvals may contribute negatively according
-to the canonical autonomy policy. A trust change may offer a mode change, but the
-user-selected mode remains authoritative.
+`TrustScore` is defined as a normative integer score from 0 to 100 (default initial baseline score = 50).
+- **Increments:** Successful low-risk tool call (+1); successful milestone completion (+5); verified final results (+10).
+- **Decrements:** Failed step (-5); safety violation or denied approval (-10). Repeated drops trigger autonomy mode reduction.
+- **Mode Thresholds:** `MANUAL` (0–39), `ASSISTED` (40–74), `AUTOPILOT` (75–100).
+A trust change offers a mode suggestion, but the user-selected mode remains authoritative. Autonomy resets are explicit.
 
 ```kotlin
 enum class AutonomyMode { MANUAL, ASSISTED, AUTOPILOT }

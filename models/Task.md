@@ -88,7 +88,6 @@ data class CanonicalErrorEnvelope(
 
 `status` is a durable lifecycle projection aligned to [state-machines/TaskLifecycle.md](../state-machines/TaskLifecycle.md). `phase` represents transient execution phase and MUST NOT replace lifecycle state. `dependsOnTaskIds` is validated as an acyclic dependency graph before queueing. `effectiveDeadline` is inherited by dependency waits and child operations. `retryNotBefore` is authoritative for RetryPending backoff and cannot be bypassed by direct start. Task identity and `correlationId` remain stable throughout retries of the same logical task once assigned.
 
-Under DEC-44, when a root Task is classified as a Research Task, each distinct admitted leaf research objective is counted once by its stable Task identity across the root Task’s descendant lineage. Replans, retries, recovery, and worker reassignment do not create an additional workload-item count unless they introduce a materially new objective or scope. This is a workload admission projection only; it does not add a Task state, field, or lifecycle transition.
 
 ### Error Envelope Propagation
 

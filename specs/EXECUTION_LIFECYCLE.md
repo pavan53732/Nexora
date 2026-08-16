@@ -77,7 +77,6 @@ terms and resolves them to agents and tools.
 
 Before queueing a task or workflow step, dependency references MUST be validated as an acyclic graph. A dependency cycle is rejected without queueing or execution. If a dependency later fails terminally, dependent work fails through the canonical Task lifecycle rather than remaining indefinitely blocked. Each task carries an effective deadline inherited by dependency waits, approval waits, capability clarification, provider rate-limit waits, and delegated children.
 
-For a root Research Task, DEC-44 defines the admission boundary for research workload breadth: at most 250 distinct leaf research work items may be admitted across that root Task’s descendant Task lineage. Each item is an existing admitted leaf Task with a distinct bounded objective/scope and acceptance/evidence target, counted once by stable Task identity. Sources, claims, artifacts, tools, providers, agents, retries, and execution attempts are not counted. The Planner/Coordinator validates duplicate scope and dependencies before child creation or queueing; item 251 is rejected before creation or queueing. This limit does not change Task lifecycle ownership, grant concurrency, or the SA-3 dynamic resource ceiling.
 
 ### Plan and acceptance artifact boundary
 

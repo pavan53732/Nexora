@@ -48,14 +48,15 @@ Repair decision (bounded):
 - Each repair cycle is recorded in execution history (`plan_repair` event) so the
   final report explains *what changed and why*.
 
-## 2. Agent Loop Liveness (FR-AS-002)
+## 2. Agent Heartbeat & Watchdog (FR-AS-002)
 
-Nexora ensures agent progress through a **supervisory liveness capability**:
-
-- **Heartbeat Projection:** The agent loop publishes periodic liveness events.
-- **Stagnation Monitoring:** A runtime supervisor monitors these events for signs of circular dependencies, infinite reasoning loops, or silent stalls.
-- **Recovery Action:** Upon detection of a hang or stall, the supervisor captures the execution state, saves a checkpoint, and initiates a recovery or plan-repair operation (FR-AS-001).
-- **Escalation:** Repeated liveness failures or unrecoverable stalls are escalated to the user with diagnostics. Specific timeouts and restart bounds remain implementation choices.
+| Aspect | Rule |
+|--------|------|
+| **Heartbeat** | The agent loop publishes a `heartbeat` event every iteration (or every N seconds for long tool calls) |
+| **Watchdog** | A runtime coroutine watches heartbeats; no heartbeat within timeout (**120 s**) → suspect hang |
+| **Action** | Suspend the loop, capture stack/state, save checkpoint, restart from checkpoint (bounded restarts, max **2**) |
+| **Escalation** | If the loop hangs again after restarts → escalate to user with diagnostics |
+| **Interaction** | Extends sandbox process watchdog (SANDBOX_DEPTH §3.4) to the **agent loop** itself |
 
 ## 3. Technical-Boundary Escalation — Never Silent Stop (FR-AS-003)
 
@@ -98,10 +99,10 @@ Lessons are also retrieved during planning (Context Builder pulls relevant lesso
 
 ### Cross-Workspace Skill Distillation
 
-To enable intelligence transfer across different projects without leaking private data, Nexora formalizes **Cross-Workspace Skill Distillation**:
-1. **Generalization Pass:** When an agent successfully solves a complex problem in Workspace A, the runtime initiates a generalization pass that extracts the abstract logic and workflow patterns into a **Global Lesson** (`TOOL-409`).
-2. **Privacy Sanitization:** Before a lesson is promoted to the global Skill/Memory registry, it undergoes automated semantic scrubbing to remove all project-specific data, credentials, and private content.
-3. **Safe Pollination:** Sanitized global lessons become available to other workspaces as generalized expertise, ensuring that agents in Workspace B can benefit from strategies discovered in Workspace A while maintaining strict workspace isolation. Mechanisms for scrubbing and promotion remain implementation choices.
+To enable intelligence transfer across different projects without violating workspace isolation, Nexora formalizes **Cross-Workspace Skill Distillation**:
+1. **Generalization Pass:** When an agent successfully solves a complex problem in Workspace A, the runtime extracts abstract algorithmic patterns into a sanitized lesson (`TOOL-409`).
+2. **Privacy Sanitization:** The lesson undergoes automated semantic scrubbing to remove workspace paths, credentials, and private content.
+3. **Safe Pollination:** Sanitized lessons enter the global skill/template pool as read-only references, allowing agents in Workspace B to load generalized strategies without cross-workspace data leakage. Concrete promotion and storage mechanisms remain downstream implementation choices.
 
 The semantic lesson projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
 A lesson MUST retain agent/workspace scope, source execution provenance, evidence references,

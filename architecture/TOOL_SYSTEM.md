@@ -156,8 +156,8 @@ data class ToolMetadata(
 To prevent inconsistent workspace states when tool calls fail mid-execution, Nexora provides an **Atomic Side-Effect Capability**:
 
 1. **Atomic Operation Bundles:** Mutating tool calls can be grouped into atomic bundles. A failure within a bundle triggers a workspace rollback to the last known-good state, ensuring data consistency.
-2. **Durable Intent Logging:** Mutating operations are recorded in a durable intent log before execution. This allows the runtime to reconcile `UNKNOWN_COMPLETION` states during recovery, preventing duplicate side effects or silent failures.
-3. **Idempotency Enforcement:** Non-idempotent operations are managed through unique idempotency keys, ensuring that retries do not result in redundant side effects. The specific implementation of keys and logging remains an implementation choice.
+2. **Durable Intent Logging:** Mutating operations are recorded in persistent tool invocation records (`models/ToolInvocation.md`, `specs/DATABASE_SCHEMA.md`) before execution. This allows the runtime to reconcile `UNKNOWN_COMPLETION` states during recovery, preventing duplicate side effects or silent failures.
+3. **Idempotency Enforcement:** Non-idempotent operations are managed through unique idempotency keys, ensuring that retries do not result in redundant side effects. Exact table serialization remains a downstream implementation choice.
 
 ## Tool Execution Flow
 

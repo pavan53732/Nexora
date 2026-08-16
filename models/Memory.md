@@ -37,7 +37,8 @@ enum class MemoryKind {
     EXECUTION_HISTORY,
     CONTEXT_SNAPSHOT,
     REASONING_SUMMARY,
-    STREAM_LINEAGE
+    STREAM_LINEAGE,
+    LESSON
 }
 
 enum class MemoryStatus {

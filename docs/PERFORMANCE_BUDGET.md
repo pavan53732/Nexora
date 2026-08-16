@@ -54,9 +54,6 @@ Measurable performance targets for Nexora — an Android-native autonomous AI ag
 | App memory — 3+ concurrent agents | 384 MB | 512 MB | 640 MB | Android Profiler | Beta |
 | Sandbox disk usage per workspace | 100 MB quota | 80 MB alert | 100 MB hard limit | `VirtualFileSystem` stats | Alpha |
 
-### DEC-44 Research Workload Boundary
-
-The normative 250-item target is a maximum of 250 distinct admitted leaf research work items within one root Research Task and its descendant Task lineage. It is a workload-breadth boundary, not an active-agent, process, provider-stream, source, claim, artifact, retry, or execution-attempt limit. Active parallelism remains governed by the SA-3 dynamic resource formula and the Android CPU, memory, battery, storage, provider, stream, deadline, and sandbox budgets above. Performance validation must measure the 250-item admission boundary separately from active concurrency and must report queueing, active lanes, partial results, checkpoint/recovery behavior, and resource impact.
 
 ## Database & Storage
 

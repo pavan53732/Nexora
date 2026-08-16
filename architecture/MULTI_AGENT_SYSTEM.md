@@ -115,7 +115,7 @@ Delegates to Reviewer Agent -> Reviews changes
 ## Competitive Multi-Agent Consensus Verification
 
 For tasks classified as **high-risk, security-critical, or complex architectural changes**, Nexora deepens the mandatory review pass into a **Competitive Multi-Agent Consensus Verification** model:
-1. **Adversarial Red-Teaming:** In addition to the standard Reviewer agent pass, the runtime can spawn an independent "Adversary Agent" whose sole objective is to discover logical flaws, security vulnerabilities, or edge-case failures in the implementation agent's output.
+1. **Adversarial Red-Teaming:** In addition to the standard Reviewer agent pass, the runtime can utilize the Security Auditor (AGT-010) or Reviewer (AGT-004) agent in an adversarial validation mode whose sole objective is to discover logical flaws, security vulnerabilities, or edge-case failures in the implementation agent's output.
 2. **Cross-Model / Cross-Specialist Agreement:** For critical artifact promotion, the workflow coordinator requires verified agreement between two independent specialist validation passes (e.g., Coder vs Security Auditor) before changes are promoted from the private scope to the shared workspace base snapshot.
 
 ## Mandatory Review Rule (FR-EV-006)
@@ -284,9 +284,37 @@ Large outputs SHOULD be persisted as permissioned artifacts and returned by stab
 
 The coordinator MUST expose coordination telemetry sufficient to explain child count, fan-out reason, dependency edges, queue time, active time, tool calls, duplicate-scope suppression, partial-result arrivals, artifact references, cancellation, timeout, merge conflict, and final end-state. Telemetry is observability data; it MUST NOT silently redefine Task, Execution, Agent, or Artifact lifecycle states.
 
-#### Supervisory Liveness Capability
+#### Deadlock Watchdog Algorithm (ADR-0009, Decision #6)
 
-The coordinator role includes a **supervisory liveness capability** to ensure multi-agent progress. It monitors active sub-agents for circular dependencies or resource stalls (e.g., file write-locks or unresolved delegation futures). If a deadlock is detected, the coordinator initiates a plan-repair operation (FR-AS-001) to break the stall, release held resources, and ensure the parent task can progress. Stagnation detection and recovery mechanisms remain implementation choices governed by the existing liveness, deadline, and retry contracts.
+The `CoordinatorAgent` runs a periodic watchdog coroutine (default interval: **5 s**) that
+maintains a **waits-for graph** `W`:
+
+- **Nodes** are active sub-agents in the workspace queue.
+- **Edges** `A → B` exist when `A` is blocked waiting on:
+  - a file write-lock currently held by `B` (from the per-file `ReentrantReadWriteLock`
+    in `ResourceManager`, RUNTIME.md §Resource Manager), or
+  - a delegation `Future` that `B` has not resolved (e.g. `B` is awaiting its own
+    provider stream or a downstream tool commit).
+- A **cycle** in `W` means a deadlock: every agent in the cycle is waiting on another
+  member and none can progress.
+
+On cycle detection:
+
+1. Identify the **youngest** agent in the cycle (lowest `startedAt`).
+2. Abort that agent's execution coroutine, cancel its in-flight tool/stream calls,
+   and release its held write-locks.
+3. Commit an `execution_checkpoint` (BackgroundExecution §3) so its partial work is
+   recoverable.
+4. Log `NXR-3011` (Agent coordination failed) to the audit trail with the cycle path
+   and the aborted agent's `correlationId`.
+5. Promote the **parent** task (the one that delegated to the cycle) out of the
+   resource deadlock by re-planning its subtask assignment (FR-AS-001 Plan Repair,
+   option **c. Re-plan**) — the parent never waits on the aborted child.
+
+The graph is recomputed from authoritative lock-ownership state in `ResourceManager`
+and the delegation futures table in `ExecutionState` (models/Execution.md). Lock
+state is the single source of truth; stale edges from cancelled agents are pruned on
+each sweep.
 
 #### Delegation Timeout Enforcement
 
