@@ -12,7 +12,8 @@
 
 ## Normative Operation Contract
 
-The Runtime API exposes workspace orchestration, session isolation, transactionally-safe task execution, checkpoint save/restore, and background execution services backed by the Android WorkManager. It does not acquire ownership of the single-agent loop, multi-agent delegation, or workflow graph semantics; those remain governed by `architecture/AGENT_RUNTIME.md`, `architecture/MULTI_AGENT_SYSTEM.md`, and `architecture/WORKFLOW_ENGINE.md` respectively.
+The Runtime API exposes workspace orchestration, session isolation, transactionally-safe task execution, checkpoint save/restore, and background execution services backed by the Android WorkManager, incorporating the Proactive Android Resource Negotiation Protocol and Distributed Side-Effect Transaction Kernel.
+ It does not acquire ownership of the single-agent loop, multi-agent delegation, or workflow graph semantics; those remain governed by `architecture/AGENT_RUNTIME.md`, `architecture/MULTI_AGENT_SYSTEM.md`, and `architecture/WORKFLOW_ENGINE.md` respectively.
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|

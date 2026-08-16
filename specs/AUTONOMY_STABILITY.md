@@ -95,8 +95,14 @@ Propose skill refinement:
 User or policy approves → skill updated/created
 ```
 
-Lessons are also retrieved during planning (Context Builder pulls relevant lessons for
-similar tasks), so the application literally gets smarter with use.
+Lessons are also retrieved during planning (Context Builder pulls relevant lessons for similar tasks), so the application literally gets smarter with use.
+
+### Cross-Workspace Skill Distillation
+
+To enable intelligence transfer across different projects without leaking private data, Nexora formalizes **Cross-Workspace Skill Distillation**:
+1. **Generalization Pass:** When an agent successfully solves a complex problem in Workspace A, the runtime initiates a generalization pass that extracts the abstract logic, algorithmic methodology, and workflow patterns into a **Global Lesson** (`TOOL-409`).
+2. **Privacy Scrubbing & Sanitization:** Before a lesson is promoted to the global Skill/Memory registry, it undergoes automated cryptographic and semantic scrubbing to remove all project-specific file paths, API keys, customer data, and private content.
+3. **Safe Pollination:** Sanitized global lessons become available to other workspaces as generalized expertise, allowing agents in Workspace B to benefit from problem-solving strategies discovered in Workspace A while maintaining strict workspace isolation.
 
 The semantic lesson projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
 A lesson MUST retain agent/workspace scope, source execution provenance, evidence references,

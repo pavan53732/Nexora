@@ -112,6 +112,12 @@ Delegates to Tester Agent -> Writes and runs tests
     v
 Delegates to Reviewer Agent -> Reviews changes
 
+## Competitive Multi-Agent Consensus Verification
+
+For tasks classified as **high-risk, security-critical, or complex architectural changes**, Nexora deepens the mandatory review pass into a **Competitive Multi-Agent Consensus Verification** model:
+1. **Adversarial Red-Teaming:** In addition to the standard Reviewer agent pass, the runtime can spawn an independent "Adversary Agent" whose sole objective is to discover logical flaws, security vulnerabilities, or edge-case failures in the implementation agent's output.
+2. **Cross-Model / Cross-Specialist Agreement:** For critical artifact promotion, the workflow coordinator requires cryptographic and verification agreement between two independent specialist validation passes (e.g., Coder vs Security Auditor) before changes are promoted from the private overlay to the shared workspace base snapshot.
+
 ## Mandatory Review Rule (FR-EV-006)
 
 For tasks classified **important** (sensitivity, risk, or cost), the runtime
