@@ -48,7 +48,7 @@ This document covers creation, initialization, active use, shutdown/teardown, an
 
 **Execution & Caching.** With permission granted, `ToolManager.execute(toolId, params, context)` runs the tool. If the tool requires sandbox isolation, execution is redirected inside the sandbox. Identical parameter sets may be served from the tool result cache.
 
-**Error Handling.** Tool timeouts produce error NXR-2002 and return a `ToolResult.Error` carrying a `recoverable` flag, letting the agent decide whether to retry.
+**Error Handling & Unknown Completion.** Tool timeouts or transport interruptions without confirmed operation results do not assert side effect failure; instead, they publish `completionState = UNKNOWN_COMPLETION` with reconciliation evidence references per `architecture/TOOL_SYSTEM.md`, requiring idempotency authorization before conditional retry.
 
 ---
 
