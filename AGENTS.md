@@ -84,3 +84,26 @@ Commit messages must describe:
 - Why it was changed (the contradiction or gap)
 - What was verified (the validation commands run)
 - What was intentionally preserved (historical references left untouched)
+
+## Rule 9 — Cloud-only AI models; no API credit or token-budget limits for the user
+
+Nexora uses **cloud/external AI models only**. It must not bundle, load, execute,
+or manage any local AI model or local AI inference runtime (no Ollama, LM Studio,
+GGUF, TFLite, ONNX, or on-device model of any kind). All agent inference, planning,
+embeddings, routing, and provider-backed execution go through eligible cloud
+providers (DEC-41, DEC-42, DEC-44).
+
+Because the user of the Nexora app is the product owner, the app imposes **no API
+credit limits and no token-budgeting limits** on that user. No internal credit
+balance, spending wallet, cost quota, token ceiling, or automatic cost/token-based
+execution stop, pause, downgrade, or refusal may exist (DEC-25, DEC-45). Financial
+and usage information may remain observable, but it must never become an execution
+gate for the user.
+
+- Do not assume a local model path, localhost AI endpoint, or offline inference
+  mode is available or eligible — verify against the active provider scope before
+  citing it.
+- Do not assume an internal credit, spending, or token-budget control exists for
+  the user — verify against DEC-25/DEC-45 before citing any such limit.
+- This rule overrides any model-level default that implies local AI models or
+  user-facing credit/token gating.

@@ -12,7 +12,7 @@ decision — UI, roadmap, marketing, and implementation — must align with thes
 principles. If a proposed feature contradicts a principle, the feature is wrong, not
 the principle.
 
-**Stable IDs:** `PP-001` … `PP-015` (referenced in docs, backlog, and issue tracking).
+**Stable IDs:** `PP-001` … `PP-017` (referenced in docs, backlog, and issue tracking).
 
 ## 2. Positioning Statement
 
@@ -38,9 +38,9 @@ agent plans, uses tools, iterates, and completes the goal autonomously.
 
 ### PP-002 — Provider-Agnostic
 
-Nexora is provider-agnostic within a **cloud/external provider boundary**. A single abstraction supports **OpenAI-compatible APIs, Anthropic, Gemini, Groq, OpenRouter, and custom external endpoints**. The runtime never depends on a specific provider; users bring their own provider keys and can switch cloud profiles per workspace. Local AI models and local inference runtimes are out of scope under DEC-41 and DEC-42.
+Nexora is provider-agnostic within a **cloud/external provider boundary**. A single abstraction supports **OpenAI-compatible APIs, Anthropic, Gemini, Groq, OpenRouter, and custom external endpoints**. The runtime never depends on a specific provider; users bring their own provider keys and can switch cloud profiles per workspace. Local AI models and local inference runtimes are out of scope under DEC-41, DEC-42, and the standing cloud-only rule DEC-44.
 
-- Sources: [ADR-0005](../docs/adr/ADR-0005-Provider-Abstraction.md) · [DEC-41](../decisions/DEC-41-cloud-only-ai-provider-scope.md) · [specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md)
+- Sources: [ADR-0005](../docs/adr/ADR-0005-Provider-Abstraction.md) · [DEC-41](../decisions/DEC-41-cloud-only-ai-provider-scope.md) · [DEC-42](../decisions/DEC-42-no-local-ai-models-and-classifier-boundary.md) · [DEC-44](../decisions/DEC-44-standing-cloud-only-ai-models.md) · [specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md)
 
 ### PP-003 — Tool-Based Execution
 
@@ -154,9 +154,12 @@ Technical context and provider limits remain bounded per request/session for cor
 liveness, and safety, with transparent usage tracking. Provider usage and estimated cost
 are user-visible information, not an internal credit balance or spending quota. Nexora
 MUST NOT block, pause, downgrade, or terminate a technically valid progressing agent
-because of internal credits or financial cost.
+because of internal credits or financial cost. Because the user of the Nexora app is the
+product owner, the app imposes **no API credit limits and no token-budgeting limits** on
+that user — there is no token ceiling, credit balance, spending wallet, or cost quota that
+can stop, pause, downgrade, or refuse an otherwise valid operation for the user.
 
-- Sources: [DEC-25](../decisions/DEC-25-no-internal-credit-cost-gating.md) · [AGENT_RUNTIME → TokenBudget](../architecture/AGENT_RUNTIME.md) · [FR-P009](../requirements/FR.md)
+- Sources: [DEC-25](../decisions/DEC-25-no-internal-credit-cost-gating.md) · [DEC-45](../decisions/DEC-45-no-api-credit-or-token-limits-for-user.md) · [AGENT_RUNTIME → TokenBudget](../architecture/AGENT_RUNTIME.md) · [FR-P009](../requirements/FR.md)
 
 ### PP-014 — Offline Workspace Access
 
@@ -170,6 +173,35 @@ The agent-first model requires a 3-step guided setup: **provider → workspace �
 first goal**. The app explains itself in minutes, then gets out of the way.
 
 - Sources: [NFR-USE-004](../requirements/NFR.md) · [MVP backlog](../backlog/MVP.md)
+
+### PP-016 — Cloud-Only AI Models
+
+Nexora uses **cloud/external AI models only**. It must not bundle, load, execute,
+or manage any local AI model or local AI inference runtime — no Ollama, LM Studio,
+GGUF, TFLite, ONNX, or on-device model of any kind. All agent inference, planning,
+embeddings, routing, and provider-backed execution go through eligible cloud
+providers. A Custom endpoint is cloud/external only; a localhost, loopback,
+app-private, or on-device model endpoint is not an eligible provider. When no
+eligible cloud provider is reachable, the only permitted degradation path is
+read-only workspace access plus notification — never local inference.
+
+- Sources: [DEC-41](../decisions/DEC-41-cloud-only-ai-provider-scope.md) · [DEC-42](../decisions/DEC-42-no-local-ai-models-and-classifier-boundary.md) · [DEC-44](../decisions/DEC-44-standing-cloud-only-ai-models.md) · [NFR-REL-005](../requirements/NFR.md) · [NFR-REL-006](../requirements/NFR.md) · [CONSTRAINTS → AI Providers](../requirements/CONSTRAINTS.md)
+
+### PP-017 — No API Credit or Token-Budget Limits for the User
+
+Because the user of the Nexora app is the product owner, the app imposes **no API
+credit limits and no token-budgeting limits** on that user. There is no internal
+credit balance, spending wallet, cost quota, token ceiling, or automatic
+cost/token-based execution stop, pause, downgrade, or refusal for the user.
+Financial and usage information may remain observable and may inform non-blocking
+presentation or routing preferences, but it must never become an execution gate
+for the user. Technical limits that exist for correctness, safety, liveness, and
+device protection (context-window, output-token, provider-call, Tool-call,
+repair, verifier, wall-clock, cancellation, Android lifecycle, device/resource
+ceilings, retry/reconciliation) remain mandatory and are not financial credit
+restrictions.
+
+- Sources: [DEC-25](../decisions/DEC-25-no-internal-credit-cost-gating.md) · [DEC-45](../decisions/DEC-45-no-api-credit-or-token-limits-for-user.md) · [AGENT_RUNTIME → TokenBudget](../architecture/AGENT_RUNTIME.md) · [FR-P009](../requirements/FR.md)
 
 ---
 
@@ -208,6 +240,8 @@ your pocket."*
 | PP-013 Token usage & cost transparency | DEC-25 | AGENT_RUNTIME | AI_PROVIDERS | FR-P009 |
 | PP-014 Offline workspace access | DEC-41 | — | — | NFR-REL-006 |
 | PP-015 First-run onboarding | — | — | — | NFR-USE-004 |
+| PP-016 Cloud-only AI models | DEC-41, DEC-42, DEC-44 | PROVIDER_SYSTEM | AI_PROVIDERS | CONSTRAINTS, ASSUMPTIONS |
+| PP-017 No API credit/token limits for the user | DEC-25, DEC-45 | AGENT_RUNTIME, PROVIDER_SYSTEM | CONTEXT_MANAGEMENT, AI_PROVIDERS | FR-P009 |
 
 ---
 
