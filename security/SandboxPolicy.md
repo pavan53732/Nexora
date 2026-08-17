@@ -23,7 +23,7 @@ The Nexora sandbox confines all agent and tool execution to the app's private st
 
 | Property | Value |
 |----------|-------|
-| Root path | `/data/data/com.nexora.app/sandbox/workspaces/{id}/files/`
+| Root path | `/data/data/com.nexora.app/sandbox/workspaces/{id}/files/` |
 | Accessible storage | App-private only; never `/sdcard`, `/system`, or `/data/data/other-app/` |
 | Inter-workspace access | Prohibited — each workspace's VFS root is an isolated directory |
 | Host IPC | Not available — no AIDL, no content providers, no broadcasts from sandbox |

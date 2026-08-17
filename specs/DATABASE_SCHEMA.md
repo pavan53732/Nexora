@@ -215,13 +215,13 @@ The dedicated process-death recovery-evidence artifact selected by DEC-7.12. Eac
 | stepIndex | INTEGER | |
 | variablesJson | TEXT | |
 | historyLogJson | TEXT | |
-| acceptanceProgressJson | TEXT | | Checkpointed acceptance-criterion progress vector and evidence references |
-| failureLedgerJson | TEXT | | Task-scoped failure ledger and blacklist disposition |
-| effectiveDeadline | TEXT | | ISO-8601 UTC end-to-end deadline |
-| remainingBudgetMs | INTEGER | | Remaining parent budget at checkpoint time |
-| tokenBudgetUsed | INTEGER | |
-| phase | TEXT | |
-| occurredAt | TEXT | |
+| acceptanceProgressJson | TEXT | Checkpointed acceptance-criterion progress vector and evidence references |
+| failureLedgerJson | TEXT | Task-scoped failure ledger and blacklist disposition |
+| effectiveDeadline | TEXT | ISO-8601 UTC end-to-end deadline |
+| remainingBudgetMs | INTEGER | Remaining parent budget at checkpoint time |
+| tokenBudgetUsed | INTEGER | Token budget consumed |
+| phase | TEXT | Execution phase at checkpoint |
+| occurredAt | TEXT | ISO-8601 UTC |
 
 `execution_checkpoint.historyLogJson` is a structured execution-recovery and audit projection. It MUST NOT contain unrestricted internal model reasoning, hidden system prompts, raw untrusted content, credentials, raw provider continuation state, or other private provider artifacts. Durable/user-visible reasoning remains limited to the redacted `reasoning_summary` contract and structured evidence/provenance records.
 
@@ -351,7 +351,11 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | status | TEXT | Maps MemoryStatus |
 | createdAt | TEXT | |
 | updatedAt | TEXT | |
-| INDEX idx_memory_ws_kind (workspaceId, kind) |
+
+**Indexes:**
+| Index | Definition |
+|-------|------------|
+| idx_memory_ws_kind | (workspaceId, kind) |
 
 ### `tool_record` (append-only)
 | Column | Type | Notes |
@@ -383,7 +387,11 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | name | TEXT | |
 | embeddingRef | TEXT NULL | |
 | createdAt | TEXT | |
-| INDEX idx_graph_name (name) |
+
+**Indexes:**
+| Index | Definition |
+|-------|------------|
+| idx_graph_name | (name) |
 
 ### `graph_edge`
 | Column | Type | Notes |
@@ -405,9 +413,9 @@ only uncompleted calls and reconcile non-idempotent in-flight calls from durable
 | excludedSegmentsJson | TEXT | |
 | contentHash | TEXT | |
 | compactionLineageJson | TEXT | |
-| progressSignalJson | TEXT | | ADR-0009 semantic state-delta evidence |
-| effectivePolicyJson | TEXT | | Effective bounded ReasoningPolicy after ceiling evaluation |
-| ceilingDecisionJson | TEXT | | Ceiling acceptance/rejection and applicable policy-boundary evidence |
+| progressSignalJson | TEXT | ADR-0009 semantic state-delta evidence |
+| effectivePolicyJson | TEXT | Effective bounded ReasoningPolicy after ceiling evaluation |
+| ceilingDecisionJson | TEXT | Ceiling acceptance/rejection and applicable policy-boundary evidence |
 | createdAt | TEXT | |
 
 ### `reasoning_summary`

@@ -53,13 +53,13 @@ These are the most critical violations to watch for in code review:
 
 | Violation | Why it's forbidden |
 |-----------|-------------------|
-| `ui/ → sandbox/` | UI talks only to `application/` + `shared/` interfaces (MODULE_BOUNDARIES); sandbox is infrastructure | |
-| `ui/ → providers/` | UI must go through `runtime/`; provider selection is a runtime concern | |
-| `plugins/ → ui/` | Plugins never touch UI; they expose tools only | |
-| `providers/ → Android UI` | Providers are pure Kotlin with zero Compose/View dependencies | |
-| `sandbox/ → providers/` | Sandbox is infrastructure; it knows nothing about AI | |
-| `tools/ → ui/` | Tools are backend logic; never import Compose or View | |
-| `shared/ → any domain module` | `shared/` is the leaf — no upward dependencies ever | |
+| `ui/ → sandbox/` | UI talks only to `application/` + `shared/` interfaces (MODULE_BOUNDARIES); sandbox is infrastructure |
+| `ui/ → providers/` | UI must go through `runtime/`; provider selection is a runtime concern |
+| `plugins/ → ui/` | Plugins never touch UI; they expose tools only |
+| `providers/ → Android UI` | Providers are pure Kotlin with zero Compose/View dependencies |
+| `sandbox/ → providers/` | Sandbox is infrastructure; it knows nothing about AI |
+| `tools/ → ui/` | Tools are backend logic; never import Compose or View |
+| `shared/ → any domain module` | `shared/` is the leaf — no upward dependencies ever |
 
 ## Hilt Module Binding Rule
 

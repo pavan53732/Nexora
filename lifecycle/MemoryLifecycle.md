@@ -1,4 +1,4 @@
-> **Status: DERIVATIVE** for memory lifecycle narrative.
+> **Status: DERIVED** for memory lifecycle narrative.
 > **The canonical state machine definition is owned by
 > [../state-machines/MemoryLifecycle.md](../state-machines/MemoryLifecycle.md).**
 > This file describes the memory lifecycle in prose; it MUST NOT redefine, rename,
