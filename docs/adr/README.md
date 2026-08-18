@@ -18,6 +18,7 @@ Architecture Decision Records (ADRs) document major architectural decisions, the
 | [ADR-0007](ADR-0007-Skills-First-Class.md) | Skills as a First-Class Capability | Accepted | 2026-08-03 |
 | [ADR-0008](ADR-0008-Typed-Inference-Streaming.md) | Typed Inference Streaming and Structured Reasoning Artifacts | Accepted | 2026-08-06 |
 | [ADR-0009](ADR-0009-Adaptive-Autonomy-And-Persistence.md) | Adaptive Autonomy, Anti-Hang, and Resumable Escalation | Accepted | 2026-08-11 |
+| [ADR-0010](ADR-0010-Evidence-Bounded-Nexora-Execution-Strengthening-And-Verification.md) | Evidence-Bounded Nexora Execution Strengthening and Verification | Accepted | 2026-08-19 |
 
 ## ADR Template
 

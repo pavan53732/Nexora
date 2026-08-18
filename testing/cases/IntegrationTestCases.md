@@ -1,5 +1,7 @@
 # Integration Test Case Inventory — Nexora
 
+> ADR-0010: case rows are `TEST DEFINED` until execution produces a result; `EXECUTED EVIDENCE` requires the common reproducible envelope in `testing/EVIDENCE_CONVENTIONS.md`. Deterministic controls are fixture-scoped and test-only.
+
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | IT-CONTRACT-001 | IT-CONTRACT | Validate cross-layer correlation continuity | Core Runtime | Planned | `evidence/integration/IT-CONTRACT-001/` | 2026-08-04 |
@@ -7,6 +9,7 @@
 | IT-AGENT-001 | IT-AGENT | Validate agent task start with durable projection | Agent Runtime | Planned | `evidence/integration/IT-AGENT-001/` | 2026-08-04 |
 | IT-TOOL-001 | IT-TOOL | Validate permission and sandbox checks before tool side effects | Tooling + Sandbox | Planned | `evidence/integration/IT-TOOL-001/` | 2026-08-04 |
 | IT-PROVIDER-001 | IT-PROVIDER | Validate provider stream terminal marker semantics | Provider Layer | Planned | `evidence/integration/IT-PROVIDER-001/` | 2026-08-04 |
+| IT-PROVIDER-002 | IT-PROVIDER | Validate AI Settings Test Connection and capability refresh use provider-owned health/catalog checks without creating Task/Execution state, granting permissions, invoking Tools, or exposing API keys | Provider + UI + Security | Planned | `evidence/integration/IT-PROVIDER-002/` | 2026-08-19 |
 | IT-PLUGIN-001 | IT-PLUGIN | Validate transactional plugin activation and rollback | Plugin System | Planned | `evidence/integration/IT-PLUGIN-001/` | 2026-08-04 |
 | IT-MEMORY-001 | IT-MEMORY | Validate memory write/retrieve provenance linkage | Memory System | Planned | `evidence/integration/IT-MEMORY-001/` | 2026-08-04 |
 | IT-TOOL-002 | IT-TOOL | TOOL-408 validates both required scopes before side effects | Tool + Security | Planned | `evidence/integration/IT-TOOL-002/` | 2026-08-06 |

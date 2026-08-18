@@ -2,6 +2,8 @@
 
 > **DEC-42 boundary:** `SEC-PERM-037..052`, `SEC-PERM-054`, and `SEC-PERM-056..064` retain classifier-era case identities for historical traceability only. Their classifier-selection, classifier-input, classifier-skip, and classifier-denial purposes are superseded as active execution requirements because no local classifier is implemented or invoked. The existing `Planned` values do not claim current implementation or execution evidence. Active authorization coverage remains governed by `security/PermissionModel.md`, the non-classifier PermissionModel cases, and the current Tool authorization contract.
 
+> ADR-0010: case rows are `TEST DEFINED` until execution produces a result; `EXECUTED EVIDENCE` requires the common reproducible envelope in `testing/EVIDENCE_CONVENTIONS.md`. Deterministic controls are fixture-scoped and test-only.
+
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | SEC-PERM-001 | SEC-PERM | Validate authorization before tool side effects | Security | Planned | `evidence/security/SEC-PERM-001/` | 2026-08-04 |

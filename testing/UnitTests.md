@@ -88,3 +88,7 @@ At minimum, unit suites for contract-sensitive modules SHOULD explicitly assert:
 
 - `UT-CONV-001..006` — conversation checkpoint lifecycle and branch semantics
 - `UT-SKILL-001..006` — skill lifecycle metadata and authorization-boundary semantics
+
+## ADR-0010 Evidence and Deterministic Controls
+
+Unit cases that exercise progress, reasoning, context, evidence, authorization, lifecycle, recovery, or nondeterministic inputs MUST use the common evidence envelope in `testing/EVIDENCE_CONVENTIONS.md`. A case row is `TEST DEFINED` until execution produces a result; only a retained reproducible artifact is `EXECUTED EVIDENCE`. Deterministic clocks, seeds/jitter, provider outcomes, resource conditions, permission outcomes, storage/lock state, scheduler order, and process/device conditions are test-only inputs and MUST NOT bypass the owning contract.

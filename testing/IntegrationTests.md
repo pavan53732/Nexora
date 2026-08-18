@@ -35,6 +35,7 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-AGENT-001` agent starts task and emits durable lifecycle events
 - `IT-TOOL-001` tool invocation flows through permission and sandbox checks
 - `IT-PROVIDER-001` provider streaming returns ordered terminal semantics
+- `IT-PROVIDER-002` AI Settings Test Connection and capability refresh use provider-owned health/catalog checks without workspace execution authorization, Tool invocation, or secret exposure
 - `IT-PLUGIN-001` plugin activation registers capabilities transactionally
 - `IT-CONTRACT-001` runtime replay or retry preserves correlation and durable versions
 - `IT-TOOL-002..014` complete authorization ordering, error mapping, and correlation preservation
@@ -97,6 +98,10 @@ Integration suites SHOULD explicitly validate:
 - `IT-REASON-001..004` validate effort routing, verifier/critic, OFF behavior, and bounded repair.
 - `IT-CONTEXT-001..002` validate model-aware ContextSnapshot assembly and resume lineage.
 - All newly listed model, Tool-discovery, long-horizon, and multimodal cases are `Planned`; their presence does not claim runtime implementation or executed evidence.
+
+## ADR-0010 Evidence and Deterministic Controls
+
+Integration cases MUST use the common evidence envelope in `testing/EVIDENCE_CONVENTIONS.md` for source revision, fixture/control revision, environment, existing Task/Execution/Workflow/agent/tool/stream/correlation/checkpoint identities, expected and observed owner states, terminal disposition, and artifact location. Fault-injection categories are selected by the affected integration contract and release gate; they are not a separate lifecycle or milestone. Planned rows remain `TEST DEFINED` until execution, and retained reproducible artifacts are required for `EXECUTED EVIDENCE`.
 
 - `IT-CONV-001..007` — conversation checkpoint and branching integration (immutability, source preservation, stale/expired rejection, conflicting mutation rejection, interrupted branch safety, no external side-effect reversal)
 - `IT-SKILL-001..006` — skill registry/runtime integration (validation, acquisition, binding, revocation, automatic selection, permission inheritance)

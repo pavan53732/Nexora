@@ -98,9 +98,18 @@ Rules:
 - **A profile maps to a `ProviderConfig`** (see [models/Provider.md](../models/Provider.md))
   plus a SecureKeyStore key reference.
 
+## AI Settings and Test Connection Behavior (Creator Product Design)
+
+The AI Settings surface exposes the existing named provider-profile fields: provider/type, external base URL, API key, and model name. It also exposes `TEST CONNECTION`, capability refresh/detection where supported, connection status, validation result, and `SAVE`. Persistence remains the existing provider-profile and `SecureKeyStore` boundary; this supporting UI contract creates no second configuration store.
+
+`TEST CONNECTION` verifies provider/model connectivity and capability compatibility through the existing health-check and model-catalog contracts. It does not authorize workspace execution, create a Task or Execution, grant a permission, invoke a Tool, start a sandbox process, or represent completed user work. A successful connection result is a provider observation, not implementation or executed-evidence proof for every advertised capability.
+
+API keys MUST remain secret values. They MUST be stored encrypted, never logged, placed in prompts, written to evidence or telemetry, or included in generated artifacts. Provider capability detection MUST preserve explicit incompatibility outcomes and MUST NOT silently downgrade required capabilities.
+
 ## Model-Catalog and Capability Negotiation
 
-A profile MUST NOT treat a provider name as proof that every model in that provider supports the same capabilities. Before a route is accepted, the adapter MUST resolve a model descriptor from the current provider catalog and negotiate the requested hard capabilities, modalities, context/output limits, reasoning effort, stream mode, cancellation, resume, data locality, and provider contract version.
+A profile MUST NOT treat a provider name as proof that every model in that provider supports the same capabilities.
+ Before a route is accepted, the adapter MUST resolve a model descriptor from the current provider catalog and negotiate the requested hard capabilities, modalities, context/output limits, reasoning effort, stream mode, cancellation, resume, data locality, and provider contract version.
 
 Catalog refresh is separate from an in-flight route. A refreshed catalog may change new-route eligibility, deprecation status, or available model choices, but it MUST NOT mutate the model identity or capability snapshot already recorded on an active execution. Unsupported advanced capabilities MUST produce an explicit incompatibility outcome or a policy-approved fallback; they MUST NOT be silently discarded.
 

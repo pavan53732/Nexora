@@ -1,5 +1,7 @@
 # Regression Test Case Inventory — Nexora
 
+> ADR-0010: case rows are `TEST DEFINED` until execution produces a result; `EXECUTED EVIDENCE` requires the common reproducible envelope in `testing/EVIDENCE_CONVENTIONS.md`. Deterministic controls are fixture-scoped and test-only.
+
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | RT-CONTRACT-001 | RT-CONTRACT | Compare canonical contract samples for drift | API Contracts | Planned | `evidence/regression/RT-CONTRACT-001/` | 2026-08-04 |

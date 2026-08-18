@@ -1,5 +1,7 @@
 # Unit Test Case Inventory — Nexora
 
+> ADR-0010: case rows are `TEST DEFINED` until execution produces a result; `EXECUTED EVIDENCE` requires the common reproducible envelope in `testing/EVIDENCE_CONVENTIONS.md`. Deterministic controls are fixture-scoped and test-only.
+
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | UT-CONTRACT-001 | UT-CONTRACT | Validate tool input schema enforcement | Core Runtime | Planned | `evidence/unit/UT-CONTRACT-001/` | 2026-08-04 |

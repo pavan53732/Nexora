@@ -173,6 +173,16 @@ When a bounded-progress violation is detected, the runtime MUST either:
 3. fall back to a different provider/tool strategy, or
 4. terminate with explicit incomplete/blocked status.
 
+## Metric-Driven Execution and Evidence Projection (ADR-0010)
+
+The Agent Runtime MUST expose a derived execution/progress/verification projection over the existing `Agent`, `Task`, `Execution`, `Workflow`, `PlanStep`, `AcceptanceProgressVector`, `ProgressSignal`, `ClaimRecord`, checkpoint, trace, and evidence references. The projection MUST make the current objective, actionable next work, acceptance-criterion status, progress reason, verification state, blocked reason, recovery/replan candidate, and completion disposition explainable without creating a second lifecycle owner.
+
+A metric is a derived evaluation over existing acceptance criteria, `ProgressSignal`, Task/Execution/Workflow state, and evidence. Nexora MUST NOT persist a `GoalMetric` identity, metric lifecycle, metric-owned scheduler, metric-owned authorization, or metric-owned completion authority. Metric output MAY recommend continue, recover, replan, escalate, or report incomplete; only the existing lifecycle and authorization owners may transition state or authorize side effects.
+
+Every projection observation MUST retain the existing execution lineage and evidence references needed to distinguish `CANONICAL REQUIREMENT`, `IMPLEMENTED`, `TEST DEFINED`, `TESTED`, and `EXECUTED EVIDENCE`. A metric MUST NOT infer lifecycle success from confidence, latency, logs, file-change count, or provider output alone. It MUST NOT reset a deadline, retry budget, failure ledger, checkpoint, or unknown-completion classification.
+
+The execution trace MUST preserve the existing Planner → ExecutionPlan → ContextSnapshot → ProviderRoutePlan → typed stream → Tool authorization → Executor → result/memory/EventBus → verification → bounded repair/replan → claim/evidence validation path. This is an explicit composition and observability contract; it does not create an Execution Kernel or replace the ownership boundaries declared by `RUNTIME.md`, `TOOL_SYSTEM.md`, `WORKFLOW_ENGINE.md`, `MULTI_AGENT_SYSTEM.md`, or `specs/CONTEXT_MANAGEMENT.md`.
+
 ## Controlled Execution-Capability Escalation
 
 The static capability matrix remains authoritative for ordinary dispatch. An agent MUST NOT acquire Terminal, Background, Delegate, or any other capability merely because the shared runtime can perform that operation. When a task requires a capability not granted to the current agent type, the runtime has only two permitted paths: delegate the work to an eligible agent, or create a task-scoped capability-escalation request through the existing authorization and approval flow.

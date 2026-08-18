@@ -50,6 +50,7 @@ The authoritative ownership map is [docs/CANONICAL_SOURCES.md](docs/CANONICAL_SO
 |----------|------|
 | **Product Vision** | [docs/PRODUCT_VISION.md](docs/PRODUCT_VISION.md) |
 | **Product Principles** | [docs/PRODUCT_PRINCIPLES.md](docs/PRODUCT_PRINCIPLES.md) |
+| **Creator-Owned Product Design** | [NEXORA_PRODUCT_DESIGN_BY_CREATER.md](NEXORA_PRODUCT_DESIGN_BY_CREATER.md) — creator-owned product authority for what Nexora is; not an ADR or subsystem specification |
 | **Architecture** | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
 | **System Design** | [docs/SYSTEM_DESIGN.md](docs/SYSTEM_DESIGN.md) |
 | **Roadmap** | [docs/ROADMAP.md](docs/ROADMAP.md) |

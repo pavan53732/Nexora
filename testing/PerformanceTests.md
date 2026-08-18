@@ -81,6 +81,10 @@ Reasoning benchmarks MUST compare effort levels and record reasoning-token usage
 
 Model and provider claims remain evidence-scoped. Vendor-published capability or benchmark results may inform route selection and test design, but Nexora release gates require reproducible Nexora evidence under the declared device, provider, model, and fixture conditions.
 
+## ADR-0010 Evidence and Deterministic Controls
+
+Performance cases MUST record the common evidence envelope in `testing/EVIDENCE_CONVENTIONS.md`, including source/fixture revision, device/network/environment matrix, deterministic clock/seed/provider/resource/process conditions, existing Task/Execution/Workflow/agent/tool/stream/correlation/checkpoint identities, metric definition, sample count, measured distribution, acceptance target, and artifact location. Resource and context budgets remain canonical requirements; performance results measure implementation and execution evidence without redefining those budgets. Fixed controls MUST be identified when comparing progress, replanning, recovery, context compilation, or liveness behavior.
+
 ## Regression Policy
 
 Performance regressions are compared against the recorded baseline per `docs/PERFORMANCE_BUDGET.md` §Enforcement: a regression exceeding 20% from baseline blocks merge to the release branch, and any metric at or above its Critical threshold blocks release.

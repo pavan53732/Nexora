@@ -13,10 +13,21 @@
 - High-level overviews and diagrams are non-normative unless explicitly marked canonical.
 - Diagram artifacts use two tiers: (1) Mermaid code-block diagrams in ADRs and design docs follow the DL-011 practice; (2) the SVG/HTML overview visuals under `docs/diagrams/` are DERIVED, non-normative design-doc visuals added by DL-045..DL-047. DL-011 remains the historical record for the Mermaid code-block standard; it is not amended here.
 
+## Creator-Owned Product Design Authority
+
+`NEXORA_PRODUCT_DESIGN_BY_CREATER.md` is the **CREATOR-OWNED PRODUCT DESIGN AUTHORITY** for what Nexora is. It is not an AI-owned canonical subsystem document, ADR, implementation manifest, or replacement for any canonical architecture, specification, lifecycle, model, protocol, API, SDK, registry, requirement, UI, security, or testing owner. AI agents MUST read it before product or architectural changes, MUST follow its selected product decisions, and MUST NOT modify or silently reinterpret it.
+
+If a canonical document conflicts with the creator-owned product design, the required protocol is:
+
+> **CONFLICT → STOP → REPORT → CREATOR DECISION**
+
+The conflict report MUST identify both documents, exact line ranges, competing statements, affected ownership/lifecycle/security/persistence/evidence semantics, and the creator decision required. This document does not silently resolve conflicts by changing either authority.
+
 ## Source Map
 
 | Concept | Canonical source | Supporting / derived sources |
 |---|---|---|
+| Creator-owned product design boundary (what Nexora is; not a canonical subsystem source) | `NEXORA_PRODUCT_DESIGN_BY_CREATER.md` | `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `docs/PRODUCT_PRINCIPLES.md`; all canonical subsystem owners below define realization |
 | Runtime composition and service boundaries | `architecture/RUNTIME.md` | `docs/ARCHITECTURE.md`, `docs/SYSTEM_DESIGN.md`, `docs/MODULE_BOUNDARIES.md`, `docs/DEPENDENCY_GRAPH.md` |
 | Single-agent autonomous loop | `architecture/AGENT_RUNTIME.md` | `docs/SYSTEM_DESIGN.md`, `docs/api/Agent-API.md`, `sdk/AgentSDK.md`, `specs/EXECUTION_LIFECYCLE.md` |
 | Bounded reasoning modes and per-iteration progress guards | `architecture/AGENT_RUNTIME.md` | `specs/EXECUTION_LIFECYCLE.md`, `decisions/DEC-7-retry-attempt-state.md`, `state-machines/AgentLifecycle.md`, `state-machines/TaskLifecycle.md` |
@@ -106,6 +117,15 @@
 | Plugin trust and revocation | `architecture/PLUGIN_SYSTEM.md` | `state-machines/PluginLifecycle.md`, `registry/PLUGINS.md`, `sdk/PluginSDK.md` |
 | Browser page/action state | `specs/BROWSER.md` | `specs/BACKGROUND_EXECUTION.md`, `architecture/TOOL_SYSTEM.md` (§Browser tools), `architecture/TOOL_SYSTEM.md` (§Operation-Level Side-Effect Recovery) |
 | Documentation governance and implementation-ready contract discipline | `standards/Documentation-Standard.md` + `docs/TRACEABILITY_RULES.md` | `docs/DOCUMENTATION_COMPLETENESS_INVENTORY.md`, `docs/TRACEABILITY.md`, `docs/REQUIREMENT_COVERAGE_LEDGER.md` |
+
+| ADR-0010 accepted decision record | `docs/adr/ADR-0010-Evidence-Bounded-Nexora-Execution-Strengthening-And-Verification.md` | The canonical owners listed below; `docs/TRACEABILITY.md`; `docs/REQUIREMENT_COVERAGE_LEDGER.md` | Records the accepted Nexora decision; it does not replace the owning architecture, security, specification, standards, or testing documents. |
+| Metric-driven execution/progress/verification projection | `architecture/AGENT_RUNTIME.md` | `architecture/RUNTIME.md`, `architecture/WORKFLOW_ENGINE.md`, `specs/CONTEXT_MANAGEMENT.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `testing/EVIDENCE_CONVENTIONS.md` | Derived evaluations use existing Agent/Task/Execution/Workflow/ProgressSignal/acceptance/evidence identities; no GoalMetric identity or lifecycle. |
+| Bounded read-only investigation/reviewer projection | `architecture/MULTI_AGENT_SYSTEM.md` | `architecture/AGENT_RUNTIME.md`, `architecture/RUNTIME.md`, `security/PermissionModel.md`, `testing/EVIDENCE_CONVENTIONS.md` | Uses existing agent/task/execution/delegation/artifact identities and authority; no reviewer or Batch lifecycle is created. |
+| Derived work-group projection | `architecture/RUNTIME.md` | `architecture/WORKFLOW_ENGINE.md`, `architecture/AGENT_RUNTIME.md`, `models/Task.md`, `models/Execution.md`, `models/Workflow.md`, `testing/EVIDENCE_CONVENTIONS.md` | Recomputable view over existing source identities; no persisted work-group identity, lifecycle, scheduler, authorization, recovery, or evidence root. |
+| Android boundary enforcement | `docs/MODULE_BOUNDARIES.md` + `docs/DEPENDENCY_GRAPH.md` | `architecture/RUNTIME.md`, `security/PermissionModel.md`, `security/SandboxPolicy.md`, `specs/BACKGROUND_EXECUTION.md`, `testing/EVIDENCE_CONVENTIONS.md` | Existing Android-aware owners and allowed dependency edges remain authoritative; checks and tests enforce rather than replace them. |
+| Derived cross-policy eligibility report and stateless evaluator boundary | `security/PermissionModel.md` | `architecture/RUNTIME.md`, `architecture/TOOL_SYSTEM.md`, `specs/CONTEXT_MANAGEMENT.md`, `docs/DEPENDENCY_GRAPH.md`, `testing/EVIDENCE_CONVENTIONS.md` | Existing owner decisions remain authoritative; no persisted Policy Engine identity, lifecycle, precedence, veto, or recovery authority. |
+| Mechanical architecture/dependency/documentation compliance checks | `docs/DEPENDENCY_GRAPH.md` + `standards/Documentation-Standard.md` | `docs/MODULE_BOUNDARIES.md`, `docs/CANONICAL_SOURCES.md`, `docs/TRACEABILITY.md`, `docs/REQUIREMENT_COVERAGE_LEDGER.md`, `testing/EVIDENCE_CONVENTIONS.md` | Checks may enforce existing canonical contracts and report findings; they cannot invent or own architecture. |
+| Common verification matrix, evidence envelope, and deterministic test controls | `testing/EVIDENCE_CONVENTIONS.md` | Existing unit, integration, E2E, performance, regression, security, lifecycle, context, liveness, sandbox, and Android test inventories; `requirements/NFR.md`; `docs/TRACEABILITY.md` | Distinguishes requirement, implementation, test definition, tested execution, and retained executed evidence; controls are test-only. |
 
 ## Contract Derivation
 

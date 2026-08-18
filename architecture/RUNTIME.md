@@ -158,6 +158,14 @@ Loop back to Planner (reflect and plan next step)
 
 The runtime composition layer MUST route, but does not replace, the canonical Task lifecycle transitions. Before queueing, task dependencies are validated as an acyclic graph; invalid references or cycles return `NXR-1014` without Task mutation. A failed dependency returns `NXR-1015` and propagates terminal failure to dependent tasks. Approval denial produces `NXR-2003` / `USER_DENIED` and a `WaitingApproval → Failed` Task transition; approval expiry produces `NXR-2003` / `POLICY_DENIAL` under DEC-36 with the same Task effect; the participating Agent may independently project `WaitingApproval → Paused` under DEC-35, while audit and activity projections preserve expiry as distinct from explicit user denial. The effective task deadline bounds `Pending`, `Blocked`, and `BlockedAwaitingInput`, whose expiry returns `NXR-1016` and transitions to `Failed`. Provider `Retry-After` waits are honored only within the parent task effective deadline; an exhausted deadline produces `NXR-1016` rather than an indefinite wait. Delegation depth is bounded at 4 by the multi-agent coordination authority. These are projections of canonical subsystem contracts, not new runtime states or a new loop owner.
 
+### Derived Work-Group Projection (ADR-0010)
+
+Runtime MAY compute a derived work-group view to communicate actionable work, recovery candidates, and replanning context. The view is recomputed from existing `Task`, `Execution`, `Workflow`, `PlanStep`, delegated-child, checkpoint, acceptance-progress, trace, and evidence records. It is not a persisted domain entity and does not require a new table, identity, or lifecycle.
+
+A work-group MUST NOT substitute for `Task`, `Execution`, `Workflow`, `PlanStep`, or delegated-child identity in persistence, telemetry, correlation, authorization, recovery, checkpointing, audit, evidence, deadlines, retries, or completion. Every displayed row MUST resolve to its source identity and preserve the source owner, version, deadline, lineage, and evidence references. A cached presentation projection is non-authoritative and MUST be invalidatable after checkpoint, retry, failure, cancellation, or unknown-completion changes.
+
+The work-group view MAY inform the Agent Runtime, Workflow Engine, coordinator, activity feed, or a replanning request. It MUST NOT transition a lifecycle, authorize a Tool, reset a deadline or retry budget, resolve `UNKNOWN_COMPLETION`, or declare completion. A request for durable work-group identity, lifecycle, scheduler, permission, recovery, or evidence ownership requires a separate ADR.
+
 ## Inference-Turn Composition
 
 Agent Runtime owns turn orchestration; Provider System owns routing/streaming; Context

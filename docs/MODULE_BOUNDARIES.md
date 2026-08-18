@@ -41,3 +41,11 @@
 > (`architecture/WORKFLOW_ENGINE.md`). It is listed in RUNTIME.md as a coordinated
 > service but is not owned by the runtime — the runtime invokes it; the engine owns
 > workflow graph progression. This document's module row reflects that separation.
+
+## Android Boundary Enforcement (ADR-0010)
+
+Android-facing behavior remains owned by the existing `services`, `sandbox`, `storage`, `security`, `runtime`, `application`, `ui`, and `shared` modules. Foreground/background services, WorkManager handoff, notifications, process and device lifecycle, app-private storage, quotas, provider/network degradation, and Android permission mappings MUST use the public interfaces and canonical owners listed in this document; an adapter MUST NOT conceal or replace those semantics.
+
+Mechanical checks and interface tests MUST verify that every Android-facing implementation is reachable through an allowed public interface and dependency edge. The checks MUST reject UI-to-sandbox/provider/tool leakage, provider-to-Android-UI dependencies, sandbox-to-provider coupling, shared-module upward dependencies, concrete implementation imports across boundaries, and module cycles. Emulator/device evidence MUST exercise process death, ANR/Doze, foreground/background transitions, restart/checkpoint, notifications, app-private storage, quotas, and permission/security behavior where the affected contract applies.
+
+This section adds no module, package namespace, lifecycle, permission scope, adapter-owned persistence, or cross-platform architecture. `services` and existing platform-aware owners remain authoritative.

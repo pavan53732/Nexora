@@ -70,3 +70,7 @@ primitive separation.
 `RT-LIVE-005` MUST protect non-success routing for stream failure/cancellation, denied Tool calls, missing committed drafts, and unsatisfied completion gates.
 
 DEC-30 additionally resolves Task dependency-cycle handling, Task approval denial/expiry, Agent failure retry identity, provider rate-limit wait bounds, and delegation depth. Regression coverage MUST verify these selected bounds; test execution remains planned and is not claimed by this document.
+
+## ADR-0010 Evidence and Deterministic Controls
+
+Regression cases MUST use the common evidence envelope in `testing/EVIDENCE_CONVENTIONS.md` for source/fixture revision, existing identity lineage, expected and observed contract behavior, terminal disposition, and artifact location. Known-good and known-bad fixtures MUST be explicit about deterministic clock, seed/jitter, provider, resource, permission, storage/lock, scheduler, and process/device controls where applicable. A regression case is `TEST DEFINED` until execution produces a result; a retained reproducible artifact is required for `EXECUTED EVIDENCE`. Regression checks protect existing canonical contracts and do not create a new lifecycle or authority.

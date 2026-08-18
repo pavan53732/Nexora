@@ -81,3 +81,11 @@ ViewModels and services inject `ToolManager` — they never see `ToolManagerImpl
 ## Cycle Prevention
 
 Circular dependencies between any two modules are **strictly forbidden**. Gradle's `:modules` project structure can enforce unidirectional edges at build time via dependency rules. Architectural fitness functions in CI should flag any cycle detected in the module graph.
+
+## Mechanical Contract Checks (ADR-0010)
+
+The repository MAY run mechanical checks derived directly from this canonical graph, `MODULE_BOUNDARIES.md`, and the applicable documentation standards. Initial checks SHOULD cover forbidden direct and transitive dependency edges, cycles, concrete-implementation imports across module boundaries, missing interface/Hilt bindings, provider-to-Android-UI leakage, `shared/` upward dependencies, and generated-source/configuration variants that can evade a source-only scan.
+
+A check MUST report the violated canonical rule, path and line, owning document/module, severity, and remediation. A check MAY block a change only when it demonstrates a violation of an existing canonical contract or an explicitly accepted project rule. The checker is not a new architecture owner: it MUST NOT invent a contract, grant permission, mutate runtime state, create a lifecycle, or provide an independent architecture veto.
+
+The compliance suite MUST maintain known-good and known-bad fixtures for every forbidden edge and cycle class. It MUST measure false positives on the canonical allowed graph and approved good fixtures, and escaped violations across direct, transitive, alias, generated-source, and configuration variants applicable to the checker. A report-only baseline SHOULD precede blocking mode. Findings and results use the existing review/evidence conventions; no policy database or persisted architecture-check identity is introduced.

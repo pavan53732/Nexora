@@ -18,6 +18,7 @@ End-to-end tests validate user-visible workflows across the full stack.
 - `E2E-CONTEXT-*` — reproducible context and crash-reconstruction journeys
 - `E2E-REL-*` — Android, provider, Tool, anti-loop, multi-agent, and claim-evidence reliability journeys
 - `E2E-MODEL-*` — model-catalog, capability-negotiation, provider-version, and routing journeys
+- `E2E-AI-*` — AI Settings, provider-profile, connection-validation, and capability-observation journeys
 - `E2E-TOOLDISC-*` — dynamic Tool discovery, selection, descriptor-quality, and repair journeys
 - `E2E-LONG-*` — long-horizon compaction, artifact handoff, resume, and reconstruction journeys
 - `E2E-MM-*` — negotiated multimodal, realtime, audio, screen, and computer-action journeys
@@ -81,6 +82,9 @@ ID/version, context/checkpoint identity, trace correlation, and final dispositio
 - `E2E-MODEL-003`: provider-native reasoning continuation is preserved only within the
   compatible provider/model/adapter contract and is not replayed across incompatible
   failover.
+- `E2E-AI-001`: AI Settings saves a cloud provider profile, Test Connection reports
+  provider/model connectivity and capability validation, and no Task/Execution,
+  permission grant, Tool invocation, or API-key exposure occurs.
 - `E2E-TOOLDISC-001`: a large registry is reduced to a bounded candidate projection with
   canonical IDs, examples, edge cases, boundaries, and required permissions.
 - `E2E-TOOLDISC-002`: stale, incompatible, unknown-scope, or unavailable descriptors fail
@@ -145,3 +149,9 @@ The following journeys are required for reliability evidence before release gati
 - `E2E-REL-009`: claim-level evidence omission, stale evidence, contradictory evidence, and low confidence block or qualify the user-facing claim.
 
 These journeys are planned evidence obligations. Their presence in this specification does not claim that the runtime implementation or device validation already exists.
+
+## ADR-0010 Evidence and Deterministic Controls
+
+E2E journeys MUST use the common evidence envelope in `testing/EVIDENCE_CONVENTIONS.md`, including source/fixture revision, Android device/emulator and OS where applicable, deterministic clock/seed/provider/resource/process inputs, existing lifecycle and correlation identities, expected and observed transitions, terminal disposition, duplicate-side-effect outcome, and retained artifact location. A journey definition is `TEST DEFINED`; it becomes `TESTED` only after execution produces a result and `EXECUTED EVIDENCE` only after the reproducible result is retained. Fault-injection journeys are coverage categories governed by the applicable suite and release gate, not a single implementation milestone.
+
+Test-only controls MUST NOT grant permissions, suppress audit, bypass SandboxPolicy, reset deadlines or retry budgets, resolve unknown completion, fabricate success, or mutate production state. Android-specific controls and evidence remain subject to the existing device, lifecycle, notification, WorkManager, checkpoint, permission, sandbox, and provider owners.

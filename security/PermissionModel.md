@@ -74,6 +74,14 @@ A grant is valid only for the identified task and execution lineage. It expires 
 
 Every request, delegation, approval, grant, denial, use, expiry, revocation, and final disposition MUST be appended to the existing permission audit trail and correlated execution trace. The audit projection MUST identify the requester, delegated worker when applicable, capability, scope decisions, approval transaction, lifetime, and resulting Tool/execution outcome. This section changes no scope default and introduces no new scope identifier.
 
+## Derived Cross-Policy Eligibility Report (ADR-0010)
+
+Nexora MAY compute a derived eligibility report before a side-effecting operation by joining the existing owner decisions for PermissionModel authorization, Task/Execution deadline and recovery, ResourceManager budgets, ContextSnapshot/evidence eligibility, Tool risk and unknown-completion status, Workflow readiness, Sandbox/Security rules, and cancellation state. The report is diagnostic and evaluative; the owner of each input remains authoritative.
+
+A stateless evaluator MAY compute the composite result from an explicit immutable set of owner outputs, versions/timestamps, operation identity, approval transaction, context/evidence references, resource snapshot, and unknown-completion classification. It MUST be deterministic for the same inputs and MUST report the contributing owner, source version, decision, and conflict for every dimension. Missing, stale, contradictory, or unavailable owner input MUST produce an explicit non-eligible or unresolved outcome; it MUST NOT be silently treated as eligible.
+
+The report or evaluator MUST NOT grant or deny a PermissionModel scope, transition Task/Execution/Workflow/Tool state, reset a deadline or retry budget, resolve `UNKNOWN_COMPLETION`, bypass audit/sandbox/context checks, or declare completion. It has no persisted policy identity, policy lifecycle, precedence rule, override authority, scheduler, recovery authority, or production veto authority. An authoritative Policy Engine or policy god-object requires a separate ADR demonstrating that the existing owners and stateless evaluator are insufficient.
+
 ## Runtime Permission Request Flow
 
 ```kotlin

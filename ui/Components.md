@@ -31,6 +31,12 @@
 
 All components use Jetpack Compose.
 
+## Provider Settings Projection (Creator Product Design)
+
+The existing `ProviderCard` and provider configuration surface MUST project provider/type, external base URL, API-key entry state without exposing the secret, model name, `TEST CONNECTION`, capability refresh/detection where supported, connection status, validation result, and `SAVE`. The UI routes persistence and health/catalog operations through the provider-owned service/API boundary and MUST NOT store a second provider configuration.
+
+A successful connection status MUST NOT be rendered as workspace execution authorization, Tool approval, Task/Execution completion, or proof that every advertised capability is implemented. API keys MUST never appear in logs, prompts, evidence, telemetry, or generated artifacts. The UI is projection-only: it cannot grant permissions, invoke Tools, create lifecycle transitions, or claim executed evidence.
+
 ## Agent Activity and State Presentation
 
 The activity feed is the primary user-visible projection of agent execution. Components MUST

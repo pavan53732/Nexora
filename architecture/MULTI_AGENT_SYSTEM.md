@@ -131,6 +131,17 @@ Coder Agent → Tester Agent → Reviewer Agent → User
   no user-facing completion until the reviewer approves.
 - The reviewer checks against the task's declared validation criteria (FR-EL-008);
   findings return to the originating agent as a bounded fix loop (FR-AS-001).
+
+## Bounded Read-Only Investigation and Reviewer Projection (ADR-0010)
+
+The coordinator MAY delegate a bounded investigation or review to an existing eligible agent type, including Researcher, Reviewer, Tester, Security Auditor, or Architect, when the work has a distinct evidence target, acceptance criteria, and source/tool boundary. The delegated worker MUST use the existing `Agent`, `Task`, `Execution`, workspace, execution-lineage, permission, sandbox, and artifact identities; this pattern does not create a new reviewer identity or lifecycle.
+
+A read-only investigation MUST be explicitly marked read-only in its task-scoped capability and permission inputs. It may read declared sources, run permitted non-mutating inspection or test operations, produce structured findings and permissioned artifact references, and report unresolved items. It MUST NOT mutate the shared base, grant capabilities, authorize production side effects, alter canonical state, or treat a free-form summary as equivalent to evidence. Writes, when applicable to a test or implementation task, remain isolated in the existing private overlay and require the existing artifact promotion and merge path.
+
+The coordinator retains plan, delegation, merge, and completion responsibility. The worker retains its existing execution, Tool, permission, sandbox, and evidence responsibilities. Results MUST preserve child `agentId`, `taskId`, `executionId`, `workspaceId`, `correlationId`, acceptance-criteria effects, provenance, verification status, artifact references, failures, and unresolved questions. A reviewer result is a validation input, not automatic proof of completion; the existing completion and evidence gates remain authoritative.
+
+Read-only investigation is an operational projection over existing multi-agent coordination. It does not create a Batch/work-group lifecycle, replace Task or Execution identity, bypass the reviewer rule, or permit direct agent-to-agent communication.
+
     |
     v
 Results aggregated -> Workflow Coordinator combines results

@@ -207,6 +207,14 @@ Event Bus -> Publish tool execution event
 Return result to AI for next step
 ```
 
+## Cloud AI to Local Execution Boundary (Creator Product Design)
+
+A provider response or model-generated `tool_call` is an input to the existing Tool flow, not a direct command execution authority. The Runtime/Agent/Workflow composition, Tool Manager, PermissionModel, parameter validator, Tool Executor, Sandbox, Memory/History, EventBus, and evidence/verification boundaries remain in the order defined above. AI cannot directly access the local filesystem, Android APIs, process environment, or host process controls.
+
+The local execution path MUST preserve workspace isolation, permission and approval checks, sandbox/resource/egress controls, timeout and cancellation propagation, stdout/stderr and exit-result capture, artifact references, audit lineage, and `UNKNOWN_COMPLETION` reconciliation. A Skill may select or orchestrate existing Tools, and a Plugin may export capabilities, but neither may bypass this flow or become a second Agent Runtime, Tool identity authority, or authorization authority.
+
+A provider health check, connection test, model capability result, or generated text is not a Tool authorization result and does not create a Task/Execution or declare completion. The normal `Allowed` result remains the only gate before a Tool side effect; evidence and claim validation remain required for completion.
+
 Authorization denial returns `NXR-2003` with subreason (`UNKNOWN_SCOPE`,
 `POLICY_DENIAL`, `USER_DENIED`, `MALFORMED_APPROVAL`, `CLASSIFIER_DENIAL`). Invalid
 Tool descriptors, including duplicate/unknown scope declarations or missing risk metadata,

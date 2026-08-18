@@ -46,9 +46,16 @@ Security validation SHOULD explicitly assert:
 - credentials never cross caller-visible boundaries
 - cancellation and retries do not bypass authorization
 - plugin activation rollback preserves isolation guarantees
+- AI Settings Test Connection and capability refresh do not expose API keys, grant permissions, invoke Tools, create Task/Execution state, or bypass provider/sandbox/security gates
 
 ## Inference Stream and Reasoning Security
 
 `SEC-STREAM-001..010` validate terminal/sequence integrity, Tool fragment isolation,
 audit lineage, reasoning redaction, resume-token security, failover confinement,
 bounded buffering, and reasoning-budget enforcement (TM-038..047).
+
+## ADR-0010 Evidence and Deterministic Controls
+
+Security cases MUST use the common evidence envelope in `testing/EVIDENCE_CONVENTIONS.md` and retain permission, workspace, task, execution, tool-call, correlation, audit, fixture, environment, expected owner decision, observed result, and artifact metadata where applicable. Deterministic controls may vary test clock, seed/jitter, provider/stream, resource, permission, storage/lock, scheduler, or process/device conditions only inside the fixture boundary. They MUST NOT bypass PermissionModel, SandboxPolicy, egress, redaction, audit, lifecycle, idempotency, or unknown-completion rules.
+
+A security case is `TEST DEFINED` until execution produces a result; only the retained reproducible result is `EXECUTED EVIDENCE`. Fault-injection categories are selected by the affected security contract and release gate. Security owners remain authoritative; the evidence envelope and deterministic controls create no new policy or production authority.

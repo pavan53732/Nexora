@@ -114,6 +114,7 @@ Nexora/
 - [Project Specification (Master Index)](PROJECT_SPECIFICATION.md)
 - [Product Vision](docs/PRODUCT_VISION.md)
 - [Product Principles](docs/PRODUCT_PRINCIPLES.md)
+- [Creator-Owned Product Design](NEXORA_PRODUCT_DESIGN_BY_CREATER.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [System Design](docs/SYSTEM_DESIGN.md)
 - [Roadmap](docs/ROADMAP.md)

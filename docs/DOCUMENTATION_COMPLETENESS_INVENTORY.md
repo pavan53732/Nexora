@@ -22,6 +22,7 @@ The repository corpus was inventoried across:
 - Errors/validation/security: documented through `errors/`, `security/`, relevant specifications, and domain contracts; numeric error encoding and concrete enforcement mechanisms remain downstream where not canonically selected.
 - Testing: present through test strategy documents, case documents, and the Session–Conversation deterministic matrix; planned evidence directories are not treated as executed test evidence.
 - Traceability/canonical sources: maintained through `docs/TRACEABILITY.md` and `docs/CANONICAL_SOURCES.md`.
+- Creator-owned product design: present at `NEXORA_PRODUCT_DESIGN_BY_CREATER.md`; it defines what Nexora is, does not replace canonical subsystem ownership, and is protected by the conflict-stop-report-creator-decision protocol.
 
 ## Architecture-resolution status
 

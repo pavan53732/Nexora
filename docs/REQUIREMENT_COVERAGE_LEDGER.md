@@ -65,15 +65,15 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-TL015` | `requirements/FR.md` | MAPPED | Security + Tooling | `security/PermissionModel.md` | `IT-TOOL-014` | `evidence/integration/IT-TOOL-014/` |
 | `FR-P001` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P002` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
-| `FR-P003` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P003` | `requirements/FR.md` | MAPPED | Provider Layer + UI | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001`; `IT-PROVIDER-002`; `E2E-AI-001` | `evidence/integration/IT-PROVIDER-001/`; `evidence/integration/IT-PROVIDER-002/`; `evidence/e2e/E2E-AI-001/` |
 | `FR-P004` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P005` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
-| `FR-P006` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
-| `FR-P007` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P006` | `requirements/FR.md` | MAPPED | Provider Layer + UI | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001`; `IT-PROVIDER-002`; `E2E-AI-001` | `evidence/integration/IT-PROVIDER-001/`; `evidence/integration/IT-PROVIDER-002/`; `evidence/e2e/E2E-AI-001/` |
+| `FR-P007` | `requirements/FR.md` | MAPPED | Provider Layer + UI | `architecture/PROVIDER_SYSTEM.md`, `specs/AI_PROVIDERS.md` | `IT-PROVIDER-002`; `E2E-AI-001`; `SEC-SECRET-001` | `evidence/integration/IT-PROVIDER-002/`; `evidence/e2e/E2E-AI-001/`; `evidence/security/SEC-SECRET-001/` |
 | `FR-P008` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P009` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P010` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
-| `FR-P011` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
+| `FR-P011` | `requirements/FR.md` | MAPPED | Provider Layer + UI | `architecture/PROVIDER_SYSTEM.md`, `specs/AI_PROVIDERS.md`, `ui/Navigation.md`, `ui/Components.md` | `IT-PROVIDER-002`; `E2E-AI-001`; `SEC-SECRET-001` | `evidence/integration/IT-PROVIDER-002/`; `evidence/e2e/E2E-AI-001/`; `evidence/security/SEC-SECRET-001/` |
 | `FR-P012` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P013` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
 | `FR-P014` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-STREAM-001` | `evidence/integration/IT-STREAM-001/` |
@@ -131,7 +131,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-U004` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `FR-U005` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `FR-U006` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
-| `FR-U007` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
+| `FR-U007` | `requirements/FR.md` | MAPPED | UI/UX + Provider | `ui/Components.md`, `ui/Navigation.md`, `specs/AI_PROVIDERS.md` | `PERF-START-001`; `E2E-AI-001`; `IT-PROVIDER-002` | `evidence/performance/PERF-START-001/`; `evidence/e2e/E2E-AI-001/`; `evidence/integration/IT-PROVIDER-002/` |
 | `FR-U008` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `FR-U009` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |
 | `FR-U010` | `requirements/FR.md` | MAPPED | UI/UX | `ui/Components.md` | `PERF-START-001` | `evidence/performance/PERF-START-001/` |

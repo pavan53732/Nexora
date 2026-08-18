@@ -1,5 +1,7 @@
 # End-to-End Test Case Inventory — Nexora
 
+> ADR-0010: case rows are `TEST DEFINED` until execution produces a result; `EXECUTED EVIDENCE` requires the common reproducible envelope in `testing/EVIDENCE_CONVENTIONS.md`. Deterministic controls are fixture-scoped and test-only.
+
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | E2E-CORE-001 | E2E-CORE | Validate primary user-visible task execution flow | Orchestration | Planned | `evidence/e2e/E2E-CORE-001/` | 2026-08-04 |
@@ -26,6 +28,7 @@
 | E2E-MODEL-001 | E2E-MODEL | Route selection records exact model descriptor, catalog snapshot, and adapter contract without in-flight mutation after catalog refresh | Provider + Runtime | Planned | `evidence/e2e/E2E-MODEL-001/` | 2026-08-15 |
 | E2E-MODEL-002 | E2E-MODEL | Unsupported hard capability produces explicit incompatibility or policy-approved fallback without silent downgrade | Provider + Runtime | Planned | `evidence/e2e/E2E-MODEL-002/` | 2026-08-15 |
 | E2E-MODEL-003 | E2E-MODEL | Provider-native reasoning continuation remains bound to compatible provider/model/adapter and is not replayed across incompatible failover | Provider + Reasoning | Planned | `evidence/e2e/E2E-MODEL-003/` | 2026-08-15 |
+| E2E-AI-001 | E2E-AI | AI Settings saves a cloud provider profile, Test Connection reports connectivity/capability validation, and no Task/Execution, permission grant, Tool invocation, or API-key exposure occurs | Provider + UI + Security | Planned | `evidence/e2e/E2E-AI-001/` | 2026-08-19 |
 | E2E-TOOLDISC-001 | E2E-TOOLDISC | Large Tool registry produces bounded candidate projection with canonical IDs, examples, edge cases, boundaries, and permissions | Tool + Agent Runtime | Planned | `evidence/e2e/E2E-TOOLDISC-001/` | 2026-08-15 |
 | E2E-TOOLDISC-002 | E2E-TOOLDISC | Stale, incompatible, unknown-scope, or unavailable Tool descriptor fails closed without invented Tool or silent substitution | Tool + Security | Planned | `evidence/e2e/E2E-TOOLDISC-002/` | 2026-08-15 |
 | E2E-TOOLDISC-003 | E2E-TOOLDISC | Tool candidate set, selection, rejected alternatives, repair, authorization, and progress outcome are correlated in the trace | Tool + Observability | Planned | `evidence/e2e/E2E-TOOLDISC-003/` | 2026-08-15 |

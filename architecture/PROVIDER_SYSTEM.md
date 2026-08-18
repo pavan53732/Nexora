@@ -197,6 +197,14 @@ Profiles are independent (create/edit/duplicate/delete/switch), stored with keys
 [specs/AI_PROVIDERS.md](../specs/AI_PROVIDERS.md) and
 [models/Provider.md](../models/Provider.md).
 
+## Product Configuration and Test Connection Boundary (Creator Product Design)
+
+The product-facing AI Settings surface uses the existing named provider-profile boundary. A profile MUST support provider identity/type, external base URL, secret API-key reference, default model, and the provider parameters already defined by `ProviderConfig`; model and capability metadata come from the provider catalog and negotiated route contract. The canonical configuration owner remains the provider subsystem and `SecureKeyStore`; no UI component or creator-owned product document stores a second provider configuration.
+
+**Test Connection** MAY invoke the existing provider `healthCheck()` and, where supported, model-catalog/capability discovery for the selected profile/model. The result is a connection and compatibility observation for the UI and evidence surfaces. It MUST NOT create a `Task` or `Execution`, authorize a workspace Tool, grant a PermissionModel scope, start sandbox/process work, or bypass the Runtime, Tool, Security, or evidence gates. API keys are secret values and MUST never enter prompts, logs, telemetry, evidence, or generated artifacts.
+
+Capability refresh/detection MUST preserve the existing distinction between provider, model, request, response, and capability. A provider or successful connection test is not proof that every model or capability is implemented; hard capability incompatibility remains an explicit route outcome under the model-catalog negotiation contract.
+
 ## Design Rule
 
 > The runtime must NEVER depend on a specific provider implementation.

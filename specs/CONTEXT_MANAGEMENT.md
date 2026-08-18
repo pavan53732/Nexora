@@ -446,9 +446,18 @@ introspection — no ordering dependency between readers.
    or ESTIMATED); the Planner treats ESTIMATED fields as advisory, not
    authoritative.
 5. **KG query after introspection.** The Knowledge Graph is queried AFTER the
-   ProjectContext is populated, so entity extraction can reference the fresh
+   `ProjectContext` is populated, so entity extraction can reference the fresh
    file paths and schema names.
 
+## Persistent Project-Knowledge Loading and ClaimRecord Integration (ADR-0010)
+
+Before planning, the existing `ProjectIntrospector` and Context Builder MAY load persistent project knowledge from the existing workspace-scoped Memory, canonical requirements, locked decisions, constraints, prior verified artifacts, and relevant project configuration. This is a read-time context projection over existing sources; it does not create a `Knowledge` authority, a new knowledge identity, or a new knowledge lifecycle.
+
+Every loaded project-knowledge item MUST retain its existing source identifier, source version or checkpoint, retrieval reason, freshness, authority level, trust classification, evidence class, and conflict status. Canonical requirements, decisions, and specifications remain authoritative; memory, summaries, retrieved content, tool results, and introspection summaries remain derived or contextual and MUST NOT silently redefine canonical behavior. Persistent project instructions that are user-provided remain distinguishable from canonical product requirements and untrusted external content.
+
+The Planner MAY use loaded project knowledge to improve decomposition, acceptance-criteria interpretation, context relevance, and evidence retrieval. `ESTIMATED`, stale, contradictory, missing-provenance, or untrusted items are advisory or blocked according to the existing Evidence & Validation Engine; they cannot authorize a Tool, change a PermissionModel decision, alter a lifecycle, or waive a verification gate.
+
+Every significant claim produced after project-knowledge loading MUST use the existing `ClaimRecord` projection and claim-to-evidence binding. A project-knowledge item is not evidence merely because it is persistent or always included. Claim records MUST preserve source authority, freshness, contradiction state, verifier result, confidence classification, and user-facing disposition. No new Knowledge table, Knowledge lifecycle, or project-knowledge completion authority is introduced.
 
 ## Context Drift Protection
 

@@ -33,8 +33,12 @@
 |------|--------|
 | **All Workspaces** | Workspace list |
 | **Plugins** | Plugin Hub |
-| **AI Providers** | Provider configuration |
+| **AI Providers** | Provider configuration and AI Settings |
 | **Notifications** | Notification center |
+
+## AI Provider Settings Surface
+
+The existing AI Providers destination includes the product-level AI Settings behavior: provider/type, external base URL, API key, model name, `TEST CONNECTION`, capability refresh/detection where supported, connection status, validation result, and `SAVE`. The surface projects provider-owned configuration and observations; it MUST NOT authorize workspace execution, grant permissions, create Task/Execution state, invoke Tools, or expose secrets. Exact UI technology and layout remain outside this navigation document.
 
 ## Deep Links
 
