@@ -42,6 +42,8 @@ Nexora's plugin system follows a rigorous lifecycle to ensure that third-party o
 | `install()` | Verifying | Installing | Signature valid && SDK compatible |
 | `installComplete()` | Installing | Installed | — |
 | `activate()` | Installed / Inactive | Activating | — |
+| `compensationComplete()` | Activating | Installed | Activation began in `Installed` && every registered capability is unregistered and cleanup is verified |
+| `compensationComplete()` | Activating | Inactive | Activation began in `Inactive` && every registered capability is unregistered and cleanup is verified |
 | `activateComplete()` | Activating | Active | — |
 | `deactivate()` | Active | Deactivating | — |
 | `deactivateComplete()` | Deactivating | Inactive | — |
@@ -55,6 +57,7 @@ Nexora's plugin system follows a rigorous lifecycle to ensure that third-party o
 ### Recovery Paths
 
 - **Failed → Verifying**: When the failure occurred during download or verification and the error is retriable (e.g., network timeout).
+- **Activation compensation**: When activation from `Installed` or `Inactive` fails, the Plugin System MUST attempt compensation. Successful compensation restores the exact activation-origin state (`Installed` or `Inactive`). Failed or unproven cleanup MUST use `fail(error)` and commit `Failed`; the Plugin MUST NOT become `Installed` or `Inactive`, and affected capabilities MUST NOT be executable while cleanup is unproven. Retry remains permitted only under the existing retryability rule and after cleanup is verified.
 - **Inactive → Activating**: Reactivation skips download and install; uses cached artifacts.
 - **Active → Downloading** (via `update()`): In-place update preserves plugin state where possible.
 
@@ -72,6 +75,8 @@ stateDiagram-v2
     Installing --> Installed : installComplete()
     Installing --> Failed : fail(error)
     Installed --> Activating : activate()
+    Activating --> Installed : compensationComplete() [origin Installed; cleanup verified]
+    Activating --> Inactive : compensationComplete() [origin Inactive; cleanup verified]
     Activating --> Active : activateComplete()
     Active --> Deactivating : deactivate()
     Deactivating --> Inactive : deactivateComplete()
@@ -87,7 +92,7 @@ stateDiagram-v2
     Failed --> Verifying : retry()
 
     Downloading --> Failed : fail(error)
-    Activating --> Failed : fail(error)
+    Activating --> Failed : fail(error) [cleanup failed or unproven]
 
     Discovered --> Cancelled : cancel()
     Downloading --> Cancelled : cancel()

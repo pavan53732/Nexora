@@ -31,9 +31,7 @@ method in [../sdk/PluginSDK.md](../sdk/PluginSDK.md) `CapabilityRegistrar`:
 | **UI Screens** | `exportedUiScreens` | `registerUiScreen` | Custom screens embedded in the app. |
 | **Memory Backends** | `exportedMemoryBackends` | `registerMemoryBackend` | Alternative memory storage. |
 
-Registration is transactional across all exported capabilities: partial registration
-is not a valid durable state, and failed activation rolls back to the prior committed
-plugin state.
+Registration is transactional across all exported capabilities: partial registration is not a valid durable state. When activation fails, the Plugin System MUST unregister every capability registered by that activation and complete compensation before publishing a terminal result. If compensation and cleanup succeed, it MUST restore the exact prior committed Plugin lifecycle state (`Installed` or `Inactive`, matching the activation origin). If cleanup fails or completion cannot be proven, it MUST preserve the existing `Failed` lifecycle disposition, disable or isolate affected capabilities, and prevent their execution until cleanup is verified. Retry remains governed by the existing retryability rules.
 
 ## Plugin Interface
 

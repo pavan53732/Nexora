@@ -71,6 +71,12 @@ Every non-idempotent or externally side-effecting Tool MUST declare an operation
 
 A timeout without a confirmed result MUST remain `UNKNOWN_COMPLETION` until the declared contract resolves whether the side effect occurred. The runtime MUST NOT silently retry, silently mark failure, or report success for an unresolved unknown-completion operation. Reconciliation evidence and final disposition MUST be persisted with the ToolInvocation and execution history.
 
+### Reconciliation Exhaustion and Parent Non-Success (GAP-003)
+
+Reconciliation attempts MUST remain within the Tool operation's declared recovery contract and the parent Task/Execution effective deadline. A reconciliation failure MAY retry only when that contract preserves idempotency or safe compensation; it MUST NOT reset the parent deadline, retry budget, failure ledger, or execution lineage. Every attempt, observation, timeout, error, and evidence reference MUST be persisted with the ToolInvocation and execution history.
+
+When the reconciliation budget or effective deadline is exhausted without establishing whether the side effect occurred, the ToolInvocation MUST remain `UNKNOWN_COMPLETION` and MUST project `MANUAL_RECONCILIATION_REQUIRED`. The runtime MUST NOT replay, skip, mark success, or silently convert the operation to confirmed failure. The owning Task/Execution lifecycle MUST commit its existing explicit non-success, blocked, incomplete, or manual-disposition outcome. **OWNER DECISION REQUIRED:** if the existing parent lifecycle does not select among those existing dispositions for a particular operation, the owner MUST decide before implementation; this section creates no new state or authority.
+
 ### Ownership
 
 Timeout monitoring is owned by the tool execution subsystem. A timeout (`NXR-2002`) has **no ToolStatus lifecycle effect**: it is an execution outcome, not a Tool descriptor lifecycle transition. The existing ToolInvocation record and canonical error envelope preserve the timeout/partial-output outcome without asserting that an underlying non-idempotent side effect failed or did not occur.

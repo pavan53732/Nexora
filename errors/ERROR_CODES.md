@@ -243,7 +243,7 @@ To eliminate responsibility gaps and satisfy Critical Finding 2, every public in
 | | | `NXR-4004` | Infrastructure | Safe | Conditional (rate-limit backoff)| `NO_CHANGE` | Provider Layer: parse `Retry-After` header, delay request execution |
 | | | `NXR-4009` | Infrastructure | Safe | Safe (Automatic fallback) | `NO_CHANGE` | Provider Layer: switch to next Healthy provider in priority queue, emit alert |
 | **`PluginManager`** | `installPlugin` | `NXR-6002` | Client | Safe | Never | Transition to `FAILED` | Plugin System: checksum/signature check failed, delete partial files, notify user |
-| | `activatePlugin`| `NXR-6003` | Server | Unsafe | Conditional (re-check SDK) | Rollback to `INACTIVE` | Plugin System: rollback exported capability registrations to prior state |
+| | `activatePlugin`| `NXR-6003` | Server | Unsafe | Conditional (re-check SDK and verified cleanup) | Restore the activation-origin prior committed state only after compensation succeeds; otherwise `FAILED` | Plugin System: unregister capabilities, verify cleanup, restore `Installed`/`Inactive` by activation origin on success, or preserve `Failed` and block capability execution when cleanup fails or is unproven |
 | **`WorkspaceManager`**| `createWorkspace` | `NXR-7001` | Server | Unsafe | Safe | `NO_CHANGE` | Sandbox: wipe temp / clean up workspace caches, retry sandbox creation |
 | | `deleteWorkspace` | `NXR-7007` | Server | Safe (Idempotent) | Conditional | `NO_CHANGE` | Sandbox: queue deferred background purge of workspace directories; Workspace deletion may be retried after cleanup succeeds |
 | **`WorkflowEngine`** | `executeWorkflow` | `NXR-1002` | Server | Unsafe | Safe | Transition to `FAILED` | Orchestration: cancel downstream tasks, release locks, report failure |

@@ -45,8 +45,7 @@ interface CapabilityRegistrar {
 Every `register*` call corresponds to one `exported*` field in
 [../models/Plugin.md](../models/Plugin.md) and to one capability kind in
 [../architecture/PLUGIN_SYSTEM.md](../architecture/PLUGIN_SYSTEM.md) §Plugin Architecture.
-Registration is transactional: partial registration is not a valid durable state and
-failed activation rolls back to the prior committed plugin state.
+Registration is transactional: partial registration is not a valid durable state. When activation fails, successful compensation and verified cleanup MUST restore the exact prior committed Plugin lifecycle state (`Installed` or `Inactive`, matching the activation origin). Failed or unproven cleanup MUST preserve `Failed`, disable or isolate affected capabilities, and prevent their execution until cleanup is verified. Retry remains governed by the existing retryability rules.
 
 ## Security & Permission Model
 
@@ -56,4 +55,4 @@ Plugins operate within strict sandbox boundaries:
 
 ## Errors & Exception Guidelines
 
-Plugin authors MUST catch internal failures and translate them into clean, descriptive SDK outcomes. Leaking native application exceptions triggers an unhandled crash trap, forcing the `PluginManager` to transition the plugin state to `FAILED`, disable its capabilities, and isolate its classloader for safety.
+Plugin authors MUST catch internal failures and translate them into clean, descriptive SDK outcomes. Leaking native application exceptions or failing to prove activation compensation triggers the `PluginManager` to transition the plugin state to `FAILED`, disable or isolate affected capabilities, and prevent their execution for safety. Successful compensation does not produce `Failed`; it restores the activation-origin prior committed state after cleanup is verified.

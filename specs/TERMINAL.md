@@ -44,6 +44,10 @@ new durable states:
   lifecycle event, not a durable state.
 - **Background**: `run_background` creates a `Running`/`Detached` session bound to the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline under DEC-34. It has no separate interactive timeout, but it cannot outlive parent cancellation, parent terminal state, or deadline expiry. Expiry and cancellation use the existing termination/checkpoint path; an idempotent cleanup reconciliation removes sessions whose parent is terminal, missing, or expired. Unbound autonomous background requests are rejected before process creation. Financial cost or internal credits do not kill it.
 
+#### Cleanup Failure and Parent Loss (GAP-010)
+
+When a parent is missing, terminal, cancelled, or expired, cleanup MUST use the existing TerminalSession termination/checkpoint path and preserve the parent/session/process identities, effective deadline, correlation ID, process outcome, and audit disposition. Successful cleanup commits the existing `Closed` or `Failed` terminal outcome and releases resources. If process termination or orphan removal fails, the session MUST NOT be reattached or treated as successful; the cleanup failure, remaining process/session reference, and bounded retry/deadline information MUST be persisted, and the existing `Failed` or explicit manual-cleanup disposition MUST be surfaced. **OWNER DECISION REQUIRED:** the terminal/background owner MUST select the existing user-visible disposition after bounded cleanup exhaustion; no `Orphaned`, `Suspended`, `Restored`, or cleanup lifecycle state is created.
+
 State fields (`models/TerminalSession.md` — updated for S4):
 
 ```kotlin

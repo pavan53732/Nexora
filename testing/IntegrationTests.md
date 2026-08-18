@@ -36,7 +36,7 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-TOOL-001` tool invocation flows through permission and sandbox checks
 - `IT-PROVIDER-001` provider streaming returns ordered terminal semantics
 - `IT-PROVIDER-002` AI Settings Test Connection and capability refresh use provider-owned health/catalog checks without workspace execution authorization, Tool invocation, or secret exposure
-- `IT-PLUGIN-001` plugin activation registers capabilities transactionally
+- `IT-PLUGIN-001` plugin activation registers capabilities transactionally; verified compensation restores the activation-origin `Installed` or `Inactive` state, while failed or unproven cleanup preserves `Failed` and prevents affected capability execution
 - `IT-CONTRACT-001` runtime replay or retry preserves correlation and durable versions
 - `IT-TOOL-002..014` complete authorization ordering, error mapping, and correlation preservation
 - `IT-LC-001..020` Session/Execution/ToolStatus integration, same-ID resume, terminal retry lineage, and replay safety

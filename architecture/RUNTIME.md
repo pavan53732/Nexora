@@ -289,6 +289,14 @@ defined in `models/Execution.md`:
 - **Unrecoverable failure:** commit `FAILED`; no same-identity resume. DEC-33 uses `NXR-1014` for invalid Task dependency references/cycles, `NXR-1015` for unsatisfied terminal dependencies, and `NXR-1016` for effective-deadline expiry.
 - **Android ANR (Application Not Responding):** `AgentExecutionService` MUST commit a checkpoint on the 6 s / 10 s ANR threshold (foreground / background), emit `TASK_SUSPENDED`, and suspend execution. Service restart or watchdog resumes from the checkpoint without user-visible crash data (NFR-REL-002, ADR-0009 Decision #7). The `executionId` and `correlationId` are preserved across the ANR/resume cycle; `version` increments at resume.
 
+### Checkpoint Save and Restore Exhaustion (GAP-002/GAP-006)
+
+Checkpoint recovery remains artifact-specific. An execution restore MAY use only a validated checkpoint candidate and the declared last-known-good fallback; it MUST preserve the `executionId`, `correlationId`, version lineage, acceptance progress, failure ledger, deadline, and evidence. If the selected checkpoint is corrupt or incompatible, `NXR-1004` MUST be persisted and the next validated fallback MAY be attempted. When no valid execution checkpoint candidate remains, the existing Execution lifecycle MUST commit `FAILED` as an unrecoverable error, dependent recovery work MUST NOT start, the last valid checkpoint reference and failure evidence MUST be preserved, and the user MUST be alerted. No new restore lifecycle is created.
+
+A checkpoint-save failure uses the existing `NXR-1003` contract: retry once without overwriting the last valid checkpoint. If the retry fails, persist the error and checkpoint lineage, mark the affected workspace recovery path unhealthy, prevent dependent recovery work from starting, and commit the existing execution `FAILED` or explicit non-success outcome. **OWNER DECISION REQUIRED:** the Workspace owner MUST select the existing user-visible unavailable/read-only or failed projection for a workspace whose persistence remains unhealthy; this section creates no new Workspace state.
+
+`NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate artifact-owner contracts. `NXR-8004` reinitializes UI state from defaults and records data loss. `NXR-9004` verifies the current backup and tries an earlier backup without mutating the source until validation succeeds. If all database candidates fail, the database/workspace owner MUST preserve the source and commit its existing unavailable/read-only or failed projection. **OWNER DECISION REQUIRED:** the database/workspace owner MUST select that existing projection before implementation; no generic checkpoint authority or new restore state is introduced.
+
 ### Phase Mapping
 
 - **Phase 1**: Define interfaces only (Task, ExecutionPlan, EventBus, NexoraEvent).

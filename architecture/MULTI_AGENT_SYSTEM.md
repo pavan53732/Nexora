@@ -338,6 +338,12 @@ If the deadline passes before the delegate reports `COMPLETED` or `FAILED`:
 - Resumes the parent from its last checkpoint with the delegated subtask marked
   `not-attempted` (FR-AS-005 reporting semantics).
 
+### Coordinator Incarnation Loss (GAP-005)
+
+If a coordinator/parent runtime incarnation fails while delegated children remain active, the children retain their existing `agentId`, `taskId`, `executionId`, workspace, overlay, correlation, and immutable effective-deadline lineage. A child MUST NOT self-promote, merge, or promote an overlay to the shared base merely because the coordinator is unavailable. Each child remains bounded by its inherited deadline and existing cancellation/resource/sandbox rules; a child whose parent cancellation, terminal state, or deadline invalidates its work follows the existing child cancellation/termination path.
+
+The existing coordination, artifact-promotion, file-lock, workflow, Task, Execution, and scheduler owners MUST preserve the parent/child checkpoint, failure, timeout, cancellation, artifact, and audit records. Private overlays remain unpromoted until an authorized coordinator or existing artifact-promotion owner validates them against acceptance criteria; otherwise they are abandoned through existing cleanup without becoming a new durable lifecycle state. The parent coordination result MUST be reported as incomplete, failed, or otherwise non-successful unless the existing completion gate is satisfied. **OWNER DECISION REQUIRED:** choose conservative child cancellation/abandonment handling or propose a separate architectural decision for coordinator takeover/reparenting; this section selects neither takeover nor a new authority.
+
 ### SA-4 — Inherited rules (FR-MA-004)
 
 Sub-agents operate under the same anti-hallucination + reasoning policies as primary

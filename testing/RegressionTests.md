@@ -27,7 +27,7 @@ Schema or manifest changes must retain backward-compatible interpretation where 
 
 ## Plugin API Backward Compatibility
 
-Plugin compatibility testing SHOULD include activation rollback and exported capability compatibility checks.
+Plugin compatibility testing SHOULD include activation compensation from both `Installed` and `Inactive`, verified restoration to the activation-origin state, exported capability compatibility, and preservation of `Failed` with non-executable affected capabilities when cleanup fails or is unproven.
 
 ## Run Schedule
 

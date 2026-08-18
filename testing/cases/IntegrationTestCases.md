@@ -10,7 +10,7 @@
 | IT-TOOL-001 | IT-TOOL | Validate permission and sandbox checks before tool side effects | Tooling + Sandbox | Planned | `evidence/integration/IT-TOOL-001/` | 2026-08-04 |
 | IT-PROVIDER-001 | IT-PROVIDER | Validate provider stream terminal marker semantics | Provider Layer | Planned | `evidence/integration/IT-PROVIDER-001/` | 2026-08-04 |
 | IT-PROVIDER-002 | IT-PROVIDER | Validate AI Settings Test Connection and capability refresh use provider-owned health/catalog checks without creating Task/Execution state, granting permissions, invoking Tools, or exposing API keys | Provider + UI + Security | Planned | `evidence/integration/IT-PROVIDER-002/` | 2026-08-19 |
-| IT-PLUGIN-001 | IT-PLUGIN | Validate transactional plugin activation and rollback | Plugin System | Planned | `evidence/integration/IT-PLUGIN-001/` | 2026-08-04 |
+| IT-PLUGIN-001 | IT-PLUGIN | Validate transactional plugin activation compensation: `Installed` restores to `Installed` and `Inactive` restores to `Inactive` after verified cleanup; failed or unproven cleanup remains `Failed`, with no affected capability executable and retry only after verified cleanup | Plugin System | Planned | `evidence/integration/IT-PLUGIN-001/` | 2026-08-04 |
 | IT-MEMORY-001 | IT-MEMORY | Validate memory write/retrieve provenance linkage | Memory System | Planned | `evidence/integration/IT-MEMORY-001/` | 2026-08-04 |
 | IT-TOOL-002 | IT-TOOL | TOOL-408 validates both required scopes before side effects | Tool + Security | Planned | `evidence/integration/IT-TOOL-002/` | 2026-08-06 |
 | IT-TOOL-003 | IT-TOOL | Aggregated approval spans PermissionManager and ToolExecutor | Tool + Security | Planned | `evidence/integration/IT-TOOL-003/` | 2026-08-06 |
@@ -30,7 +30,7 @@
 | IT-LC-008 | IT-LC | Retry after COMPLETED creates new executionId | Runtime | Planned | `evidence/integration/IT-LC-008/` | 2026-08-06 |
 | IT-LC-009 | IT-LC | Retry records priorExecutionId | Runtime | Planned | `evidence/integration/IT-LC-009/` | 2026-08-06 |
 | IT-LC-010 | IT-LC | Terminal Execution cannot transition to RUNNING | Runtime | Planned | `evidence/integration/IT-LC-010/` | 2026-08-06 |
-| IT-LC-011 | IT-LC | Non-idempotent in-flight call reconciled, not replayed | Runtime | Planned | `evidence/integration/IT-LC-011/` | 2026-08-06 |
+| IT-LC-011 | IT-LC | Non-idempotent in-flight call remains unknown through reconciliation exhaustion/manual disposition and is never replayed | Runtime | Planned | `evidence/integration/IT-LC-011/` | 2026-08-06 |
 | IT-LC-012 | IT-LC | Idempotent incomplete call may replay safely | Runtime | Planned | `evidence/integration/IT-LC-012/` | 2026-08-06 |
 | IT-LC-013 | IT-LC | Duplicate resume event deduplicated | Runtime | Planned | `evidence/integration/IT-LC-013/` | 2026-08-06 |
 | IT-LC-014 | IT-LC | Session close drains/detaches active execution | Runtime + Session | Planned | `evidence/integration/IT-LC-014/` | 2026-08-06 |
@@ -64,7 +64,7 @@
 | IT-CONV-002 | IT-CONV | Validate non-destructive branch creation preserves source conversation | Conversation/Session | Planned | `evidence/integration/IT-CONV-002/` | 2026-08-12 |
 | IT-CONV-003 | IT-CONV | Reject stale, expired, invalid, or unauthorized checkpoint operations without source mutation | Conversation/Session + Security | Planned | `evidence/integration/IT-CONV-003/` | 2026-08-12 |
 | IT-CONV-004 | IT-CONV | Reject conflicting concurrent conversation mutation during branch request | Conversation/Session | Planned | `evidence/integration/IT-CONV-004/` | 2026-08-12 |
-| IT-CONV-005 | IT-CONV | Recover interrupted branch operation as no branch or one complete branch | Conversation/Session | Planned | `evidence/integration/IT-CONV-005/` | 2026-08-12 |
+| IT-CONV-005 | IT-CONV | Recover interrupted or rollback-cleanup-failed branch operation as no branch or one complete branch, never success with partial branch state | Conversation/Session | Planned | `evidence/integration/IT-CONV-005/` | 2026-08-12 |
 | IT-CONV-006 | IT-CONV | Confirm conversation rollback does not restore task, execution, memory, file, workspace, provider, or Git state | Conversation/Session + Runtime | Planned | `evidence/integration/IT-CONV-006/` | 2026-08-12 |
 | IT-CONV-007 | IT-CONV | Confirm conversation rollback does not reverse external side effects | Conversation/Session + Runtime | Planned | `evidence/integration/IT-CONV-007/` | 2026-08-12 |
 | IT-SKILL-001 | IT-SKILL | Validate skill registration and compatibility validation before availability | Skill Registry | Planned | `evidence/integration/IT-SKILL-001/` | 2026-08-12 |
@@ -86,6 +86,6 @@
 | IT-LIVE-004 | IT-LIVE | Agent Completing finalizes artifacts and resources before Completed commit | Agent Runtime | Planned | `evidence/integration/IT-LIVE-004/` | 2026-08-15 |
 | IT-LIVE-005 | IT-LIVE | Stream failure, cancellation, missing draft, and denied Tool call route to non-success effects without completion synthesis | Agent + Provider + Tool | Planned | `evidence/integration/IT-LIVE-005/` | 2026-08-15 |
 | IT-LIVE-006 | IT-LIVE | Invalid dependency, unsatisfied dependency, and effective-deadline expiry persist NXR-1014/NXR-1015/NXR-1016 and the selected Task effects | Task + Runtime | Planned | `evidence/integration/IT-LIVE-006/` | 2026-08-15 |
-| IT-TERM-001 | IT-TERM | Background TerminalSession inherits parent identity/deadline and reconciles cancellation, terminal parent, expiry, and restart | Terminal + Runtime | Planned | `evidence/integration/IT-TERM-001/` | 2026-08-15 |
+| IT-TERM-001 | IT-TERM | Background TerminalSession inherits parent identity/deadline and reconciles cancellation, terminal parent, expiry, restart, and bounded cleanup failure without reattachment | Terminal + Runtime | Planned | `evidence/integration/IT-TERM-001/` | 2026-08-15 |
 | IT-BROWSER-001 | IT-BROWSER | WebView bridge interruption preserves UNKNOWN_COMPLETION and prevents silent replay of potentially mutating browser operations | Browser + Tool System | Planned | `evidence/integration/IT-BROWSER-001/` | 2026-08-15 |
 | IT-AUTH-001 | IT-AUTH | Approval denial/expiry emits NXR-2003, prevents side effects, commits Task Failed, and independently projects Agent Paused | Security + Agent + Task | Planned | `evidence/integration/IT-AUTH-001/` | 2026-08-15 |

@@ -25,7 +25,7 @@
 | UT-EV-007 | UT-EV | Validate one-to-one ClaimRecord evidence binding, freshness, contradiction, verifier, confidence, and disposition fields | Evidence Engine | Planned | `evidence/unit/UT-EV-007/` | 2026-08-15 |
 | UT-RN-013 | UT-RN | Validate rejection of ReasoningPolicy values above non-overridable provider, device, and resource-class ceilings | Reasoning + Context | Planned | `evidence/unit/UT-RN-013/` | 2026-08-15 |
 | UT-TOOL-006 | UT-TOOL | Validate unknown-completion reconciliation blocks unsafe replay until outcome evidence resolves the operation | Tool + Runtime | Planned | `evidence/unit/UT-TOOL-006/` | 2026-08-15 |
-| UT-EXEC-001 | UT-EXEC | Validate failure-class binding uses the canonical error envelope, legal Task/Execution retry or terminal effects, operation-owner idempotency, and no undocumented escalation state | Execution Lifecycle | Planned | `evidence/unit/UT-EXEC-001/` | 2026-08-15 |
+| UT-EXEC-001 | UT-EXEC | Validate failure-class binding uses the canonical error envelope, legal Task/Execution retry or terminal effects, checkpoint-save/restore exhaustion preservation, operation-owner idempotency, and no undocumented escalation state | Execution Lifecycle | Planned | `evidence/unit/UT-EXEC-001/` | 2026-08-15 |
 | UT-REASON-003 | UT-REASON | Redact ReasoningSummary and exclude private trace | Security + Reasoning | Planned | `evidence/unit/UT-REASON-003/` | 2026-08-06 |
 | UT-CONTEXT-001 | UT-CONTEXT | Reproduce immutable ContextSnapshot from segment hashes | Context | Planned | `evidence/unit/UT-CONTEXT-001/` | 2026-08-06 |
 | UT-CONTEXT-002 | UT-CONTEXT | Deduplicate retrieval while preserving source diversity | Context + Memory | Planned | `evidence/unit/UT-CONTEXT-002/` | 2026-08-06 |

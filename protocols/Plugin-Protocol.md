@@ -59,5 +59,5 @@ data class PluginStateChangedEvent(
 
 ## Conformance Rules
 
-- **Transactional Registration**: Capability registration is atomic. If any exported tool or provider registration fails (e.g. duplicate key or naming collision), the registration engine MUST throw an exception, triggering the `PluginManager` to immediately call `onDeactivate` and roll back state to `INACTIVE`.
+- **Transactional Registration**: Capability registration is atomic. If any exported capability registration fails (e.g. duplicate key or naming collision), the registration engine MUST throw an exception and the `PluginManager` MUST immediately attempt compensation through `onDeactivate`. If activation began from `Installed` or `Inactive` and every registered capability is unregistered and cleanup is verified, the Plugin MUST return to that activation-origin state. If cleanup fails or completion cannot be proven, the Plugin MUST remain `Failed`, affected capabilities MUST NOT be executable, and retry MUST require the existing retryability rule plus verified cleanup.
 - **Deduplication**: Plugin lifecycle events MUST carry a monotonically increasing entity version and be deduplicated by `(pluginId, version, transition)`.

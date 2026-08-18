@@ -49,6 +49,18 @@ Supported capabilities are conditional, not guaranteed merely because they are n
 
 API keys are secrets. They MUST be stored through existing secure provider configuration ownership, never placed in prompts, logs, evidence, telemetry, or generated artifacts, and never exposed to the local model context. AI providers cannot directly access the local filesystem or process environment and cannot bypass PermissionModel, Sandbox, Tool, Runtime, audit, or evidence authority. [architecture/PROVIDER_SYSTEM.md:176-198] [requirements/CONSTRAINTS.md:57-74] [security/SandboxPolicy.md:18-20,101-115] [specs/CONTEXT_MANAGEMENT.md:311-317]
 
+## Context Summarization Policy — CREATOR LOCK
+
+Nexora uses a hybrid context-summarization model.
+
+**Cloud/External AI:** AI-based summarization may be performed through an eligible user-configured cloud/external AI provider using the canonical provider architecture.
+
+**Local deterministic processing:** Nexora may perform deterministic, non-AI context transformations locally when model inference is not required, such as deterministic trimming, windowing, compaction mechanics, metadata reduction, or other explicitly defined non-inference transformations.
+
+**Local AI inference is prohibited.** Nexora must not invoke an on-device/local LLM or other local AI inference engine for context summarization.
+
+Any implementation, agent, skill, plugin, sandbox operation, provider integration, or future architectural proposal that conflicts with this rule is non-compliant unless the creator explicitly changes this document.
+
 ## 3. Local Execution Sandbox
 
 The product boundary is:

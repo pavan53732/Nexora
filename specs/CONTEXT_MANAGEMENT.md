@@ -122,9 +122,14 @@ To avoid context overflow (`NXR-1006`) and maximize recall accuracy, the context
 **Hierarchical Context Compaction & Semantic Memory Distillation** prevents context overflows while preserving critical plan history.
 
 - **Trigger Threshold**: When the active context exceeds 75% of the provider model's max token limit, the oldest 20% of Layer 5 content is selected for compaction.
-- **Rolling Compactor**: A local summarization prompt is run to generate a dense, bulleted Markdown summary of the historical events. Older tool outputs and intermediary reasoning steps are distilled into semantic memory projections (`memory_lessons`, `TOOL-409`) and knowledge graph entities, with exact database table persistence remaining a downstream implementation choice.
+- **Rolling Compactor**: Context summarization MUST use either (a) an eligible cloud/external AI provider through the existing Provider System, or (b) a deterministic local non-AI transformation. The local option MUST NOT load, execute, or manage any AI model or inference runtime. Both paths MUST preserve the existing ContextSnapshot, provenance, fidelity, ClaimRecord, persistence, and evidence contracts.
+
 - **Idempotency & Fidelity Check**: Before the summarized chunk is persisted, a validation pass checks that no core plan variables or status parameters were dropped or mutated. If drift is detected, the compaction is rolled back, and a warning is logged.
 - **Resume Reconstruction (FR-CM-004)**: Upon agent resume from a crash, the context window is reconstructed from the `Checkpoint + Summary + semantic memories`. The raw, unsummarized history is never replayed.
+
+### Compaction Rollback Failure (GAP-009)
+
+Compaction MUST validate the candidate summary against the source `ContextSnapshot`, acceptance/provenance references, and fidelity checks before promotion. If validation fails, the candidate MUST be discarded or rolled back and the last valid source projection MUST remain authoritative. If candidate discard/rollback itself fails, the candidate MUST NOT become authoritative; the source snapshot/checkpoint reference, candidate and source hashes, fidelity result, rollback error, and evidence references MUST be retained, and dependent summarization/reconstruction MUST stop with the existing incomplete, blocked, or non-success execution disposition. **OWNER DECISION REQUIRED:** the Context Management owner must select the existing user-visible disposition when no valid source projection can be reconstructed; this contract creates no new Context or Knowledge state or authority.
 
 ### Long-Horizon Task and Artifact Projection
 
