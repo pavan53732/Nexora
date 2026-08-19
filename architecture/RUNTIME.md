@@ -276,15 +276,21 @@ defined in `models/Execution.md`:
 ### Failure Recovery
 
 - **Recoverable interruption before a terminal state:** retain the same `executionId`; increment `version`; retain `correlationId`; resume `RUNNING` from checkpoint.
-- **User-clarification suspension (BlockedAwaitingInput):** when `TaskLifecycle`
-  transitions to `BlockedAwaitingInput` via `requestEscalation`, the executor
-  commits a checkpoint capturing the full plan + `currentStepIndex` + the
-  escalation payload (`clarificationQuestion`) and retains the same
-  `executionId`/`correlationId`. The `resolveEscalation` trigger resumes from
-  that checkpoint: `version` increments, status → `RUNNING`, and the
-  user's answer is injected as the next input — same-identity resume, no
-  new `executionId` (ADR-0009 Decision #5; TaskLifecycle `resolveEscalation`
-  transition).
+- **User-clarification or human-reconciliation suspension (BlockedAwaitingInput):** when
+  `TaskLifecycle` transitions to `BlockedAwaitingInput` via `requestEscalation`, including
+  after exhausted `UNKNOWN_COMPLETION` reconciliation, the executor commits a checkpoint
+  capturing the full plan + `currentStepIndex` + the escalation payload
+  (`clarificationQuestion`) + the unresolved ToolInvocation/reconciliation context and
+  retains the same `executionId`/`correlationId`. While the Task is `BlockedAwaitingInput`
+  for unresolved reconciliation, the associated existing Execution retains `RUNNING`
+  because no blocked or suspended ExecutionStatus exists; this is an existing non-terminal/resumable
+  projection only and does not authorize further Tool execution or automatic replay. The
+  `resolveEscalation` trigger resumes from that checkpoint: `version` increments, status
+  remains/returns `RUNNING`, and the user's answer is injected as the next input —
+  same-identity resume, no new `executionId` (ADR-0009 Decision #5; TaskLifecycle
+  `resolveEscalation` transition). Entering or resolving this escalation does not itself
+  create a new Execution; a new identity is permitted only under the existing terminal
+  retry/restart lineage rules.
 - **Committed terminal `FAILED`/`CANCELLED`/`COMPLETED`:** never transition back to `RUNNING`. Explicit retry/restart creates a new `executionId`; parent/prior execution linkage and correlation policy preserved.
 - **Unrecoverable failure:** commit `FAILED`; no same-identity resume. DEC-33 uses `NXR-1014` for invalid Task dependency references/cycles, `NXR-1015` for unsatisfied terminal dependencies, and `NXR-1016` for effective-deadline expiry.
 - **Android ANR (Application Not Responding):** `AgentExecutionService` MUST commit a checkpoint on the 6 s / 10 s ANR threshold (foreground / background), emit `TASK_SUSPENDED`, and suspend execution. Service restart or watchdog resumes from the checkpoint without user-visible crash data (NFR-REL-002, ADR-0009 Decision #7). The `executionId` and `correlationId` are preserved across the ANR/resume cycle; `version` increments at resume.
@@ -295,7 +301,7 @@ Checkpoint recovery remains artifact-specific. An execution restore MAY use only
 
 A checkpoint-save failure uses the existing `NXR-1003` contract: retry once without overwriting the last valid checkpoint. If the retry fails, persist the error and checkpoint lineage, mark the affected workspace recovery path unhealthy, prevent dependent recovery work from starting, and commit the existing execution `FAILED` or explicit non-success outcome. **OWNER DECISION REQUIRED:** the Workspace owner MUST select the existing user-visible unavailable/read-only or failed projection for a workspace whose persistence remains unhealthy; this section creates no new Workspace state.
 
-`NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate artifact-owner contracts. `NXR-8004` reinitializes UI state from defaults and records data loss. `NXR-9004` verifies the current backup and tries an earlier backup without mutating the source until validation succeeds. If all database candidates fail, the database/workspace owner MUST preserve the source and commit its existing unavailable/read-only or failed projection. **OWNER DECISION REQUIRED:** the database/workspace owner MUST select that existing projection before implementation; no generic checkpoint authority or new restore state is introduced.
+`NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate artifact-owner contracts. `NXR-8004` reinitializes UI state from defaults and records data loss. `NXR-9004` verifies the current backup and tries an earlier backup without mutating the source until validation succeeds. If all database candidates fail, the database/workspace owner MUST preserve the source data, checkpoint/recovery evidence, and all durable Workspace state, then commit the existing Workspace state `Suspended`. While `Suspended`, no new work or mutation may begin. The Workspace MAY return to `Active` only through the existing `Suspended → Active` recovery path after the underlying database/storage condition is repaired and integrity is verified. The existing suspend guard requiring in-flight work/checkpoint handling MUST be satisfied; if safe preservation cannot be completed, the existing error/recovery contract applies and the system MUST NOT claim a successful recoverable suspension. No new restore state or authority is introduced.
 
 ### Phase Mapping
 

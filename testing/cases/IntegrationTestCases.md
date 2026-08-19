@@ -30,7 +30,7 @@
 | IT-LC-008 | IT-LC | Retry after COMPLETED creates new executionId | Runtime | Planned | `evidence/integration/IT-LC-008/` | 2026-08-06 |
 | IT-LC-009 | IT-LC | Retry records priorExecutionId | Runtime | Planned | `evidence/integration/IT-LC-009/` | 2026-08-06 |
 | IT-LC-010 | IT-LC | Terminal Execution cannot transition to RUNNING | Runtime | Planned | `evidence/integration/IT-LC-010/` | 2026-08-06 |
-| IT-LC-011 | IT-LC | Non-idempotent in-flight call remains unknown through reconciliation exhaustion/manual disposition and is never replayed | Runtime | Planned | `evidence/integration/IT-LC-011/` | 2026-08-06 |
+| IT-LC-011 | IT-LC | Non-idempotent in-flight call remains `UNKNOWN_COMPLETION` through reconciliation exhaustion, is never replayed, and uses `requestEscalation` to place the parent Task in `BlockedAwaitingInput` while the associated Execution retains existing non-terminal/resumable `RUNNING` only; no Tool execution or automatic replay occurs while blocked, and checkpoint/resume and expiry remain canonical | Runtime | Planned | `evidence/integration/IT-LC-011/` | 2026-08-06 |
 | IT-LC-012 | IT-LC | Idempotent incomplete call may replay safely | Runtime | Planned | `evidence/integration/IT-LC-012/` | 2026-08-06 |
 | IT-LC-013 | IT-LC | Duplicate resume event deduplicated | Runtime | Planned | `evidence/integration/IT-LC-013/` | 2026-08-06 |
 | IT-LC-014 | IT-LC | Session close drains/detaches active execution | Runtime + Session | Planned | `evidence/integration/IT-LC-014/` | 2026-08-06 |
@@ -81,7 +81,7 @@
 | IT-ESC-006 | IT-ESC | Temporary grant cannot transfer across task, agent, workspace, or execution lineage and cannot mutate the static matrix | Agent Runtime + Security | Planned | `evidence/integration/IT-ESC-006/` | 2026-08-15 |
 | IT-ESC-007 | IT-ESC | Correlated trace and permission audit preserve request, decision, approval, use, expiry/revocation, cancellation, and final disposition | Observability + Security | Planned | `evidence/integration/IT-ESC-007/` | 2026-08-15 |
 | IT-LIVE-001 | IT-LIVE | STALLED provider stream uses bounded failover transition and preserves priorStreamId lineage | Provider + Runtime | Planned | `evidence/integration/IT-LIVE-001/` | 2026-08-15 |
-| IT-LIVE-002 | IT-LIVE | NXR-2002 timeout preserves unknown completion and retries only after reconciliation/idempotency authorization | Tool + Runtime | Planned | `evidence/integration/IT-LIVE-002/` | 2026-08-15 |
+| IT-LIVE-002 | IT-LIVE | NXR-2002 timeout preserves `UNKNOWN_COMPLETION`, retries only after reconciliation/idempotency authorization, and after exhaustion uses existing escalation to Task `BlockedAwaitingInput` with associated Execution retaining existing non-terminal/resumable `RUNNING` only, no Tool execution or automatic replay while blocked | Tool + Runtime | Planned | `evidence/integration/IT-LIVE-002/` | 2026-08-15 |
 | IT-LIVE-003 | IT-LIVE | RetryPending cannot start before backoff and scheduler authorization | Task Scheduler + Runtime | Planned | `evidence/integration/IT-LIVE-003/` | 2026-08-15 |
 | IT-LIVE-004 | IT-LIVE | Agent Completing finalizes artifacts and resources before Completed commit | Agent Runtime | Planned | `evidence/integration/IT-LIVE-004/` | 2026-08-15 |
 | IT-LIVE-005 | IT-LIVE | Stream failure, cancellation, missing draft, and denied Tool call route to non-success effects without completion synthesis | Agent + Provider + Tool | Planned | `evidence/integration/IT-LIVE-005/` | 2026-08-15 |

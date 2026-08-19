@@ -15,7 +15,9 @@
 The Workspace Lifecycle governs the durable availability and ownership context of every
 Nexora workspace. It is the **root** authority: contained sessions, tasks, executions,
 terminal sessions, files, tools, and memory all operate *within* a workspace but must
-not replace its lifecycle state.
+not replace its lifecycle state. When all `NXR-9004` database-restore candidates fail,
+the existing `suspend()` transition is the legal Workspace effect after source,
+checkpoint/recovery evidence, and durable Workspace state are preserved.
 
 ## States
 
@@ -49,8 +51,8 @@ the transitions below.
 |---------|------|----|-------|
 | `create()` | — | Created | Storage/identity valid |
 | `provision()` | Created | Active | Sandbox + VFS provisioned |
-| `suspend()` | Active | Suspended | In-flight work checkpointed |
-| `resume()` | Suspended | Active | Resources available |
+| `suspend()` | Active | Suspended | In-flight work/checkpoint state and required recovery evidence are durably preserved; no new work or mutation may begin |
+| `resume()` | Suspended | Active | Underlying database/storage condition repaired, integrity verified, and resources available |
 | `archive()` | Active / Suspended | Archived | No active tasks |
 | `delete()` | Archived / Active | Deleted | Confirmation + cleanup complete |
 

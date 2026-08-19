@@ -45,6 +45,10 @@ Workspace
 | **Export** | Export workspace as a zip file. |
 | **Import** | Import a workspace from a zip file. |
 
+### Database Restore Exhaustion
+
+If all `NXR-9004` database-backup candidates fail, the source data, checkpoint/recovery evidence, and durable Workspace state MUST be preserved before the existing Workspace lifecycle transitions to `Suspended`. A suspended Workspace permits no new work or mutation. It may return to `Active` only through the existing `Suspended → Active` path after the underlying database/storage condition is repaired, integrity is verified, and the suspend guard has been satisfied. This clarification adds no Workspace operation, state, error, or authority.
+
 ## Workspace Configuration
 
 ```json

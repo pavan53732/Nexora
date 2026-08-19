@@ -211,7 +211,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | NXR-9001 | Database corruption | Server | Room/SQLite database file is corrupt and cannot be opened | Attempt `PRAGMA integrity_check`; restore from backup |
 | NXR-9002 | Migration failed | Server | Schema migration threw or left the database in an inconsistent state | Roll back migration; alert user; do not proceed |
 | NXR-9003 | Backup failed | Server | Scheduled or manual backup could not be written | Retry; check available disk space |
-| NXR-9004 | Restore failed | Server | Restoring from a backup file failed | Verify backup integrity; try earlier backup |
+| NXR-9004 | Restore failed | Server | Restoring from a backup file failed | Verify backup integrity; try earlier backup; if all candidates fail, preserve source/evidence and let WorkspaceLifecycle commit existing `Suspended`; error metadata does not select Workspace lifecycle state |
 | NXR-9005 | Export failed | Server | Exporting workspace or settings data failed | Retry with smaller batch; check write permissions |
 
 ---
@@ -231,7 +231,7 @@ To eliminate responsibility gaps and satisfy Critical Finding 2, every public in
 | | `getTaskStatus`| `NXR-1009` | Client | Safe | Safe | `NO_CHANGE` | Storage: return standard empty/404 projection |
 | **`ToolManager`** | `registerTool` | `NXR-2005` | Client | Safe | Never until descriptor repaired | Remains `DISCOVERED` | Tool Registry: reject duplicate/unknown scope IDs, invalid risk level, or invalid schema before registration |
 | **`ToolManager`** | `executeTool` | `NXR-2001` | Client | Safe | Never | `NO_CHANGE` | Agent Runtime: report tool not found so agent can self-correct parameters |
-| | `executeTool` | `NXR-2002` | Infrastructure | Safe (Idempotent Key) | Conditional (retry counts) | `NO_CHANGE` | Sandbox: kill process, return partial result or trigger exponential backoff |
+| | `executeTool` | `NXR-2002` | Infrastructure | Safe (Idempotent Key) | Conditional (retry counts and reconciliation authorization) | `NO_CHANGE` for ToolStatus; after reconciliation exhaustion, TaskLifecycle/Runtime apply the existing `requestEscalation(question)` transition to `BlockedAwaitingInput` while the associated Execution retains existing `RUNNING` as a non-terminal/resumable projection only | Sandbox: kill process, preserve `UNKNOWN_COMPLETION` and reconciliation evidence, prevent Tool execution and automatic replay, persist the existing escalation checkpoint, and use the existing `BlockedAwaitingInput → Failed` expiry path; this error metadata does not select lifecycle state |
 | | `executeTool` | `NXR-2003` | Client | Safe only with operation idempotency key | Conditional by subreason | `WAITING_APPROVAL` only while an `ASK` transaction is open; otherwise `NO_CHANGE` | Security: follow NXR-2003 subreason table; never execute on denial |
 | | `executeTool` | `NXR-2004` | Server | Unsafe | Conditional (retries) | `NO_CHANGE` | Developer Action: log stack trace, run agent bounded self-correction loop |
 | | `executeTool` | `NXR-7004` | Infrastructure | Unsafe | Never | Transition to `FAILED` | Sandbox: terminate offending process, record policy breach in audit |

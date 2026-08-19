@@ -173,6 +173,8 @@ When a bounded-progress violation is detected, the runtime MUST either:
 3. fall back to a different provider/tool strategy, or
 4. terminate with explicit incomplete/blocked status.
 
+An exhausted reconciliation budget or effective deadline for a non-idempotent Tool is an explicit human-reconciliation escalation case. The runtime MUST preserve the child `UNKNOWN_COMPLETION` and `MANUAL_RECONCILIATION_REQUIRED` projection, invoke the existing `requestEscalation(question)` path, transition the parent Task to `BlockedAwaitingInput`, persist the reconciliation context in the existing checkpoint, and retain the associated Execution's existing `RUNNING` status as a non-terminal/resumable projection only. While awaiting `resolveEscalation(answer)`, no further Tool execution or automatic replay is authorized. Escalation expiry uses the existing Task `BlockedAwaitingInput → Failed` path; no new state or ExecutionStatus is introduced.
+
 ## Metric-Driven Execution and Evidence Projection (ADR-0010)
 
 The Agent Runtime MUST expose a derived execution/progress/verification projection over the existing `Agent`, `Task`, `Execution`, `Workflow`, `PlanStep`, `AcceptanceProgressVector`, `ProgressSignal`, `ClaimRecord`, checkpoint, trace, and evidence references. The projection MUST make the current objective, actionable next work, acceptance-criterion status, progress reason, verification state, blocked reason, recovery/replan candidate, and completion disposition explainable without creating a second lifecycle owner.

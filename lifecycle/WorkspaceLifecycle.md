@@ -30,8 +30,8 @@ Every durable transition SHOULD emit workspace identity, prior state, new state,
 
 ### Transitions
 - `Created → Active`: First agent/task/background execution starts.
-- `Active → Suspended`: User suspends; budget limit reached (`FR-AS-003`); heartbeat failure (`FR-AS-002`).
-- `Suspended → Active`: User resumes; budget restored.
+- `Active → Suspended`: User suspends; budget limit reached (`FR-AS-003`); heartbeat failure (`FR-AS-002`); or all `NXR-9004` database-restore candidates fail after source, checkpoint/recovery evidence, and durable Workspace state are preserved. The suspend guard MUST be satisfied before the transition; no new work or mutation may begin while suspended.
+- `Suspended → Active`: User resumes after the underlying database/storage condition is repaired, integrity is verified, and resources are available.
 - `Active/Active → Archived`: User archives; automatic archive after user-initiated action or inactivity policy (see WorkspaceLifecycle state machine).
 - `Archived → Deleted`: User deletes; automatic deletion after retention period expires.
 
