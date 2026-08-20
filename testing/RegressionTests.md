@@ -61,7 +61,7 @@ primitive separation.
 
 `RT-LIVE-001` MUST protect the explicit ProviderStream `STALLED → RECONNECTING` failover guard and stalled-failover budget.
 
-`RT-LIVE-002` MUST protect NXR-2002 unknown-completion reconciliation, preserve the child as `UNKNOWN_COMPLETION`, prohibit replay without operation-level authorization, and verify that exhaustion uses existing escalation to Task `BlockedAwaitingInput` while the associated Execution retains existing non-terminal/resumable `RUNNING` only until resolution or existing expiry to `Failed`, with no Tool execution or automatic replay while blocked.
+`RT-LIVE-002` MUST protect NXR-2002 unknown-completion reconciliation, preserve the child as `UNKNOWN_COMPLETION`, prohibit replay without operation-level authorization, and verify that bounded automatic exhaustion retains the unresolved child and checkpoint/evidence context, applies existing Task `Failed` plus Execution `FAILED` effects, and permits no human escalation, Tool execution, automatic replay, or false child success/failure.
 
 `RT-LIVE-003` MUST protect RetryPending backoff enforcement so direct start cannot bypass the scheduler guard.
 

@@ -10,7 +10,7 @@
 
 > Back to [PROJECT_SPECIFICATION.md](../PROJECT_SPECIFICATION.md)
 
-A **Task** is the fundamental unit of work assigned to an agent in Nexora. The Task Lifecycle tracks each task from initial authoring through execution to final resolution, supporting blocking on dependencies, human approval gates, and retry semantics for transient failures.
+A **Task** is the fundamental unit of work assigned to an agent in Nexora. The Task Lifecycle tracks each task from initial authoring through execution to final resolution, supporting blocking on dependencies, approval gates where an existing permission policy requires them, and retry semantics for transient failures. Normal recovery does not require human intervention.
 
 ## States
 
@@ -21,7 +21,7 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | **Queued** | Dependencies satisfied; placed in the agent's execution queue. |
 | **Running** | Agent is actively executing the task. |
 | **Blocked** | Execution stalled due to an unresolved dependency or resource lock. |
-| **BlockedAwaitingInput** | Stalled due to loop escalation or missing capability; awaiting user clarification/input. |
+| **BlockedAwaitingInput** | Stalled due to an explicitly unresolved clarification or capability gap; this state is not used for exhausted unknown-completion reconciliation. |
 | **WaitingApproval** | Task produced an action requiring human approval. |
 | **Completed** | Terminal state — task finished successfully. |
 | **Failed** | Terminal state — non-retryable failure. |
@@ -40,8 +40,8 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 | `block(dependency)` | Running | Blocked | Dependency not yet completed |
 | `unblock()` | Blocked | Running | Dependency resolved |
 | `dependencyFailed()` | Pending / Blocked | Failed | A required dependency entered terminal `Failed` or `Cancelled` state; `NXR-1015` / `Server` |
-| `requestEscalation(question)` | Running | BlockedAwaitingInput | Loop escalation, capability gap, or exhausted `UNKNOWN_COMPLETION` reconciliation requiring human reconciliation; the runtime explicitly supplies the question/context |
-| `resolveEscalation(answer)` | BlockedAwaitingInput | Running | User input received; resumes from checkpoint |
+| `requestEscalation(question)` | Running | BlockedAwaitingInput | Explicit clarification or capability gap requires a bounded user-input path; this transition is not used for exhausted `UNKNOWN_COMPLETION` reconciliation |
+| `resolveEscalation(answer)` | BlockedAwaitingInput | Running | Required clarification/capability input is received; resumes from checkpoint |
 | `requestApproval()` | Running | WaitingApproval | Action exceeds autonomy scope |
 | `approve()` | WaitingApproval | Running | — |
 | `deny()` | WaitingApproval | Failed | User denial; canonical `NXR-2003` / `USER_DENIED`; no task mutation beyond the terminal failure |
@@ -55,7 +55,7 @@ A **Task** is the fundamental unit of work assigned to an agent in Nexora. The T
 
 ### DEC-30 Liveness Projections
 
-The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected with `NXR-1014` / `Client` without lifecycle mutation. A failed dependency propagates `NXR-1015` / `Server` and terminal failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`, and approval expiry uses `NXR-2003` / `POLICY_DENIAL`; both terminate the task through `Failed` without automatic retry. `requestEscalation(question)` also covers an exhausted `UNKNOWN_COMPLETION` reconciliation when the runtime supplies a human-reconciliation question and preserves the existing checkpoint. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed` with `NXR-1016` / `Infrastructure`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
+The Task scheduler validates dependency references and the dependency graph before a task can be queued; invalid references or cycles are rejected with `NXR-1014` / `Client` without lifecycle mutation. A failed dependency propagates `NXR-1015` / `Server` and terminal failure to dependants rather than leaving them indefinitely blocked. Approval denial uses `NXR-2003` / `USER_DENIED`, and approval expiry uses `NXR-2003` / `POLICY_DENIAL`; both terminate the task through `Failed` without automatic retry. An exhausted `UNKNOWN_COMPLETION` reconciliation does not request human input: the owning runtime preserves the unresolved child and checkpoint evidence, then applies the existing `Running → Failed` Task effect. `requestEscalation(question)` remains limited to explicit clarification or capability-gap paths. `Pending`, `Blocked`, and `BlockedAwaitingInput` are deadline-bounded; expiry transitions to `Failed` with `NXR-1016` / `Infrastructure`. These projections preserve the existing state set and do not redefine `Blocked` or approval semantics beyond the selected triggers.
 
 ### Observational Task Recovery Projection (ADR-0010)
 
@@ -72,7 +72,7 @@ The PermissionModel/Tool boundary owns the authorization result and returns `NXR
 - **Draft → Running** — must submit and enqueue first.
 - **Completed → Running** — terminal state; create a new task.
 - **Queued → Completed** — task must pass through Running.
-- **BlockedAwaitingInput → Completed** — task must resolve escalation input and return to Running first.
+- **BlockedAwaitingInput → Completed** — task must resolve the explicit clarification/capability path and return to Running first.
 - **Pending → RetryPending** — task has never attempted execution.
 
 ## State Diagram

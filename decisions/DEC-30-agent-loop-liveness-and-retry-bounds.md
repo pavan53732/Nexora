@@ -42,11 +42,11 @@ Delegation depth is a bounded coordination parameter, not a lifecycle state. The
 
 ### 6. Stream and Tool liveness bindings
 
-The canonical ProviderStream lifecycle includes the bounded `STALLED → RECONNECTING` failover transition. NXR-2002 Tool timeout handling preserves `UNKNOWN_COMPLETION` until reconciliation and permits retry only when the operation's idempotency and retry policy authorize it. `RetryPending → Running` requires elapsed backoff and TaskScheduler authorization. Agent `Completing → Completed` requires the explicit finalization guard. Stream failure/cancellation, denied Tool calls, missing committed drafts, and unsatisfied completion gates route through existing non-success effects rather than successful completion synthesis.
+The canonical ProviderStream lifecycle includes the bounded `STALLED → RECONNECTING` failover transition. NXR-2002 Tool timeout handling preserves `UNKNOWN_COMPLETION` through automatic reconciliation and permits retry only when the operation's idempotency and retry policy authorize it. When automatic reconciliation is exhausted, the child remains `UNKNOWN_COMPLETION`, evidence is retained, and existing Task/Execution non-success effects apply without human escalation or unsafe replay. `RetryPending → Running` requires elapsed backoff and TaskScheduler authorization. Agent `Completing → Completed` requires the explicit finalization guard. Stream failure/cancellation, denied Tool calls, missing committed drafts, and unsatisfied completion gates route through existing non-success effects rather than successful completion synthesis.
 
 ## Invariants
 
-No new Task, Agent, Execution, Provider, Tool, or approval lifecycle state is created. Terminal Execution identities remain immutable. Approval and classifier denial remain fail-closed. Unknown completion is never converted into success or failure before reconciliation. Child operations cannot outlive the parent deadline. Delegation does not grant permissions, mutate the static capability matrix, or bypass sandbox/security policy.
+No new Task, Agent, Execution, Provider, Tool, or approval lifecycle state is created. Terminal Execution identities remain immutable. Approval and classifier denial remain fail-closed. An unresolved child remains `UNKNOWN_COMPLETION`; bounded exhaustion may commit the existing parent Task/Execution non-success effects without converting the child into confirmed success or confirmed failure. Child operations cannot outlive the parent deadline. Delegation does not grant permissions, mutate the static capability matrix, or bypass sandbox/security policy.
 
 ## Required projections
 

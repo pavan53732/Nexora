@@ -37,8 +37,7 @@ enum class ToolCompletionState {
     CONFIRMED_FAILURE,
     UNKNOWN_COMPLETION,
     RECONCILED_SUCCESS,
-    RECONCILED_FAILURE,
-    MANUAL_RECONCILIATION_REQUIRED
+    RECONCILED_FAILURE
 }
 ```
 
@@ -53,4 +52,4 @@ sealed class ToolResult {
 - Authorization happens before execution (see `security/PermissionModel.md`).
 - `ToolExecution` events are separate from `ToolStatus` lifecycle.
 - `ToolCompletionState` records operation outcome certainty and reconciliation without introducing a Tool descriptor lifecycle state.
-- `UNKNOWN_COMPLETION` MUST remain unresolved until the Tool System’s declared reconciliation contract produces evidence; it MUST NOT be represented as confirmed success or confirmed failure.
+- `UNKNOWN_COMPLETION` MUST remain unresolved until the Tool System’s declared automatic reconciliation contract produces evidence or the owning Task/Execution commits the existing non-success outcome after bounded exhaustion; it MUST NOT be represented as confirmed success or confirmed failure.

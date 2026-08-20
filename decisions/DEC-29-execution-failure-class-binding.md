@@ -34,7 +34,7 @@ A permanent classification prohibits retry without an explicit strategy change o
 
 An escalation classification indicates a systemic constraint, bounded-progress violation, retry storm, deadline exhaustion, or resource constraint that requires notification, incomplete termination, or a user clarification path.
 
-Escalation does not create a new Task state. `TaskLifecycle.Running → BlockedAwaitingInput` is used only when the owning runtime explicitly invokes `requestEscalation(question)` for user clarification or a capability gap. If the operation terminates, the existing terminal failure effects apply: `Task Running → Failed` and `ExecutionStatus RUNNING → FAILED`. The error envelope and operation owner determine whether notification, clarification, cleanup, or a new operation is required.
+Escalation does not create a new Task state. `TaskLifecycle.Running → BlockedAwaitingInput` is used only when the owning runtime explicitly invokes `requestEscalation(question)` for user clarification or a capability gap; exhausted `UNKNOWN_COMPLETION` reconciliation does not use this path. If the operation terminates, the existing terminal failure effects apply: `Task Running → Failed` and `ExecutionStatus RUNNING → FAILED`. The error envelope and operation owner determine automatic retry, reconciliation, cleanup, containment, or a new operation; no human intervention is required for bounded recovery exhaustion.
 
 ### 5. Authority separation
 

@@ -298,21 +298,17 @@ defined in `models/Execution.md`:
 ### Failure Recovery
 
 - **Recoverable interruption before a terminal state:** retain the same `executionId`; increment `version`; retain `correlationId`; resume `RUNNING` from checkpoint. Coordinator-incarnation loss is recoverable through this existing process-death/checkpoint path only for the original coordinator Task and Execution lineage; the inherited effective deadline is immutable and MUST NOT be reset. No other coordinator may adopt, reparent, or replay the child under a new identity. If the parent is invalidated or the inherited deadline expires, the existing child cancellation/termination path applies.
-- **User-clarification or human-reconciliation suspension (BlockedAwaitingInput):** when
-  `TaskLifecycle` transitions to `BlockedAwaitingInput` via `requestEscalation`, including
-  after exhausted `UNKNOWN_COMPLETION` reconciliation, the executor commits a checkpoint
-  capturing the full plan + `currentStepIndex` + the escalation payload
-  (`clarificationQuestion`) + the unresolved ToolInvocation/reconciliation context and
-  retains the same `executionId`/`correlationId`. While the Task is `BlockedAwaitingInput`
-  for unresolved reconciliation, the associated existing Execution retains `RUNNING`
-  because no blocked or suspended ExecutionStatus exists; this is an existing non-terminal/resumable
-  projection only and does not authorize further Tool execution or automatic replay. The
-  `resolveEscalation` trigger resumes from that checkpoint: `version` increments, status
-  remains/returns `RUNNING`, and the user's answer is injected as the next input —
-  same-identity resume, no new `executionId` (ADR-0009 Decision #5; TaskLifecycle
-  `resolveEscalation` transition). Entering or resolving this escalation does not itself
-  create a new Execution; a new identity is permitted only under the existing terminal
-  retry/restart lineage rules.
+- **Explicit clarification/capability suspension (`BlockedAwaitingInput`):** when
+  `TaskLifecycle` transitions to `BlockedAwaitingInput` via `requestEscalation` for an
+  explicit clarification or capability gap, the executor commits a checkpoint capturing
+  the full plan + `currentStepIndex` + the clarification payload and retains the same
+  `executionId`/`correlationId`. The `resolveEscalation` trigger resumes from that
+  checkpoint: `version` increments, status remains/returns `RUNNING`, and the supplied
+  clarification is injected as the next input through the existing path. This state is
+  not used for exhausted `UNKNOWN_COMPLETION` reconciliation; that path preserves the
+  unresolved child and checkpoint evidence, then applies parent Task `Running → Failed`
+  and associated Execution `RUNNING → FAILED` without human intervention. A new identity
+  is permitted only under the existing terminal retry/restart lineage rules.
 - **Committed terminal `FAILED`/`CANCELLED`/`COMPLETED`:** never transition back to `RUNNING`. Explicit retry/restart creates a new `executionId`; parent/prior execution linkage and correlation policy preserved.
 - **Unrecoverable failure:** commit `FAILED`; no same-identity resume. DEC-33 uses `NXR-1014` for invalid Task dependency references/cycles, `NXR-1015` for unsatisfied terminal dependencies, and `NXR-1016` for effective-deadline expiry.
 - **Android ANR (Application Not Responding):** `AgentExecutionService` MUST commit a checkpoint on the 6 s / 10 s ANR threshold (foreground / background), emit `TASK_SUSPENDED`, and suspend execution. Service restart or watchdog resumes from the checkpoint without user-visible crash data (NFR-REL-002, ADR-0009 Decision #7). The `executionId` and `correlationId` are preserved across the ANR/resume cycle; `version` increments at resume.
