@@ -87,3 +87,12 @@ This document defines invalid semantic operations and the expected semantic resu
 - Error condition: Runtime, Memory, Checkpoint, or another subsystem is treated as the semantic owner of the Session–Conversation relationship without canonical authority.
 - Why invalid: DEC-15 fixes ownership in the existing Conversation/Session responsibility.
 - Expected semantic result: reject the conflicting authoritative interpretation in implementation/docs; no semantic ownership transfer occurs.
+
+### 14. Rollback-cleanup exhaustion
+- Error condition: branch creation fails and rollback/cleanup of the attempted branch also fails or cannot be proven complete.
+- Why invalid: atomic rollback requires either no branch or one complete branch; partial branch work cannot be exposed as a successful BranchLineage relationship.
+- Expected semantic result: commit the existing non-success outcome and recover to no branch; never claim or expose a partial branch.
+- Conversation/checkpoint effect: source Conversation and source checkpoint remain unchanged.
+- Identity/lineage effect: retain the existing operation identity, source/checkpoint lineage, original error, rollback error, and partial-artifact references for reconciliation; do not promote partial lineage work into the BranchLineage lifecycle.
+- Evidence effect: retain the audit result and surface the non-success through the existing result/status boundary.
+- Recovery expectation: only existing eligible automatic mechanisms may continue, including idempotent same-operation-identity recovery and DEC-31 daily cleanup; no manual-recovery disposition, new state, error code, identity, authority, or external-side-effect reversal is introduced.

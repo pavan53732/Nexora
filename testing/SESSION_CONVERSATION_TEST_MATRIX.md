@@ -306,7 +306,20 @@
 - Forbidden result: invalid rollback claiming success.
 - Traceability: DEC-8, DEC-9.
 
+### T26 — Rollback-cleanup exhaustion
+- Preconditions: authorized rollback begins with valid source Conversation/checkpoint, branch creation fails, and rollback/cleanup of attempted branch work fails or cannot be proven complete.
+- Action: complete bounded automatic reconciliation for the same operation identity.
+- Expected result: existing non-success outcome; recover to no branch; no partial branch is exposed or claimed.
+- Session identity: unchanged.
+- Conversation identity: source Conversation unchanged; no branch identity is promoted or created as a successful result.
+- Association result: no branch association created.
+- Checkpoint result: source checkpoint unchanged and retained.
+- Lineage result: source/checkpoint lineage, partial-artifact references, and audit result retained; partial lineage is not promoted into `RECORDED`, `ACTIVE`, `DETACHED`, or `DELETED`.
+- Recovery result: only existing eligible idempotent same-operation-identity recovery and DEC-31 cleanup may continue; no manual-recovery action, new state, new error code, external-side-effect reversal, or unsafe replay.
+- Forbidden result: successful completion or user-visible branch claim with partial/unproven branch state.
+- Traceability: DEC-8, DEC-9, DEC-22, DEC-31.
+
 
 ## Field interpretation for rejected operations
 
-For negative cases where an attempted operation cannot create or mutate the named entities, the identity fields refer to the precondition identities and state that they remain unchanged; the association field identifies the pre-existing association and rejected attempted association. Checkpoint and lineage results are unchanged unless explicitly stated otherwise. This interpretation applies to T08 through T09 and T12 through T25 where the attempted operation is rejected or does not itself create an association.
+For negative cases where an attempted operation cannot create or mutate the named entities, the identity fields refer to the precondition identities and state that they remain unchanged; the association field identifies the pre-existing association and rejected attempted association. Checkpoint and lineage results are unchanged unless explicitly stated otherwise. This interpretation applies to T08 through T09 and T12 through T26 where the attempted operation is rejected or does not itself create an association.
