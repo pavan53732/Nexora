@@ -158,8 +158,17 @@ Rules:
 - The agent loop publishes **`TaskProgress`** events on the event bus at each
   iteration (AGENT_RUNTIME): status, step index, plan state, and token usage
   (FR-A010, FR-P009).
+- The progress projection MUST retain the existing `workspaceId`, `taskId`,
+  `executionId`, `agentId`, `correlationId`, workflow/plan-step identity when applicable,
+  checkpoint/version, and evidence references. It MUST expose the current phase/action,
+  elapsed or active time, latest heartbeat/freshness observation, immutable deadline and
+  remaining budget, resource/concurrency condition, blocker or uncertainty, next safe
+  action, verification state, and final disposition. Missing values are unknown or
+  unavailable; they MUST NOT be inferred from logs, elapsed time, or provider confidence.
 - The UI renders progress via `TaskCard` (progress indicator) and `ActivityCard`
   (inline progress events) in the chat activity feed ([ui/Components.md](../ui/Components.md)).
+  Android notifications and WorkManager results MUST preserve the same durable lineage and
+  non-authoritative classification.
 - Token usage is tracked per request, session, provider, and model
   ([SYSTEM_DESIGN → Observability](../docs/SYSTEM_DESIGN.md)).
 
@@ -178,7 +187,7 @@ Rules:
 
 A checkpoint save MUST use the existing `saveCheckpoint` transaction and may retry once under the existing retry/deadline rules. A failed retry MUST preserve the last valid checkpoint and its `executionId`, `correlationId`, version, effective deadline, acceptance progress, failure ledger, and evidence; it MUST persist `NXR-1003`, prevent dependent recovery work from starting, and project the affected execution to its existing `FAILED` or explicit non-success outcome. It MUST NOT overwrite the last valid checkpoint or silently resume from an incomplete save.
 
-Checkpoint restore is artifact-specific. An execution restore MUST validate the selected checkpoint and any declared last-known-good fallback before resuming the same `executionId`; a corrupt or incompatible candidate persists `NXR-1004` and may advance only to the next validated candidate. If all execution candidates fail, the existing Execution lifecycle commits `FAILED`, preserves the last valid checkpoint reference and restore evidence, alerts the user, and does not start dependent recovery work. `NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate owner contracts: UI state reinitializes from defaults, while database candidates are integrity-checked without mutating the source. **OWNER DECISION REQUIRED:** the Workspace/database owner must select the existing unavailable/read-only or failed projection after database restore exhaustion; no new restore state or generic checkpoint authority is created.
+Checkpoint restore is artifact-specific. An execution restore MUST validate the selected checkpoint and any declared last-known-good fallback before resuming the same `executionId`; a corrupt or incompatible candidate persists `NXR-1004` and may advance only to the next validated candidate. If all execution candidates fail, the existing Execution lifecycle commits `FAILED`, preserves the last valid checkpoint reference and restore evidence, alerts the user, and does not start dependent recovery work. `NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate owner contracts: UI state reinitializes from defaults, while database candidates are integrity-checked without mutating the source. If all `NXR-9004` database candidates fail, the database/workspace owner MUST preserve source data, checkpoint/recovery evidence, and durable Workspace state, then commit the existing Workspace state `Suspended` under the existing suspend guard. While `Suspended`, no new work or mutation may begin; recovery requires storage repair, integrity verification, resources available, and the existing `Suspended → Active` path. If safe preservation cannot be completed, the existing error/recovery contract applies and the system MUST NOT claim a successful recoverable suspension. No new restore state or generic checkpoint authority is created.
 
 ## 7. Android Platform Rules (API 34+)
 

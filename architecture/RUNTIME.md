@@ -241,6 +241,34 @@ changes remain owned by the canonical state machine or operation owner. Trace ex
 respect workspace permissions, sensitive-content redaction, retention policy, and the
 existing audit/security rules.
 
+### Android Operational Status and Final-Result Projection (ADR-0010)
+
+The Runtime MAY project existing execution information into the Android activity feed,
+foreground-service notification, WorkManager result, and other approved user-facing
+surfaces through the canonical Background Execution owner. Each projection MUST resolve to
+the existing `workspaceId`, `taskId`, `executionId`, `agentId`, `correlationId`, workflow/
+plan-step identity when applicable, checkpoint/version, and evidence references. It MUST
+make the current phase and action, elapsed/active time, latest heartbeat or freshness,
+immutable deadline and remaining budget, resource or concurrency condition, blocker or
+uncertainty, next safe action, verification state, and final disposition explainable.
+Unavailable values MUST be shown as unknown or unavailable; the projection MUST NOT infer
+progress or success from elapsed time, logs, provider confidence, heartbeat presence, or
+file-change count.
+
+A final-result projection MUST distinguish, using existing lifecycle and evidence
+semantics, `Passed`/successful completion, `Failed` completion, cancelled or incomplete
+work, `Blocked`/awaiting-input work, `Skipped` or not-attempted work, degraded/read-only
+work, and work whose result remains `Unverified`. It MUST separately expose the existing
+evidence state, including `CANONICAL REQUIREMENT`, `IMPLEMENTED`, `TEST DEFINED`, `TESTED`,
+and `EXECUTED EVIDENCE`; a passed or failed reporting label MUST NOT be treated as
+retained executed evidence unless the evidence envelope requirements are satisfied. These
+are reporting classifications only. They do not create a new `TaskStatus`,
+`ExecutionStatus`, Workflow state, permission outcome, error identity, or evidence
+authority. The completion gate, canonical state machines, PermissionModel, Tool/Provider
+owners, and Evidence & Validation Engine remain authoritative. Android notifications and
+background results MUST preserve the same classification and lineage as the durable
+record.
+
 ## ExecutionStatus Lifecycle
 
 The Executor owns ExecutionStatus lifecycle semantics. The canonical state set is
@@ -275,7 +303,7 @@ defined in `models/Execution.md`:
 
 ### Failure Recovery
 
-- **Recoverable interruption before a terminal state:** retain the same `executionId`; increment `version`; retain `correlationId`; resume `RUNNING` from checkpoint.
+- **Recoverable interruption before a terminal state:** retain the same `executionId`; increment `version`; retain `correlationId`; resume `RUNNING` from checkpoint. Coordinator-incarnation loss is recoverable through this existing process-death/checkpoint path only for the original coordinator Task and Execution lineage; the inherited effective deadline is immutable and MUST NOT be reset. No other coordinator may adopt, reparent, or replay the child under a new identity. If the parent is invalidated or the inherited deadline expires, the existing child cancellation/termination path applies.
 - **User-clarification or human-reconciliation suspension (BlockedAwaitingInput):** when
   `TaskLifecycle` transitions to `BlockedAwaitingInput` via `requestEscalation`, including
   after exhausted `UNKNOWN_COMPLETION` reconciliation, the executor commits a checkpoint
@@ -299,7 +327,7 @@ defined in `models/Execution.md`:
 
 Checkpoint recovery remains artifact-specific. An execution restore MAY use only a validated checkpoint candidate and the declared last-known-good fallback; it MUST preserve the `executionId`, `correlationId`, version lineage, acceptance progress, failure ledger, deadline, and evidence. If the selected checkpoint is corrupt or incompatible, `NXR-1004` MUST be persisted and the next validated fallback MAY be attempted. When no valid execution checkpoint candidate remains, the existing Execution lifecycle MUST commit `FAILED` as an unrecoverable error, dependent recovery work MUST NOT start, the last valid checkpoint reference and failure evidence MUST be preserved, and the user MUST be alerted. No new restore lifecycle is created.
 
-A checkpoint-save failure uses the existing `NXR-1003` contract: retry once without overwriting the last valid checkpoint. If the retry fails, persist the error and checkpoint lineage, mark the affected workspace recovery path unhealthy, prevent dependent recovery work from starting, and commit the existing execution `FAILED` or explicit non-success outcome. **OWNER DECISION REQUIRED:** the Workspace owner MUST select the existing user-visible unavailable/read-only or failed projection for a workspace whose persistence remains unhealthy; this section creates no new Workspace state.
+A checkpoint-save failure uses the existing `NXR-1003` contract: retry once without overwriting the last valid checkpoint. If the retry fails, persist the error and checkpoint lineage, mark the affected workspace recovery path unhealthy, prevent dependent recovery work from starting, and commit the existing execution `FAILED` or explicit non-success outcome. When the persistence condition is the `NXR-9004` database-restore exhaustion contract, the existing Workspace owner MUST preserve source data, checkpoint/recovery evidence, and durable Workspace state, then commit `Suspended` under the existing suspend guard; no new Workspace state is introduced. Other checkpoint-save failures continue through their existing execution and Workspace recovery contracts and MUST NOT be silently reclassified as `NXR-9004`.
 
 `NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate artifact-owner contracts. `NXR-8004` reinitializes UI state from defaults and records data loss. `NXR-9004` verifies the current backup and tries an earlier backup without mutating the source until validation succeeds. If all database candidates fail, the database/workspace owner MUST preserve the source data, checkpoint/recovery evidence, and all durable Workspace state, then commit the existing Workspace state `Suspended`. While `Suspended`, no new work or mutation may begin. The Workspace MAY return to `Active` only through the existing `Suspended → Active` recovery path after the underlying database/storage condition is repaired and integrity is verified. The existing suspend guard requiring in-flight work/checkpoint handling MUST be satisfied; if safe preservation cannot be completed, the existing error/recovery contract applies and the system MUST NOT claim a successful recoverable suspension. No new restore state or authority is introduced.
 

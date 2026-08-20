@@ -81,6 +81,26 @@ Cross-layer contract-sensitive paths are mandatory.
 
 Contract-affecting documentation changes SHOULD be mirrored by integration evidence updates.
 
+## Mechanical Architecture and Documentation Compliance Coverage (ADR-0010)
+
+The existing integration/CI validation MUST exercise the rules declared by
+`docs/DEPENDENCY_GRAPH.md`, `docs/MODULE_BOUNDARIES.md`, `docs/CANONICAL_SOURCES.md`,
+`docs/TRACEABILITY.md`, `docs/REQUIREMENT_COVERAGE_LEDGER.md`, and the applicable
+Documentation Standard. The fixture set MUST include known-good allowed edges and known-bad
+cases for forbidden direct and transitive dependencies, cycles, concrete implementation
+imports across boundaries, missing interface/binding coverage, provider-to-Android-UI
+leakage, shared-module upward dependencies, stale or broken internal links, ownership and
+identifier mismatches, and generated/configuration variants that can evade a source-only
+scan when applicable.
+
+Each run MUST record the violated canonical rule, path/line, owner, severity, remediation,
+false-positive results on allowed fixtures, and escaped-violation results on applicable
+variants. A report MAY block a change only when it demonstrates a violation of an existing
+canonical contract; the check cannot invent architecture, grant permissions, mutate runtime
+state, or become an independent policy authority. Results use the common evidence envelope;
+fixture presence remains `TEST DEFINED` until execution and retained artifacts establish
+`TESTED` or `EXECUTED EVIDENCE`.
+
 ## Canonical Contract Evidence
 
 Integration suites SHOULD explicitly validate:

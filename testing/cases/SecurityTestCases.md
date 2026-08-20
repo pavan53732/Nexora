@@ -8,10 +8,10 @@
 |---|---|---|---|---|---|---|
 | SEC-PERM-001 | SEC-PERM | Validate authorization before tool side effects | Security | Planned | `evidence/security/SEC-PERM-001/` | 2026-08-04 |
 | SEC-PERM-002 | SEC-PERM | Validate cancellation/retry cannot bypass authorization | Security | Planned | `evidence/security/SEC-PERM-002/` | 2026-08-04 |
-| SEC-SBX-001 | SEC-SBX | Validate sandbox escape resistance | Security + Sandbox | Planned | `evidence/security/SEC-SBX-001/` | 2026-08-04 |
+| SEC-SBX-001 | SEC-SBX | Validate sandbox escape resistance, Android app-private storage/overlay integrity, fail-closed repair behavior, and retained device/emulator security evidence | Security + Sandbox | Planned | `evidence/security/SEC-SBX-001/` | 2026-08-04 |
 | SEC-SECRET-001 | SEC-SECRET | Validate credential redaction across boundaries | Security | Planned | `evidence/security/SEC-SECRET-001/` | 2026-08-04 |
 | SEC-PLUGIN-001 | SEC-PLUGIN | Validate plugin activation compensation preserves isolation: `Installed → Activating → cleanup succeeds → Installed` and `Inactive → Activating → cleanup succeeds → Inactive`; failed or unproven cleanup remains `Failed`, and affected capabilities are not executable until cleanup is verified | Security + Plugin System | Planned | `evidence/security/SEC-PLUGIN-001/` | 2026-08-04 |
-| SEC-DOS-001 | SEC-DOS | Validate process spawn limiting and Doze handoffs | Security + Sandbox | Planned | `evidence/security/SEC-DOS-001/` | 2026-08-05 |
+| SEC-DOS-001 | SEC-DOS | Validate process spawn limiting and Doze handoffs preserve checkpoint, heartbeat/deadline reporting, notification/activity classification, resource limits, and fail-closed behavior on applicable Android devices/emulators | Security + Sandbox | Planned | `evidence/security/SEC-DOS-001/` | 2026-08-05 |
 | SEC-DOS-002 | SEC-DOS | Validate workspace memory quotas and write-blocking | Security + Sandbox | Planned | `evidence/security/SEC-DOS-002/` | 2026-08-05 |
 | SEC-FLOW-001 | SEC-FLOW | Validate provider profile isolation and credential containment | Security + Provider | Planned | `evidence/security/SEC-FLOW-001/` | 2026-08-05 |
 | SEC-NET-001 | SEC-NET | Validate egress proxy Allowed Domains, DLP outbound scan, and direct-socket denial (guest processes cannot bypass the workspace egress proxy; pinned/foreign-cert traffic is denied — fail-closed) | Security | Planned | `evidence/security/SEC-NET-001/` | 2026-08-05 |
@@ -104,6 +104,6 @@
 | SEC-ESC-001 | SEC-ESC | Unsupported Terminal/Background capability cannot be self-granted by an agent | Security + Agent Runtime | Planned | `evidence/security/SEC-ESC-001/` | 2026-08-15 |
 | SEC-ESC-002 | SEC-ESC | Task-scoped escalation cannot transfer across agent, task, workspace, or execution lineage | Security + Agent Runtime | Planned | `evidence/security/SEC-ESC-002/` | 2026-08-15 |
 | SEC-ESC-003 | SEC-ESC | Terminal escalation still enforces sandbox scopes, canonical denial, path, network, process, output, and timeout controls | Security + Terminal + Sandbox | Planned | `evidence/security/SEC-ESC-003/` | 2026-08-15 |
-| SEC-ESC-004 | SEC-ESC | Background escalation cannot bypass checkpoint, notification, cancellation, resource, Android lifecycle, or degraded-mode controls | Security + Background Runtime | Planned | `evidence/security/SEC-ESC-004/` | 2026-08-15 |
+| SEC-ESC-004 | SEC-ESC | Background escalation cannot bypass checkpoint, heartbeat/deadline reporting, notification, cancellation, resource, Android lifecycle, or degraded-mode controls; evidence preserves the existing permission and lifecycle owners | Security + Background Runtime | Planned | `evidence/security/SEC-ESC-004/` | 2026-08-15 |
 | SEC-ESC-005 | SEC-ESC | Expiry/revocation cancels active descendants, preserves checkpoint/audit lineage, and cannot reset deadlines or retry budgets | Security + Recovery | Planned | `evidence/security/SEC-ESC-005/` | 2026-08-15 |
 | SEC-ESC-006 | SEC-ESC | Escalation request, approval, use, denial, expiry, revocation, and final disposition are redacted and audit-correlated | Security + Observability | Planned | `evidence/security/SEC-ESC-006/` | 2026-08-15 |

@@ -183,6 +183,33 @@ Package downloads and installed artifacts count toward workspace quota. Package 
 
 The bundled Debian rootfs contains OSS components with license obligations. Nexora must ship attribution and source-offer information with the APK and provide an in-app OSS licenses view before store distribution.
 
+## 5A. Android Environment Diagnostics and Repair Boundary (ADR-0010)
+
+Before a guest process or environment-dependent background operation begins, the existing
+Full Environment, Sandbox, Storage, Security, and Background Runtime owners MUST be able
+to report the applicable diagnostic inputs: device ABI and Android compatibility, bundled
+asset manifest/checksum/signature, extraction and mount readiness, app-private storage and
+workspace quota availability, base-rootfs and overlay integrity, proot/guest entrypoint
+readiness, and the applicable permission, network, battery, and scheduling constraints.
+The diagnostic result is evidence and observability data; it is not a new environment
+lifecycle or authority.
+
+Repair MAY use only the existing verified reset/re-extraction, checkpoint, retry,
+resource/degradation, user-guidance, or terminal failure paths owned by those subsystems.
+Repair MUST preserve the last known-good rootfs, overlay, workspace data, checkpoint and
+evidence references until the replacement asset or repaired condition passes the existing
+integrity and permission checks. It MUST fail closed when integrity, storage, sandbox,
+permission, or Android scheduling prerequisites cannot be established, and it MUST report
+the existing non-success or degraded disposition rather than claiming a healthy
+execution environment.
+
+This boundary covers Android-relevant environment behavior only. It does not authorize
+Node/Rust/desktop/web tooling as a product target, local AI/model inference, unrestricted
+host access, a repair manager, a new environment identity, a new Workspace/Task/Execution
+state, or a new recovery authority. `architecture/SANDBOX.md`, `security/SandboxPolicy.md`,
+`specs/BACKGROUND_EXECUTION.md`, and the existing lifecycle/error owners remain
+authoritative for their respective decisions.
+
 ## 6. W^X Compatibility (`targetSdk=34` current baseline)
 
 Nexora uses `targetSdk=34` for the current Android build baseline under DEC-37. Devices running newer Android releases may still enforce newer W^X and foreground-execution behavior; those runtime compatibility rules do not change the current target SDK. Android 10+ enforces W^X

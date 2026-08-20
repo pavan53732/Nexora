@@ -13,6 +13,8 @@
 
 When a canonical requirement, architecture, lifecycle, protocol, API, SDK, model, registry, security, or test artifact changes, this matrix MUST be updated in the same change or the gap MUST be recorded explicitly. Operational rules are further defined in [TRACEABILITY_RULES.md](./TRACEABILITY_RULES.md). The complete canonical requirement identifier inventory is maintained in [REQUIREMENT_COVERAGE_LEDGER.md](./REQUIREMENT_COVERAGE_LEDGER.md).
 
+For ADR-0010 operational strengthening, existing owner documents and validation IDs remain authoritative. Projection or test-purpose wording may be strengthened in place, but those edits MUST NOT promote `PARTIAL`, `Planned`, `TEST DEFINED`, or implementation-unverified coverage to `IMPLEMENTED`, `TESTED`, or `EXECUTED EVIDENCE`.
+
 ## Creator Product Design to Canonical Owner Matrix
 
 The creator-owned product design defines product identity and selected boundaries; the documents below remain authoritative for realization. Status reflects the current Phase 0 evidence boundary and does not claim implementation or executed evidence.
