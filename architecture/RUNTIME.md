@@ -261,13 +261,7 @@ work, `Blocked`/awaiting-input work, `Skipped` or not-attempted work, degraded/r
 work, and work whose result remains `Unverified`. It MUST separately expose the existing
 evidence state, including `CANONICAL REQUIREMENT`, `IMPLEMENTED`, `TEST DEFINED`, `TESTED`,
 and `EXECUTED EVIDENCE`; a passed or failed reporting label MUST NOT be treated as
-retained executed evidence unless the evidence envelope requirements are satisfied. These
-are reporting classifications only. They do not create a new `TaskStatus`,
-`ExecutionStatus`, Workflow state, permission outcome, error identity, or evidence
-authority. The completion gate, canonical state machines, PermissionModel, Tool/Provider
-owners, and Evidence & Validation Engine remain authoritative. Android notifications and
-background results MUST preserve the same classification and lineage as the durable
-record.
+retained executed evidence unless the evidence envelope requirements are satisfied. These are reporting classifications only. The projection is observational and coordinating only; it MUST NOT adopt or reparent work, replay an uncertain operation, reset a deadline or retry budget, authorize a Tool or permission escalation, trigger an autonomous side effect, or select a lifecycle transition. It does not create a new `TaskStatus`, `ExecutionStatus`, Workflow state, permission outcome, error identity, or evidence authority. The completion gate, canonical state machines, PermissionModel, Tool/Provider owners, and Evidence & Validation Engine remain authoritative. Android notifications and background results MUST preserve the same classification and lineage as the durable record.
 
 ## ExecutionStatus Lifecycle
 
@@ -330,6 +324,8 @@ Checkpoint recovery remains artifact-specific. An execution restore MAY use only
 A checkpoint-save failure uses the existing `NXR-1003` contract: retry once without overwriting the last valid checkpoint. If the retry fails, persist the error and checkpoint lineage, mark the affected workspace recovery path unhealthy, prevent dependent recovery work from starting, and commit the existing execution `FAILED` or explicit non-success outcome. When the persistence condition is the `NXR-9004` database-restore exhaustion contract, the existing Workspace owner MUST preserve source data, checkpoint/recovery evidence, and durable Workspace state, then commit `Suspended` under the existing suspend guard; no new Workspace state is introduced. Other checkpoint-save failures continue through their existing execution and Workspace recovery contracts and MUST NOT be silently reclassified as `NXR-9004`.
 
 `NXR-8004` `SavedStateHandle` restoration and `NXR-9004` database-backup restoration remain separate artifact-owner contracts. `NXR-8004` reinitializes UI state from defaults and records data loss. `NXR-9004` verifies the current backup and tries an earlier backup without mutating the source until validation succeeds. If all database candidates fail, the database/workspace owner MUST preserve the source data, checkpoint/recovery evidence, and all durable Workspace state, then commit the existing Workspace state `Suspended`. While `Suspended`, no new work or mutation may begin. The Workspace MAY return to `Active` only through the existing `Suspended → Active` recovery path after the underlying database/storage condition is repaired and integrity is verified. The existing suspend guard requiring in-flight work/checkpoint handling MUST be satisfied; if safe preservation cannot be completed, the existing error/recovery contract applies and the system MUST NOT claim a successful recoverable suspension. No new restore state or authority is introduced.
+
+For Android environment-dependent checkpoint, retry, degradation, or failure handling, the Runtime MUST carry forward the existing diagnostic classification and source lineage: ABI/asset, mount, storage/quota, integrity, permission, battery/network/scheduling, checkpointability, and resource conditions are reported as verified, failed, unavailable, or unknown. Unverified readiness MUST fail closed or use the existing retry, checkpoint, escalation, cancellation, Workspace suspension, degradation, or terminal failure path; it MUST NOT be converted into a healthy-run claim, permission grant, lifecycle transition, deadline reset, or replay authorization. This is an observability and routing contract across existing owners, not a new Runtime recovery authority.
 
 ### Phase Mapping
 

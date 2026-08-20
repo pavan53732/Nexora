@@ -104,6 +104,12 @@ Each emitted lifecycle event MUST carry: `entityId`, `entityType`, `fromState`,
 and optional canonical error information. Consumers MUST treat events as at-least-once
 and deduplicate by `(entityType, entityId, transitionVersion)`.
 
+### Android Environment Recovery Projection (ADR-0010)
+
+For a Workspace transition affected by Android storage, integrity, quota, permission, battery, scheduling, or sandbox conditions, the diagnostic/recovery projection MUST preserve the existing `workspaceId`, transition version, source state, checkpoint/recovery evidence, durable state, and correlated Task/Execution references when applicable. It MUST report each applicable condition as verified, failed, unavailable, or unknown and MUST NOT infer readiness from process presence or prior state.
+
+Before `Suspended → Active`, the existing `resume()` guard MUST be supported by verified repair, integrity, and resources-available evidence. If those prerequisites cannot be proven, the Workspace MUST remain in its existing state or follow the existing failure/recovery contract; no new repair authority, Workspace state, identity, lease, supervisor, or lifecycle is introduced. The projection reports the guard and evidence only; `WorkspaceLifecycle` remains authoritative for the transition.
+
 ### Invalid Transition Contract
 
 An invalid transition MUST return a canonical error without changing persisted state,

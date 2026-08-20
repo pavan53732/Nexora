@@ -76,3 +76,9 @@ It does not replace `correlationId`.
 ## Execution Phase Semantics
 
 Execution events are append-only and at-least-once. Consumers MUST deduplicate by execution ID and sequence/version. A checkpoint event is durable only after the referenced checkpoint has been committed. `phase` is transient execution activity; `status` is the durable lifecycle projection. `CREATED` represents an existing Execution that has not yet started; it is also the post-recovery projection selected by DEC-7 when the preserved Execution awaits a future start after its Task returns to `Queued`.
+
+## Observational Execution Recovery Projection (ADR-0010)
+
+A runtime, background, or coordination projection MAY expose the existing `executionId`, `taskId`, `workspaceId`, `agentId` when applicable, `correlationId`, `status`, `phase`, version, checkpoint reference, heartbeat/freshness, immutable effective deadline and remaining budget, blocker or uncertainty, recovery/replan candidate, evidence references, and final disposition. The projection is observational and coordinating only; the existing Runtime and Execution lifecycle contracts remain authoritative.
+
+The projection MUST NOT adopt or reparent an Execution, change `ExecutionStatus` or `ExecutionPhase`, replay an uncertain operation, reset a deadline/retry budget, authorize a Tool or permission escalation, or trigger an autonomous side effect. A `RUNNING` value in a blocked or escalation projection remains only the existing non-terminal/resumable status and does not authorize active Tool execution or automatic replay. Missing or stale values MUST remain unknown or unavailable. No Execution state, identity, lease, supervisor, or recovery lifecycle is introduced.

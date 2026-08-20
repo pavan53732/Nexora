@@ -36,6 +36,12 @@ Nexora ensures background execution resilience by projecting execution events in
 3. **Notification Projection:** Background execution events (start, progress, completion, or approval requirements) are projected into the Android notification system according to the workspace notification policy. This ensures user visibility without requiring active UI threads.
 4. **Durable Termination:** The runtime utilizes Android lifecycle hooks to ensure that in-flight reasoning and task state are durably committed to the workspace persistence layer before process termination.
 
+### Android Environment Readiness and Repair Projection (ADR-0010)
+
+Before starting or resuming environment-dependent background work, the Background Runtime MUST expose the existing diagnostic inputs for ABI/asset compatibility, extraction and mount readiness, app-private storage and workspace quota, rootfs/overlay integrity, proot/guest readiness, PermissionModel authorization, network/battery/scheduling constraints, checkpointability, and available resources. The projection MUST preserve applicable `workspaceId`, `taskId`, `executionId`, `agentId`, `correlationId`, checkpoint/version, and evidence references, and MUST classify each input as verified, failed, unavailable, or unknown.
+
+If a required condition is failed, unavailable, contradictory, or unverified, background work MUST fail closed, remain in the existing blocked/approval/degraded/non-success path, or use the existing checkpoint, retry, cancellation, escalation, Workspace `Suspended`, Full Environment reset/re-extraction, or terminal failure contract as applicable. The Background Runtime MUST NOT infer readiness from a running service, WorkManager acceptance, elapsed time, or prior success; it MUST NOT authorize permissions, mutate lifecycle state directly, create a repair authority/manager, or silently replay uncertain work. Notifications, WorkManager results, and activity-feed entries MUST preserve the same source lineage and evidence classification.
+
 ## 1. Task Queue
 
 Tasks are the unit of background work. A per-agent execution queue manages them

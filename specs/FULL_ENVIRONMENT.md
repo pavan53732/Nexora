@@ -191,8 +191,7 @@ to report the applicable diagnostic inputs: device ABI and Android compatibility
 asset manifest/checksum/signature, extraction and mount readiness, app-private storage and
 workspace quota availability, base-rootfs and overlay integrity, proot/guest entrypoint
 readiness, and the applicable permission, network, battery, and scheduling constraints.
-The diagnostic result is evidence and observability data; it is not a new environment
-lifecycle or authority.
+The diagnostic result is evidence and observability data; it is not a new environment lifecycle or authority. For environment-dependent work, the report MUST preserve the applicable existing `workspaceId`, `taskId`, `executionId`, `agentId`, `correlationId`, checkpoint/version, and evidence references, and MUST classify each diagnostic input as verified, failed, unavailable, or unknown from observed conditions. It MUST NOT infer mount, storage, permission, scheduling, or environment health from process presence, elapsed time, prior success, or provider confidence.
 
 Repair MAY use only the existing verified reset/re-extraction, checkpoint, retry,
 resource/degradation, user-guidance, or terminal failure paths owned by those subsystems.

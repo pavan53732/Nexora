@@ -60,6 +60,8 @@ The common evidence envelope SHOULD capture, at minimum:
 - deterministic controls in force, including clock/deadline, seed/jitter, provider/stream, resource, process/device, permission, storage/lock, and scheduler inputs where applicable;
 - existing `workspaceId`, `taskId`, `executionId`, `workflowId`, `agentId`, `toolId`, `streamId`, `correlationId`, checkpoint/version, and artifact references where applicable;
 - expected owner state, observed result/transition, terminal disposition, duplicate-side-effect outcome, and notable findings/deviations;
+- for Android environment cases, observed ABI/asset, mount, storage/quota, integrity, permission, battery, network, scheduling, checkpointability, and resource classifications, each marked verified, failed, unavailable, or unknown;
+- for recovery-projection cases, the source identities, checkpoint/version lineage, heartbeat/deadline/budget observations, blocker/recovery candidate, evidence references, final disposition, and explicit confirmation that no adoption, reparenting, replay, budget reset, permission escalation, lifecycle mutation, or autonomous side effect came from the projection;
 - result status from the existing `Planned`, `In Progress`, `Passed`, `Failed`, `Blocked`, or `Obsolete` vocabulary; and
 - stable artifact location using `evidence/<suite>/<case-id>/<yyyy-mm-dd>/<artifact>`.
 

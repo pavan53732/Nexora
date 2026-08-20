@@ -82,6 +82,8 @@ A stateless evaluator MAY compute the composite result from an explicit immutabl
 
 The report or evaluator MUST NOT grant or deny a PermissionModel scope, transition Task/Execution/Workflow/Tool state, reset a deadline or retry budget, resolve `UNKNOWN_COMPLETION`, bypass audit/sandbox/context checks, or declare completion. It has no persisted policy identity, policy lifecycle, precedence rule, override authority, scheduler, recovery authority, or production veto authority. An authoritative Policy Engine or policy god-object requires a separate ADR demonstrating that the existing owners and stateless evaluator are insufficient.
 
+Environment diagnostics MAY be included as an input to this report when they concern ABI, asset, mount, storage, quota, integrity, permission, battery, network, or scheduling readiness. Such diagnostics are observed evidence only; they MUST preserve applicable existing task/execution/workspace/correlation/checkpoint/evidence references and MUST classify unavailable or contradictory inputs explicitly. They MUST NOT grant a permission, convert an unresolved condition into `ALLOW`, bypass approval or audit, mutate Task/Execution/Workspace state, or authorize repair or side effects. Fail-closed authorization and the existing Runtime, Sandbox, Full Environment, Background, and Workspace recovery paths remain authoritative.
+
 ## Runtime Permission Request Flow
 
 ```kotlin

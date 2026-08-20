@@ -114,6 +114,12 @@ A workflow step that produces `UNKNOWN_COMPLETION` MUST remain unresolved until 
 
 Workflow validation MUST distinguish invalid dependency cycles from explicitly bounded `Iterative` edges. A dependency cycle is invalid unless it is represented by an `Iterative` step with an explicit `maxIterations` and/or `convergenceCondition`. Unbounded or ambiguous cycles fail validation before execution; this clarification does not create a new lifecycle state or graph type.
 
+## Observational Workflow Recovery Projection (ADR-0010)
+
+A runtime, activity-feed, or coordination projection MAY expose the existing `workflowId`, `PlanStep` identity, source `Task`/`Execution` identity, checkpoint/version, current graph phase, heartbeat/freshness, inherited deadline and remaining budget, blocker, recovery/replan candidate, evidence references, and final disposition. The projection is observational and coordinating only; the Workflow Engine remains authoritative for graph progression and the participating Task, Execution, Tool, Provider, Permission, Sandbox, Background, and Evidence owners remain authoritative for their contracts.
+
+The projection MUST NOT adopt or reparent work, change workflow or lifecycle state, replay an uncertain Tool operation, reset a deadline/retry/iteration budget, authorize a Tool or permission escalation, or trigger an autonomous side effect. Missing or stale values MUST remain unknown or unavailable. No Workflow state, identity, lease, supervisor, recovery lifecycle, or parallel authority is introduced.
+
 ## Phase Mapping
 
 - **Phase 2**: Basic linear and parallel workflows.

@@ -167,6 +167,11 @@ data class SandboxLimits(
     val maxFileCount: Int = 10_000
 )
 ```
+## Android Environment Diagnostic Boundary (ADR-0010)
+
+Before guest-process creation or environment-dependent background work, the Sandbox MUST contribute observed readiness for the existing ABI/rootfs asset, mount and proot entrypoint, app-private storage and workspace quota, base/overlay integrity, process/resource limits, and applicable egress restrictions. The diagnostic projection MUST preserve the source `workspaceId`, `taskId`, `executionId`, `correlationId`, checkpoint/version, and evidence references when applicable; it is observational data and not a Sandbox lifecycle, repair authority, or production recovery decision.
+
+A failed, unavailable, or unknown diagnostic MUST fail closed for the affected operation and route through the existing Full Environment reset/re-extraction, PermissionModel authorization, Workspace suspension, Background checkpoint/degradation, Runtime retry/escalation, or terminal failure contract as applicable. The Sandbox MUST NOT claim readiness from process presence alone, authorize a permission, mutate Workspace/Task/Execution state, replace a failed environment, or create a repair manager, environment identity, lease, supervisor, or lifecycle.
 
 ## Phase Mapping
 

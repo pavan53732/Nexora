@@ -26,7 +26,7 @@ Every API call MUST carry a `correlationId`.
 
 ### Background terminal binding (DEC-34)
 
-Autonomous background terminal work is not an unbound Runtime operation. The created TerminalSession projection MUST carry the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline. Parent cancellation, terminal state, or deadline expiry invokes the existing terminal termination/checkpoint path; requests without a parent Task/Execution are rejected before process creation. Reconciliation closes or fails sessions whose parent is missing, terminal, or expired.
+Autonomous background terminal work is not an unbound Runtime operation. The created TerminalSession projection MUST carry the parent `taskId`, `executionId`, `workspaceId`, `correlationId`, and immutable effective deadline. Parent cancellation, terminal state, or deadline expiry invokes the existing terminal termination/checkpoint path; requests without a parent Task/Execution are rejected before process creation. Reconciliation closes or fails sessions whose parent is missing, terminal, or expired. After bounded cleanup/termination exhaustion or unproven completion, reconciliation commits existing TerminalSession `Failed` and exposes derived user-visible `Manual cleanup required`; it MUST preserve process/session references, cleanup evidence, deadline/retry data, and audit disposition and MUST NOT reattach, replay, adopt, or reparent the session.
 
 ### Adaptive orchestration projection
 
