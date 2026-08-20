@@ -29,4 +29,9 @@
 - [ ] Knowledge graph visualization
 - [ ] Advanced analytics dashboard
 - [ ] Community plugin repository
-- [ ] Desktop companion app (optional)
+
+## Explicitly rejected historical scope
+
+The following item is retained only to record a rejected historical proposal; it is not an active backlog item, product requirement, roadmap commitment, or implementation authorization:
+
+- Desktop companion app / Desktop-Web-CLI product expansion — **REJECTED** for Nexora’s pure Android product boundary. The creator-owned product design explicitly defines Nexora as Android-native and excludes Desktop/Web/CLI expansion (`NEXORA_PRODUCT_DESIGN_BY_CREATER.md:14–17,252–266`).
