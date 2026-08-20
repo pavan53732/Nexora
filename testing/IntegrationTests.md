@@ -39,7 +39,7 @@ Integration environments MUST exercise storage, eventing, and orchestration laye
 - `IT-PLUGIN-001` plugin activation registers capabilities transactionally; verified compensation restores the activation-origin `Installed` or `Inactive` state, while failed or unproven cleanup preserves `Failed` and prevents affected capability execution
 - `IT-CONTRACT-001` runtime replay or retry preserves correlation and durable versions
 - `IT-TOOL-002..014` complete authorization ordering, error mapping, and correlation preservation
-- `IT-LC-001..020` Session/Execution/ToolStatus integration, same-ID resume, terminal retry lineage, replay safety, and `UNKNOWN_COMPLETION` exhaustion through Task `BlockedAwaitingInput` with associated Execution retaining existing non-terminal/resumable `RUNNING` only, with no Tool execution or automatic replay while blocked
+- `IT-LC-001..020` Session/Execution/ToolStatus integration, same-ID resume, terminal retry lineage, replay safety, and automatic `UNKNOWN_COMPLETION` exhaustion that retains the unresolved child/checkpoint/evidence context and applies existing Task `Failed` plus Execution `FAILED` effects without human escalation, Tool execution, or automatic replay
 - `IT-MODEL-001..003` model-catalog snapshot immutability, unsupported-capability handling, and provider-native reasoning continuation compatibility
 - `IT-TOOLDISC-001..003` bounded candidate projection, descriptor examples/permissions, stale or unknown-scope fail-closed behavior, selection telemetry, and MCP tool/resource/prompt separation
 - `IT-LONG-001..003` long-horizon projection preservation across compaction/resume, artifact-reference handoff, and pause-on-ambiguous reconstruction
