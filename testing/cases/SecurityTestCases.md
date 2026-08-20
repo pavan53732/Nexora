@@ -53,11 +53,11 @@
 | SEC-PERM-038 | SEC-PERM | Empty permission list follows the PermissionModel decision directly | Security | Planned | `evidence/security/SEC-PERM-038/` | 2026-08-06 |
 | SEC-PERM-039 | SEC-PERM | Workspace scope override precedence remains deterministic | Security | Planned | `evidence/security/SEC-PERM-039/` | 2026-08-06 |
 | SEC-PERM-040 | SEC-PERM | Workspace tool override precedence remains deterministic | Security | Planned | `evidence/security/SEC-PERM-040/` | 2026-08-06 |
-| SEC-PERM-041 | SEC-PERM | ASK/DENY-default satisfied scope triggers SCOPE_RISK_POLICY | Security | Planned | `evidence/security/SEC-PERM-041/` | 2026-08-06 |
-| SEC-PERM-042 | SEC-PERM | All low-risk ALLOW scopes produce NOT_SELECTED | Security | Planned | `evidence/security/SEC-PERM-042/` | 2026-08-06 |
+| SEC-PERM-041 | SEC-PERM | ASK/DENY-default satisfied scope triggers SCOPE_RISK_POLICY; category defaults do not bypass existing high-risk gates | Security | Planned | `evidence/security/SEC-PERM-041/` | 2026-08-06 |
+| SEC-PERM-042 | SEC-PERM | Known low-risk scopes with authoritative `ALLOW` defaults proceed without an ASK transaction when no higher-priority restriction applies; outcome is audited and no classifier is invoked | Security | Planned | `evidence/security/SEC-PERM-042/` | 2026-08-06 |
 | SEC-PERM-043 | SEC-PERM | Retired classifier-era selection case; no local classifier skip is part of the active contract | Security | Planned | `evidence/security/SEC-PERM-043/` | 2026-08-06 |
 | SEC-PERM-044 | SEC-PERM | Authorization resolution and final denial outcomes are audited | Security | Planned | `evidence/security/SEC-PERM-044/` | 2026-08-06 |
-| SEC-PERM-045 | SEC-PERM | PermissionModel ALLOW produces an authorization audit record without a classifier dependency | Security | Planned | `evidence/security/SEC-PERM-045/` | 2026-08-06 |
+| SEC-PERM-045 | SEC-PERM | PermissionModel category-default or policy `ALLOW` produces an authorization audit record without a classifier dependency, while higher-priority restrictions remain authoritative | Security | Planned | `evidence/security/SEC-PERM-045/` | 2026-08-06 |
 | SEC-PERM-046 | SEC-PERM | Preserved classification-denial compatibility outcome maps through canonical NXR-2003 when applicable | Security | Planned | `evidence/security/SEC-PERM-046/` | 2026-08-06 |
 | SEC-PERM-047 | SEC-PERM | Canonical authorization denial is final for the current call | Security | Planned | `evidence/security/SEC-PERM-047/` | 2026-08-06 |
 | SEC-PERM-048 | SEC-PERM | Approved ASK followed by a canonical denial blocks execution without side effects | Security | Planned | `evidence/security/SEC-PERM-048/` | 2026-08-06 |

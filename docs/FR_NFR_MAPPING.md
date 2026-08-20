@@ -57,8 +57,8 @@
 - `FR-GT-001`..`006` (git grounding) preserved — terminal session does not affect git grounding rules.
 
 ## Agent Intelligence Deepening
-- `FR-AS-004` → `specs/AUTONOMY_STABILITY.md` §4 and `models/AutonomyLearning.md`; lessons retain provenance/evidence, require approval for planning, and cannot grant permissions. Validation `UT-AS-004` (Planned).
-- `FR-AS-005` → `specs/AUTONOMY_STABILITY.md` §5 and `models/AutonomyLearning.md`; trust is scoped to agent/workspace, may offer a mode, but user selection and security boundaries remain authoritative. Validation `UT-AS-005` (Planned).
+- `FR-AS-004` → `specs/AUTONOMY_STABILITY.md` §4 and `models/AutonomyLearning.md`; lessons retain provenance/evidence, are validated before planning retrieval, and may promote/refine an existing `LEARNED` Skill through the existing deterministic policy or user path when trust, safety, scope, evidence, and lifecycle conditions pass. Validation `UT-AS-004` (Planned).
+- `FR-AS-005` → `specs/AUTONOMY_STABILITY.md` §5 and `models/AutonomyLearning.md`; trust is scoped to agent/workspace and automatically selects `MANUAL` 0–39, `ASSISTED` 40–74, or `AUTOPILOT` 75–100. Existing user override may only downgrade immediately; security, permission, degraded-mode, and high-risk boundaries remain authoritative. Validation `UT-AS-005` (Planned).
 - `NFR-CI-003` → `specs/CONTEXT_MANAGEMENT.md` §7, `models/Inference.md` (`ClaimRecord`), `specs/DATABASE_SCHEMA.md` (`claim_record`), `protocols/Agent-Protocol.md`, and `docs/api/Agent-API.md`; validation `UT-EV-007`, `E2E-REL-009` (Planned).
 - `NFR-CI-004` → Agent Runtime final completion revalidates the acceptance vector after repair and answer synthesis; validation `UT-AS-010`, `E2E-REL-007` (Planned).
 
@@ -89,7 +89,7 @@
 - Tool categories 27→28, tools 343→350 → `architecture/TOOL_SYSTEM.md`, `registry/TOOLS.md`, `PROJECT_SPECIFICATION.md`, `docs/PRODUCT_VISION.md`, `README.md`, 
 
 ## S13 — Authorization and Execution Recovery Contract Synchronization
-- `FR-S016` → `security/PermissionModel.md` complete multi-scope permission resolution, approval, denial, and audit authorization; validation `SEC-PERM-003..066`, `IT-TOOL-002..014` (Planned).
+- `FR-S016` → `security/PermissionModel.md` complete multi-scope permission resolution, category-level low-risk `ALLOW` defaults, high-risk `ASK`/`DENY` and approval gates, denial, and audit authorization; validation `SEC-PERM-003..066`, `IT-TOOL-002..014`, `UT-AS-005` (Planned).
 - `FR-TL015` → Permission Audit Schema + Tool Protocol/API correlation; validation `SEC-PERM-023/044/045/052/062..065`, `IT-TOOL-008/009/014` (Planned).
 - `FR-TL001`..`015` → `architecture/TOOL_SYSTEM.md`, `models/Tool.md`, `protocols/Tool-Protocol.md`, `docs/api/Tool-API.md`, `errors/ERROR_CODES.md`; validation `IT-TOOL-001..014` (Planned).
 - `FR-AS-007` → same-ID `RESUME`, new-ID `RETRY_AFTER_TERMINAL`, `priorExecutionId`, and reconciliation in Runtime/Background/Autonomy/Execution Protocol/Runtime API; validation `SEC-LC-EXEC-002..004`, `IT-LC-001..013/016..020` (Planned).

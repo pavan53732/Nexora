@@ -112,7 +112,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-S013` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S014` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S015` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
-| `FR-S016` | `requirements/FR.md` | MAPPED | Security | `security/PermissionModel.md` | `SEC-PERM-005` | `evidence/security/SEC-PERM-005/` |
+| `FR-S016` | `requirements/FR.md` | MAPPED | Security + Autonomy | `security/PermissionModel.md` + `specs/AUTONOMY_STABILITY.md` | `SEC-PERM-042`; `UT-AS-005` | `evidence/security/SEC-PERM-042/`; `evidence/unit/UT-AS-005/` |
 | `FR-S017` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S018` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-PL001` | `requirements/FR.md` | MAPPED | Provider Layer | `architecture/PROVIDER_SYSTEM.md` | `IT-PROVIDER-001` | `evidence/integration/IT-PROVIDER-001/` |
@@ -194,7 +194,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-AS-004` | `requirements/FR.md` | MAPPED | Autonomy Learning | `specs/AUTONOMY_STABILITY.md` + `models/AutonomyLearning.md` | `UT-AS-004` | `evidence/unit/UT-AS-004/` |
 | `FR-AS-005` | `requirements/FR.md` | MAPPED | Autonomy Trust | `specs/AUTONOMY_STABILITY.md` + `models/AutonomyLearning.md` | `UT-AS-005` | `evidence/unit/UT-AS-005/` |
 | `FR-AS-006` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
-| `FR-AS-007` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `IT-LC-011` | `evidence/integration/IT-LC-011/` |
+| `FR-AS-007` | `requirements/FR.md` | MAPPED | Core Runtime + Tool | `specs/AUTONOMY_STABILITY.md` + `architecture/TOOL_SYSTEM.md` | `IT-LC-011`; `IT-TOOL-010` | `evidence/integration/IT-LC-011/`; `evidence/integration/IT-TOOL-010/` |
 | `FR-AS-008` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-AS-009` | `requirements/FR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `FR-GT-001` | `requirements/FR.md` | MAPPED | Grounding | `specs/GIT.md` | `E2E-GT-001` | `evidence/e2e/E2E-GT-001/` |

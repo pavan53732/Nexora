@@ -18,6 +18,8 @@
 | `category` | Category index number |
 | `phase` | Implementation phase |
 | `status` | Registry status (Planned / Implemented) |
+| `isIdempotent` | Whether replay is intrinsically safe under the existing Tool recovery contract |
+| `recoveryContract` | Strongest truthful existing operation-level contract: `IDEMPOTENT_REPLAY`, `STATUS_RECONCILIATION`, `DETERMINISTIC_COMPENSATION`, or `BOUNDED_CONTAINMENT`; missing/contradictory declarations reject registration through `NXR-2005` |
 
 ## Category Index
 
@@ -52,7 +54,7 @@
 | 27 | MCP Integration | MCP | 6 | 5 |
 | 28 | Project Introspection | INTRO | 7 | 4 |
 
-**Total registered tools: 350** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)).
+**Total registered tools: 350** (target: 300–500, see [PRODUCT_VISION.md](../docs/PRODUCT_VISION.md)). New registry entries MUST include truthful `isIdempotent` and `recoveryContract` metadata in their existing Tool descriptor; this does not create a new Tool identity or lifecycle.
 
 ## File System (FILE)
 

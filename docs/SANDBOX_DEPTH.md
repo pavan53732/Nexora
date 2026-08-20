@@ -114,17 +114,13 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 ## 3. Full Environment — Autonomy Depth (Phases 4–6)
 
 ### 3.1 Adaptive Approval / Autonomy Modes (FR-S016)
-- **What:** Three user-selectable autonomy levels:
-  - **Manual** — every action `ASK`s (current behavior).
-  - **Assisted** — low-risk actions auto-allow (read-only, sandbox-local), medium-risk
-    ask, high-risk always ask. Risk score per tool call (read/write/network/system ×
-    category × history).
-  - **Autopilot** — agent executes within declared task budgets; user approves at
-    **milestones** (task boundaries), not per tool call; every action still audited.
-- **Why:** Approval fatigue is the #1 blocker to "complete autonomy". Autopilot +
-  full audit + snapshots (2.3) gives autonomy *with* a safety net.
-- **Enforcement:** trust learning — repeated identical low-risk calls auto-allow in
-  session; all decisions append-only to `permission_audit_log` (90-day retention).
+- **What:** Three automatically selected autonomy levels from the existing scoped trust thresholds:
+  - **Manual** (`0–39`) — existing `ASK`/high-risk approval and explicit user-guidance paths remain authoritative; known low-risk scopes with a declared `ALLOW` default do not prompt solely because the mode is Manual.
+  - **Assisted** (`40–74`) — low-risk actions may proceed under existing category defaults and gates; higher-risk actions use existing `ASK`/DENY and approval rules.
+  - **Autopilot** (`75–100`) — agent executes within declared task budgets and existing safety, permission, sandbox, resource, concurrency, deadline, and evidence gates; no gate is bypassed.
+- The user does not confirm the mode per session or per action. An existing user override may only downgrade the effective mode and takes effect immediately; every decision remains audited.
+- **Why:** Approval fatigue is reduced by deterministic low-risk defaults while high-risk gates, audit, snapshots, and existing permission ownership remain intact.
+- **Enforcement:** trust learning automatically selects the effective mode; existing PermissionModel category defaults and higher-precedence overrides remain authoritative. Android degraded mode may force `Manual` independently of trust.
 
 ### 3.2 Parallel Per-Agent Sandboxes (FR-S018)
 - **What:** Delegated sub-agents (multi-agent orchestration) run in **separate sandbox

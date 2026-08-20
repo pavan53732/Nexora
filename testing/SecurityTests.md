@@ -41,12 +41,14 @@ Run on security-sensitive changes and before release gating.
 
 Security validation SHOULD explicitly assert:
 
+- known low-risk category `ALLOW` defaults proceed without an ASK transaction only when no higher-priority restriction applies, and high-risk `ASK`/`DENY` gates remain authoritative
 - permissions are enforced before side effects
 - canonical error-envelope redaction rules are preserved
 - credentials never cross caller-visible boundaries
 - cancellation and retries do not bypass authorization
 - plugin activation rollback preserves isolation guarantees
 - AI Settings Test Connection and capability refresh do not expose API keys, grant permissions, invoke Tools, create Task/Execution state, or bypass provider/sandbox/security gates
+- automatic autonomy-mode selection, downgrade-only override, category-default authorization, and policy-approved skill promotion do not invoke a local classifier or bypass PermissionModel, SandboxPolicy, audit, or high-risk approval gates
 
 ## Inference Stream and Reasoning Security
 

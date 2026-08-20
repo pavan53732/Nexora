@@ -14,7 +14,7 @@ data class RemoteInstance(
     val fingerprint: String,             // pipeKey public key fingerprint (pairing identity)
     val capabilities: JsonObject,        // advertised {appVersion, minContractVersion, workspace summary}
     val pairingStatus: PairingStatus,
-    val acceptanceMode: AcceptanceMode,  // per-pipe FR-S016 override
+    val acceptanceMode: AcceptanceMode,  // current FR-S016 effective mode; existing per-pipe user override may only downgrade
     val pairedAt: Instant?,
     val lastSeenAt: Instant?
 )
@@ -25,7 +25,7 @@ enum class PairingStatus {
     REVOKED
 }
 
-enum class AcceptanceMode {     // mirrors FR-S016 autonomy modes, per pipe
+enum class AcceptanceMode {     // mirrors FR-S016 effective autonomy modes, per pipe
     MANUAL,
     ASSISTED,
     AUTOPILOT

@@ -41,10 +41,10 @@ Repair decision (bounded):
    b. Repair step (same plan, new approach) — fix loop (FR-EL-013)
    c. Re-plan: re-sequence remaining steps (dependencies invalidated)
    d. Re-delegate: hand the task to a better-suited agent (skill mismatch)
-   e. Escalate to user (unresolvable, or budget exhausted)
+   e. Notify through the existing user-visible status boundary and continue when the next action remains within existing permission, safety, capability, deadline, resource, and evidence gates; otherwise use the existing escalation, incomplete, failure, or cancellation path
 ```
 
-- Re-planning is **bounded**: max 3 repair cycles per task, then escalation (FR-AS-003).
+- Re-planning is **bounded**: max 3 repair cycles per task. After the bound, the runtime MUST notify and continue only when ordinary advancing progress remains safe and authorized; otherwise it uses the existing escalation, incomplete, failure, or cancellation path (FR-AS-003).
 - Each repair cycle is recorded in execution history (`plan_repair` event) so the
   final report explains *what changed and why*.
 
@@ -55,7 +55,7 @@ Repair decision (bounded):
 | **Heartbeat** | The agent loop publishes a `heartbeat` event every iteration (or every N seconds for long tool calls) |
 | **Watchdog** | A runtime coroutine watches heartbeats; no heartbeat within timeout (**120 s**) → suspect hang |
 | **Action** | Suspend the loop, capture stack/state, save checkpoint, restart from checkpoint (bounded restarts, max **2**) |
-| **Escalation** | If the loop hangs again after restarts → escalate to user with diagnostics |
+| **Escalation** | If the loop hangs again after restarts → use the existing bounded recovery or escalation path with diagnostics; ordinary advancing progress may notify and continue only when all existing gates remain satisfied |
 | **Interaction** | Extends sandbox process watchdog (SANDBOX_DEPTH §3.4) to the **agent loop** itself |
 
 ## 3. Technical-Boundary Escalation — Never Silent Stop (FR-AS-003)
@@ -92,7 +92,7 @@ Propose skill refinement:
    - propose a new LEARNED skill (ADR-0007, FR-SK-002)
    │
    ▼
-User or policy approves → skill updated/created
+Existing policy path or user path approves → skill updated/created
 ```
 
 Lessons are also retrieved during planning (Context Builder pulls relevant lessons for similar tasks), so the application literally gets smarter with use.
@@ -106,13 +106,12 @@ To enable intelligence transfer across different projects without violating work
 
 The semantic lesson projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
 A lesson MUST retain agent/workspace scope, source execution provenance, evidence references,
-approval-for-planning status, and retirement status. Lesson content MUST NOT grant permissions,
-change sandbox policy, bypass approval, or directly select an autonomy mode. Learned-skill proposals remain subject to the existing Skill Registry validation and user/policy approval
-boundary.
+promotion disposition, and retirement status. Lesson content MUST NOT grant permissions,
+change sandbox policy, bypass approval, or directly select an autonomy mode. A lesson MAY become an existing `LEARNED` Skill only after the existing provenance, evidence, trust, safety, scope, and lifecycle conditions are satisfied and the existing deterministic policy path or user path approves promotion. A policy-approved promotion MUST be recorded through existing Skill Registry, memory, audit, and evidence projections. An agent MAY retire an acquired or learned skill through the existing retirement path at any time.
 
 ### Learning implementation boundary
 
-`memory_lessons` (`TOOL-409`) is the existing semantic destination for a structured `LearningLesson`; it is not a declaration of a database table, transport, or new MemoryLifecycle state. Before a lesson becomes retrievable for planning, the Evidence & Validation Engine MUST validate its provenance, evidence references, scope, redaction status, and disposition. A lesson that is missing provenance, stale, contradictory, unverified, retired, or not approved for planning MUST remain unavailable for planning injection or be presented only as explicitly non-authoritative evidence. Lesson retrieval may inform planning and propose skill refinement, but it MUST NOT change permissions, sandbox policy, approval outcomes, provider scope, execution mode, or the existing Task/Agent lifecycle. Persistence, serializer, API, promotion, and retention mechanisms remain downstream implementation choices unless a later canonical decision selects them.
+`memory_lessons` (`TOOL-409`) is the existing semantic destination for a structured `LearningLesson`; it is not a declaration of a database table, transport, or new MemoryLifecycle state. Before a lesson becomes retrievable for planning, the Evidence & Validation Engine MUST validate its provenance, evidence references, scope, redaction status, and disposition. A lesson that is missing provenance, stale, contradictory, unverified, retired, or not approved for planning MUST remain unavailable for planning injection or be presented only as explicitly non-authoritative evidence. Lesson retrieval may inform planning and propose skill refinement, but it MUST NOT change permissions, sandbox policy, approval outcomes, provider scope, execution mode, or the existing Task/Agent lifecycle. A policy-approved skill promotion is a deterministic disposition over existing records, not a new authority or lifecycle. Persistence, serializer, API, promotion, and retention mechanisms remain downstream implementation choices unless a later canonical decision selects them.
 
 ## 5. Trust Growth (FR-AS-005)
 
@@ -128,19 +127,14 @@ Autonomy expands with a **trust score** instead of jumping straight to autopilot
 | Safety violations, denied approvals | −10; repeated → autonomy drops a mode (Autopilot → Assisted → Manual) |
 
 - Trust is per agent + per workspace; resets are explicit (user can reset trust).
-- Autonomy mode selection: `Manual / Assisted / Autopilot` (FR-S016) is *offered* by
-  the trust score, *decided* by the user.
+- Autonomy mode selection: `Manual / Assisted / Autopilot` (FR-S016) is selected automatically from the existing scoped trust score and thresholds. The user does not confirm the mode per session or per action. An existing user override MAY only downgrade the effective mode and takes effect immediately; it MUST NOT silently upgrade the mode or bypass a permission/safety gate.
 
 The semantic trust projection is defined in [../models/AutonomyLearning.md](../models/AutonomyLearning.md).
 Trust is scoped to `(agentId, workspaceId)` and retains update/reset provenance. The score
 scale (integer 0–100, default initial baseline 50), the update increments and decrements
 (table above), the mode thresholds (`MANUAL` 0–39, `ASSISTED` 40–74, `AUTOPILOT` 75–100),
 and the explicit-reset baseline (50) are selected by that derived model projection. No
-time-based decay is selected; score changes are event-driven only. Trust may offer a mode
-but MUST NOT override user selection, permission
-scopes, applicable canonical denial or classification outcomes, human approval, workspace
-isolation, or provider/device/resource ceilings. Android degraded mode may force `Manual`
-independently of trust. The retired local classifier is not part of this contract.
+time-based decay is selected; score changes are event-driven only. The runtime MUST select the effective mode from this score and the thresholds above. The existing user override is downgrade-only and is recorded through existing settings, audit, activity, and evidence projections. Trust MUST NOT grant permissions, override permission scopes, applicable canonical denial or classification outcomes, workspace isolation, or provider/device/resource ceilings. Existing high-risk ASK/DENY and approval gates remain authoritative. Android degraded mode may force `Manual` independently of trust. The retired local classifier is not part of this contract.
 
 ## 6. Verification Gates (FR-AS-006)
 
@@ -164,7 +158,7 @@ Resuming after a crash must never double-apply side effects.
 
 | Aspect | Rule |
 |--------|------|
-| **Tool declaration** | Every tool declares `idempotent: true/false` in its definition (extends `Tool` interface) |
+| **Tool declaration** | Every tool declares `idempotent: true/false` and the strongest truthful existing operation-level recovery contract in its definition (extends the Tool descriptor contract) |
 | **Idempotent tools** | Safe to re-run (reads, writes-by-content, upserts) — recovery replays them freely |
 | **Non-idempotent tools** | (e.g. `http_post` with side effects, `terminal_run` with mutations) — recovery **does not replay**; effects are reconciled from tool history (FR-M011) instead |
 | **Replay log** | A compact `execution_replay` log records completed tool calls (id + input hash + result); recovery replays only uncompleted calls |
@@ -250,9 +244,7 @@ working-state lineage:
 - Error category shift (is the failure *different*, or just the same one rehashed?)
 
 If `ProgressSignal == 0` over **N=3 consecutive iterations** — even when the actions
-differ — Agent Runtime MUST classify the run as escalated and route through §3's
-escalation path (`e. Escalate to user`) OR apply a strategy mutation, never an
-unconditionally silent retry. This closes the "treadmill" class of infinite loop.
+differ — Agent Runtime MUST apply a strategy mutation or use the existing bounded escalation/recovery path. When the next action represents ordinary advancing progress and remains within all existing gates, the runtime MUST notify through the existing user-visible status boundary and continue; it MUST block or escalate when a permission, safety, capability, deadline, resource, verification, or unresolved-operation contract requires it. This closes the "treadmill" class of infinite loop without creating a silent retry.
 
 **Task-Scoped Failure Ledger.** Each task's working context carries a compact,
 durable failure ledger: `{toolId, errorSignature, count, firstSeenAt, blacklistedUntilTaskEnd}`. After

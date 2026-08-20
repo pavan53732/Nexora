@@ -21,6 +21,7 @@ data class Tool(
     val supportsStreaming: Boolean,
     val supportsCancellation: Boolean,
     val isIdempotent: Boolean, // canonical: architecture/TOOL_SYSTEM.md `Tool` interface (FR-AS-007)
+    val recoveryContract: ToolRecoveryContract, // existing operation-level recovery declaration
     val cacheTtlMs: Long,
     val configSchemaRef: String?,
     val health: ToolHealth,
@@ -29,6 +30,13 @@ data class Tool(
 )
 
 enum class ToolRiskLevel { LOW, MEDIUM, HIGH, CRITICAL }
+
+enum class ToolRecoveryContract {
+    IDEMPOTENT_REPLAY,
+    STATUS_RECONCILIATION,
+    DETERMINISTIC_COMPENSATION,
+    BOUNDED_CONTAINMENT
+}
 
 enum class ToolHealth { UNKNOWN, HEALTHY, DEGRADED, UNHEALTHY }
 

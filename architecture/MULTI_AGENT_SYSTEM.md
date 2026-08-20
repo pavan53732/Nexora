@@ -227,8 +227,8 @@ Verify (EV gates, FR-EL-008/011) → Report (plan-vs-actual, RG-6) → Coordinat
 ```
 
 Interruptions are **limited to**:
-- High-risk approval gate (PermissionManager `ASK`, FR-S016) — one prompt, then resume
-- Budget exhaustion (FR-AS-003) — escalate with state, never silent stop
+- High-risk approval gate (PermissionManager `ASK`, FR-S016) — existing approval path, then resume when approved
+- Budget or boundary exhaustion (FR-AS-003) — notify and continue only when ordinary advancing progress remains within all existing gates; otherwise use the existing bounded escalation, incomplete, failure, or cancellation path with state
 - Heartbeat failure (FR-AS-002) — checkpoint restart, then escalate
 
 No mid-task check-ins for status; progress flows via the activity feed.

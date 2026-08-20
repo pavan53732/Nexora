@@ -97,10 +97,11 @@ PipeManager.select(pipe)           — paired, Connected, workspace W exposed, p
 DelegateTask ──pipe──> Remote coordinator (instance B)
    ▼
 Remote admission control:
-   acceptanceMode(W) ∈ {MANUAL, ASSISTED, AUTOPILOT}   (FR-S016 modes, per-pipe override)
-   MANUAL    → user prompt on B (one tap) before spawn
-   ASSISTED  → auto-accept low-risk, prompt on high-risk (risk score as FR-S016)
-   AUTOPILOT → auto-accept within declared technical safety, resource, concurrency, and deadline limits; all actions remain audited. Provider cost or credit telemetry does not block a technically valid delegation.
+   acceptanceMode(W) ∈ {MANUAL, ASSISTED, AUTOPILOT}   (FR-S016 effective mode)
+   effective mode → selected automatically from the existing scoped trust thresholds; an existing per-pipe user override may only downgrade and takes effect immediately
+   MANUAL    → existing approval path for actions whose PermissionModel or high-risk contract requires it before spawn; low-risk declared ALLOW scopes do not prompt solely because a mode was selected
+   ASSISTED  → auto-accept low-risk operations within existing gates; prompt on high-risk operations
+   AUTOPILOT → auto-accept within declared technical safety, resource, concurrency, and deadline limits; existing ASK/DENY, sandbox, device, plugin, network, evidence, and audit gates remain authoritative. Provider cost or credit telemetry does not block a technically valid delegation.
    ▼
 Remote sub-agent spawned in B's OWN sandbox (FR-S018) with B's provider profiles (§2 rule 2)
    ▼
@@ -152,7 +153,7 @@ Broadcast is a coordinator-only operation for fan-out announcements (e.g., "work
 
 Per ADR-0006, pipes have **no primary screen and no chat tab**. The user interacts through:
 
-- **Settings → Pipes**: paired instances list, pair new instance (QR/6-word code), acceptance mode per pipe, revoke, discovery on/off toggle.
+- **Settings → Pipes**: paired instances list, pair new instance (QR/6-word code), current effective acceptance mode and downgrade-only per-pipe override, revoke, discovery on/off toggle. The surface does not require per-session mode confirmation and cannot upgrade the automatically selected mode.
 - **Agent activity feed** (FR-U005): cross-instance delegations render as ordinary tool-call/activity cards with a pipe badge (`pipe → <instanceName>`); progress, approval prompts, and results surface in chat exactly like local sub-agents.
 - **Notifications** (specs/BACKGROUND_EXECUTION.md §4): pairing requests and remote approval gates use the existing `agent_approval` channel.
 

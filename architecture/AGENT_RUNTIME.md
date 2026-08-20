@@ -32,7 +32,9 @@ The single-agent runtime supports **mode-selected execution**. These modes are e
 
 ### Mode selection
 
-The runtime MUST select the **minimum sufficient mode** for the task. FAST is preferred when requirement coverage, risk, and evidence needs permit. DEEP MUST NOT be the default path for all requests.
+The runtime MUST select the **minimum sufficient mode** for the task and the applicable autonomy mode automatically from the existing scoped trust score and thresholds. FAST is preferred when requirement coverage, risk, and evidence needs permit. DEEP MUST NOT be the default path for all requests.
+
+The existing autonomy thresholds are `MANUAL` 0–39, `ASSISTED` 40–74, and `AUTOPILOT` 75–100. The effective autonomy mode MUST be recorded through existing execution, audit, activity, and evidence projections. The user does not confirm the mode per session or per action. An existing user override MAY only downgrade the effective mode, takes effect immediately, and MUST NOT silently upgrade the mode or bypass PermissionModel, sandbox, safety, or evidence gates. Android degraded mode may force `MANUAL` independently of trust.
 
 Mode selection SHOULD consider:
 
@@ -40,6 +42,7 @@ Mode selection SHOULD consider:
 - ambiguity level;
 - conflict or contradiction presence;
 - evidence sufficiency;
+- trust score and its scoped provenance;
 - user-requested rigor;
 - failure history;
 - provider/tool latency sensitivity.
@@ -166,12 +169,14 @@ The runtime MUST detect and react to:
 - verification loops that restate the same failure without new evidence;
 - retry storms after repeated transient failure beyond policy bounds.
 
-When a bounded-progress violation is detected, the runtime MUST either:
+When a bounded-progress violation is detected, the runtime MUST first determine whether the next action represents ordinary advancing progress and remains within existing permission, safety, capability, deadline, resource, and evidence gates. If so, it MUST surface an existing user-visible notification/status update and continue through the existing execution path. Otherwise it MUST use the existing recovery or escalation contract, including:
 
 1. switch to RECOVER mode,
-2. escalate for user input/approval,
+2. escalate for explicit clarification, capability input, or required approval,
 3. fall back to a different provider/tool strategy, or
-4. terminate with explicit incomplete/blocked status.
+4. terminate with explicit incomplete/blocked/failed status.
+
+A notification is observability, not approval. High-risk, denied, unsafe, unverified, deadline-exhausted, resource-exhausted, and unresolved non-idempotent operations remain blocking or non-successful under their existing owners.
 
 An exhausted reconciliation budget or effective deadline for a non-idempotent Tool is an automatic bounded-recovery exhaustion case. The runtime MUST preserve the child `UNKNOWN_COMPLETION`, retain the reconciliation evidence and existing checkpoint context, prohibit replay or further Tool execution of the unresolved child, and apply the existing non-success effects through TaskLifecycle and the Execution lifecycle: parent Task `Running → Failed` and associated Execution `RUNNING → FAILED`. No human clarification or `requestEscalation(question)` is required for this exhaustion path. Any later eligible retry/restart uses existing idempotency and new-Execution lineage rules; it MUST NOT replay the unresolved child merely because recovery continued. No new state or ExecutionStatus is introduced.
 
@@ -189,7 +194,8 @@ The execution trace MUST preserve the existing Planner → ExecutionPlan → Con
 
 Whenever the Agent Runtime exposes progress or recovery information, the projection MUST resolve to the existing `agentId`, `taskId`, `executionId`, `workflowId`/`planStepId` when applicable, `workspaceId`, `correlationId`, checkpoint/version, and evidence references. It MUST report the current objective and phase, actionable step or Tool operation, elapsed time, immutable effective deadline and remaining budget, latest heartbeat/freshness observation, applicable resource/concurrency condition, blocker or uncertainty, next safe action, verification/evidence state, and final non-authoritative disposition. A missing value MUST be reported as unknown or unavailable rather than inferred.
 
-The projection MUST report the applicable existing recovery ladder without creating a recovery owner. The reporting sequence is: preserve the current checkpoint, lineage, failure classification, and evidence; consider retry only when the owning Tool, Provider, Task, or Execution contract permits it; run bounded diagnostics or context refresh when those existing paths can add relevant evidence; apply bounded repair or re-plan; change provider/strategy or delegate to an eligible specialist/read-only investigator; restore a validated checkpoint through the existing same-identity recovery path; then escalate to the user or return the existing safe read-only, degraded, incomplete, cancelled, or failed disposition. The sequence is a projection of existing authorities, not a promise that every rung is available or ordered identically for every failure. Candidate selection remains bounded by the existing deadline, retry budget, failure ledger, resource limits, permission/sandbox rules, and lifecycle owners. This projection is observational and coordinating only: it MUST NOT adopt or reparent work, reset a deadline or budget, authorize a Tool or permission escalation, replay an uncertain operation, trigger autonomous side effects, or create a recovery manager, supervisor identity, worker identity, lease, lifecycle, or state. The existing recovery and degradation contracts remain authoritative.
+The projection MUST report the applicable existing recovery ladder without creating a recovery owner. The reporting sequence is: preserve the current checkpoint, lineage, failure classification, and evidence; consider retry only when the owning Tool, Provider, Task, or Execution contract permits it; run bounded diagnostics or context refresh when those existing paths can add relevant evidence; apply bounded repair or re-plan; change provider/strategy or delegate to an eligible specialist/read-only investigator; when ordinary advancing progress remains within all existing gates, notify through the existing user-visible status boundary and continue; restore a validated checkpoint through the existing same-identity recovery path; then escalate to the user or return the existing safe read-only, degraded, incomplete, cancelled, or failed disposition.
+ The sequence is a projection of existing authorities, not a promise that every rung is available or ordered identically for every failure. Candidate selection remains bounded by the existing deadline, retry budget, failure ledger, resource limits, permission/sandbox rules, and lifecycle owners. This projection is observational and coordinating only: it MUST NOT adopt or reparent work, reset a deadline or budget, authorize a Tool or permission escalation, replay an uncertain operation, trigger autonomous side effects, or create a recovery manager, supervisor identity, worker identity, lease, lifecycle, or state. The existing recovery and degradation contracts remain authoritative.
 
 ## Controlled Execution-Capability Escalation
 

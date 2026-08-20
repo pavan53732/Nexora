@@ -63,13 +63,16 @@ Timeout values are specified per-tool in the tool descriptor and MUST respect wo
 
 ### Unknown-Completion Reconciliation
 
-Every non-idempotent or externally side-effecting Tool MUST declare an operation-level recovery contract in addition to `isIdempotent`. The contract MUST be one of:
+Every new, non-idempotent, or externally side-effecting Tool MUST declare the strongest truthful operation-level recovery contract in addition to `isIdempotent`. The contract MUST be one of:
 
 - provider or remote idempotency key plus status lookup;
 - deterministic local transaction or compensating operation; or
 - an automatic bounded reconciliation and containment contract that preserves evidence and commits existing non-success effects when completion remains unproven.
 
-A timeout without a confirmed result MUST remain `UNKNOWN_COMPLETION` until the declared contract resolves whether the side effect occurred. The runtime MUST NOT silently retry, silently mark failure, or report success for an unresolved unknown-completion operation. Reconciliation evidence and final disposition MUST be persisted with the ToolInvocation and execution history. If the automatic contract is exhausted, the unresolved child remains `UNKNOWN_COMPLETION` and the owning Task/Execution applies the existing non-success path; no human action is required to continue recovery.
+A Tool descriptor with a missing, contradictory, or unsupported recovery declaration MUST be rejected through the existing Tool validation path (`NXR-2005`); no Tool is registered or executed on the basis of an assumed recovery behavior. The declaration is metadata of the existing Tool descriptor and does not create a recovery owner, state, identity, or error code.
+
+A timeout without a confirmed result MUST remain `UNKNOWN_COMPLETION` until the declared contract resolves whether the side effect occurred.
+ The runtime MUST NOT silently retry, silently mark failure, or report success for an unresolved unknown-completion operation. Reconciliation evidence and final disposition MUST be persisted with the ToolInvocation and execution history. If the automatic contract is exhausted, the unresolved child remains `UNKNOWN_COMPLETION` and the owning Task/Execution applies the existing non-success path; no human action is required to continue recovery.
 
 ### Reconciliation Exhaustion and Parent Non-Success (GAP-003)
 
@@ -83,6 +86,7 @@ Timeout monitoring is owned by the tool execution subsystem. A timeout (`NXR-200
 
     val requiresSandbox: Boolean
     val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery
+    val recoveryContract: ToolRecoveryContract   // strongest truthful operation-level contract; invalid/missing declarations reject registration
     val supportsStreaming: Boolean
     val supportsCancellation: Boolean
     val cacheTtlMs: Long

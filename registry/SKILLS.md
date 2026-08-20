@@ -16,3 +16,5 @@
 ## Notes
 
 The Skill registry remains an inventory document, but it SHOULD stay aligned with the compatibility expectations defined in [standards/Registry-Standard.md](../standards/Registry-Standard.md).
+
+A lesson may be promoted to an existing `LEARNED` Skill only after the existing provenance, evidence, trust, safety, scope, and lifecycle conditions pass and the existing deterministic policy path or user path approves promotion. Policy-approved promotion MUST be recorded through existing Skill Registry, memory, audit, and evidence projections. Acquired or learned Skills remain subject to the existing retirement path. This registry projection creates no new Skill authority, permission, identity, or lifecycle.

@@ -6,7 +6,7 @@ The Tool SDK provides standard base classes, dependency injection utilities, and
 
 ## SDK Architecture
 
-All developer-defined tools MUST extend the standard `BaseTool` class provided by the SDK. This guarantees that parameter-schema validation, risk classification, permission-scope ID validation, timeouts, and execution logs are consistently structured and handled without boilerplate. A descriptor MUST declare `riskLevel: ToolRiskLevel` and unique `requiredPermissions: List<String>` IDs; invalid or unknown declarations are rejected before registration (`NXR-2005`). Tool calls still pass through the complete authorization gate before any side effect.
+All developer-defined tools MUST extend the standard `BaseTool` class provided by the SDK. This guarantees that parameter-schema validation, risk classification, permission-scope ID validation, timeouts, and execution logs are consistently structured and handled without boilerplate. A descriptor MUST declare `riskLevel: ToolRiskLevel`, unique `requiredPermissions: List<String>` IDs, `isIdempotent`, and the strongest truthful existing operation-level recovery contract: idempotent replay, status reconciliation, deterministic compensation, or bounded containment. Missing, contradictory, or unsupported declarations are rejected before registration (`NXR-2005`). Tool calls still pass through the complete authorization gate before any side effect. The recovery declaration is descriptor metadata; it does not create a new Tool identity, lifecycle, recovery owner, or error code.
 
 ```kotlin
 package com.nexora.app.sdk.tool

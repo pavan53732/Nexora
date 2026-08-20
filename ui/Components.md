@@ -18,7 +18,7 @@
 | `TaskCard` | Task status card with progress indicator. | P0 |
 | `TerminalView` | Terminal emulator — internal only (agent activity / developer mode — read-only observability, see ADR-0006). Not a primary screen. | P2 |
 | `FileExplorer` | Tree-view file browser for the virtual file system. | P0 |
-| `AgentCard` | Agent status and capabilities display. | P1 |
+| `AgentCard` | Agent status, capabilities, effective autonomy mode, scoped trust band, and downgrade-only override display. | P1 |
 | `MemorySearchBar` | Semantic search input for memory recall. | P1 |
 | `PluginCard` | Plugin info with install/uninstall button. | P1 |
 | `ProviderCard` | Provider config card with health indicator. | P0 |
@@ -36,6 +36,10 @@ All components use Jetpack Compose.
 The existing `ProviderCard` and provider configuration surface MUST project provider/type, external base URL, API-key entry state without exposing the secret, model name, `TEST CONNECTION`, capability refresh/detection where supported, connection status, validation result, and `SAVE`. The UI routes persistence and health/catalog operations through the provider-owned service/API boundary and MUST NOT store a second provider configuration.
 
 A successful connection status MUST NOT be rendered as workspace execution authorization, Tool approval, Task/Execution completion, or proof that every advertised capability is implemented. API keys MUST never appear in logs, prompts, evidence, telemetry, or generated artifacts. The UI is projection-only: it cannot grant permissions, invoke Tools, create lifecycle transitions, or claim executed evidence.
+
+## Autonomy Mode Projection (DEC-46)
+
+The existing `AgentCard`, `TaskCard`, and `ActivityCard` MAY project the effective `Manual`, `Assisted`, or `Autopilot` mode, the scoped trust band that selected it, the presence of a downgrade-only user override, and the reason for a forced `Manual` degraded-mode projection. The mode is selected automatically by the existing runtime and is not confirmed per session or per action. A user downgrade routes through existing settings/permission APIs and takes effect immediately; the UI MUST NOT upgrade the mode, grant a permission, or bypass a high-risk gate. A status notification is observability, not approval.
 
 ## Agent Activity and State Presentation
 

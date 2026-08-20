@@ -477,6 +477,10 @@ reinterprets an `ALLOW` or `ASK` table value as `DENY`.
 | `ASK` | Explicit user approval is required unless a higher-priority policy already resolves the scope to `ALLOW` or `DENY`. |
 | `DENY` | Blocked unless a higher-priority policy explicitly grants `ALLOW`. |
 
+### DEC-46 Category-Level Defaults
+
+The existing scope table is interpreted by risk category without adding a second policy layer. A known low-risk scope whose authoritative declared default is `ALLOW` proceeds without an ASK transaction when no higher-priority Agent, Workspace, or Global policy restricts it; this is the existing `ALLOW` semantics, not an AI or classifier decision. High-risk categories retain their existing `ASK` or `DENY` defaults and any applicable approval, sandbox, sensitive-domain, device, plugin, network, resource, or audit gates. No user confirmation is required per session or per action for an already-authorized low-risk `ALLOW` scope, but no category default bypasses a higher-priority restriction or an explicit canonical gate.
+
 ### Resolution Chain
 
 The runtime resolves every scope independently:
@@ -514,7 +518,7 @@ The following defaults are the single authoritative values:
 
 ## Security Classifier Boundary (DEC-42)
 
-The optional on-device TFLite auto-approval classifier is retired from the active architecture. Nexora does not bundle, load, execute, or manage TFLite, ONNX, GGUF, or other local AI model files for authorization or any other AI-model function.
+The optional on-device TFLite auto-approval classifier is retired from the active architecture. Nexora does not bundle, load, execute, or manage TFLite, ONNX, GGUF, or other local AI model files for authorization or any other AI-model function. Category-level ALLOW behavior is deterministic PermissionModel resolution and is not AI classification.
 
 Authorization remains fail-closed through the existing PermissionModel scope hierarchy, explicit `DENY`, `ASK` approval transactions, user decisions, policy evaluation, and audit logging. `ToolExecutor.execute()` runs only after the existing permission and approval flow returns `Allowed`. No classifier `ALLOW` override, bypass, or new permission state is introduced.
 

@@ -151,7 +151,7 @@
 | FR-S013 | Workspace snapshots & rollback — full-workspace snapshot and atomic restore to any snapshot | Should | 4 |
 | FR-S014 | Network egress policy — deny-by-default, per-workspace domain allowlists, per-task time windows, all egress logged through an in-app proxy | Must | 3 |
 | FR-S015 | Quarantine & content scanning — network-downloaded files quarantined and scanned; promotion requires permission | Must | 3 |
-| FR-S016 | Autonomy modes & adaptive approval — manual / assisted / autopilot; risk-scored permission decisions with full audit | Should | 4 |
+| FR-S016 | Autonomy modes & adaptive approval — automatic Manual / Assisted / Autopilot selection from scoped trust thresholds; downgrade-only user override; category-level low-risk ALLOW defaults; existing high-risk ASK/DENY and approval gates; full audit | Should | 4 |
 | FR-S017 | Per-workspace encryption at rest — workspace storage encrypted with Keystore-backed keys | Should | 4 |
 | FR-S018 | Per-agent sandbox isolation — delegated sub-agents run in separate sandbox instances | Should | 5 |
 
@@ -283,9 +283,9 @@
 |----|-------------|----------|-------|
 | FR-AS-001 | Plan repair — on step failure: diagnose, then retry / repair / re-plan / re-delegate / escalate (bounded, max 3 cycles); repair decisions recorded in history | Must | 4 |
 | FR-AS-002 | Agent heartbeat & watchdog — heartbeat per loop iteration; hang detection with checkpoint restart (bounded) and escalation | Must | 2 |
-| FR-AS-003 | Technical-boundary escalation — context/token, step, wall-clock, provider-call, Tool-call, repair, verifier, device, or resource safety exhaustion pauses, summarizes, retries, reconciles, escalates, or marks incomplete according to the owning contract; cost/usage notifications are informational only and cost alone MUST NOT pause, downgrade, block, or terminate a technically valid progressing run | Must | 2 |
-| FR-AS-004 | Closed-loop learning — reflect, store lesson (memory_lessons), propose skill refinement or new LEARNED skill; lessons retrieved during planning | Should | 4 |
-| FR-AS-005 | Trust growth — per-agent/per-workspace trust score adjusts autonomy mode; success raises it, failures lower it; explicit reset | Should | 4 |
+| FR-AS-003 | Technical-boundary escalation — context/token, step, wall-clock, provider-call, Tool-call, repair, verifier, device, or resource safety exhaustion uses the owning contract; ordinary advancing progress surfaces an existing notification and continues when all gates remain satisfied, while unsafe, blocked, unverified, denied, or exhausted conditions still escalate, degrade, fail, cancel, or mark incomplete; cost/usage notifications are informational only | Must | 2 |
+| FR-AS-004 | Closed-loop learning — reflect, store provenance-bearing lesson (`memory_lessons`), retrieve validated lessons during planning, and promote/refine an existing `LEARNED` skill through the existing deterministic policy or user approval path when trust, safety, evidence, scope, and lifecycle conditions pass | Should | 4 |
+| FR-AS-005 | Trust growth — per-agent/per-workspace trust score automatically selects Manual / Assisted / Autopilot by existing thresholds; success raises it, failures lower it; explicit reset; existing user override may only downgrade and high-risk permission gates remain authoritative | Should | 4 |
 | FR-AS-006 | Verification gates — step validation criteria are hard gates; executor blocks next step until pass or classified failure; resumed agents re-validate | Must | 2 |
 | FR-AS-007 | Idempotency & exactly-once recovery — tools declare idempotency; replay log; non-idempotent calls reconciled from tool history, never replayed | Must | 2 |
 | FR-AS-008 | Cloud-only degradation ladder — primary cloud provider → alternate eligible cloud provider/profile → cached prior result or supported non-inference workspace operation → read-only + notification; each descent announced and logged | Must | 2 |

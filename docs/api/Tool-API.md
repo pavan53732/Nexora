@@ -16,7 +16,7 @@ The Tool API defines the boundaries for registering tools, executing tools in th
 
 | Operation | Lifecycle effect | Success result | Canonical failures | Retry/idempotency | Security and cancellation | Evidence |
 |---|---|---|---|---|---|---|
-| `registerTool` | Tool `Discovered → Registered` | Stable validated descriptor | Duplicate ID (`NXR-2006`), invalid schema/risk/scope declaration (`NXR-2005`), storage failure | Safe (Idempotent) | Validates unique known permission IDs and risk level before registry exposure | `SEC-PERM-055/066`, `IT-TOOL-010` |
+| `registerTool` | Tool `Discovered → Registered` | Stable validated descriptor | Duplicate ID (`NXR-2006`), invalid schema/risk/scope/recovery declaration (`NXR-2005`), storage failure | Safe (Idempotent) | Validates unique known permission IDs, risk level, `isIdempotent`, and strongest truthful recovery contract before registry exposure | `SEC-PERM-055/066`, `IT-TOOL-010` |
 | `executeTool` | No ToolStatus change; backing terminal may run | Standardized output envelope | Not found (`NXR-2001`), timeout (`NXR-2002`), authorization denied (`NXR-2003`), exception (`NXR-2004`), validation (`NXR-2005`), sandbox-policy violation (`NXR-2009`), OOM (`NXR-7004`) | Idempotency key required for retry-sensitive calls | Runs the complete PermissionModel authorization gate before any side effect; preserves denial subreason, toolCallId, and correlationId | `SEC-PERM-001..066`, `IT-TOOL-001..014` |
 | `getToolDescriptor`| No lifecycle change | Dynamic tool schema and metadata | Not found (`NXR-2001`) | Safe to retry; side-effect free | Open access; sanitizes internal implementation details | API contract tests |
 | `listTools` | No lifecycle change | Paged list of registered tool descriptors | Storage failure, invalid page parameters | Safe to retry; side-effect free | Filters out internal-only tools based on client credentials | API contract tests |
@@ -71,8 +71,16 @@ data class ToolDescriptor(
     val requiredPermissions: List<String>,
     val requiresSandbox: Boolean,
     val supportsStreaming: Boolean,
-    val isIdempotent: Boolean
+    val isIdempotent: Boolean,
+    val recoveryContract: ToolRecoveryContract
 )
+
+enum class ToolRecoveryContract {
+    IDEMPOTENT_REPLAY,
+    STATUS_RECONCILIATION,
+    DETERMINISTIC_COMPENSATION,
+    BOUNDED_CONTAINMENT
+}
 ```
 
 ## Tool API Interface
@@ -92,7 +100,7 @@ interface ToolApi {
 
 | Operation | Canonical `NXR-*` codes | Recovery & Lifecycle Effects |
 |---|---|---|
-| `registerTool` | `NXR-2005` (Invalid descriptor), `NXR-2006` (Not Registered), `NXR-2010` (Incompatible) | Reject registration; state remains `DISCOVERED`; never prompt for descriptor repair. |
+| `registerTool` | `NXR-2005` (Invalid descriptor), `NXR-2006` (Not Registered), `NXR-2010` (Incompatible) | Reject registration when schema, risk, scope, `isIdempotent`, or recovery declaration is invalid or missing; state remains `DISCOVERED`; never prompt for descriptor repair. |
 | `executeTool` | `NXR-2001` (Not Found) | Reject call; no lifecycle change. |
 | | `NXR-2002` (Timeout) | Kill process; return partial outputs; preserve `UNKNOWN_COMPLETION` when the operation outcome is not confirmed; reconcile before retrying, and retry only when the operation’s idempotency and retry policy authorize it. After bounded reconciliation exhaustion, retain the unresolved child/context and evidence, commit the existing parent Task/Execution non-success effects automatically, and prohibit further Tool execution or automatic replay. The existing `requestEscalation(question)` path remains reserved for explicit clarification or capability gaps. |
 | | `NXR-2003` (Authorization Denied) | ToolInvocation status → `PENDING_AUTHORIZATION` for an effective `ASK` decision. On `USER_DENIED` or approval expiry classified as `POLICY_DENIAL` under DEC-36, the Tool returns `ToolResult.Error` without side effects; the owning Task commits `WaitingApproval → Failed`, while the participating Agent may project `WaitingApproval → Paused` under DEC-35. Approval is never represented as a `ToolResult` variant, and a later attempt requires a new authorization transaction. The audit and activity projections preserve expiry as distinct from explicit user denial. |
