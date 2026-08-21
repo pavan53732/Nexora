@@ -4,7 +4,7 @@
 > Defines terminal session execution model (PTY vs subprocess), session state management,
 > working-directory boundary enforcement, output caps, timeout discipline, session restore,
 > and isolation rules.
-> This document owns terminal behavior; lifecycle authority remains `lifecycle/TerminalSessionLifecycle.md` (S3 — expanded).
+> This document owns terminal execution behavior; lifecycle authority remains `state-machines/TerminalSessionLifecycle.md` (S3-E formal state-machine owner). The `lifecycle/` narrative is derived.
 
 ---
 

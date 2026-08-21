@@ -58,3 +58,4 @@ interface SkillRegistry {
     suspend fun skillsOf(agentId: String): List<AgentSkillBinding>
     suspend fun validate(skill: Skill): SkillValidation  // checks tool refs exist
 }
+```

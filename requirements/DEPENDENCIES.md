@@ -9,7 +9,7 @@
 ## Android Platform
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | Android SDK | API 34 (current min/compile/target baseline; DEC-37) | Target platform APIs |
 | Build Tools | 34.0.0 | AAPT2, D8, R8 compilation for the API-34 baseline |
 | Platform Tools | Latest | ADB, debugging |
@@ -17,7 +17,7 @@
 ## Language & Build
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | JDK | 21 | Compilation and tooling |
 | Kotlin | 2.0+ | Primary language |
 | Gradle | 8.10+ | Build system |
@@ -26,7 +26,7 @@
 ## UI
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | Jetpack Compose | BOM 2024.x | Declarative UI framework |
 | Material Design 3 | `androidx.compose.material3` | Design system, components, dynamic color |
 | Compose Navigation | `androidx.navigation:navigation-compose` | Screen navigation |
@@ -35,7 +35,7 @@
 ## Architecture
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | Hilt | 2.51+ | Dependency injection (Dagger Hilt) |
 | Room | 2.6+ | SQLite ORM with coroutines support |
 | DataStore | 1.1+ | Preferences and typed key-value storage |
@@ -45,7 +45,7 @@
 ## Networking
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | OkHttp | 4.12+ | HTTP client with interceptor support |
 | Retrofit | 2.11+ | Type-safe REST client for provider APIs |
 | Kotlinx Serialization | 1.6+ | JSON serialization (preferred over Gson/Moshi) |
@@ -53,7 +53,7 @@
 ## Background & Security
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | WorkManager | 2.9+ | Guaranteed background task scheduling |
 | AndroidX Biometric | 1.2+ | Fingerprint/biometric authentication for sensitive actions |
 | AndroidX Security Crypto | 1.1+ | EncryptedSharedPreferences and file encryption |
@@ -61,7 +61,7 @@
 ## Testing
 
 | Dependency | Version | Purpose |
------------|---------|--------|
+|-----------|---------|--------|
 | JUnit 5 | 5.10+ | Unit test framework |
 | Mockito / MockK | 5.x / 1.13+ | Mocking for unit tests |
 | Turbine | 1.1+ | Flow testing utilities |

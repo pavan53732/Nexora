@@ -49,7 +49,7 @@
 | FEAT-020 | Sandbox Telemetry & Self-Monitoring (agents observe their own environment) | 3 | Planned |
 | FEAT-021 | Workspace Snapshots & Rollback (full-workspace time travel) | 4 | Planned |
 | FEAT-022 | Adaptive Autonomy Modes (manual / assisted / autopilot, risk-scored approvals) | 4 | Planned |
-| FEAT-023 | Network Egress Policy & DLP (deny-by-default, allowlists, outbound inspection) | 3 | Planned |
+| FEAT-023 | Network Egress Policy & Secret-Material Protection (host-mediated mode-conditioned public egress, loopback/app-private floors, secret-material blocking, audit) | 3 | Planned |
 | FEAT-024 | Quarantine & Content Scanning (network downloads gated before promotion) | 3 | Planned |
 | FEAT-025 | Per-Agent Sandbox Isolation (sub-agents in separate sandbox instances) | 5 | Planned |
 | FEAT-026 | Sandbox Templates (pre-baked environment profiles) | 3 | Planned |

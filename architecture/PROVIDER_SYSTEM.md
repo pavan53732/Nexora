@@ -232,7 +232,7 @@ scale defined in [../specs/CONTEXT_MANAGEMENT.md](../specs/CONTEXT_MANAGEMENT.md
 ## Phase Mapping
 
 - **Phase 1**: Define `AIProvider` interface, `ProviderRegistry`, configuration models.
-- **Phase 5**: Implement the active cloud/external provider adapters. Streaming. Health checks. Local AI providers are out of scope under DEC-41.
+- **Phase 5**: Implement the active cloud/external provider adapters. Streaming. Health checks. Local AI providers are out of scope under the standing DEC-44 rule.
 - **Phase 8**: Providers as plugins. Custom provider SDK.
 
 

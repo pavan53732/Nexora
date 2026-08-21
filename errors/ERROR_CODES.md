@@ -101,7 +101,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | `POLICY_DENIAL` | Effective Agent/Workspace/Global/default policy is `DENY`, or an approval transaction expires before a valid authorization outcome is committed under DEC-36; an expiry is not an explicit user rejection and does not alter the direct policy-DENY meaning | No automatic prompt | Change policy only through authorized settings, or require a new approval transaction after expiry |
 | `USER_DENIED` | User rejected an `ASK` approval | No | Stop; retry only through a new user action |
 | `MALFORMED_APPROVAL` | Approval transaction is missing, duplicate, extra, empty, or mismatched | No | Reject, security-audit, never execute |
-| `CLASSIFIER_DENIAL` | Selected classifier denied the authorized call | No | Final for this attempt; a later attempt re-runs authorization |
+| `CLASSIFIER_DENIAL` | Reserved compatibility classification: an applicable separately authorized classification boundary denied an otherwise authorized call; no local AI classifier path is active in current Nexora scope | No | Final for this attempt; a later attempt re-runs authorization |
 
 `INVALID_SCOPE_DECLARATION` is descriptor validation, not NXR-2003: it maps to
 `NXR-2005`, prevents `DISCOVERED → REGISTERED`, and is never user-prompted.

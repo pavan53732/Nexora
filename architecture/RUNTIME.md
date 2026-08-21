@@ -39,7 +39,7 @@ here as a runtime service but is owned canonically by
 ## Module Inventory
 
 | Module | Responsibility | Kotlin Package |
---------|---------------|----------------|
+|--------|---------------|----------------|
 | **Planner** | Decomposes goals into tasks, creates execution plans with dependencies. | `com.nexora.app.runtime.planner` |
 | **Executor** | Executes planned tasks sequentially or in parallel, manages execution state. | `com.nexora.app.runtime.executor` |
 | **Workflow Engine** | Manages workflow graph state and step progression. Delegates step execution to the Executor. | `com.nexora.app.workflows` |

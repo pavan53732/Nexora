@@ -30,6 +30,17 @@ interface Tool {
     val parameters: JsonSchema
     val requiredPermissions: List<String> // canonical PermissionScope IDs
     val timeout: Duration
+    val requiresSandbox: Boolean
+    val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery
+    val recoveryContract: ToolRecoveryContract   // strongest truthful operation-level contract; invalid/missing declarations reject registration
+    val supportsStreaming: Boolean
+    val supportsCancellation: Boolean
+    val cacheTtlMs: Long
+    val version: String
+
+    suspend fun execute(params: JsonObject, context: ToolContext): ToolResult
+}
+```
 
 ## Timeout Semantics
 
@@ -84,17 +95,7 @@ When the reconciliation budget or effective deadline is exhausted without establ
 
 Timeout monitoring is owned by the tool execution subsystem. A timeout (`NXR-2002`) has **no ToolStatus lifecycle effect**: it is an execution outcome, not a Tool descriptor lifecycle transition. The existing ToolInvocation record and canonical error envelope preserve the timeout/partial-output outcome without asserting that an underlying non-idempotent side effect failed or did not occur.
 
-    val requiresSandbox: Boolean
-    val isIdempotent: Boolean   // FR-AS-007: declares replay-safety for exactly-once recovery
-    val recoveryContract: ToolRecoveryContract   // strongest truthful operation-level contract; invalid/missing declarations reject registration
-    val supportsStreaming: Boolean
-    val supportsCancellation: Boolean
-    val cacheTtlMs: Long
-    val version: String
-
-    suspend fun execute(params: JsonObject, context: ToolContext): ToolResult
-}
-
+```kotlin
 data class ToolContext(
     val workspaceId: String,
     val sandbox: Sandbox,
@@ -345,7 +346,7 @@ States are defined in `models/Tool.md`:
 - **Phase 8**: Plugin-based tool installation.
 
 
-> **S4 — Terminal specification fully specified:** `specs/TERMINAL.md` (§Execution Model, §Session State Machine, §Working-Dir Boundary, §Output Caps, §Timeout Discipline, §Restore Behavior, §Security & Isolation) defines terminal behavior; lifecycle authority `lifecycle/TerminalSessionLifecycle.md` (S3 filled); model fields updated (`models/TerminalSession.md`); registry capabilities updated (`TOOL_MATRIX.md`). See `docs/DECISION_LOG.md` DL-028.
+> **S4 — Terminal specification fully specified:** `specs/TERMINAL.md` (§Execution Model, §Session State Machine, §Working-Dir Boundary, §Output Caps, §Timeout Discipline, §Restore Behavior, §Security & Isolation) defines terminal behavior; lifecycle authority is the canonical `state-machines/TerminalSessionLifecycle.md` (S3-E formal state machine), while `lifecycle/TerminalSessionLifecycle.md` is derived; model fields updated (`models/TerminalSession.md`); registry capabilities updated (`TOOL_MATRIX.md`). See `docs/DECISION_LOG.md` DL-028.
 
 
 ## Tool Reuse and Repetition Control

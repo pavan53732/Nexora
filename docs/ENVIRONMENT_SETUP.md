@@ -449,7 +449,7 @@ The environment is verified suitable for future AI provider integration (Step 4 
 | OpenRouter | Network / SSL ready | ✅ Ready |
 | Custom external providers | Python HTTP libraries (`urllib`, `requests` available) | ✅ Ready |
 
-Local AI providers, local model runtimes, localhost AI endpoints, and model files are not part of the active environment or source setup under DEC-41/DEC-42.
+Local AI providers, local model runtimes, localhost AI endpoints, and model files are not part of the active environment or source setup under the standing DEC-44 rule.
 
 No API keys were configured or stored. Key storage will use Android Keystore (as specified in `security/SECURITY_MODEL.md`) when integration begins in Phase 5.
 

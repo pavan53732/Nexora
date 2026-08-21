@@ -60,7 +60,7 @@ Detailed specification for each AI provider integration. All providers implement
 
 ### Unsupported local AI provider boundary (out of scope)
 
-Local AI providers, local model files, and local model runtimes are not supported and are out of scope under DEC-41. Active provider profiles must resolve to an external/cloud endpoint under DEC-41; localhost, loopback, app-private, and on-device model endpoints are invalid.
+Local AI providers, local model files, and local model runtimes are not supported and are out of scope under the standing DEC-44 rule. Active provider profiles must resolve to an external/cloud endpoint under DEC-44; localhost, loopback, app-private, and on-device model endpoints are invalid.
 
 ### Custom
 
@@ -77,7 +77,7 @@ switchable provider configuration:
 | Field | Description |
 |-------|-------------|
 | **Name** | Human-readable profile name (e.g. "OpenAI Work", "Fast Cloud"). |
-| **Provider type** | One of the active cloud/external ProviderType values under DEC-41. |
+| **Provider type** | One of the active cloud/external ProviderType values under DEC-44. |
 | **API key** | Per-profile key, stored encrypted via `SecureKeyStore` (never plaintext, never logged — NFR-SEC-005). |
 | **Endpoint** | Configurable base URL (defaults per provider; required for custom endpoints). |
 | **Model** | Default model for the profile; selectable from the provider model catalog (FR-P006). |
@@ -150,7 +150,7 @@ financial cost.
 ## Phase Mapping
 
 - **Phase 1**: Profile model, configuration UI, encrypted key storage.
-- **Phase 5**: Active cloud/external providers implemented; streaming; health checks; profile switching. Local AI providers are out of scope under DEC-41.
+- **Phase 5**: Active cloud/external providers implemented; streaming; health checks; profile switching. Local AI providers are out of scope under the standing DEC-44 rule.
 - **Phase 8**: Providers installable as plugins.
 
 ---

@@ -89,7 +89,7 @@ Uninstall -> Remove plugin and clean up data
 ## Example Plugins
 
 | Plugin | Registers |
---------|----------|
+|--------|----------|
 | **Browser** | Browser tools (open_url, screenshot, extract_page) |
 | **Git** | Git tools (clone, commit, push, pull) |
 | **Python** | Python runtime extension, pip tools |

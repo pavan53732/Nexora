@@ -151,7 +151,7 @@
 | FR-S013 | Workspace snapshots & rollback — full-workspace snapshot and atomic restore to any snapshot | Should | 4 |
 | FR-S014 | Network egress policy — host-mediated, mode-conditioned public-destination admission (`AUTOPILOT` may default `network:http`/`network:websocket` to `ALLOW`; `ASSISTED` retains opt-in), per-task time windows, all egress logged through the host-side proxy, direct sockets/inbound listeners denied, and secret-material blocking enforced | Must | 3 |
 | FR-S015 | Quarantine & content scanning — network-downloaded files quarantined and scanned; promotion requires permission | Must | 3 |
-| FR-S016 | Autonomy modes & adaptive approval — automatic Manual / Assisted / Autopilot selection from scoped trust thresholds; downgrade-only user override; category-level low-risk ALLOW defaults; existing high-risk ASK/DENY and approval gates; full audit | Should | 4 |
+| FR-S016 | Autonomy modes & adaptive approval — automatic Manual / Assisted / Autopilot selection from scoped trust thresholds; downgrade-only user override; category-level low-risk ALLOW defaults; existing high-risk ASK/DENY and approval gates; full audit | Must | 4 |
 | FR-S017 | Per-workspace encryption at rest — workspace storage encrypted with Keystore-backed keys | Should | 4 |
 | FR-S018 | Per-agent sandbox isolation — delegated sub-agents run in separate sandbox instances | Should | 5 |
 

@@ -38,7 +38,7 @@
 | Assumption | Detail |
 |-----------|--------|
 | External services | AI providers (OpenAI, Anthropic, etc.) are third-party SaaS with their own SLAs |
-| AI inference locality | All AI inference, generation, embeddings, and model-backed routing use external cloud providers; no local AI model runtime or model file is present under DEC-41/DEC-42 |
+| AI inference locality | All AI inference, generation, embeddings, and model-backed routing use external cloud providers; no local AI model runtime or model file is present under the standing DEC-44 rule |
 | API stability | Provider APIs follow their published specs; breaking changes are infrequent |
 | Stream terminals | Provider adapters can detect native completion or synthesize a canonical failure; transport close alone is not trusted as success |
 | Resume support | Native cursor resume is provider/model specific; unsupported providers restart with lineage or fail partial |

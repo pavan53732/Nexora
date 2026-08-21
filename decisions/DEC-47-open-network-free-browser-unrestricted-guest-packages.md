@@ -40,6 +40,10 @@ Inside the existing sandbox guest, `pip`, `npm`, `gradle`/`maven`, `apt`, and eq
 
 Guest package installation is not host-JVM Plugin installation. Host-JVM Plugins remain subject to manifest declaration, user review, Plugin lifecycle, integrity, capability, and cleanup contracts because they execute native-level code in the app process.
 
+## Creator-authorized Option B clarification
+
+The creator-owned statement that network access is denied unless authorized is interpreted as an effective-policy authorization requirement, not as a global denial of network access. Under DEC-47, an `AUTOPILOT` workspace’s deterministic public-destination `network:http` and `network:websocket` defaults are the applicable authorization for public, routable destinations when no higher-priority restriction applies. `ASSISTED` retains opt-in authorization. Loopback, localhost, app-private endpoints, inbound listeners, secret-material transmission outside declared service boundaries, and sensitive-domain credential-entry or transaction-execution floors remain restricted as stated above. The creator-owned product design document remains unchanged.
+
 ## Unchanged boundaries
 
 PermissionModel resolution order, explicit ASK transactions for operations that remain ASK-scoped, DENY behavior, unknown-completion semantics, lifecycle ownership, audit retention, evidence conventions, cloud-only AI scope, untrusted page-content handling, no inbound sockets, loopback/app-private SSRF floors, and host-plugin trust separation remain unchanged.

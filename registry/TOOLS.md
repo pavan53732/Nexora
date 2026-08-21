@@ -427,7 +427,7 @@
 | TOOL-332 | security_revoke | Revoke a session or token | Later | Planned |
 | TOOL-333 | security_vault | Store or retrieve a secret in the vault | Later | Planned |
 | TOOL-334 | security_policy_check | Evaluate a policy for an action | Later | Planned |
-| TOOL-392 | sandbox_network_rules | Manage sandbox network egress allow/deny rules | 3 | Planned |
+| TOOL-392 | sandbox_network_rules | Manage or inspect host-mediated sandbox network policy, including mode-conditioned public egress, higher-priority restrictions, loopback/app-private floors, secret-material blocking, and audit | 3 | Planned |
 | TOOL-393 | sandbox_quarantine_review | Review quarantined files and promote or delete | 3 | Planned |
 
 ## Observability (OBS)

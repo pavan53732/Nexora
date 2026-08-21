@@ -22,7 +22,7 @@ The Sandbox is Nexora's isolated execution environment. The AI never directly ex
 ## Components
 
 | Component | Description | Phase |
------------|-------------|-------|
+|-----------|-------------|-------|
 | **Virtual File System** | Complete file system inside app private storage. Directories, files, symlinks. | 3 |
 | **Workspace Isolation** | Each workspace has isolated storage. No cross-workspace access. | 1 |
 | **Temporary Workspaces** | Ephemeral workspaces for one-off tasks. | 3 |

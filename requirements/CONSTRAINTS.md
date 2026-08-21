@@ -68,7 +68,7 @@
 |-----------|--------|
 | Provider model | External API calls only — providers are not bundled with the app |
 | Supported providers | OpenAI, Anthropic, Gemini, Groq, OpenRouter, and Custom external/cloud endpoint |
-| Local AI models | None. Ollama, LM Studio, GGUF, TFLite, ONNX, and other local AI-model runtimes/files are out of scope under DEC-41 and DEC-42 |
+| Local AI models | None. Ollama, LM Studio, GGUF, TFLite, ONNX, and other local AI-model runtimes/files are out of scope under the standing DEC-44 rule |
 | Stream abstraction | Provider-native SSE/WebSocket/HTTP formats must normalize to the canonical typed stream; Agent Runtime never depends on provider wire formats |
 | Stream buffering | Unbounded stream buffers are prohibited; semantic/control events must not be dropped |
 | Reasoning artifacts | Raw private chain-of-thought is not required, logged, exported, or persisted; only redacted ReasoningSummary artifacts cross durable boundaries |

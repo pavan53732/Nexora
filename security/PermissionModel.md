@@ -504,7 +504,7 @@ The following defaults are the single authoritative values:
 | Scope | Default | Notes |
 |---|---|---|
 | `sandbox:read`, `sandbox:write`, `sandbox:execute` | `ALLOW` | Trusted workspace execution |
-| `network:http`, `network:websocket` | `ASK` | Outbound network |
+| `network:http`, `network:websocket` | `ASK` in base/`ASSISTED`; mode-conditioned `ALLOW` in `AUTOPILOT` for public routable destinations when no higher-priority restriction applies | Outbound network; HTTP port 80 permitted under DEC-47 |
 | `device:camera`, `device:storage` | `DENY` | Hardware access |
 | `device:notifications` | `ASK` | User-visible |
 | `ai:complete`, `ai:embed` | `ALLOW` | AI provider calls |

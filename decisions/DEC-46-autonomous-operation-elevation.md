@@ -35,7 +35,7 @@ An existing learned lesson may become an existing `LEARNED` Skill when the exist
 
 ### 4. Maximal truthful Tool recovery declaration
 
-Every new Tool MUST declare the strongest truthful existing operation-level recovery contract: idempotent replay, query/status reconciliation, or deterministic local transaction/compensating operation. If none is available, the Tool MUST be treated as non-retryable and its registration or invocation MUST be rejected through the existing Tool validation/error path. The declaration remains metadata of the existing Tool descriptor and does not create a recovery owner, Tool identity, lifecycle state, or error code.
+Every new Tool MUST declare the strongest truthful existing operation-level recovery contract: `IDEMPOTENT_REPLAY`, `STATUS_RECONCILIATION`, `DETERMINISTIC_COMPENSATION`, or `BOUNDED_CONTAINMENT`. `BOUNDED_CONTAINMENT` applies when the operation can be safely bounded and contained without replay or compensation. If none is available, the Tool MUST be treated as non-retryable and its registration or invocation MUST be rejected through the existing Tool validation/error path. The declaration remains metadata of the existing Tool descriptor and does not create a recovery owner, Tool identity, lifecycle state, or error code.
 
 ### 5. Notify-and-continue for ordinary advancing progress
 
