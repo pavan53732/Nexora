@@ -71,7 +71,7 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
 | **Egress enforcement boundary** | All guest egress is forced through the host-side workspace egress proxy (`docs/SANDBOX_DEPTH.md` §2.4). proot is launched with `http_proxy`/`https_proxy`/`all_proxy` set to `127.0.0.1:{perWorkspacePort}`; guest processes cannot create direct outbound sockets. The proxy — not an in-guest interceptor — is the sole authority for mode-conditioned admission, secret-material blocking, audit, and grant enforcement |
 | **Secret-material protection** | Configured credentials, API keys, and `SecureKeyStore` contents are blocked from transmission to any endpoint except their declared service. The proxy may terminate guest TLS with a workspace-scoped CA (private key in `SecureKeyStore`, never exported to the guest) to enforce this rule; no general full-body policy scan is required |
 | **Encrypted egress** | Pinned/foreign-certificate traffic or any attempt to bypass the proxy is denied — fail-closed, with no silent path |
-| **Provider & pipe clients** | Host-side provider HTTP clients and pipe transports are *not* guest processes; they remain host-managed and confined by `NFR-SEC-012` / `NFR-SEC-014`. Their request bodies are scanned by the DLP engine before transport encryption, so they do not traverse the guest egress proxy |
+| **Provider & pipe clients** | Host-side provider HTTP clients and pipe transports are *not* guest processes; they remain host-managed and confined by `NFR-SEC-012` / `NFR-SEC-014`. Their outbound payloads are subject to deterministic secret-material blocking before transport encryption, so they do not traverse the guest egress proxy; no general full-body classifier is required |
 
 ## 4. Process Restrictions
 

@@ -111,6 +111,7 @@ Delegates to Tester Agent -> Writes and runs tests
     |
     v
 Delegates to Reviewer Agent -> Reviews changes
+```
 
 ## Competitive Multi-Agent Consensus Verification
 
@@ -142,6 +143,7 @@ The coordinator retains plan, delegation, merge, and completion responsibility. 
 
 Read-only investigation is an operational projection over existing multi-agent coordination. It does not create a Batch/work-group lifecycle, replace Task or Execution identity, bypass the reviewer rule, or permit direct agent-to-agent communication.
 
+```
     |
     v
 Results aggregated -> Workflow Coordinator combines results

@@ -59,7 +59,6 @@
 | IT-REASON-004 | IT-REASON | Critic disagreement triggers bounded repair then escalation | Reasoning + Agent | Planned | `evidence/integration/IT-REASON-004/` | 2026-08-06 |
 | IT-CONTEXT-001 | IT-CONTEXT | ContextSnapshot budget accounts for tools/output/reasoning | Context + Provider | Planned | `evidence/integration/IT-CONTEXT-001/` | 2026-08-06 |
 | IT-CONTEXT-002 | IT-CONTEXT | Resume reconstructs identical ContextSnapshot lineage | Context + Memory | Planned | `evidence/integration/IT-CONTEXT-002/` | 2026-08-06 |
-
 | IT-CONV-001 | IT-CONV | Validate immutable conversation checkpoint creation at selected post-turn boundary | Conversation/Session | Planned | `evidence/integration/IT-CONV-001/` | 2026-08-12 |
 | IT-CONV-002 | IT-CONV | Validate non-destructive branch creation preserves source conversation | Conversation/Session | Planned | `evidence/integration/IT-CONV-002/` | 2026-08-12 |
 | IT-CONV-003 | IT-CONV | Reject stale, expired, invalid, or unauthorized checkpoint operations without source mutation | Conversation/Session + Security | Planned | `evidence/integration/IT-CONV-003/` | 2026-08-12 |

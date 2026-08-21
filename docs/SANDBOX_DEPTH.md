@@ -227,7 +227,6 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 | **Cross-architecture emulation** | QEMU user-mode for selected foreign-architecture binaries | 6 |
 | **Rootfs delta updates** | Incremental updates to the base rootfs | 6 |
 | **Custom rootfs builds** | User-built rootfs using the Nexora manifest format | 7 |
-
 | 17 | Bundled Full Environment per workspace | 3 | Core | FR-S019 | — |
 | 18 | Bundled Debian-slim rootfs | 3 | Core | FR-S020 | — |
 | 19 | proot execution | 3 | Core | FR-S021 | — |

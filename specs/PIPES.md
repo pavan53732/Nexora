@@ -131,9 +131,9 @@ Broadcast is a coordinator-only operation for fan-out announcements (e.g., "work
 | Mutual authentication | Pinned `pipeKey` certificates both directions; no fallback to unauthenticated sessions |
 | Encryption | TLS 1.3 mandatory; plaintext pipes impossible by construction (no `ws://`-style downgrade) |
 | Workspace scoping | A pipe is bound to exactly one exposed workspace; cross-workspace routing is rejected (`NXR-1002` variant) |
-| Credential firewall | Provider keys, `SecureKeyStore` aliases, and user secrets are never serializable into pipe payloads (enforced by DLP scan on outbound bodies, NFR-SEC-013 extended to pipes) |
+| Credential firewall | Provider keys, `SecureKeyStore` aliases, and user secrets are never serializable into pipe payloads (enforced by deterministic secret-material blocking on outbound payloads under NFR-SEC-013) |
 | Untrusted payloads | All inbound payloads wrapped as untrusted context segments (FR-CM-006); tool calls inside payloads validated against the registry before execution (TM-025) |
-| Authorization gate | Pipe delegation is evaluated by the existing PermissionModel scope hierarchy, acceptance mode, ASK approval transaction, explicit DENY, and audit contract; no local AI classifier is invoked (DEC-42) |
+| Authorization gate | Pipe delegation is evaluated by the existing PermissionModel scope hierarchy, acceptance mode, ASK approval transaction, explicit DENY, and audit contract; no local AI classifier is invoked under the standing DEC-44 rule; DEC-42 remains historical vocabulary |
 | Egress confinement | Pipe sockets connect only to the paired endpoint (NFR-SEC-012 network confinement applied to pipe clients); discovery sockets are mDNS-only |
 | Audit | Every pipe event → `permission_audit_log`-adjacent pipe audit stream (FR-TL015). The canonical `permission_audit_log` is non-evictable; a derived 90-day operational view may be surfaced for routine review but MUST NOT delete/mutate the source rows (see `security/PermissionModel.md` §Permission Audit Trail) |
 
@@ -174,7 +174,7 @@ There are no slash commands and no `/pipes` panel; the chat remains the single p
 
 | Phase | Deliverable |
 |-------|-------------|
-| 5 | Pipe transport hardening design; DLP scan hook into egress engine |
+| 5 | Pipe transport hardening design; deterministic secret-material blocking hook into the host egress engine |
 | 7 | Instance identity, pairing, same-machine + LAN discovery, cross-instance delegation (SA-1..SA-5 over pipes), broadcast routing, Settings → Pipes surface, TOOL-405..408 |
 | 8 | Pipe-provided marketplace capabilities (remote plugin/agents advertised via capability TXT records) |
 

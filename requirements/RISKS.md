@@ -20,9 +20,6 @@
 | RISK-010 | User data loss due to corruption or unintended deletion | Low | High | WAL journaling; encrypted backup/restore; undo for destructive operations; crash recovery tests | Data Lead |
 | RISK-011 | Multi-agent coordination deadlock | Medium | Medium | Timeout on delegation handoff; cycle detection in dependency graph; deadlock monitor coroutine | Agent Lead |
 | RISK-012 | Third-party library vulnerabilities (OkHttp, Room, etc.) | Medium | Medium | Dependabot / Renovate for auto-updates; lockfile auditing in CI; minimal dependency surface | Security Lead |
-
-
-
 | RISK-013 | GPL-2.0/3.0 license exposure from bundled Debian-slim rootfs in APK | Medium | High | Bundle rootfs as a data asset; include source offer in `licenses/`; provide in-app OSS attribution; legal review before Play Store submission | Legal/Product |
 | RISK-014 | Architecture-specific Full Environment delivery exceeds the DEC-38 80MB gate or device storage expectations | Medium | Medium | Use xz compression, ABI-specific packaging, Android App Bundles, per-ABI measurement, and installed-size monitoring | Build Lead |
 | RISK-015 | Rootfs extraction failure on devices with low free storage | Medium | High | Pre-flight storage check; clear user guidance; cleanup incomplete extraction state; support environment reset | Runtime Lead |

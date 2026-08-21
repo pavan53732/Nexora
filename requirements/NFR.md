@@ -31,8 +31,8 @@
 | NFR-REL-002 | Checkpoint resume | 100% state fidelity | Serialize full agent state to disk |
 | NFR-REL-003 | Error recovery | Automatic retry (configurable) | Exponential backoff, max 3 retries (attempt=0 is the first retry; 1 initial execution + 3 retries = 4 total executions maximum); each delay = `base × 2^attempt × random(0.5…1.5)` (jitter); retry across tool invocations, sub-agent delegation, and provider reconnects per [AUTONOMY_STABILITY.md §9.2](../specs/AUTONOMY_STABILITY.md#92-retry-policy) and [ADR-0009](../docs/adr/ADR-0009-Adaptive-Autonomy-And-Persistence.md) Decision #8. No maximum interval cap is imposed beyond the exponential formula. |
 | NFR-REL-004 | Data persistence | ACID-compliant | Room with WAL mode |
-| NFR-REL-005 | Graceful degradation | Degrade features, not crash | Alternate eligible cloud providers, cached responses, supported non-inference workspace operations, and read-only access |
-| NFR-REL-006 | Offline workspace mode | Read-only and supported local-data operations only | Local data remains available without network; agent inference, planning, embeddings, and provider-backed execution are unavailable |
+| NFR-REL-005 | Graceful degradation | Degrade features, not crash | Alternate eligible cloud providers, cached responses, supported non-inference workspace operations, and read-only access (DEC-44) |
+| NFR-REL-006 | Offline workspace mode | Read-only and supported local-data operations only | Local data remains available without network; agent inference, planning, embeddings, and provider-backed execution are unavailable under the standing DEC-44 cloud-only rule |
 | NFR-REL-007 | Backup/restore | Full workspace export/import | Encrypted archive format |
 | NFR-REL-008 | Data integrity | CRC/checksum verification | On every write to persistent storage |
 | NFR-REL-009 | Android background compliance | Foreground service type declared (API 34+); dataSync 6-hour cap (API 35+) handled via WorkManager handoff or user-initiated jobs; Doze-aware | Per [specs/BACKGROUND_EXECUTION.md](../specs/BACKGROUND_EXECUTION.md) §7 |

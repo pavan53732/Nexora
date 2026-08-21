@@ -64,7 +64,7 @@ A protocol, API, or SDK adapter MUST preserve `code`, `category`, `retryability`
 | NXR-1004 | Checkpoint restore failed | Server | Stored checkpoint data is corrupt or incompatible with current version | Fall back to last-known-good checkpoint; alert user |
 | NXR-1005 | Agent loop crash | Server | The main agent execution loop exited unexpectedly | Restart agent from last checkpoint; limit restarts to 3 |
 | NXR-1006 | Context overflow | Client | Accumulated context window exceeds the provider's token limit | Trigger automatic context pruning; warn user |
-| NXR-1007 | Token budget exceeded | Client | Operation consumed more tokens than the configured budget allows | Halt generation; present cost summary to user |
+| NXR-1007 | Technical token ceiling reached | Client | A technical request/session token ceiling was reached for correctness, liveness, or provider safety; this is not a user credit, cost quota, or financial execution gate under DEC-45 | Stop or degrade only as required by the existing technical ceiling; usage/cost information remains informational and must not be the reason for refusing an otherwise technically valid user operation |
 | NXR-1008 | Provider not configured | Client | No AI provider is set up for the requested capability | Prompt user to configure a provider in Settings |
 | NXR-1009 | Workspace not found | Client | Referenced workspace ID does not exist on disk | Offer to create or select an existing workspace |
 | NXR-1010 | Invalid configuration | Client | A settings value fails schema validation on load | Reset offending key to default; log warning |

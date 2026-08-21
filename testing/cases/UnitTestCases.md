@@ -30,7 +30,6 @@
 | UT-CONTEXT-001 | UT-CONTEXT | Reproduce immutable ContextSnapshot from segment hashes | Context | Planned | `evidence/unit/UT-CONTEXT-001/` | 2026-08-06 |
 | UT-CONTEXT-002 | UT-CONTEXT | Deduplicate retrieval while preserving source diversity | Context + Memory | Planned | `evidence/unit/UT-CONTEXT-002/` | 2026-08-06 |
 | UT-ROUTE-001 | UT-ROUTE | Rank eligible providers by hard constraints then policy score | Provider Layer | Planned | `evidence/unit/UT-ROUTE-001/` | 2026-08-06 |
-
 | UT-CONV-001 | UT-CONV | Validate immutable conversation checkpoint lifecycle state entry | Conversation/Session | Planned | `evidence/unit/UT-CONV-001/` | 2026-08-12 |
 | UT-CONV-002 | UT-CONV | Validate newer checkpoint supersedes without mutating prior checkpoint | Conversation/Session | Planned | `evidence/unit/UT-CONV-002/` | 2026-08-12 |
 | UT-CONV-003 | UT-CONV | Validate invalid transitions leave checkpoint state unchanged | Conversation/Session | Planned | `evidence/unit/UT-CONV-003/` | 2026-08-12 |

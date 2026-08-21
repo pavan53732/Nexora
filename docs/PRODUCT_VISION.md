@@ -134,7 +134,7 @@ The non-negotiable design principles are codified as invariant rules in
 [PRODUCT_PRINCIPLES.md](./PRODUCT_PRINCIPLES.md) (PP-001..PP-015) — this section is
 deliberately not duplicated here to avoid divergence. Highlights: plugin-first,
 sandboxed, extensible, observable, cloud-backed for AI inference, offline-capable for workspace access, Android-native, and agent-first
-(PP-001..PP-015).
+(PP-001..PP-015; active cloud-only and user token-boundary authority: DEC-44/DEC-45).
 
 ### Workspace-First Architecture
 

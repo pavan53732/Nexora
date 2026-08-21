@@ -74,13 +74,13 @@ Priority: File System, Terminal, Search, Workspace, Git, Network, Memory, Packag
 
 ## Phase 5 — AI Providers
 
-**Goal:** Provider abstraction + cloud/external providers.
+**Goal:** Provider abstraction + cloud/external providers under the standing DEC-44 cloud-only rule; user-facing usage/cost telemetry remains non-gating under DEC-45.
 
 OpenAI-compatible external APIs, Anthropic, Gemini, Groq, OpenRouter, and Custom external endpoints.
 
 - Typed sequenced inference events and exactly-one terminal contract (FR-P014/015)
 - Bounded backpressure, cancellation, reconnect, and stream lineage (FR-P016/017/019)
-- Capability/latency/privacy-aware ProviderRoutePlan with non-blocking provider-cost metadata or preference (FR-P018, DEC-25)
+- Capability/latency/privacy-aware ProviderRoutePlan with non-blocking provider-cost metadata or preference (FR-P018, DEC-25, DEC-45)
 - ProviderStreamLifecycle and adapter conformance suite
 - ReasoningPolicy, verifier/critic, redacted ReasoningSummary (FR-RN-009..012)
 - Reproducible model-aware ContextSnapshot (FR-CM-010..012)

@@ -181,9 +181,7 @@ or manage any local AI model or local AI inference runtime — no Ollama, LM Stu
 GGUF, TFLite, ONNX, or on-device model of any kind. All agent inference, planning,
 embeddings, routing, and provider-backed execution go through eligible cloud
 providers. A Custom endpoint is cloud/external only; a localhost, loopback,
-app-private, or on-device model endpoint is not an eligible provider. When no
-eligible cloud provider is reachable, the only permitted degradation path is
-read-only workspace access plus notification — never local inference.
+app-private, or on-device model endpoint is not an eligible provider. When no eligible cloud provider is reachable, the permitted degradation ladder is an alternate eligible cloud provider, then a cached prior result or supported non-inference workspace operation, then read-only workspace access plus notification — never local inference.
 
 - Sources: [DEC-41](../decisions/DEC-41-cloud-only-ai-provider-scope.md) · [DEC-42](../decisions/DEC-42-no-local-ai-models-and-classifier-boundary.md) · [DEC-44](../decisions/DEC-44-standing-cloud-only-ai-models.md) · [NFR-REL-005](../requirements/NFR.md) · [NFR-REL-006](../requirements/NFR.md) · [CONSTRAINTS → AI Providers](../requirements/CONSTRAINTS.md)
 

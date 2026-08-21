@@ -100,7 +100,7 @@
 | FR-P006 | Model selection from provider catalog | Must | 1 |
 | FR-P007 | Provider configuration (API key, endpoint, params) | Must | 0 |
 | FR-P008 | Automatic fallback on provider failure | Should | 3 |
-| FR-P009 | Per-session token usage tracking | Must | 2 |
+| FR-P009 | Per-session token usage tracking; usage and estimated cost remain informational and must not impose a user credit, spending, cost-quota, or token-budget execution gate under DEC-45 | Must | 2 |
 | FR-P010 | Side-by-side provider comparison | Should | 7 |
 | FR-P011 | Provider profiles — named, switchable configurations (API key, endpoint, model, streaming, params); create, edit, duplicate, delete, switch independently | Must | 1 |
 | FR-P012 | Per-workspace default provider profile — workspace settings bind a profile; agents route through the active profile | Must | 1 |
@@ -185,7 +185,6 @@
 | FR-U009 | In-app notification system | Should | 3 |
 | FR-U010 | Global search across workspaces, agents, tasks | Should | 4 |
 | FR-U011 | Chat is the single primary interaction surface — goal entry, streaming responses, tool-call cards, permission prompts, and results all live in the conversation | Must | 1 |
-
 | FR-S019 | Full Environment per workspace using bundled Debian-slim rootfs | Must | 3 |
 | FR-S020 | Bundled Debian-slim rootfs in APK assets with integrity verification (SHA-256 + signature) | Must | 3 |
 | FR-S021 | proot-based userland execution inside sandbox without root privileges | Must | 3 |

@@ -109,7 +109,7 @@ level. `AGENTS.md` (Rule 9) owns the agent-facing restatement.
 - `decisions/DEC-42-no-local-ai-models-and-classifier-boundary.md`
 - `decisions/DEC-39-gguf-execution-boundary.md` (historical, superseded)
 - `AGENTS.md` Rule 9
-- `docs/PRODUCT_PRINCIPLES.md` (PP-002, PP-014)
+- `docs/PRODUCT_PRINCIPLES.md` (PP-014, PP-016, PP-017)
 - `requirements/CONSTRAINTS.md`
 - `requirements/ASSUMPTIONS.md`
 - `specs/AI_PROVIDERS.md`

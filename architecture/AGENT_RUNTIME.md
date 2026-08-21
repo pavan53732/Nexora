@@ -370,6 +370,9 @@ sealed class AgentStep {
 ## Token Budgeting
 
 ```kotlin
+// Technical request/session ceilings for correctness, liveness, provider safety, and
+// resource protection. These are not user credits, spending quotas, or financial gates
+// under DEC-45; usage/cost telemetry remains informational.
 data class TokenBudget(
     val maxTokensPerRequest: Int = 4096,
     val maxTokensPerSession: Int = 100_000,
@@ -379,6 +382,8 @@ data class TokenBudget(
     fun remainingContextTokens(): Int =
         maxTokensPerRequest - reservedForResponse
 
+    // Exhaustion may stop or degrade execution only because a technical ceiling was
+    // reached; it must not be presented as user credit/token-budget refusal.
     fun isExhausted(): Boolean = usedTokens >= maxTokensPerSession
 }
 ```
