@@ -96,6 +96,13 @@
 - `NFR-REL-001`/`002`/`012` → durable checkpoint, resume fidelity, and exactly-once lineage/replay rules; validation `IT-LC-001..013/016..020` (Planned).
 - No S13 case is `VERIFIED`; all evidence paths are placeholders for `Planned` execution.
 
+## S13A — DEC-47 Network, Browser, and Guest-Package Policy
+- `FR-S014` → `security/SandboxPolicy.md` and `docs/SANDBOX_DEPTH.md`: host-mediated, mode-conditioned network admission; `AUTOPILOT` public destinations may default `network:http`/`network:websocket` to `ALLOW`, `ASSISTED` retains opt-in, direct sockets/inbound listeners and loopback/app-private endpoints remain blocked, and all egress is audited.
+- `NFR-SEC-013` → `security/SandboxPolicy.md` and `docs/SANDBOX_DEPTH.md`: configured credentials, API keys, and `SecureKeyStore` contents are blocked from unauthorized endpoints; general full-body policy scanning is not required; proxy bypass remains fail-closed.
+- Browser navigation/read-only extraction are permitted under existing untrusted-content and sandbox boundaries; credential entry and transaction execution on sensitive domains remain denied and audited through existing PermissionModel/Tool authorization.
+- Guest package managers may install from reachable registries without pre-approval, subject to existing network mediation, audit, process/storage/rootfs/quarantine/resource quotas; host-JVM Plugins remain under their existing review and lifecycle contracts.
+- Validation: `SEC-NET-001`, `SEC-SBX-001`, `SEC-PERM-041`, and `E2E-ESC-007` (all Planned; no implementation or executed evidence claimed).
+
 ## S14 — Typed Inference, Deep Reasoning, and Context Snapshots
 - `FR-P014`..`019` → Provider System + ProviderStreamLifecycle + Provider Protocol/API/SDK; validation `UT-STREAM-001..004`, `UT-ROUTE-001`, `IT-STREAM-001..008`, `E2E-STREAM-001..003` (Planned).
 - `FR-RN-009`..`012` → Context Management + Agent Runtime + Inference model; technical ReasoningPolicy ceilings and the DEC-25 no-credit-gating rule are projected through the model/spec chain; validation `UT-REASON-001..003`, `IT-REASON-001..004`, `E2E-REASON-001..002` (Planned).

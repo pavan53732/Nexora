@@ -81,8 +81,9 @@ Browser operation history MUST preserve the existing `toolCallId`, idempotency k
 data class BrowserNavigationRequest(
  val url: String,
  val timeoutMs: Long = 30_000,
- val blockImages: Boolean = true,
- val blockThirdPartyCookies: Boolean = true
+ val blockImages: Boolean = false,              // existing workspace preference; default off
+ val blockFonts: Boolean = false,               // existing workspace preference; default off
+ val blockThirdPartyResources: Boolean = false  // existing workspace preference; default off
 )
 ```
 
@@ -107,40 +108,36 @@ data class WebLink(val text: String, val url: String)
 
 To prevent prompt-injection attacks, data exfiltration, or sandbox escapes through web content, the bridge enforces the following security boundaries:
 
-- **Isolated Network Egress**: The host `WebView` is configured with a forced proxy to the workspace egress proxy (see `docs/SANDBOX_DEPTH.md` §2.4); it never opens direct guest sockets. The same proxy enforces per-workspace Allowed Domains, applies the `network:http` / `network:websocket` grant, runs outbound-body DLP (NFR-SEC-013), and logs every request (`FR-S014`). Guest-native browsers are unsupported; all WebView traffic is host-mediated, so native guest binaries cannot bypass the controls.
+- **Isolated Network Egress**: The host `WebView` is configured with a forced proxy to the workspace egress proxy (see `docs/SANDBOX_DEPTH.md` §2.4); it never opens direct guest sockets. The same proxy applies the existing mode-conditioned `network:http` / `network:websocket` admission, blocks configured secret material from unauthorized endpoints, and logs every request (`FR-S014`). In `AUTOPILOT`, public routable destinations do not require per-workspace Allowed-Domains enrollment; localhost, loopback, and app-private endpoints remain hard-blocked. Guest-native browsers are unsupported; all WebView traffic is host-mediated, so native guest binaries cannot bypass the controls.
 - **Data vs. Instruction Wrapping**: Text extracted from pages is tagged as untrusted, labeled with source context, and treated strictly as passive data inside the Context Builder (`FR-S015` / `FR-WS-005`), preventing malicious pages from hijacking the agent loop.
 - **No Java-Interface Injections**: The WebView instance MUST NOT expose any Java interfaces (`addJavascriptInterface`) to the web page. All data extraction is unidirectional via `evaluateJavascript` string evaluation.
 - **No Localhost Access**: Headless WebView requests attempting to connect to localhost, loopback addresses (`127.0.0.1`), or app-private database endpoints are immediately blocked.
-- **Image/Resource Blocking**: To minimize token costs, bandwidth, and battery drain, WebView settings default to blocking image loading, custom fonts, and third-party tracking scripts.
+- **Image/Resource Blocking**: Image loading, custom fonts, and third-party-resource blocking are existing per-workspace preferences and default to off. Token, bandwidth, and related cost information is informational only and never a gate under DEC-45.
 
 ---
 
-## 5.1 Blocked List & Isolation Warning (G3 — Added 2026-08-06)
+## 5.1 Sensitive-Domain Action Floor (DEC-47; narrows G3)
 
-> **Status:** CANONICAL blocked-list specification for browser automation (added G3 — 2026-08-06). 
-> **Verified research reference:** `aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03 (`Kimi Claw` pattern — sensitive accounts must not be automated). 
-> **Reference:** `security/SandboxPolicy.md` (§Blocked Domains & Sensitive Apps); `docs/DECISION_LOG.md` (`DL-023`); browser automation capability gap documented in `docs/DECISION_LOG.md` — blocked-list closes a security gap without redesign.
+> **Status:** CANONICAL sensitive-action specification selected by DEC-47.
+> **Reference:** `security/SandboxPolicy.md` (§Sensitive Domains and Restricted Action Classes); `docs/DECISION_LOG.md` (`DL-087`).
 
-### Blocked App Classes (UI Automation)
+### Sensitive App Action Classes (UI Automation)
 
-When `AgentType.BROWSER` (`architecture/MULTI_AGENT_SYSTEM.md`) attempts interaction with a blocked app class (`banking`, `payment`, `trading`, `insurance` — see `security/SandboxPolicy.md` §Blocked App Classes), the following isolation flow activates:
+When `AgentType.BROWSER` (`architecture/MULTI_AGENT_SYSTEM.md`) attempts credential entry or transaction execution on a sensitive app/domain class (`banking`, `payment`, `trading`, `crypto`, `insurance` — see `security/SandboxPolicy.md` §Sensitive Domains and Restricted Action Classes):
 
-1. **Sandbox denial** (`security/SandboxPolicy.md`): Interaction is denied by the canonical blocked-list authorization contract as `NXR-2003` with preserved subreason `CLASSIFIER_DENIAL`; no local classifier is invoked. This preserves the documented denial, audit, notification, isolation, and continuation behavior.
-2. **Audit entry** (`FR-TL015`): Severity `CRITICAL`; fields: `workspaceId`, `agentId`, `blockedAppClass`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), `isolationWarning` (`true`), `userActionRequired` (`true`).
-3. **User notification** (`specs/BACKGROUND_EXECUTION.md` §4 — `agent_error` notification type; `NotificationHelper` — `agent_error` channel): Message includes isolation instruction (`"Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."`).
-4. **Continuation status:** The blocked-list rule remains in effect. There is no domain/app-specific `ALLOW` override and no bypass mechanism. Resolving isolation settings does not resume browser automation after this denial. A continuation, if needed, is a new operation/task initiated in the properly isolated workspace/profile. This rule does not create or reinterpret a TaskLifecycle state or transition.
+1. **Existing authorization denies.** Navigation and read-only extraction are not denied solely by the domain. Credential entry and transaction execution are denied through existing PermissionModel/Tool authorization; no local classifier is invoked.
+2. **Audit entry** (`FR-TL015`) records `workspaceId`, `agentId`, sensitive domain/app, timestamp, attempted action, and denial reason.
+3. **User notification** uses the existing `agent_error` boundary when a user-visible explanation is required.
+4. **Continuation status:** The denied action does not execute or automatically resume. A later attempt remains subject to existing authorization, approval, audit, and lifecycle contracts. This rule does not create or reinterpret a TaskLifecycle state or transition.
 
-### Blocked High-Risk Domains (Browser Navigation)
+### Public Navigation and Sensitive-Domain Actions
 
-When `browser_open` (`TOOL-245`) attempts to load a blocked domain (`*.bank*`, `*.pay*`, `*.crypto*`, `*.insurance*` — see `security/SandboxPolicy.md` §Blocked Domains):
+`browser_open` (`TOOL-245`) MAY load any publicly routable URL without a domain allowlist check under the existing effective network and sandbox rules. `WebView.loadUrl()` remains blocked for localhost, loopback, and app-private endpoints. Sensitive-domain restrictions apply to credential entry and transaction execution performed by `browser_type`, `browser_click`, `browser_evaluate`, or equivalent actions, not to navigation or read-only extraction.
 
-- `WebView.loadUrl()` is intercepted by the sandbox manager (`ToolManager` — `executeTool()`); the URL is checked against the blocked-list (`security/SandboxPolicy.md` §Blocked Domains); if blocked, `execute()` returns `ToolResult.Error` (`NXR-2003`) immediately (before `WebView.loadUrl()` is called); the `EventBus` publishes `AgentError` (`protocols/Agent-Protocol.md` — `AgentError` event); the blocked-list rule remains in effect; the audit log records `CRITICAL` severity; the user receives `agent_error` notification with isolation instruction.
+### Evidence Classification (DEC-47)
 
-### Evidence Classification (G3 — Per Discovery)
-
-- `VERIFIED` (`Kimi Claw` / `MiniMax Hailuo`): Sensitive account isolation required; verified by public sources (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03).
-- `ENGINEERING INFERENCE` (Domain-pattern blocklist): Standard web-security practice; `security/SandboxPolicy.md` §Network Policy already defines `DENY` default; blocked-list extends existing denial mechanism (`NXR-2003`) — no new mechanism.
-- `DECIDED` (Blocked-list denial has no domain/app-specific authorization override or bypass. Isolation does not resume the blocked operation; any continuation is a new operation/task in the properly isolated workspace/profile. No TaskLifecycle state or transition is created or reinterpreted.)
+- `DECIDED`: Public navigation and read-only extraction are allowed subject to existing network, permission, sandbox, loopback, app-private, and untrusted-content floors.
+- `DECIDED`: Credential entry and transaction execution on sensitive domains remain denied, audited, and non-resumable through existing authorization and lifecycle contracts. No new browser state, error code, permission scope, or bypass is created.
 
 ---
 

@@ -154,6 +154,8 @@ apt install -y jq ffmpeg
 
 Package downloads and installed artifacts count toward workspace quota. Package cache management should minimize retained archive size where possible.
 
+Under DEC-47, `pip`, `npm`, `gradle`/`maven`, `apt`, and equivalent guest package managers may install from any reachable registry without pre-approval. Every installation remains audited and subject to existing network mediation, process limits, storage quotas, rootfs/overlay integrity, quarantine, and Android resource controls. This guest-package rule does not apply to host-JVM Plugin installation: Plugins remain subject to manifest declaration, user review, Plugin lifecycle, integrity, capability, and cleanup contracts because they execute native-level code in the app process.
+
 ## 10. Performance Characteristics
 
 | Metric | Target |

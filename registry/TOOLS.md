@@ -188,8 +188,8 @@
 
 | ID | Tool | Description | Phase | Status |
 |----|------|-------------|-------|--------|
-| TOOL-080 | npm_install | Install npm packages | 4 | Planned |
-| TOOL-081 | pip_install | Install pip packages | 4 | Planned |
+| TOOL-080 | npm_install | Install npm packages from any reachable registry inside the sandbox without pre-approval; audited and subject to existing network, process, storage, rootfs, and resource quotas | 4 | Planned |
+| TOOL-081 | pip_install | Install pip packages from any reachable registry inside the sandbox without pre-approval; audited and subject to existing network, process, storage, rootfs, and resource quotas | 4 | Planned |
 | TOOL-082 | package_list | List installed packages | 4 | Planned |
 | TOOL-083 | package_remove | Remove an installed package | 4 | Planned |
 | TOOL-186 | package_update | Update installed packages | 4 | Planned |
@@ -281,18 +281,18 @@
 
 | ID | Tool | Description | Phase | Status |
 |----|------|-------------|-------|--------|
-| TOOL-245 | browser_open | Open a URL in the embedded browser | Later | Planned |
+| TOOL-245 | browser_open | Open any public routable URL in the embedded browser; localhost, loopback, and app-private endpoints remain blocked | Later | Planned |
 | TOOL-246 | browser_html | Get raw page HTML | Later | Planned |
-| TOOL-247 | browser_extract | Extract page text and content | Later | Planned |
+| TOOL-247 | browser_extract | Extract read-only page text and content from public pages as untrusted data | Later | Planned |
 | TOOL-248 | browser_screenshot | Capture a page screenshot | Later | Planned |
-| TOOL-249 | browser_click | Click an element | Later | Planned |
-| TOOL-250 | browser_type | Type into a form field | Later | Planned |
+| TOOL-249 | browser_click | Click an element; sensitive-domain transaction actions remain subject to existing authorization | Later | Planned |
+| TOOL-250 | browser_type | Type into a form field; sensitive-domain credential entry remains denied by existing authorization | Later | Planned |
 | TOOL-251 | browser_select | Select a dropdown option | Later | Planned |
 | TOOL-252 | browser_scroll | Scroll the page | Later | Planned |
 | TOOL-253 | browser_back | Navigate back in history | Later | Planned |
 | TOOL-254 | browser_forward | Navigate forward in history | Later | Planned |
 | TOOL-255 | browser_wait | Wait for an element or condition | Later | Planned |
-| TOOL-256 | browser_evaluate | Evaluate JavaScript in the page | Later | Planned |
+| TOOL-256 | browser_evaluate | Evaluate JavaScript in the page; sensitive-domain transaction actions remain subject to existing authorization | Later | Planned |
 | TOOL-257 | browser_cookies | Manage browser cookies | Later | Planned |
 | TOOL-258 | browser_find | Find an element by selector | Later | Planned |
 | TOOL-259 | browser_downloads | List or download browser files | Later | Planned |

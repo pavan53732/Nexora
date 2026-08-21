@@ -41,8 +41,8 @@ Nexora enforces strict security boundaries. The AI never touches the host system
 | `sandbox:read` | Read files inside sandbox | allow |
 | `sandbox:write` | Write/modify files inside sandbox | allow |
 | `sandbox:execute` | Execute commands in sandbox | allow |
-| `network:http` | Make HTTP/HTTPS requests | ask |
-| `network:websocket` | Open WebSocket connections | ask |
+| `network:http` | Make HTTP/HTTPS requests | ask in base/`ASSISTED`; `AUTOPILOT` may allow public routable destinations under existing PermissionModel gates |
+| `network:websocket` | Open WebSocket connections | ask in base/`ASSISTED`; `AUTOPILOT` may allow public routable destinations under existing PermissionModel gates |
 | `device:camera` | Access device camera | deny |
 | `device:storage` | Access device external storage | deny |
 | `device:notifications` | Send system notifications | ask |

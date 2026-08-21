@@ -91,7 +91,7 @@ Workspace (primary entity)
       "network_allowed": true
     },
     "tool_permissions": {
-      "network:http": "ask",
+      "network:http": "ask (base/ASSISTED); AUTOPILOT public destinations may ALLOW under PermissionModel",
       "sandbox:write": "allow",
       "device:camera": "deny"
     }

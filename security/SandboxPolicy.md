@@ -63,12 +63,14 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
 
 | Aspect | Rule |
 |--------|------|
-| **Default** | All outbound connections denied unless `network:http` or `network:websocket` is granted |
-| **Whitelist** | When granted, only HTTPS (port 443) is allowed; HTTP is blocked unless explicitly opted in per-domain |
+| **Default** | In an `AUTOPILOT` workspace, `network:http` and `network:websocket` default to `ALLOW` for public, routable destinations when no higher-priority restriction applies; `ASSISTED` retains the existing opt-in grant behavior |
+| **Destination scope** | No per-workspace Allowed-Domains enrollment is required for the `AUTOPILOT` public-destination default; localhost, loopback, app-private, and other existing higher-priority restrictions remain blocked |
+| **Transport** | HTTP port 80 is permitted under the applicable effective mode and grant; HTTPS-only is not an active requirement for the `AUTOPILOT` public-destination default |
 | **DNS** | DNS resolution restricted to system DNS resolver; no custom DNS to prevent DNS exfiltration |
 | **No inbound** | Sandbox processes never open listening sockets |
-| **Egress enforcement boundary** | All guest egress is forced through the host-side workspace egress proxy (`docs/SANDBOX_DEPTH.md` §2.4). proot is launched with `http_proxy`/`https_proxy`/`all_proxy` set to `127.0.0.1:{perWorkspacePort}`; guest processes cannot create direct outbound sockets. The proxy — not an in-guest interceptor — is the sole authority for allowlist, DLP, audit, and grant enforcement |
-| **Encrypted egress** | For inspectable DLP the proxy terminates guest TLS with a workspace-scoped CA (private key in `SecureKeyStore`, never exported to the guest) and re-encrypts to the real destination. Pinned/foreign-certificate traffic or any attempt to bypass the proxy is denied — fail-closed, no silent path |
+| **Egress enforcement boundary** | All guest egress is forced through the host-side workspace egress proxy (`docs/SANDBOX_DEPTH.md` §2.4). proot is launched with `http_proxy`/`https_proxy`/`all_proxy` set to `127.0.0.1:{perWorkspacePort}`; guest processes cannot create direct outbound sockets. The proxy — not an in-guest interceptor — is the sole authority for mode-conditioned admission, secret-material blocking, audit, and grant enforcement |
+| **Secret-material protection** | Configured credentials, API keys, and `SecureKeyStore` contents are blocked from transmission to any endpoint except their declared service. The proxy may terminate guest TLS with a workspace-scoped CA (private key in `SecureKeyStore`, never exported to the guest) to enforce this rule; no general full-body policy scan is required |
+| **Encrypted egress** | Pinned/foreign-certificate traffic or any attempt to bypass the proxy is denied — fail-closed, with no silent path |
 | **Provider & pipe clients** | Host-side provider HTTP clients and pipe transports are *not* guest processes; they remain host-managed and confined by `NFR-SEC-012` / `NFR-SEC-014`. Their request bodies are scanned by the DLP engine before transport encryption, so they do not traverse the guest egress proxy |
 
 ## 4. Process Restrictions
@@ -123,45 +125,43 @@ Plugins execute inside the calling workspace's sandbox. A plugin receives the sa
 | Resource limit exceeded | Graceful termination with partial output; `NXR-7xxx` error returned to agent |
 | Repeated violations (3+ in 1 hour) | Workspace locked to read-only; user must manually unlock via Settings |
 
-## 11. Blocked Domains & Sensitive App Classes (G3 — Added 2026-08-06)
+## 11. Sensitive Domains & Restricted Action Classes (DEC-47; narrows G3)
 
-> **Status:** CANONICAL blocked-list specification (added G3 — 2026-08-06).  
-> **Verified research reference:** `aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03 (`Kimi Claw` pattern: sensitive accounts must be isolated to prevent fraud/regulatory exposure).  
-> **Purpose:** Browser automation (`specs/BROWSER.md`) and any UI-based agent interaction (`AgentType.BROWSER` — `architecture/MULTI_AGENT_SYSTEM.md`) must not interact with banking, payment, trading, or insurance interfaces. The blocked-list protects both the user (accidental exposure of sensitive accounts) and the agent (regulatory/fraud liability).  
+> **Status:** CANONICAL sensitive-action specification selected by DEC-47.
+> **Purpose:** Browser and UI automation may navigate and perform read-only research on any domain subject to the existing network, permission, sandbox, and untrusted-content contracts. On sensitive banking, payment, trading, cryptocurrency, and insurance domains, credential entry and transaction execution remain denied and audited.
 
-### Blocked App Classes (UI/Browser Automation)
+### Sensitive App Action Classes (UI/Browser Automation)
 
 | Class | Example Apps / Services | Block Action | Evidence Classification |
 |-------|------------------------|--------------|------------------------|
-| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | Deny interaction through the canonical blocked-list authorization contract (`NXR-2003` / `CLASSIFIER_DENIAL` compatibility outcome) + audit log (`FR-TL015` — `CRITICAL` severity) + user notification (`agent_error`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`). No local classifier is invoked. | `VERIFIED` (`aihackers.net` 2026-07-03; `digitalapplied.com` 2026-07-03) |
-| Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Same (`NXR-2003` / `CLASSIFIER_DENIAL` compatibility outcome; deny interaction + audit + isolation warning; no local classifier invocation) | `VERIFIED` (same sources) |
-| Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Same (`NXR-2003` / `CLASSIFIER_DENIAL` compatibility outcome; deny interaction + audit + isolation warning; no local classifier invocation) | `VERIFIED` (same sources) |
-| Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Same (`NXR-2003` / `CLASSIFIER_DENIAL` compatibility outcome; deny interaction + audit + isolation warning; no local classifier invocation) | `VERIFIED` (same sources) |
+| Banking | `Bank of America`, `Chase Mobile`, `Wells Fargo`, `HSBC`, `Deutsche Bank` | Deny credential entry and transaction execution through existing PermissionModel/Tool authorization and audit contracts; read-only navigation and extraction are allowed. No local classifier is invoked. | `DECIDED` (DEC-47) |
+| Payment / Wallet | `PayPal`, `Venmo`, `Apple Pay`, `Google Pay`, `Stripe Dashboard` | Deny credential entry and transaction execution through existing PermissionModel/Tool authorization and audit contracts; read-only navigation and extraction are allowed. No local classifier is invoked. | `DECIDED` (DEC-47) |
+| Trading / Investment | `Robinhood`, `E*TRADE`, `Fidelity`, `Charles Schwab`, `Bloomberg Terminal` | Deny credential entry and transaction execution through existing PermissionModel/Tool authorization and audit contracts; read-only navigation and extraction are allowed. No local classifier is invoked. | `DECIDED` (DEC-47) |
+| Insurance | `Geico`, `Progressive`, `Allstate`, `State Farm` | Deny credential entry and transaction execution through existing PermissionModel/Tool authorization and audit contracts; read-only navigation and extraction are allowed. No local classifier is invoked. | `DECIDED` (DEC-47) |
 
-### Blocked High-Risk Domains (Network Egress / Browser)
+### Sensitive Domains and Restricted Action Classes (Network Egress / Browser)
 
-| Domain Pattern | Category | Block Action | Evidence Classification |
-|---------------|----------|------------|------------------------|
-| `*.bank*`, `*.banking*`, `*.pay*` (subdomain-level) | Banking / Payment | Network connection denied (`NXR-2003`) + sandbox audit (`FR-TL015`) + isolation warning (`specs/BROWSER.md` — `BlockedListWarning`) | `ENGINEERING INFERENCE` (domain-pattern blocklists — standard web-security practice; `security/SandboxPolicy.md` §Network Policy already defines `DENY` default for `network:http` unless granted; blocking specific domains is a documentation-level extension, not a new mechanism) |
-| `*.crypto*`, `*.bitcoin*`, `*.blockchain*` | Cryptocurrency / High-risk trading | Same (`NXR-2003` + audit + isolation warning) | `ENGINEERING INFERENCE` (same rationale) |
-| `*.insurance*`, `*.claims*` | Insurance | Same (`NXR-2003` + audit + isolation warning) | `ENGINEERING INFERENCE` (same rationale) |
+| Domain Pattern | Category | Restricted action classes | Evidence Classification |
+|---------------|----------|--------------------------|------------------------|
+| `*.bank*`, `*.banking*`, `*.pay*` (subdomain-level) | Banking / Payment | Credential entry and transaction execution are denied and audited; navigation and read-only extraction are allowed | `DECIDED` (DEC-47) |
+| `*.crypto*`, `*.bitcoin*`, `*.blockchain*` | Cryptocurrency / High-risk trading | Credential entry and transaction execution are denied and audited; navigation and read-only extraction are allowed | `DECIDED` (DEC-47) |
+| `*.insurance*`, `*.claims*` | Insurance | Credential entry and transaction execution are denied and audited; navigation and read-only extraction are allowed | `DECIDED` (DEC-47) |
 
-### Isolation Warning (`specs/BROWSER.md` — Added G3)
+### Sensitive Action Denial and Audit (`specs/BROWSER.md`)
 
-When browser automation (`AgentType.BROWSER`) attempts to navigate to a blocked domain or interact with a blocked app class:
+When browser or UI automation attempts credential entry or transaction execution on a sensitive domain/app class:
 
-1. **Sandbox denies.** Network connections to blocked domains return `NXR-2003`. Filesystem/path escape is mapped by execution origin: Tool violations return `NXR-2009`; Plugin violations return `NXR-6008`. Blocked-app interaction is denied by the canonical blocked-list authorization contract as `NXR-2003` with preserved subreason `CLASSIFIER_DENIAL`; no local classifier is invoked, and denial behavior does not create an override or bypass.
-2. **Audit log entry** (`FR-TL015`) with severity `CRITICAL`: includes `workspaceId`, `agentId`, `blockedDomainOrApp`, `timestamp`, `attemptedAction` (`navigate`/`click`/`fill`/`extract`), and `isolationWarning` (`true`).
-3. **User notification** (`agent_error` — `NotificationHelper`) with isolation instruction: "Sensitive account detected. Please isolate this account in a separate workspace (`FR-W005`) with a separate provider profile (`FR-P011`) before attempting automation. See `docs/DECISION_LOG.md` (`DL-023`)."
-4. **Continuation status:** The blocked-list rule remains in effect. There is no domain/app-specific `ALLOW` override and no bypass mechanism. Resolving isolation settings does not resume the blocked operation. A continuation, if needed, is a new operation/task initiated in the properly isolated workspace/profile. This rule does not create or reinterpret a TaskLifecycle state or transition.
+1. **Existing authorization denies.** Navigation and read-only extraction are not denied solely by the domain. Credential entry and transaction execution are denied through existing PermissionModel/Tool authorization; no local classifier is invoked.
+2. **Audit log entry** (`FR-TL015`) records `workspaceId`, `agentId`, sensitive domain/app, timestamp, attempted action, and denial reason.
+3. **User notification** uses the existing `agent_error` boundary when a user-visible explanation is required.
+4. **Continuation status:** The denied action does not execute or automatically resume. A later attempt remains subject to existing authorization, approval, audit, and lifecycle contracts. This rule does not create or reinterpret a TaskLifecycle state or transition.
 
-**Traceability (G3 — Documentation Updates Only):**
-- `security/SandboxPolicy.md`: Updated (§Blocked Domains and Sensitive Apps — above).
-- `specs/BROWSER.md`: Updated (`BlockedListWarning` section — isolation instruction + audit + notification reference).
-- `FR.md`: References preserved (`FR-S014` network egress policy; `FR-S015` quarantine; `FR-TL015` audit trail; `FR-W001` workspace isolation; `FR-P011` provider profile isolation).
-- `docs/DECISION_LOG.md`: `DL-023` (see above) logs the decision with evidence (`Kimi Claw` pattern — `VERIFIED` research; domain-pattern blocklist — `ENGINEERING INFERENCE`).
-- `docs/REQUIREMENT_COVERAGE_LEDGER.md`: No new `FR-` / `NFR-` IDs added (G3 extends existing `FR-S014`, `FR-S015`, `FR-TL015` — no new architecture; documentation clarification of existing sandbox/network rules).
-- `docs/TRACEABILITY.md`: Not updated (no new contract — existing `SandboxPolicy.md` and `BROWSER.md` contracts extended with blocked-list; no new validation case needed — `SEC-SBX-001` covers sandbox violations; blocked-list is a documentation-level specification of existing denial behavior).
+**Traceability (DEC-47 documentation update):**
+- `security/SandboxPolicy.md`: DEC-47 mode-conditioned network defaults, secret-material blocking, and sensitive-domain action floor.
+- `specs/BROWSER.md`: free public navigation, resource preferences, loopback floors, untrusted-content wrapping, and restricted sensitive actions.
+- `requirements/FR.md`: FR-S014 remains the network-policy owner.
+- `docs/DECISION_LOG.md`: DL-087 records DEC-47.
+- `docs/REQUIREMENT_COVERAGE_LEDGER.md` and `docs/TRACEABILITY.md`: existing FR-S014/FR-S015/FR-TL015 mappings and security/browser validation projections are synchronized.
 
 **Phase mapping:** `Phase 3` (`security/SandboxPolicy.md` — sandbox security is Phase 3 per `docs/ROADMAP.md`); `Phase 4` (`specs/BROWSER.md` — browser automation is Phase 4); no phase change required (documentation update to existing specs).
 

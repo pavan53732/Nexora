@@ -110,7 +110,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-S011` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S012` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S013` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
-| `FR-S014` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
+| `FR-S014` | `requirements/FR.md` | MAPPED | Sandbox + Browser + Security | `security/SandboxPolicy.md` + `specs/BROWSER.md` + `docs/SANDBOX_DEPTH.md` | `SEC-NET-001`; `SEC-SBX-001`; `E2E-ESC-007` | `evidence/security/SEC-NET-001/`; `evidence/security/SEC-SBX-001/`; `evidence/e2e/E2E-ESC-007/` |
 | `FR-S015` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
 | `FR-S016` | `requirements/FR.md` | MAPPED | Security + Autonomy | `security/PermissionModel.md` + `specs/AUTONOMY_STABILITY.md` | `SEC-PERM-042`; `UT-AS-005` | `evidence/security/SEC-PERM-042/`; `evidence/unit/UT-AS-005/` |
 | `FR-S017` | `requirements/FR.md` | MAPPED | Sandbox | `architecture/SANDBOX.md` | `SEC-SBX-001` | `evidence/security/SEC-SBX-001/` |
@@ -293,7 +293,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-SEC-010` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
 | `NFR-SEC-011` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
 | `NFR-SEC-012` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
-| `NFR-SEC-013` | `requirements/NFR.md` | MAPPED | Security | `security/SandboxPolicy.md` | `SEC-PERM-001` | `evidence/security/SEC-PERM-001/` |
+| `NFR-SEC-013` | `requirements/NFR.md` | MAPPED | Security + Sandbox | `security/SandboxPolicy.md` + `docs/SANDBOX_DEPTH.md` | `SEC-NET-001`; `SEC-SECRET-001`; `SEC-SBX-001` | `evidence/security/SEC-NET-001/`; `evidence/security/SEC-SECRET-001/`; `evidence/security/SEC-SBX-001/` |
 | `NFR-SEC-014` | `requirements/NFR.md` | MAPPED | Security | `specs/PIPES.md` | `SEC-NET-001` | `evidence/security/SEC-NET-001/` |
 | `NFR-SEC-015` | `requirements/NFR.md` | MAPPED | Security + Context | `architecture/SECURITY_MODEL.md` | `SEC-STREAM-005` | `evidence/security/SEC-STREAM-005/` |
 | `NFR-REL-010` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |

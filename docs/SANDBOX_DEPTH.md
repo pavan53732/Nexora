@@ -58,7 +58,7 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
   workspace); restore is atomic (write-new + swap) and is an audited, `ASK`-gated,
   irreversible-until-next-snapshot operation. NFR-REL-010.
 
-### 2.4 Network Egress Policy Engine — deny-by-default, fail-closed (FR-S014)
+### 2.4 Network Egress Policy Engine — host-mediated, mode-conditioned, fail-closed (FR-S014)
 - **What:** All sandbox network traffic is **enforced at the boundary**, not merely
   observed. Nexora runs a dedicated **egress proxy** (host-side, not a guest
   `VPNService`) bound to `127.0.0.1:{perWorkspacePort}`. The sandbox is configured so
@@ -67,27 +67,30 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
   the Android `VpnService`/packet-filter exclusion is used only to *block* raw guest
   sockets, never to tunnel them. Every guest connection (curl, wget, pip, npm, Python,
   Node, apt, the WebView bridge) is forced through that proxy.
-- **Proxy responsibilities:** enforce per-workspace **domain allowlists**, apply the
-  `network:http` / `network:websocket` permission grant, enforce per-task **time
-  windows** (network enabled only while a task runs), write an egress log (host, bytes,
-  duration, matched rule), and run the **DLP scan of outbound bodies** (NFR-SEC-013).
-- **Encrypted egress (HTTPS):** for inspectable DLP, the proxy terminates guest TLS
-  using a workspace-scoped CA whose private key lives in `SecureKeyStore` and is *never*
-  exported to the guest; the proxy re-encrypts to the real destination over the host
-  network stack. Guest traffic carrying a pinned/foreign certificate (or refusing the
-  workspace CA) is **denied** — there is no silent bypass path. This is the only
-  approved egress route; direct socket creation from guest processes fails closed.
+- **Proxy responsibilities:** apply the effective mode-conditioned `network:http` /
+  `network:websocket` admission; in `AUTOPILOT`, public routable destinations do not
+  require per-workspace Allowed-Domains enrollment, while `ASSISTED` retains opt-in
+  grant behavior; enforce per-task **time windows** (network enabled only while a task
+  runs); write an egress log (host, bytes, duration, matched rule); and block configured
+  secret material from unauthorized endpoints. General full-body policy scanning is not
+  required under DEC-47.
+- **Encrypted egress:** the proxy may terminate guest TLS using a workspace-scoped CA
+  whose private key lives in `SecureKeyStore` and is *never* exported to the guest when
+  needed to block configured secret material. Guest traffic carrying a pinned/foreign
+  certificate (or refusing the workspace CA) is **denied** — there is no silent bypass
+  path. This is the only approved egress route; direct socket creation from guest
+  processes fails closed.
 - **WebView bridge:** `specs/BROWSER.md` routes through the *same* proxy via a forced
   host proxy configuration; the WebView does not perform direct guest networking.
 - **Tool:** `sandbox_network_rules` (TOOL-392).
-- **Why:** Baseline policy is "HTTPS-only + permission gate"; depth adds *enforced,
-  time-boxed, per-workspace* egress so an autonomous agent can safely browse/API-call
-  without a blanket network grant, and so native guest binaries cannot evade the
-  OkHttp-level controls.
-- **Enforcement:** deny-by-default; allowlist entries require `network:http` grant;
-  every egress event enters the audit trail (FR-TL015); DLP scan of outbound bodies
-  (NFR-SEC-013); socket-level enforcement validated by `SEC-NET-001` (proxy allowlist +
-  direct-socket-denial + TLS-termination DLP).
+- **Why:** DEC-47 preserves enforced, time-boxed, host-mediated egress so an
+  autonomous agent can browse/API-call without direct guest sockets. `AUTOPILOT`
+  public-destination admission is broader, but loopback/app-private floors, quotas,
+  audit, secret-material blocking, and bypass denial remain active.
+- **Enforcement:** effective mode-conditioned network admission; every egress event
+  enters the audit trail (FR-TL015); configured secret material is blocked from
+  unauthorized endpoints; socket-level enforcement remains validated by `SEC-NET-001`
+  (proxy admission + direct-socket denial + secret-material protection).
 
 ### 2.5 Quarantine & Content Scanning (FR-S015)
 - **What:** Files fetched from the network (downloads, browser plugin output) land in
@@ -141,7 +144,8 @@ NFR-SEC-013 / NFR-REL-010; new tools are TOOL-387…TOOL-393.
 - **What:** Untrusted content (web pages, downloaded files, user-provided docs) is
   wrapped in **labeled context segments** and injected as *data*, never as
   instructions; tool calls from untrusted content are validated against the tool
-  registry (extends TM-025); outbound DLP strips secrets from requests (NFR-SEC-013).
+  registry (extends TM-025); outbound secret-material blocking remains active under
+  NFR-SEC-013, while page content remains untrusted data.
 - **Why:** Autonomous agents that browse the web *will* meet hostile pages. The
   sandbox must guarantee content cannot hijack the agent.
 - **Enforcement:** context labeling at the Context Builder; egress scanning at the

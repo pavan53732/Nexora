@@ -26,8 +26,8 @@ Every action in Nexora—tool invocation, network call, device access—requires
 | `sandbox:read` | Read files inside the workspace sandbox | `ALLOW` | Internal storage (own) |
 | `sandbox:write` | Write/modify/delete files inside the workspace sandbox | `ALLOW` | Internal storage (own) |
 | `sandbox:execute` | Execute commands or scripts within the sandbox | `ALLOW` | N/A (managed by sandbox) |
-| `network:http` | Make outbound HTTP/HTTPS requests | `ASK` | `INTERNET` |
-| `network:websocket` | Open persistent WebSocket connections | `ASK` | `INTERNET` |
+| `network:http` | Make outbound HTTP/HTTPS requests | `ASK` in base/`ASSISTED`; mode-conditioned `ALLOW` in `AUTOPILOT` for public routable destinations when no higher-priority restriction applies | `INTERNET` |
+| `network:websocket` | Open persistent WebSocket connections | `ASK` in base/`ASSISTED`; mode-conditioned `ALLOW` in `AUTOPILOT` for public routable destinations when no higher-priority restriction applies | `INTERNET` |
 | `device:camera` | Access the device camera stream | `DENY` | `CAMERA` |
 | `device:microphone` | Capture microphone audio input (e.g., terminal voice input, real-time transcription) | `DENY` | `RECORD_AUDIO` |
 | `device:storage` | Access shared/external storage (`/sdcard`) | `DENY` | `READ/WRITE_EXTERNAL_STORAGE` |
@@ -60,7 +60,7 @@ Resolution order — first match wins:
 3. **Global policy** — defined in app Settings, applies to all workspaces.
 4. **Scope default** — the scope's own `default` from the table above (no tool-level policy layer exists; tools declare required scopes which feed into the agent/workspace/global resolution).
 
-If no layer defines a decision, the scope's **default** (table above) is used.
+If no layer defines a decision, the scope's **default** (table above) is used. For `network:http` and `network:websocket`, DEC-47 applies the existing FR-S016 effective autonomy mode to that default: `AUTOPILOT` may use `ALLOW` for public routable destinations, while `ASSISTED` retains opt-in `ASK` behavior. Localhost, loopback, app-private, high-risk, denied, and otherwise restricted destinations remain governed by the existing higher-priority rules.
 
 ## Task-Scoped Execution Capability Escalation
 
