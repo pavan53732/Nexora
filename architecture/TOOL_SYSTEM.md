@@ -143,8 +143,6 @@ data class ToolMetadata(
 | 16 | **Memory** | store_memory, recall_memory, search_memory, list_memories | 6 |
 | 17 | **AI** | complete, embed, image_generate, image_analyze | 5 |
 | 18 | **Android Device** | read_contacts, send_notification, access_camera, device_audio_stream, device_camera_stream | Later (G5 — optional: real-time streaming `device_camera_stream` `TOOL-403`, `device_audio_stream` `TOOL-404`; default `DENY`; `Streaming` flag `✓`; `FR-S016` `Manual`/`Assisted` mode required) |
-
-> **Reserved tool IDs:** `TOOL-403` (`device_camera_stream`) and `TOOL-404` (`device_audio_stream`) are reserved for real-time device streaming (G5 research); they must not be reused for other tools. Registry skips `TOOL-403` and `TOOL-404` pending implementation.
 | 19 | **Project Management** | create_task, update_task, list_tasks, track_progress | Later |
 | 20 | **Security** | check_permissions, encrypt_file, decrypt_file, scan_vulnerabilities | Later |
 | 21 | **Observability** | get_logs, get_metrics, get_trace, export_diagnostics | Later |
@@ -155,6 +153,8 @@ data class ToolMetadata(
 | 26 | **Skills** | skill_list, skill_acquire (skills are first-class expertise units — ADR-0007; these tools manage them) | 4 |
 | 27 | **MCP Integration** | mcp_connect_stdio, mcp_connect_http, mcp_list_caps, mcp_call_tool, mcp_read_resource, mcp_get_prompt | 5 |
 | 28 | **Project Introspection** | introspect_api, introspect_database, introspect_config, introspect_build, introspect_ui, introspect_domain, introspect_infrastructure — pre-flight readers that scan the workspace and populate ProjectContext before planning (FR-CM-009, Path C) | 4 |
+
+> **Reserved tool IDs:** `TOOL-403` (`device_camera_stream`) and `TOOL-404` (`device_audio_stream`) are reserved for real-time device streaming (G5 research); they must not be reused for other tools. Registry skips `TOOL-403` and `TOOL-404` pending implementation.
 
 > **Full catalog:** [registry/TOOLS.md](../registry/TOOLS.md) is the authoritative
 > registry of every tool — **350 tools** (authoritative count in [registry/TOOLS.md](../registry/TOOLS.md)) with stable `TOOL-###` IDs, descriptions, and

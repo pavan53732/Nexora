@@ -9,7 +9,7 @@
 
 ## Context
 
-The Lovable → Nexora opportunity analysis and six follow-up investigations identified useful operational patterns, but the resulting decision must be Nexora’s decision. The supplied ChatGPT/Lovable-derived text is secondary evidence. Official Lovable documentation independently confirms Lovable’s agentic implementation/verification workflow, browser/frontend/backend testing modes, security scans, focused read-only subagents, persistent project knowledge, and portable web application model. It does **not** establish a Lovable-specific Execution Kernel, persisted Batch identity, `@platform/*` namespace, authoritative Policy Engine, deterministic clock/randomness harness, or 90–95% framework-independent target. Those concepts are not treated as Lovable architecture adopted by Nexora.
+The Lovable → Nexora opportunity analysis and six follow-up investigations identified useful operational patterns, but the resulting decision must be Nexora’s decision. The supplied ChatGPT/Lovable-derived text is secondary evidence. Official Lovable documentation independently confirms Lovable’s agentic implementation/verification workflow, browser/frontend/backend testing modes, security scans, focused read-only subagents, persistent project knowledge, and portable web application model. [10] [11] [12] [13] [14] [15] It does **not** establish a Lovable-specific Execution Kernel, persisted Batch identity, `@platform/*` namespace, authoritative Policy Engine, deterministic clock/randomness harness, or 90–95% framework-independent target. Those concepts are not treated as Lovable architecture adopted by Nexora.
 
 Where Nexora already had the principle, Lovable independently **validates or reinforces** it. Where Lovable supplied a useful operational pattern, Nexora adapts only the bounded portion that fits existing ownership. The Nexora evidence baseline is the canonical repository corpus: `docs/CANONICAL_SOURCES.md`, `docs/TRACEABILITY.md`, `PROJECT_SPECIFICATION.md`, `architecture/RUNTIME.md`, `architecture/AGENT_RUNTIME.md`, `architecture/WORKFLOW_ENGINE.md`, `architecture/MULTI_AGENT_SYSTEM.md`, `specs/CONTEXT_MANAGEMENT.md`, `security/PermissionModel.md`, `security/SandboxPolicy.md`, and the existing testing inventories. The supplied ChatGPT/Lovable-derived text and conversation analysis are secondary context, not a repository authority or executed evidence. The current repository remains a Phase 0 documentation baseline with no tracked Kotlin, Java, Gradle, or planned-module implementation files. `docs/CANONICAL_SOURCES.md:30-77`; `docs/TRACEABILITY.md:3-16,114-159`; `PROJECT_SPECIFICATION.md:9-17,347-357,376-388`
 
@@ -34,12 +34,12 @@ These decisions do not create a new module, package namespace, persisted identit
 
 | Topic | Lovable contribution | Nexora decision |
 |---|---|---|
-| Agentic implementation and verification | Official Build-mode documentation describes codebase exploration, multi-file changes, visible tasks, diffs, and verification. | Nexora strengthens its existing plan/execute/reflect, evidence, validation, trace, and checkpoint contracts; it does not adopt a Lovable runtime architecture. `architecture/RUNTIME.md:19-31,124-167,183-234` |
-| Focused investigations and subagents | Official Subagents documentation describes temporary read-only focused investigations, parallel execution, traceable findings, and main-agent synthesis. | Nexora adapts the operational pattern for bounded investigation and evidence collection where useful; no persisted Lovable Batch or subagent lifecycle is adopted. `docs/CANONICAL_SOURCES.md:24,104-105` |
-| Multi-mode verification | Official Testing documentation describes browser testing, frontend tests, direct edge calls, edge tests, and captured verification signals. | Nexora strengthens its existing test inventories and executed-evidence discipline. `PROJECT_SPECIFICATION.md:250-259`; `testing/IntegrationTests.md:7-22,63-99` |
-| Automated security findings | Official Security documentation describes Basic/Deep scans and explicitly says scans do not replace full security review. | Nexora adopts mechanical compliance checks derived from its own canonical dependency/security/evidence contracts; no Lovable Policy Engine is ratified. `docs/DEPENDENCY_GRAPH.md:81-83`; `security/PermissionModel.md:20-75` |
-| Persistent project knowledge | Official Knowledge documentation describes persistent workspace/project instructions and always-included context. | Nexora strengthens its existing Context Management, Memory, provenance, and ClaimRecord contracts. `specs/CONTEXT_MANAGEMENT.md:22-82,351-353` |
-| Portable web hosting/data | Official Deployment documentation describes Vite + React, portable code/data, and managed/self-hosted web deployment. | Nexora remains a native Android product. No web hosting, Cloudflare/V8-isolate runtime, or cross-platform product architecture is adopted. `PROJECT_SPECIFICATION.md:9-14,35-41`; `requirements/CONSTRAINTS.md:9-14,41-48` |
+| Agentic implementation and verification | Official Build-mode documentation describes codebase exploration, multi-file changes, visible tasks, diffs, and verification. [10] | Nexora strengthens its existing plan/execute/reflect, evidence, validation, trace, and checkpoint contracts; it does not adopt a Lovable runtime architecture. `architecture/RUNTIME.md:19-31,124-167,183-234` |
+| Focused investigations and subagents | Official Subagents documentation describes temporary read-only focused investigations, parallel execution, traceable findings, and main-agent synthesis. [13] | Nexora adapts the operational pattern for bounded investigation and evidence collection where useful; no persisted Lovable Batch or subagent lifecycle is adopted. `docs/CANONICAL_SOURCES.md:24,104-105` |
+| Multi-mode verification | Official Testing documentation describes browser testing, frontend tests, direct edge calls, edge tests, and captured verification signals. [11] | Nexora strengthens its existing test inventories and executed-evidence discipline. `PROJECT_SPECIFICATION.md:250-259`; `testing/IntegrationTests.md:7-22,63-99` |
+| Automated security findings | Official Security documentation describes Basic/Deep scans and explicitly says scans do not replace full security review. [12] | Nexora adopts mechanical compliance checks derived from its own canonical dependency/security/evidence contracts; no Lovable Policy Engine is ratified. `docs/DEPENDENCY_GRAPH.md:81-83`; `security/PermissionModel.md:20-75` |
+| Persistent project knowledge | Official Knowledge documentation describes persistent workspace/project instructions and always-included context. [14] | Nexora strengthens its existing Context Management, Memory, provenance, and ClaimRecord contracts. `specs/CONTEXT_MANAGEMENT.md:22-82,351-353` |
+| Portable web hosting/data | Official Deployment documentation describes Vite + React, portable code/data, and managed/self-hosted web deployment. [15] | Nexora remains a native Android product. No web hosting, Cloudflare/V8-isolate runtime, or cross-platform product architecture is adopted. `PROJECT_SPECIFICATION.md:9-14,35-41`; `requirements/CONSTRAINTS.md:9-14,41-48` |
 | Execution Kernel, Batch lifecycle, `@platform/*`, 90–95% target, Policy Engine | No primary Lovable source established these as Lovable implementation facts; they appear in the supplied secondary text. | These are not ratified as Lovable architecture. Nexora decisions below evaluate the underlying problems using Nexora ownership and evidence. |
 
 ## Evidence-state rule
@@ -56,13 +56,13 @@ Every statement about a requirement, implementation, test, or completion MUST di
 
 Nexora’s Phase 0 baseline proves documented contracts and planned test inventories, not source implementation or executed runtime/device evidence. `PROJECT_SPECIFICATION.md:14,347-357`; `testing/IntegrationTests.md:63-69`; `testing/PerformanceTests.md:70,78-82`
 
-# Decision 1 — Metric-driven execution strengthening
+## Decision 1 — Metric-driven execution strengthening
 
 ## Problem
 
 Long-running agent work needs measurable acceptance progress, bounded next actions, recovery/replanning signals, and evidence-linked completion instead of relying on unstructured narrative progress. Nexora already documents execution modes, acceptance progress, ProgressSignal, deadlines, failure ledgers, bounded repair, and evidence. `architecture/AGENT_RUNTIME.md:27-35,58-66,140-188,263-280`; `specs/EXECUTION_LIFECYCLE.md:81-97,206-218,245-274`
 
-## Decision
+### Decision
 
 Strengthen metric-driven execution over existing Agent, Task, Execution, Workflow, delegation, acceptance, ProgressSignal, deadline, failure-ledger, and evidence contracts. Metrics are derived evaluations over existing acceptance criteria, ProgressSignal, Task/Execution/Workflow state, and evidence references.
 
@@ -114,13 +114,13 @@ Define deterministic progress fixtures, deadline/retry fixtures, acceptance vect
 
 No GoalMetric identity, Batch lifecycle, Execution Kernel, metric-owned scheduler, metric-owned authorization, AI authority, or cross-platform metric architecture.
 
-# Decision 2 — Derived work-group projection
+## Decision 2 — Derived work-group projection
 
 ## Problem
 
 A bounded view of actionable work may improve progress communication, recovery selection, and replanning. Nexora already has Task/Execution/Workflow/PlanStep identities, bounded Workflow iteration, checkpoints, delegated-child relationships, acceptance progress, and evidence. `architecture/RUNTIME.md:67-107,183-198`; `architecture/WORKFLOW_ENGINE.md:24-35,91-115`
 
-## Decision
+### Decision
 
 Adopt a **derived work-group projection** computed from existing Task, Execution, Workflow, PlanStep, delegated-child, checkpoint, acceptance, and evidence records. It is a view, not a persisted domain entity.
 
@@ -172,13 +172,13 @@ Use source snapshots with Task/Execution/Workflow/PlanStep/delegated-child/check
 
 No persisted Batch identity, Batch lifecycle/state machine, Batch scheduler, Batch retry/deadline owner, Batch permission scope, Batch checkpoint/evidence root, or Batch replacement for existing entities.
 
-# Decision 3 — Android boundary enforcement
+## Decision 3 — Android boundary enforcement
 
 ## Problem
 
 Nexora must preserve Android lifecycle, foreground/background execution, notifications, storage, sandbox, process, permissions, and security semantics while keeping runtime/application logic interface-driven. The repository is Phase 0, so actual implementation leakage cannot yet be measured. `PROJECT_SPECIFICATION.md:9-17,347-357`; `docs/MODULE_BOUNDARIES.md:11-28`
 
-## Decision
+### Decision
 
 Strengthen enforcement of existing Android-facing module/interface boundaries. Use existing `services`, `sandbox`, `storage`, `security`, `runtime`, `application`, `ui`, and `shared` ownership and the canonical dependency graph. `docs/MODULE_BOUNDARIES.md:15-28`; `docs/DEPENDENCY_GRAPH.md:31-63`
 
@@ -228,13 +228,13 @@ Dependency graph fixtures, interface contract tests, Hilt binding tests, emulato
 
 No `@platform/*` package namespace, generic cross-platform core, Desktop/Web/CLI product, Cloudflare/V8-isolate hosting, replacement of Android-owned services, or framework-independence percentage target.
 
-# Decision 4 — Derived cross-policy eligibility reporting and stateless evaluator investigation
+## Decision 4 — Derived cross-policy eligibility reporting and stateless evaluator investigation
 
 ## Problem
 
 Nexora has separate authorities for Permission, Task/Execution deadlines and recovery, ResourceManager budgets, ContextSnapshot/evidence eligibility, Tool unknown-completion reconciliation, Workflow progression, Security, and Observability. The investigation found no canonical preflight contract that assembles their combined eligibility result before a side-effecting operation. `docs/CANONICAL_SOURCES.md:18-23,41-44,67-82`; `architecture/RUNTIME.md:49-59,157-173,201-234`; `security/PermissionModel.md:20-75`; `architecture/TOOL_SYSTEM.md:36-76`
 
-## Decision
+### Decision
 
 Adopt a **derived cross-policy eligibility report** and investigate a **stateless evaluator** within existing ownership.
 
@@ -290,13 +290,13 @@ Owner-decision fixtures, conflict matrices, expiry/deadline tests, resource/cont
 
 No authoritative Policy Engine, `ArchitecturePolicyEngine`, policy god-object, AI policy authority, new permission scope, new lifecycle, persisted policy identity, independent merge/release veto, or production override authority.
 
-# Decision 5 — Mechanical architecture and compliance checks
+## Decision 5 — Mechanical architecture and compliance checks
 
 ## Problem
 
 Nexora’s dependency graph, public interfaces, module ownership, status/ID/link conventions, canonical ownership, and evidence-state distinctions need mechanical verification. The canonical dependency document already calls for CI fitness checks. `docs/DEPENDENCY_GRAPH.md:11-83`; `docs/MODULE_BOUNDARIES.md:11-32`; `standards/Documentation-Standard.md:28-41`
 
-## Decision
+### Decision
 
 Adopt mechanical checks derived directly from existing canonical contracts. Initial checks cover forbidden dependency edges, cycles, concrete-implementation imports, interface/Hilt boundaries, status headers, IDs, links, canonical-owner references, lifecycle names, and evidence-state classification.
 
@@ -350,13 +350,13 @@ Checker unit tests, parser tests, known-good/known-bad fixture tests, graph cycl
 
 No `ArchitecturePolicyEngine`, independent architecture owner, new production veto authority, new policy persistence, new lifecycle, AI decision authority, or replacement of canonical documentation ownership.
 
-# Decision 6 — Deterministic test controls and fault-injection evidence
+## Decision 6 — Deterministic test controls and fault-injection evidence
 
 ## Problem
 
 Nexora documents deadlines, retries, checkpoints, unknown completion, permissions, workflow bounds, resource limits, and security conditions, but the Phase 0 baseline has no implementation or executed evidence. `requirements/NFR.md:30-67`; `architecture/WORKFLOW_ENGINE.md:91-115`; `testing/IntegrationTests.md:63-69`
 
-## Decision
+### Decision
 
 Strengthen deterministic testing through test-only fixture controls and fault-injection coverage against existing state machines and operation contracts.
 
@@ -410,7 +410,7 @@ Unit, integration, E2E, performance, security, lifecycle, streaming, context, li
 
 No production override API, no production nondeterminism authority, no new lifecycle, no new fault-injection production module, no AI authority, and no claim that the Phase 0 repository already implements or has executed these tests.
 
-# Explicitly rejected or non-adopted concepts
+## Explicitly rejected or non-adopted concepts
 
 This ADR does not adopt the following concepts:
 
@@ -425,7 +425,7 @@ This ADR does not adopt the following concepts:
 
 These are Nexora scope decisions based on product/security contradictions or authority-preservation requirements, not blanket claims that the concepts have no value elsewhere.
 
-# Consequences
+## Consequences
 
 ## Positive consequences
 
@@ -446,7 +446,7 @@ These are Nexora scope decisions based on product/security contradictions or aut
 - Android device/emulator evidence, provider behavior, resource conditions, and security artifacts require controlled environments and retention.
 - Future requests for new owners, identities, lifecycles, persistence, production overrides, or cross-platform targets require separate ADRs.
 
-# Acceptance conditions for this ADR
+## Acceptance conditions for this ADR
 
 Acceptance records the Nexora decision boundary only. It does **not** authorize implementation, source changes, test execution, or production rollout.
 
@@ -459,13 +459,13 @@ This ADR may be accepted only when the deciders confirm that:
 5. Canonical documentation is updated first and the normal implementation-authorization process is completed before implementation.
 6. The evidence-state distinction remains explicit: **CANONICAL REQUIREMENT ≠ IMPLEMENTED ≠ TEST DEFINED ≠ TESTED ≠ EXECUTED EVIDENCE**.
 
-# Required sequence after acceptance
+## Required sequence after acceptance
 
 > **ADR → canonical documentation update → implementation authorization → implementation → tests → executed evidence**
 
 Acceptance of this ADR does not itself authorize implementation. After acceptance, every affected canonical document, source map, lifecycle/protocol/model/API/SDK projection, requirement ledger, registry, and test inventory must be updated according to `docs/CANONICAL_SOURCES.md:110-125` and `standards/Documentation-Standard.md:28-41`. The normal project implementation-authorization process then applies. Only after those steps may implementation begin.
 
-# References
+## References
 
 [1]: https://github.com/pavan53732/Nexora/blob/c789cd3e8a9f6fab301eba2693a8b08ce1c086b6/docs/CANONICAL_SOURCES.md#L3-L14 "Nexora canonical ownership rules"
 [2]: https://github.com/pavan53732/Nexora/blob/c789cd3e8a9f6fab301eba2693a8b08ce1c086b6/architecture/RUNTIME.md#L19-L37 "Nexora runtime composition"
