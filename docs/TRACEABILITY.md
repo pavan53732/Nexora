@@ -108,7 +108,7 @@ The following table reconciles labels already present in canonical or historical
 | `GAP-009` | Existing Plugin compensation contract and `testing/cases/SecurityTestCases.md` activation-origin assertion | CLOSED by existing Plugin lifecycle/cleanup contract; no new GAP identity is created |
 | `GAP-010` | `specs/TERMINAL.md` §Cleanup Failure and Parent Loss | CLOSED; existing TerminalSession `Failed` plus automatic cleanup/reconciliation is authoritative |
 | `GAP-011` | `specs/CONTEXT_MANAGEMENT.md` Rolling Compactor hybrid cloud/deterministic-local contract | CLOSED-BY-DESIGN; local AI/model inference remains prohibited |
-| `GAP-004` / `GAP-007` | No active canonical owner or decision record is identified by the current corpus | UNRESOLVED LABEL ONLY; not treated as a product or architecture decision and not claimed closed |
+| `GAP-004` / `GAP-007` | Historical discussion labels with no active canonical owner or decision record; no current contract depends on them | RETIRED HISTORICAL LABELS; not active requirements, not pending decisions, and not claimed as closed contracts |
 
 
 ## Conversation checkpoint and Session–Conversation decision traceability
