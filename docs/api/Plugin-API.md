@@ -23,7 +23,7 @@ The Plugin API governs plugin packaging, installation, cryptographic integrity v
 
 Every response and emitted event MUST propagate a `correlationId`.
 
-### Activation Rollback Failure (GAP-008)
+### Activation Rollback Failure (GAP-008 — CLOSED)
 
 `activatePlugin` MUST unregister every capability registered during the attempted activation before an `Active` projection is published. If activation began from `Installed` and compensation/cleanup succeeds, the Plugin MUST return to `Installed`; if activation began from `Inactive` and compensation/cleanup succeeds, it MUST return to `Inactive`. If cleanup fails or completion cannot be proven, the Plugin MUST remain in the existing `Failed` state, no affected capability may remain executable, and the activation error, rollback/cleanup error, capability set, correlation ID, and audit evidence MUST be persisted. Retry may use the existing `Failed → Verifying` path only when the canonical error is retriable and cleanup has been verified. This contract creates no new Plugin state, error taxonomy, or recovery authority.
 

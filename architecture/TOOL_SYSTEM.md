@@ -85,7 +85,7 @@ A Tool descriptor with a missing, contradictory, or unsupported recovery declara
 A timeout without a confirmed result MUST remain `UNKNOWN_COMPLETION` until the declared contract resolves whether the side effect occurred.
  The runtime MUST NOT silently retry, silently mark failure, or report success for an unresolved unknown-completion operation. Reconciliation evidence and final disposition MUST be persisted with the ToolInvocation and execution history. If the automatic contract is exhausted, the unresolved child remains `UNKNOWN_COMPLETION` and the owning Task/Execution applies the existing non-success path; no human action is required to continue recovery.
 
-### Reconciliation Exhaustion and Parent Non-Success (GAP-003)
+### Reconciliation Exhaustion and Parent Non-Success (GAP-003 — CLOSED)
 
 Reconciliation attempts MUST remain within the Tool operation's declared recovery contract and the parent Task/Execution effective deadline. A reconciliation failure MAY retry only when that contract preserves idempotency or safe compensation; it MUST NOT reset the parent deadline, retry budget, failure ledger, or execution lineage. Every attempt, observation, timeout, error, and evidence reference MUST be persisted with the ToolInvocation and execution history.
 

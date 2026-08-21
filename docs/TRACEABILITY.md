@@ -84,6 +84,8 @@ The creator-owned product design defines product identity and selected boundarie
 
 The complete requirement identifier inventory is tracked separately in `docs/REQUIREMENT_COVERAGE_LEDGER.md`. The detailed matrix below remains focused on requirements whose architecture, contract, and validation relationships have been explicitly reconciled.
 
+Suite-level test IDs such as `IT-MODEL-*`, `IT-TOOLDISC-*`, `IT-LONG-*`, `IT-MM-*`, `RT-ESC-*`, `RT-MODEL-*`, `RT-REASON-*`, and `RT-TOOLDISC-*` are defined by `testing/IntegrationTests.md` and `testing/RegressionTests.md`; their absence from a case-inventory row does not make them dangling identifiers. The suite documents remain the existing test-definition owners, and no duplicate case IDs are introduced by this clarification.
+
 ## Open Gaps
 
 - Requirement identifier saturation: all 327 unique FR/NFR IDs (245 FR + 82 NFR) defined in `requirements/FR.md` and `requirements/NFR.md` are represented in the complete coverage ledger and referenced by at least one canonical, derived, or test artifact in the repository (verified by repository-wide scan). The matrix below remains a curated representative subset focused on requirements whose architecture, contract, and validation relationships have been explicitly reconciled; the full identifier inventory is tracked in `docs/REQUIREMENT_COVERAGE_LEDGER.md`.
@@ -92,14 +94,33 @@ The complete requirement identifier inventory is tracked separately in `docs/REQ
 - Requirement identifier orphan closure: `FR-SESS-001`, `FR-WF-001`, and `NFR-COMP-001` are now defined in the canonical requirement documents and mapped in `docs/REQUIREMENT_COVERAGE_LEDGER.md`. Their implementation and validation artifacts remain `PARTIAL` or `Planned` where no source implementation or executed evidence exists; that status is expected during documentation/specification phase.
 - The former requirement-identity collision is resolved in the requirements authority: `NFR-PERF-006` remains the battery-impact requirement, `NFR-REL-004` remains the ACID data-persistence requirement, `NFR-CI-006` owns minimum-sufficient execution-mode selection, and `NFR-CI-007` owns bounded-progress controls. The coverage ledger and dependent projections use these distinct identities; no requirement meaning was deleted or merged.
 
+### GAP label reconciliation
+
+The following table reconciles labels already present in canonical or historical documents. It does not create a GAP registry, requirement, lifecycle, error, authority, or implementation obligation.
+
+| Label | Existing evidence | Classification |
+|---|---|---|
+| `GAP-001` | Historical `NX-GAP-001` alias in `docs/DECISION_LOG.md` DL-035 | Historical alias; no active owner label is asserted |
+| `GAP-002` / `GAP-006` | `architecture/RUNTIME.md` §Checkpoint Save and Restore Exhaustion; `specs/BACKGROUND_EXECUTION.md` §Checkpoint Save and Restore Exhaustion | CLOSED; existing Execution/Workspace recovery contracts are authoritative |
+| `GAP-003` | `architecture/TOOL_SYSTEM.md` §Reconciliation Exhaustion and Parent Non-Success | CLOSED; existing Tool/Task/Execution non-success contract is authoritative |
+| `GAP-005` | `architecture/MULTI_AGENT_SYSTEM.md` §Coordinator Incarnation Loss | CLOSED; same-identity checkpoint recovery is documented and takeover/adoption/reparenting are current non-goals |
+| `GAP-008` | `docs/api/Plugin-API.md` §Activation Rollback Failure | CLOSED; existing Plugin lifecycle and cleanup authorities are authoritative |
+| `GAP-009` | Existing Plugin compensation contract and `testing/cases/SecurityTestCases.md` activation-origin assertion | CLOSED by existing Plugin lifecycle/cleanup contract; no new GAP identity is created |
+| `GAP-010` | `specs/TERMINAL.md` §Cleanup Failure and Parent Loss | CLOSED; existing TerminalSession `Failed` plus automatic cleanup/reconciliation is authoritative |
+| `GAP-011` | `specs/CONTEXT_MANAGEMENT.md` Rolling Compactor hybrid cloud/deterministic-local contract | CLOSED-BY-DESIGN; local AI/model inference remains prohibited |
+| `GAP-004` / `GAP-007` | No active canonical owner or decision record is identified by the current corpus | UNRESOLVED LABEL ONLY; not treated as a product or architecture decision and not claimed closed |
+
 
 ## Conversation checkpoint and Session–Conversation decision traceability
 
 | Decision | Semantic rule | Canonical source | Engineering specification | Test specification | Status |
 |---|---|---|---|---|---|
+| DEC-7 | Retry attempt index is Execution-owned; RetryPending is ephemeral; process-death recovery follows the authoritative DEC-7.7–DEC-7.12 closure labels | `decisions/DEC-7-retry-attempt-state.md` | `models/Execution.md`, `specs/DATABASE_SCHEMA.md`, `specs/BACKGROUND_EXECUTION.md`, `state-machines/TaskLifecycle.md` | `testing/cases/RegressionTestCases.md`, `testing/cases/E2ETestCases.md` | DECIDED |
 | DEC-8 | Conversation checkpoint is an immutable boundary over one Conversation's ordered record and conversation-local metadata | `architecture/CONVERSATION_CHECKPOINTS.md` | `specs/CONVERSATION_CHECKPOINTS.md`, `models/Conversation.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (T10, T13, T25) | DECIDED |
 | DEC-9 | Rollback is non-destructive branch creation; source Conversation preserved; branch gets new identity and lineage | `architecture/CONVERSATION_CHECKPOINTS.md` | `specs/CONVERSATION_CHECKPOINTS.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/SESSION_CONVERSATION_ERRORS.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (T10, T11, T12, T13, T15, T25) | DECIDED |
 | DEC-10 | Existing Conversation/Session responsibility owns Conversation identity, local records, checkpoints, and branch construction boundary | `architecture/CONVERSATION_CHECKPOINTS.md` | `models/Conversation.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (ownership/lineage assumptions) | DECIDED |
+| DEC-11 | Skill Registry owns skill registration/discovery/compatibility/binding; Agent Runtime selects and uses skills; Tool and Permission authorities own execution and authorization | `decisions/DEC-11-skill-lifecycle.md` | `models/Skill.md`, `architecture/RUNTIME.md`, `architecture/AGENT_RUNTIME.md`, `architecture/TOOL_SYSTEM.md` | `testing/cases/UnitTestCases.md`, `testing/cases/IntegrationTestCases.md` | DECIDED |
+| DEC-12 | Nexora does not create a first-class Command artifact, command registry, command lifecycle, or command UI; requests use the existing Agent Runtime/Skill/Workflow boundary | `decisions/DEC-12-command-artifact.md` | `architecture/WORKFLOW_ENGINE.md`, `models/Skill.md`, `architecture/RUNTIME.md` | Existing workflow/skill validation; no separate Command test contract | DECIDED |
 | DEC-13 | Conversation identity is durable and immutable, distinct from checkpoint identity | `decisions/DEC-13-conversation-identity-persistence.md` | `models/Conversation.md`, `state-machines/ConversationLifecycle.md`, `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/DATABASE_SCHEMA.md` (`conversation`), `docs/SESSION_CONVERSATION_IMPLEMENTATION_HANDOFF.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (T14, T15, T22) | DECIDED |
 | DEC-14 | Session–Conversation relationship is first-class semantic architecture | `decisions/DEC-14-session-conversation-relationship-semantic-status.md` | `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `docs/SESSION_CONVERSATION_IMPLEMENTATION_HANDOFF.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (T01) | DECIDED |
 | DEC-15 | Existing Conversation/Session responsibility owns the relationship semantic contract | `decisions/DEC-15-session-conversation-relationship-ownership.md` | `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/SESSION_CONVERSATION_ERRORS.md` | `testing/SESSION_CONVERSATION_TEST_MATRIX.md` (ownership assumptions) | DECIDED |

@@ -18,6 +18,10 @@
 | Feature | `registry/` | When a feature is planned |
 | API change | `docs/api/`, `sdk/` | Before implementing the change |
 
+## Decision-record decider vocabulary
+
+Decision records MAY identify the accountable decision participants as `Creator`, `Product Owner`, `Architecture Owner`, or another explicitly named project authority. These are provenance labels for who selected or authorized a decision; they do not create a new subsystem authority, lifecycle, permission, implementation, or evidence owner. `Creator` refers to the creator-owned product authority defined in `NEXORA_PRODUCT_DESIGN_BY_CREATER.md`; that document remains protected from AI modification.
+
 ## Format
 - Markdown for all documentation
 - Include a back-link to `PROJECT_SPECIFICATION.md` at the top

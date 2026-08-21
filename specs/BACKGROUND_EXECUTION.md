@@ -189,7 +189,7 @@ Rules:
 | Integrity | CRC/checksum verification on every persistent write (NFR-REL-008) |
 | Errors | Sandbox/resource failures → `NXR-7xxx`; retryable → `RetryPending` |
 
-### Checkpoint Save and Restore Exhaustion (GAP-002/GAP-006)
+### Checkpoint Save and Restore Exhaustion (GAP-002/GAP-006 — CLOSED)
 
 A checkpoint save MUST use the existing `saveCheckpoint` transaction and may retry once under the existing retry/deadline rules. A failed retry MUST preserve the last valid checkpoint and its `executionId`, `correlationId`, version, effective deadline, acceptance progress, failure ledger, and evidence; it MUST persist `NXR-1003`, prevent dependent recovery work from starting, and project the affected execution to its existing `FAILED` or explicit non-success outcome. It MUST NOT overwrite the last valid checkpoint or silently resume from an incomplete save.
 

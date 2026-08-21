@@ -9,6 +9,8 @@
 
 ---
 
+> **Namespace clarification:** `DEC-1`, `DEC-2`, and `DEC-2A` below are internal subsection labels within the immutable `DEC-7` decision record, not repository-level decision identities. The authoritative process-death closure labels are `DEC-7.7` through `DEC-7.12`.
+
 ## DEC-1 — Retry Attempt Index Ownership
 
 **Decision:** The authoritative retry-attempt index (`retryAttempt`, 0-based) is stored on the **Execution** model.
