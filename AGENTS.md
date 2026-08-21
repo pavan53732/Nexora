@@ -19,6 +19,10 @@ will miss critical context.
 - If a file was read earlier in the session and `read_file` returns a cached
  "unchanged" stub, re-verify current bytes via a direct filesystem read
  (e.g., `execute_code` with `open()`) before acting on stale context.
+- For any whole-corpus claim, read every tracked Markdown file in the declared
+ scope completely before reporting the claim. A grep/search result, scanner,
+ prior summary, or agent response may corroborate the review but never replaces
+ full-file reading. Record the file count and line-level evidence used.
 
 ## Rule 2 — Evidence-based work (zero assumptions)
 
@@ -30,6 +34,17 @@ Every claim must be backed by the actual file contents, cited as `path:line`.
 - Do not assume tool counts, phase numbers, or requirement IDs — read the
  current file. Stale numbers from prior sessions or outdated research
  documents are not authoritative.
+- Classify each material claim as `CANONICAL REQUIREMENT`, `IMPLEMENTED`,
+ `TEST DEFINED`, `TESTED`, `EXECUTED EVIDENCE`, `PROPOSED`, `CONTRADICTED`,
+ or `UNKNOWN` as applicable. Never promote a documented plan, test definition,
+ summary, absence of evidence, or generated output into implementation,
+ execution, or completion evidence.
+- Secondary ChatGPT, Hermes, developer, or other AI-generated text is context
+ only, not proof. Verify every material claim against the actual repository
+ bytes and the authoritative owner before editing or deciding.
+- When evidence is absent or conflicting, report `UNKNOWN` or
+ `IMPLEMENTATION-UNVERIFIED`, preserve the conflict, and do not invent an ID,
+ state, authority, identity, lifecycle, module, path, owner, or behavior.
 
 ## Rule 3 — Match existing conventions
 
@@ -76,6 +91,9 @@ After any edit:
 - Verify all cited IDs (FR, NFR, TOOL, TM, DL, ADR) exist in their
  source files
 - Verify all relative links resolve from the file's directory
+- For whole-corpus or cross-document claims, verify the complete declared scope,
+ ownership, traceability, identifiers, tables, links, fences, and evidence-state
+ distinctions before reporting closure.
 
 ## Rule 8 — Commit with detailed messages
 

@@ -183,6 +183,11 @@ No executable implementation or runnable test is claimed by this traceability se
 | Atomic Side-Effect Capability | `architecture/TOOL_SYSTEM.md` | `NFR-REL-017`, `protocols/Tool-Protocol.md`, `models/ToolInvocation.md`, atomic operation bundles, durable intent logging |
 | Competitive Multi-Agent Consensus Verification | `architecture/MULTI_AGENT_SYSTEM.md` | `NFR-CI-004`, adversarial red-teaming, verified agreement between specialists |
 | Cross-Workspace Skill Distillation | `specs/AUTONOMY_STABILITY.md` | `models/AutonomyLearning.md`, global lesson generalization (`TOOL-409`), privacy sanitization |
+
+### Upgrade Resolution and Status
+
+| Upgrade item | Primary architecture/spec | Supporting artifacts | Validation or resolution note | Status |
+|---|---|---|---|---|
 | Memory API boundary determination | `architecture/MEMORY_SYSTEM.md`, `protocols/Memory-Protocol.md` | `models/Memory.md`, `lifecycle/MemoryLifecycle.md`, `specs/CONTEXT_MANAGEMENT.md` | No separate `docs/api/Memory-API.md` exists; protocol is the repository contract boundary | RESOLVED (internal subsystem / protocol-sufficient) |
 | Session–Conversation implementation closure | `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md` | `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md`, `specs/DATABASE_SCHEMA.md` | `docs/TRACEABILITY.md` existing DEC-13..DEC-21 rows | OK |
 | Conversation persistence closure | `specs/SESSION_CONVERSATION_ENGINEERING_CONTRACT.md`, `specs/DATABASE_SCHEMA.md` | `decisions/DEC-13-conversation-identity-persistence.md`, `architecture/CONVERSATION_CHECKPOINTS.md`, `specs/CONVERSATION_CHECKPOINTS.md` | `docs/CANONICAL_SOURCES.md` existing conversation rows | OK |
