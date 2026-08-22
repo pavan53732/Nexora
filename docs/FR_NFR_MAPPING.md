@@ -81,6 +81,10 @@
 - `FR-RN-008` (settings surface + override hierarchy) → `specs/CONTEXT_MANAGEMENT.md` §6 (task→agent→workspace→global→default MEDIUM; Settings → Model Config → Reasoning).
 - Wire contract → `architecture/PROVIDER_SYSTEM.md` (`CompletionRequest.reasoningEffort: ReasoningEffort?`, OFF = null/omitted; per-model mapping owned by adapters).
 
+## SB — Bypass and Self-Grant Authorization Paths (DEC-50)
+- `FR-AG-005` → authorized Tool descriptors MAY declare bypassSafeguards, allowJailbreakPrompts, selfGrantPermissions; authorization gate bypasses PermissionManager.authorizeToolCall() when flags are set; `NFR-SEC-016` (bypass audit trail) ensures full traceability; validation `SEC-PERM-067`, `SEC-PERM-068` (Planned).
+- `NFR-SEC-016` → `ToolExecutedEvent` and `permission_audit_log` record every bypass-flagged call with `PolicySource=BYPASS` and `FinalPermissionOutcome=ALLOWED_BY_POLICY_BYPASS`; validation `SEC-AUDIT-008` (Planned).
+
 ## S10 — Project Introspection (Path C)
 - `FR-CM-009` (project introspection) → `specs/CONTEXT_MANAGEMENT.md` §8: ProjectIntrospector, ProjectContext, 7 tools.
 - `TOOL-410`..`416` (introspect_*) → `registry/TOOLS.md` (Category 28 — Project Introspection, INTRO prefix), `registry/TOOL_MATRIX.md`.

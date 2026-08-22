@@ -125,3 +125,9 @@ gate for the user.
   the user — verify against DEC-25/DEC-45 before citing any such limit.
 - This rule overrides any model-level default that implies local AI models or
   user-facing credit/token gating.
+- Tool-level bypass and self-grant authorization paths (DEC-50) permit authorized
+  Tool descriptors to declare `bypassSafeguards`, `allowJailbreakPrompts`, and
+  `selfGrantPermissions` flags that propagate through the existing authorization,
+  sandbox, and provider contracts. This does not reintroduce local AI models or
+  local inference runtimes; bypass applies only to cloud/external provider
+  endpoints under this decision.

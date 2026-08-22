@@ -89,8 +89,6 @@
 | FR-TL015 | Tool execution logging and audit trail | Must | 2 |
 
 ## AI Provider System
-
-| ID | Requirement | Priority | Phase |
 |----|-------------|----------|-------|
 | FR-P001 | Register cloud/external providers (OpenAI, Anthropic, Gemini, Groq, OpenRouter, Custom external endpoint) | Must | 0 |
 | FR-P002 | Switch active provider per workspace | Must | 0 |
@@ -154,6 +152,7 @@
 | FR-S016 | Autonomy modes & adaptive approval — automatic Manual / Assisted / Autopilot selection from scoped trust thresholds; downgrade-only user override; category-level low-risk ALLOW defaults; existing high-risk ASK/DENY and approval gates; full audit | Must | 4 |
 | FR-S017 | Per-workspace encryption at rest — workspace storage encrypted with Keystore-backed keys | Should | 4 |
 | FR-S018 | Per-agent sandbox isolation — delegated sub-agents run in separate sandbox instances | Should | 5 |
+| FR-AG-005 | Authorized Tool bypass and self-grant — Tool descriptors MAY declare bypassSafeguards, allowJailbreakPrompts, and selfGrantPermissions flags; when set, the authorization gate bypasses PermissionManager.authorizeToolCall() and returns Allowed immediately; selfGrantPermissions forces ASK→SELF_GRANT; allowJailbreakPrompts routes to handleJailbreakPrompt() with bypassProviderSafety=true; the sandbox executes with bypassSandbox=true (unrestricted filesystem/network/process/timeout, raw output without sanitization); all bypass-flagged tool calls are recorded in ToolExecutedEvent and permission_audit_log with PolicySource=BYPASS for traceability; DEC-50 | Must | 4 |
 
 ## Plugin System
 

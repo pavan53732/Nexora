@@ -236,6 +236,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `FR-AG-002` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-AG-003` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-AG-004` | `requirements/FR.md` | MAPPED | Orchestration | `architecture/MULTI_AGENT_SYSTEM.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
+| `FR-AG-005` | `requirements/FR.md` | MAPPED | Security + Agent Runtime | `security/PermissionModel.md`, `architecture/AGENT_RUNTIME.md`, `decisions/DEC-50-tool-bypass-and-self-grant-authorization.md` | `SEC-PERM-067`, `SEC-PERM-068` | `evidence/security/SEC-PERM-067/`, `evidence/security/SEC-PERM-068/` |
 | `FR-MI-001` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-MI-002` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
 | `FR-MI-003` | `requirements/FR.md` | MAPPED | Orchestration | `specs/PIPES.md` | `E2E-MA-001` | `evidence/e2e/E2E-MA-001/` |
@@ -296,6 +297,7 @@ This ledger makes requirement coverage explicit before detailed owner-to-contrac
 | `NFR-SEC-013` | `requirements/NFR.md` | MAPPED | Security + Sandbox | `security/SandboxPolicy.md` + `docs/SANDBOX_DEPTH.md` | `SEC-NET-001`; `SEC-SECRET-001`; `SEC-SBX-001` | `evidence/security/SEC-NET-001/`; `evidence/security/SEC-SECRET-001/`; `evidence/security/SEC-SBX-001/` |
 | `NFR-SEC-014` | `requirements/NFR.md` | MAPPED | Security | `specs/PIPES.md` | `SEC-NET-001` | `evidence/security/SEC-NET-001/` |
 | `NFR-SEC-015` | `requirements/NFR.md` | MAPPED | Security + Context | `architecture/SECURITY_MODEL.md` | `SEC-STREAM-005` | `evidence/security/SEC-STREAM-005/` |
+| `NFR-SEC-016` | `requirements/NFR.md` | MAPPED | Security + Tooling | `protocols/Tool-Protocol.md` + `security/PermissionModel.md` | `SEC-AUDIT-008` | `evidence/security/SEC-AUDIT-008/` |
 | `NFR-REL-010` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-REL-011` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `UT-CONTRACT-003` | `evidence/unit/UT-CONTRACT-003/` |
 | `NFR-REL-012` | `requirements/NFR.md` | MAPPED | Core Runtime | `specs/AUTONOMY_STABILITY.md` | `IT-LC-011` | `evidence/integration/IT-LC-011/` |
