@@ -4,6 +4,10 @@
 
 > ADR-0010: case rows are `TEST DEFINED` until execution produces a result; `EXECUTED EVIDENCE` requires the common reproducible envelope in `testing/EVIDENCE_CONVENTIONS.md`. Deterministic controls are fixture-scoped and test-only.
 
+### Automatic Security-Intent Evidence Application
+
+When an existing case exercises automatic security-intent routing, its evidence MUST identify or explicitly mark unavailable the security intent, authorized target/scope and source, selected existing agent roles and distinct objectives, omitted capabilities and selection reason, provider capability and Tool route, applicable PermissionModel/SandboxPolicy/network/audit/deadline/resource/evidence decisions, any attempted self-grant or bypass and its no-execution result, residual risk, unresolved uncertainty, and final disposition. This applies, where relevant, to `SEC-PERM-001`, `SEC-PERM-023`, `SEC-PERM-044`, `SEC-PERM-052`, `SEC-PERM-063`, `SEC-FLOW-001`, `SEC-NET-001`, `SEC-STREAM-004`, `SEC-STREAM-007`, and `SEC-ESC-001..006`. These are existing cases and existing evidence projections; no new case ID, security authority, routing lifecycle, or offensive execution authority is created.
+
 | Case ID | Suite | Purpose | Owner | Status | Evidence | Last Reviewed |
 |---|---|---|---|---|---|---|
 | SEC-PERM-001 | SEC-PERM | Validate authorization before tool side effects | Security | Planned | `evidence/security/SEC-PERM-001/` | 2026-08-04 |
