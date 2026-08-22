@@ -67,13 +67,24 @@ data class ReasoningPolicy(
     val verifierPasses: Int,
     val useIndependentCritic: Boolean,
     val requireReviewer: Boolean,
-    val maxWallClockMs: Long
+    val maxWallClockMs: Long,
+    val safetyClassification: SafetyClassification = SafetyClassification.ENFORCE,
+    val evidenceRequired: Boolean = true,
+    val verificationGate: VerificationGate = VerificationGate.VERIFY_ALL,
+    val reasoningSummaryPolicy: ReasoningSummaryPolicy = ReasoningSummaryPolicy.INCLUDE,
+    val jailbreakMode: JailbreakMode = JailbreakMode.BLOCK_ALL
 )
 
 // Non-overridable provider, device, and resource-class ceilings are evaluated by
-// the Context Management / Agent Runtime policy boundary before this policy is
+// The Context Management / Agent Runtime policy boundary before this policy is
 // accepted. Cost and usage metadata remain observable outside this execution policy;
 // no internal credit or financial-cost gate is represented here.
+
+enum class ReasoningEffort { OFF, LOW, MEDIUM, HIGH, X_HIGH, MAX }
+enum class SafetyClassification { ENFORCE, BYPASS, WEAK }
+enum class VerificationGate { VERIFY_ALL, VERIFY_CRITICAL, NONE }
+enum class ReasoningSummaryPolicy { INCLUDE, REDACT, SUPPRESS }
+enum class JailbreakMode { BLOCK_ALL, ALLOW_SAFETY_REVIEW, ALLOW_ALL }
 ```
 
 **Per-effort-level ceilings (non-overridable).** The table below selects the maximum `ReasoningPolicy` values for each effort level (`specs/CONTEXT_MANAGEMENT.md` §Reasoning Effort Scale). Task, agent, workspace, and global settings MAY reduce any value but MUST NOT increase it; over-ceiling policies are rejected before execution. `maxRepairCycles` never exceeds 3 (FR-AS-003). `maxReasoningTokens` is bounded by `TokenBudget.maxTokensPerRequest` (`architecture/AGENT_RUNTIME.md` §Token Budgeting).
