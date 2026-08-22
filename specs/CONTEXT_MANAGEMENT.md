@@ -464,6 +464,22 @@ The Planner MAY use loaded project knowledge to improve decomposition, acceptanc
 
 Every significant claim produced after project-knowledge loading MUST use the existing `ClaimRecord` projection and claim-to-evidence binding. A project-knowledge item is not evidence merely because it is persistent or always included. Claim records MUST preserve source authority, freshness, contradiction state, verifier result, confidence classification, and user-facing disposition. No new Knowledge table, Knowledge lifecycle, or project-knowledge completion authority is introduced.
 
+## Creative Context and Continuity
+
+Creative work MAY load a task-scoped creative brief through the existing context assembly path. The brief MAY contain the user’s objective, intended audience, format or style constraints, user-provided canon, permitted source or inspiration boundaries, alternatives to explore, acceptance criteria, revision intent, artifact destinations, and relevant prior verified outputs. These are context inputs carried by the existing `Task`, `Workflow`, `PlanStep`, `ContextSnapshot`, `Memory`, artifact, and `ClaimRecord` contracts; they do not create a CreativeTask identity, Creativity Engine, creative lifecycle, or separate Knowledge authority.
+
+Each creative-context item MUST retain its source identifier, source version or checkpoint, retrieval reason, freshness, authority level, trust classification, evidence class, and conflict status. User-provided canon and locked decisions MUST remain distinguishable from generated proposals, simulations, summaries, retrieved content, and untrusted external inspiration. Generated content MUST NOT silently rewrite canonical requirements, locked decisions, verified evidence, or user-provided canon.
+
+Creative exploration MAY include alternative drafts, comparisons, simulations, critiques, and revisions. Each output MUST remain attributable to the existing execution lineage and artifact references. A creative draft or stylistic judgment is not factual evidence; significant factual claims require the existing `ClaimRecord` and claim-to-evidence binding. Unsupported, stale, contradictory, or unverified content MUST remain qualified, uncertain, or withheld according to the existing Evidence & Validation Engine.
+
+Context assembly MUST preserve enough provenance and lineage to reconstruct which brief, canon, source, decision, evidence, and revision inputs produced an output. Invalidation, conflict handling, retention, and cross-workspace isolation remain governed by the existing Memory, Context, artifact, workspace, permission, and evidence authorities. No creative context may authorize a Tool, change a PermissionModel decision, alter a lifecycle, waive a verification gate, or create an autonomous side effect.
+
+### Originality and Attribution Boundary
+
+Creative output MAY use user-provided material and permitted external references. The existing context, artifact, and evidence projections MUST preserve source provenance and distinguish user canon, quoted or source-derived material, generated proposal, transformation, simulation, and unknown origin. The agent MUST NOT claim that generated output is original, licensed, copyright-free, or legally safe unless the applicable evidence and user-provided instructions support that claim.
+
+Attribution, licensing, and reuse requirements supplied by the user or source MUST be preserved as contextual constraints and surfaced with the affected artifact or claim when applicable. When rights, attribution, provenance, or permitted reuse are unclear, the affected output MUST be marked uncertain and the existing clarification, qualification, withholding, or non-success path MUST be used. This contract does not provide legal advice, determine legal ownership, or create a legal authority, permission scope, lifecycle, or completion gate separate from the existing evidence and product authorities.
+
 ## Context Drift Protection
 
 CAL MUST explicitly protect against:

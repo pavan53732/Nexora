@@ -67,6 +67,12 @@ The common evidence envelope SHOULD capture, at minimum:
 
 The matrix is a projection across existing inventories, not a new test authority. Applicable suite owners determine execution and release-gate coverage: `testing/UnitTests.md`, `testing/IntegrationTests.md`, `testing/E2ETests.md`, `testing/PerformanceTests.md`, `testing/RegressionTests.md`, `testing/SecurityTests.md`, and their `testing/cases/` inventories. Fault-injection scenarios are coverage categories selected by the affected contract and release gate, not a single milestone.
 
+### Creative-work evidence
+
+For a creative task, the evidence envelope SHOULD identify the creative objective, intended audience, format or style constraints, user-provided canon, permitted source or inspiration boundaries, originality/attribution and reuse constraints when supplied, alternatives or revisions evaluated, the applicable existing Task/Workflow retry, iteration, deadline, resource, repair, provider, permission, sandbox, and recovery bounds, acceptance criteria, artifact destinations, and final disposition when those inputs apply. These fields are projections over the existing `Task`, `Execution`, `Workflow`, `PlanStep`, `ContextSnapshot`, `Memory`, artifact, `ClaimRecord`, and test-case identities; they do not create a creative test suite, CreativeTask identity, CreativeArtifact identity, revision-budget identity, or separate creative evidence authority.
+
+A creative draft, simulation, critique, comparison, or stylistic judgment MUST remain distinguishable from verified fact, user-provided instruction or canon, canonical requirement, implementation, test execution, and retained executed evidence. Factual claims in creative output require the existing claim-to-evidence binding. Evidence MUST preserve the source, version, provenance, trust, freshness, conflict, artifact lineage, and applicable attribution/reuse disposition needed to reproduce which inputs produced the result. Creative quality, novelty, fluency, or provider confidence alone MUST NOT establish originality, legal safety, correctness, or completion.
+
 ## Deterministic Test Controls (ADR-0010)
 
 Test fixtures MAY control clock/deadline time, seeded jitter/randomness, provider/stream outcomes, resource conditions, process/device events, permission outcomes, storage/locks, scheduler order, and test identifiers only within the test boundary. Controls MUST be explicit, scoped, recorded in the evidence envelope, and unavailable to normal production execution.

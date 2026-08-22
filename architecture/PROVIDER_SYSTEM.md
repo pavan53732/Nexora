@@ -141,6 +141,16 @@ A provider fallback MUST NOT replay provider-native reasoning state into a diffe
 
 Computer use, web/file search, code execution, realtime audio, transcription, image generation, and multimodal function responses are optional negotiated capabilities, not universal properties of `AIProvider`. Their availability MUST be represented in the model descriptor and enforced by the normal authorization, sandbox, approval, stream, and evidence contracts. A provider that supports text streaming alone MUST remain a valid provider; advanced capability absence is not a lifecycle failure.
 
+## Creative Modality and Capability Routing
+
+A creative request MAY require text, image, audio, video, multimodal input, structured output, realtime interaction, or a combination of existing provider and Tool capabilities. The request’s required modality and quality constraints MUST be represented in the existing request, model-catalog, `ProviderRoutePlan`, Tool, ContextSnapshot, and evidence projections; no new creative provider identity or routing authority is created.
+
+The router MUST select only an eligible cloud/external model and existing Tool path whose negotiated descriptor supports the required input/output modality, context size, streaming or continuation behavior, permission scope, sandbox boundary, and evidence requirements. Existing capabilities such as `VISION`, `MULTIMODAL_FUNCTION_CALLING`, `REALTIME_AUDIO`, `AUDIO_TRANSCRIPTION`, image-generation Tools, and file or workspace artifact Tools remain separately represented and authorized. Provider or model self-description is capability metadata, not proof that the capability is implemented or executed.
+
+For each creative route, the persisted `ProviderRoutePlan` MUST preserve the requested modality, selected provider/model identity, capability snapshot, adapter version, fallback decision, and reason. An unsupported, unavailable, stale, unsafe, or incompatible modality MUST produce an explicit existing unsupported/degraded/blocked outcome or use an eligible fallback; it MUST NOT be silently replaced with a different medium or represented as completed. Generated artifacts and factual claims continue through the existing Tool authorization, artifact, provenance, `ClaimRecord`, verification, retention, and user-visible disposition contracts.
+
+Creative quality preferences MAY rank eligible routes or inform non-blocking presentation, but they MUST NOT override permission, safety, deadline, resource, provider, sandbox, lifecycle, or evidence gates. A creative output is not factual evidence merely because a provider generated it, and a polished artifact does not establish implementation, testing, or executed-evidence status.
+
 ## Typed Streaming Contract
 
 `AIProvider.stream()` returns `Flow<StreamEnvelope>`. Every event carries immutable

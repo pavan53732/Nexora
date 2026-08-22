@@ -120,6 +120,14 @@ A runtime, activity-feed, or coordination projection MAY expose the existing `wo
 
 The projection MUST NOT adopt or reparent work, change workflow or lifecycle state, replay an uncertain Tool operation, reset a deadline/retry/iteration budget, authorize a Tool or permission escalation, or trigger an autonomous side effect. Missing or stale values MUST remain unknown or unavailable. No Workflow state, identity, lease, supervisor, recovery lifecycle, or parallel authority is introduced.
 
+## Creative Exploration Pattern
+
+Creative work MAY be expressed as an existing workflow graph: a goal and acceptance criteria are decomposed into alternative branches, bounded iterative draft or simulation steps, comparison or critique steps, revision steps, and a final verification or artifact-promotion step. Each step MUST use the existing `WorkflowStep`, `Task`, `Execution`, `PlanStep`, Tool, artifact, and evidence contracts. A creative workflow may end with one selected alternative, multiple approved artifacts, an explicit rejected or incomplete outcome, or a user-directed revision path; it MUST NOT infer success solely from novelty, fluency, stylistic quality, provider confidence, or artifact existence.
+
+Branching and iteration MUST remain bounded by the existing dependency, convergence, deadline, resource, retry, permission, sandbox, provider, evidence, and lifecycle rules. Critique or comparison results are evidence inputs and planning data, not lifecycle transitions or authorization. User-provided canon, locked decisions, and verified factual evidence remain higher-authority inputs than generated alternatives. An unsupported factual claim remains uncertain or withheld under the existing Context Management and Evidence & Validation contracts.
+
+This pattern is a use of the existing Workflow Engine and does not create a CreativeWorkflow type, creativity-specific lifecycle, new artifact authority, new acceptance authority, or autonomous side-effect path.
+
 ## Phase Mapping
 
 - **Phase 2**: Basic linear and parallel workflows.

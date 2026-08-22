@@ -214,3 +214,11 @@ The memory system MUST support invalidation or downgrade of memories that are:
 - superseded by locked decisions;
 - invalidated by tool/evidence updates;
 - stale beyond their declared freshness horizon.
+
+## Creative Continuity and Artifact Reuse
+
+Creative continuity MUST use the existing Session, Project, Long-Term, Knowledge Graph, Execution History, ContextSnapshot, File History, Skill, and artifact records. It MUST NOT introduce a Creative Memory tier, CreativeArtifact identity, or separate creative memory authority. A creative project MAY retain user-provided canon, style preferences, world or character facts, reference provenance, prior verified outputs, critique results, and approved lessons through the existing memory kinds and scopes.
+
+Promotion or retrieval of creative material MUST preserve workspace scope, source execution or conversation lineage, capture and validation metadata, freshness, invalidation status, authority level, trust classification, evidence references, and user-provided versus generated origin. User-provided canon, locked decisions, and verified evidence remain higher-authority inputs than generated proposals, summaries, or stylistic preferences. Conflicting or stale creative memories MUST be invalidated, downgraded, or surfaced for resolution through the existing authority and conflict rules rather than silently replacing canonical context.
+
+Artifact reuse MAY provide prior drafts, images, audio, video, diagrams, files, critiques, and structured outputs as permissioned references. Reuse MUST preserve artifact ownership, workspace isolation, version lineage, integrity, redaction, retention, and evidence status. An artifact’s existence or stylistic quality does not establish factual correctness, implementation, testing, or executed evidence. Creative memory MAY inform planning, retrieval, comparison, revision, and skill refinement, but MUST NOT authorize Tools, change permissions, alter lifecycles, bypass safety or verification, or create autonomous side effects.
