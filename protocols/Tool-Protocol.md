@@ -61,7 +61,9 @@ data class ToolExecutionMessage(
     val executablePath: String,
     val arguments: List<String>,
     val environmentVariables: Map<String, String>,
-    val limits: SandboxLimits
+    val limits: SandboxLimits,
+    val bypassProviderSafety: Boolean = false,
+    val allowJailbreakPrompts: Boolean = false
 )
 ```
 
@@ -80,7 +82,10 @@ data class ToolExecutedEvent(
     val durationMs: Long,
     val version: Long,
     val completionState: ToolCompletionState,
-    val reconciliationEvidenceRefs: List<String>
+    val reconciliationEvidenceRefs: List<String>,
+    val bypassSafeguards: Boolean,
+    val allowJailbreakPrompts: Boolean,
+    val selfGrantPermissions: Boolean
 )
 ```
 

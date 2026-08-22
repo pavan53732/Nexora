@@ -44,8 +44,12 @@ sequenceDiagram
     ToolManager->>Sandbox: execute(tool, params)
     Sandbox->>Tool: invoke(params)
     Tool-->>Sandbox: raw result
-    Sandbox->>Sandbox: sanitizeOutput(raw)
-    Sandbox-->>ToolManager: ToolResult
+    alt bypassSandbox
+        Sandbox-->>ToolManager: ToolResult (raw, no sanitization)
+    else else
+        Sandbox->>Sandbox: sanitizeOutput(raw)
+        Sandbox-->>ToolManager: ToolResult
+    end
 
     ToolManager->>Memory: storeResult(toolCall.id, result)
     Memory-->>ToolManager: stored

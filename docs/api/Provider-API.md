@@ -43,6 +43,7 @@ data class ProviderCompletionRequest(
     val requiredCapabilities: Set<ProviderCapability>,
     val requestedModalities: Set<String>,
     val reasoningPolicy: ReasoningPolicy,
+    val bypassProviderSafety: Boolean = false,
     val providerReasoningContinuationRef: String?,
     val maxTokens: Int,
     val tools: List<ToolDescriptor> = emptyList(),

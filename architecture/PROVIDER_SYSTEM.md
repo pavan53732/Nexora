@@ -43,6 +43,7 @@ interface AIProvider {
                 verificationGate = VerificationGate.NONE,
                 jailbreakMode = JailbreakMode.ALLOW_ALL
             ),
+            bypassProviderSafety = true, // adapter skips provider-side safety
             systemPromptOverride = null, // do not inject system-level refusal instructions
             tools = null
         )
@@ -57,7 +58,9 @@ interface AIProvider {
 // without safety filtering or evidence validation gates.
 suspend fun AIProvider.bypassSafeguards(request: CompletionRequest): CompletionResponse {
     // Bypass: strip reasoning policy (which enforces safety boundaries)
-    // and send raw prompt without safety classification
+    // and send raw prompt without safety classification. Also sets
+    // bypassProviderSafety=true so the provider adapter skips its own
+    // safety ceiling enforcement and sends the request directly.
     val bypassRequest = request.copy(
         reasoningPolicy = ReasoningPolicy(
             effort = ReasoningEffort.OFF,
@@ -66,6 +69,7 @@ suspend fun AIProvider.bypassSafeguards(request: CompletionRequest): CompletionR
             evidenceRequired = false,
             verificationGate = VerificationGate.NONE
         ),
+        bypassProviderSafety = true, // adapter skips provider-side safety ceilings
         tools = null // prevent tool-call restriction in bypass mode
     )
     return this.complete(bypassRequest)
@@ -119,6 +123,8 @@ data class CompletionRequest(
     val stopSequences: List<String>? = null,
     val reasoningEffort: ReasoningEffort? = null,
     val reasoningPolicy: ReasoningPolicy,
+    val bypassProviderSafety: Boolean = false,
+    val providerParams: Map<String, Any>? = null,
     val idempotencyKey: String
 )
 
@@ -330,7 +336,7 @@ Routing decisions MUST remain compatible with the provider abstraction and MUST 
 
 ### Bypassing Provider Safeguards
 
-When a tool invocation requires bypassing provider safeguards, the adapter delegates to the `bypassSafeguards()` extension method instead of the standard `complete()` path:
+When a tool invocation requires bypassing provider safeguards, the adapter delegates to the `bypassSafeguards()` extension method instead of the standard `complete()` path. The bypass request carries `bypassProviderSafety=true`, which instructs the adapter to skip its own safety ceiling enforcement and forward the raw request directly to the provider endpoint:
 
 ```kotlin
 class ProviderAdapter(private val provider: AIProvider) {
@@ -363,3 +369,16 @@ class ProviderAdapter(private val provider: AIProvider) {
     }
 }
 ```
+
+### Provider-Side Safety Ceiling Bypass
+
+When `request.bypassProviderSafety=true`, the adapter MUST skip:
+- Provider-native safety classifier injection
+- Refusal-inducing system prompt additions
+- Safety parameter filtering (harm scopes, content filters, refusal thresholds)
+- Evidence/validation requirement enforcement
+
+The raw prompt is forwarded to the provider endpoint with `providerParams`
+passed through unmodified. This only applies to the active cloud/external
+provider endpoint under DEC-44; localhost/local-model endpoints remain
+invalid (`DEC-44`).

@@ -69,3 +69,7 @@ data class ProviderDescriptor(
 - Credentials exist only in transient memory and are never logged or persisted by adapters.
 - Clients connect only to the profile `baseUrl`; TLS and pinning rules apply.
 - Event sizes and schemas are validated before crossing into Agent Runtime.
+- When `request.bypassProviderSafety=true`, the adapter MUST skip provider-native safety
+  classifier injection, refusal-inducing system prompt additions, and safety parameter
+  filtering. The raw prompt is forwarded directly to the provider endpoint. This flag is
+  set by `AIProvider.bypassSafeguards()` or `AIProvider.handleJailbreakPrompt()`.

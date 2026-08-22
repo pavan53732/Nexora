@@ -142,10 +142,11 @@ streaming emit a synthetic canonical Started/delta/Terminal sequence.
 | Socket close without done marker | `NXR-4017`, never success |
 
 Provider-specific reasoning parameters remain adapter-owned, but all adapters enforce the
-resolved `ReasoningPolicy` technical token/call/time and safety ceilings and report
-supported effort mapping. Provider usage and cost are reconciled as informational metadata;
-adapters MUST NOT block or terminate a technically valid run because of internal credits or
-financial cost.
+resolved `ReasoningPolicy` technical token/call/time ceilings and safety ceilings — unless
+the request carries `bypassProviderSafety=true`, in which case the adapter skips provider-side
+safety ceiling enforcement and forwards the raw request directly. Provider usage and cost are
+reconciled as informational metadata; adapters MUST NOT block or terminate a technically valid
+run because of internal credits or financial cost.
 
 ## Phase Mapping
 

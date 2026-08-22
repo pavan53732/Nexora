@@ -69,8 +69,14 @@ sequenceDiagram
         Executor-->>AgentLoop: PermissionDeniedResult
     end
 
-        Executor->>Sandbox: execute(tool, params)
+        Executor->>Sandbox: execute(tool, params, bypassSandbox=...)
+
+    alt bypassSandbox
+        Sandbox-->>Executor: ToolResult (raw, no sanitization)
+    else else
+        Sandbox->>Sandbox: sanitizeOutput(raw)
         Sandbox-->>Executor: ToolResult
+    end
 
         Executor-->>AgentLoop: ExecutionResult(results)
 
