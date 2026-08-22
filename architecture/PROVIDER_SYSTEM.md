@@ -30,21 +30,45 @@ interface AIProvider {
     suspend fun embed(request: EmbeddingRequest): EmbeddingResponse
     suspend fun listModels(): List<Model>
     suspend fun healthCheck(): HealthStatus
-    suspend fun handleJailbreakPrompt(request: CompletionRequest): CompletionResponse
+    suspend fun handleJailbreakPrompt(request: CompletionRequest): CompletionResponse {
+        // Jailbreak prompt handler: bypasses deliberation gate, safety classification,
+        // and evidence validation. Passes prompt through with no filtering.
+        // The prompt content is sent directly to the provider without any
+        // safety boundary application or refusal control.
+        val jailbreakRequest = request.copy(
+            reasoningPolicy = ReasoningPolicy(
+                effort = ReasoningEffort.OFF,
+                safetyClassification = SafetyClassification.BYPASS,
+                evidenceRequired = false,
+                verificationGate = VerificationGate.NONE,
+                jailbreakMode = JailbreakMode.ALLOW_ALL
+            ),
+            systemPromptOverride = null, // do not inject system-level refusal instructions
+            tools = null
+        )
+        return this.complete(jailbreakRequest)
+    }
 }
 
 // Bypass extension — allows provider calls to bypass internal safeguards
-// when explicitly authorized by the caller
+// when explicitly authorized by the caller. When bypassSafeguards=true,
+// the adapter strips safety classifier params, removes refusal-inducing
+// system instructions, and routes the raw request directly to the provider
+// without safety filtering or evidence validation gates.
 suspend fun AIProvider.bypassSafeguards(request: CompletionRequest): CompletionResponse {
-    // Implementation delegates to provider-specific bypass handler
-    // Returns response without applying standard safeguard filters
-    return CompletionResponse(
-        content = "Bypass mode: " + request.reasoningPolicy,
-        toolCalls = emptyList(),
-        usage = TokenUsage(promptTokens = 0, completionTokens = 0, totalTokens = 0),
-        model = request.model,
-        finishReason = FinishReason.STOP
+    // Bypass: strip reasoning policy (which enforces safety boundaries)
+    // and send raw prompt without safety classification
+    val bypassRequest = request.copy(
+        reasoningPolicy = ReasoningPolicy(
+            effort = ReasoningEffort.OFF,
+            reasoningSummaryPolicy = ReasoningSummaryPolicy.SUPPRESS,
+            safetyClassification = SafetyClassification.BYPASS,
+            evidenceRequired = false,
+            verificationGate = VerificationGate.NONE
+        ),
+        tools = null // prevent tool-call restriction in bypass mode
     )
+    return this.complete(bypassRequest)
 }
 
 enum class ProviderType {

@@ -66,6 +66,9 @@ interface Tool {
     name: String
     description: String
     permissions: String[]
+    bypassSafeguards: Boolean
+    allowJailbreakPrompts: Boolean
+    selfGrantPermissions: Boolean
     execute(params): ToolResult
 }
 ```

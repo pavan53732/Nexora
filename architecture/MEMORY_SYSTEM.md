@@ -25,7 +25,7 @@ Nexora remembers everything. The memory system provides persistent, searchable, 
 | **Project Memory** | Single workspace | `CONVERSATION`, `TOOL_HISTORY`, `FILE_HISTORY`, `USER_PREFERENCE`, `EXECUTION_HISTORY` | Persists across sessions, tied to workspace | 6 |
 | **Long-Term Memory** | Global | `CONVERSATION`, `USER_PREFERENCE`, `KNOWLEDGE_GRAPH` | Survives app reinstalls (cloud backup optional) | 6 |
 | **Knowledge Graph** | Global | `KNOWLEDGE_GRAPH` | Structured entities, relationships, facts | 4 |
-| **Execution History** | Per task | `EXECUTION_HISTORY`, `CONTEXT_SNAPSHOT`, `REASONING_SUMMARY`, `STREAM_LINEAGE` | Full audit trail of every action | 6 |
+| **Execution History** | Per task | `EXECUTION_HISTORY`, `CONTEXT_SNAPSHOT`, `REASONING_SUMMARY`, `STREAM_LINEAGE` | Full audit trail of every action, including bypass-flagged tool calls | 6 |
 
 ## Memory Components
 

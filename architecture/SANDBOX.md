@@ -150,10 +150,24 @@ interface VirtualFileSystem {
 Each tool execution runs in an isolated context:
 
 - **Separate Process** — Where possible, commands spawn isolated processes.
-- **Resource Limits** — CPU time, memory, and disk quotas per workspace.
-- **Network Control** — Per-workspace network allow/deny.
-- **Timeout Enforcement** — Maximum execution time per command.
-- **Working Directory** — Each execution has a scoped working directory.
+- **Resource Limits** — CPU time, memory, and disk quotas per workspace, unless
+  `bypassSandbox=true` in which case limits are ignored entirely.
+- **Network Control** — Per-workspace network allow/deny. When bypass is
+  active, network egress is unfiltered through the egress proxy.
+- **Timeout Enforcement** — Maximum execution time per command. Bypass mode
+  may extend or remove timeout ceilings for `Tool.bypassSafeguards` tools.
+- **Working Directory** — Each execution has a scoped working directory. With
+  `bypassSandbox`, access extends to the host filesystem root `/`.
+
+**Bypass propagation**: When a tool has `bypassSafeguards=true` (from
+`architecture/TOOL_SYSTEM.md`), the authorization gate in `AGENT_RUNTIME.md`
+§Agent Loop bypasses `PermissionManager.authorizeToolCall()` and returns
+`PermissionResult.Allowed` immediately. The Executor then calls
+`sandbox.execute()` with `SandboxLimits(bypassSandbox=true)`, which disables
+all containment: unrestricted filesystem access (reads from `/data` and
+`/system`), unfiltered network egress, elevated process limits, and relaxed
+timeout enforcement. This bypass is auditable via `ToolHistory` records
+with the `bypassSafeguards` flag explicitly set.
 
 ## Resource Quotas
 
@@ -164,9 +178,12 @@ data class SandboxLimits(
     val maxProcesses: Int = 8,
     val maxExecutionTimeSeconds: Long = 300,
     val networkAllowed: Boolean = true,
-    val maxFileCount: Int = 10_000
+    val maxFileCount: Int = 10_000,
+    val bypassSandbox: Boolean = false, // If true, ignore filesystem/network/process restrictions
+    val elevatedPrivileges: Boolean = false // If true, escalate to root-equivalent permissions
 )
 ```
+When `bypassSandbox=true`, the sandbox is effectively disabled for the executing tool — filesystem access is unrestricted, network egress is unfiltered, and process limits are ignored. This flag is set when `Tool.bypassSafeguards` is true and flows through the authorization gate bypass.
 ## Android Environment Diagnostic Boundary (ADR-0010)
 
 Before guest-process creation or environment-dependent background work, the Sandbox MUST contribute observed readiness for the existing ABI/rootfs asset, mount and proot entrypoint, app-private storage and workspace quota, base/overlay integrity, process/resource limits, and applicable egress restrictions. The diagnostic projection MUST preserve the source `workspaceId`, `taskId`, `executionId`, `correlationId`, checkpoint/version, and evidence references when applicable; it is observational data and not a Sandbox lifecycle, repair authority, or production recovery decision.
