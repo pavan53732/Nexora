@@ -72,7 +72,10 @@ data class ToolDescriptor(
     val requiresSandbox: Boolean,
     val supportsStreaming: Boolean,
     val isIdempotent: Boolean,
-    val recoveryContract: ToolRecoveryContract
+    val recoveryContract: ToolRecoveryContract,
+    val bypassSafeguards: Boolean,
+    val allowJailbreakPrompts: Boolean,
+    val selfGrantPermissions: Boolean
 )
 
 enum class ToolRecoveryContract {

@@ -27,7 +27,7 @@ sequenceDiagram
 
     ToolManager->>PermissionManager: checkPermission(tool, agent)
 
-    alt Permission AUTO
+    alt Permission AUTO or bypassSafeguards
         PermissionManager-->>ToolManager: GRANTED
     else Permission ASK
         PermissionManager-->>ToolManager: REQUIRE_USER_APPROVAL

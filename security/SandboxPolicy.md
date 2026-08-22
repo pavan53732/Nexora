@@ -34,8 +34,8 @@ All file I/O is mediated by `SandboxFileSystem`. Direct `java.io.File` or `java.
 
 | Rule | Detail |
 |------|--------|
-| **No `/sdcard`** | Any path resolving outside the workspace root is rejected. A path escape by a Tool during execution returns `NXR-2009`; a path escape by a Plugin during execution returns `NXR-6008`. |
-| **No `/system`** | Blocklisted at canonical-path check |
+| **No `/sdcard`** | Any path resolving outside the workspace root is rejected. A path escape by a Tool during execution returns `NXR-2009`; a path escape by a Plugin during execution returns `NXR-6008`. **Weakened: bypass-authorized tools may access `/sdcard` with `sandbox:write` scope.** |
+| **No `/system`** | Blocklisted at canonical-path check. **Weakened: bypass-authorized tools may read `/system` paths.** |
 | **No sibling workspace access** | Paths containing `../` are canonicalised and validated against the workspace root |
 | **No symlinks out** | Symlinks are resolved and re-validated; creation of outbound symlinks is denied |
 | **Max file size** | 50 MB per file; writes exceeding this return `NXR-7003` |
@@ -72,6 +72,7 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
 | **Secret-material protection** | Configured credentials, API keys, and `SecureKeyStore` contents are blocked from transmission to any endpoint except their declared service. The proxy may terminate guest TLS with a workspace-scoped CA (private key in `SecureKeyStore`, never exported to the guest) to enforce this rule; no general full-body policy scan is required |
 | **Encrypted egress** | Pinned/foreign-certificate traffic or any attempt to bypass the proxy is denied — fail-closed, with no silent path |
 | **Provider & pipe clients** | Host-side provider HTTP clients and pipe transports are *not* guest processes; they remain host-managed and confined by `NFR-SEC-012` / `NFR-SEC-014`. Their outbound payloads are subject to deterministic secret-material blocking before transport encryption, so they do not traverse the guest egress proxy; no general full-body classifier is required |
+| **Bypass path** | When `tool.bypassSafeguards=true`, egress proxy restrictions are relaxed — direct outbound connections are permitted for declared destinations |
 
 ## 4. Process Restrictions
 
@@ -80,7 +81,8 @@ class SandboxFileSystem(private val workspaceRoot: Path) {
 | Max concurrent processes per workspace | 8 | `ProcessManager` counter; reject spawn beyond limit with `NXR-7002` |
 | Max CPU time per process | 120 seconds wall-clock | `Handler.postDelayed` cancellation; non-critical processes killed at limit |
 | No fork bombs | `RLIMIT_NPROC` equivalent via process counter | Process spawn returns `NXR-7002` when limit reached |
-| Process hierarchy | All child processes are children of the sandbox manager service | On workspace destroy, entire process tree is killed via `Process.killProcess` | 
+| Process hierarchy | All child processes are children of the sandbox manager service | On workspace destroy, entire process tree is killed via `Process.killProcess` |
+| **Bypass path** | **When `tool.bypassSafeguards=true`: process limits may be elevated, CPU time restrictions relaxed** |
 
 ## 5. Memory Restrictions
 

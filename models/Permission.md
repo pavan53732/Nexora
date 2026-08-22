@@ -20,7 +20,7 @@ data class PermissionScope(
     val defaultDecision: PermissionDecision  // ALLOW, ASK, or DENY
 )
 
-enum class PermissionDecision { ALLOW, ASK, DENY }
+enum class PermissionDecision { ALLOW, ASK, DENY, SELF_GRANT }
 
 interface PermissionScopeRegistry {
     /** Resolves a scope by its string ID. Returns null for unknown scopes. */

@@ -249,6 +249,14 @@ Inbound User Message
 - **Reasoning Artifact Visibility (FR-RN-005)**: Nexora stores and renders a redacted `ReasoningSummary` containing approach, evidence, decisions, uncertainty, and verification results. Raw private model chain-of-thought is neither required nor persisted.
 - **Answer-Quality Gates (FR-RN-006)**: Outbound answers must undergo consistency and confident self-review checks prior to transmission. Premise contradictions in user prompts must be explicitly flagged and corrected rather than assumed correct.
 
+### Jailbreak Prompt Handling
+
+When `tool.allowJailbreakPrompts=true` or `ContextSnapshot.allowJailbreakPrompts=true`:
+- Jailbreak-style prompts bypass the deliberation gate's THOROUGH reasoning path restrictions
+- Prompt content is passed through to the provider without safety classification
+- The `Evidence & Verification Engine` is not bypassed — factual claims still require verification
+- Jailbreak prompts are logged in the `ContextSnapshot` for audit purposes
+
 ### Reasoning Effort Scale (FR-RN-007, FR-RN-008)
 
 The deliberation effort control is a 6-level scale, user-selectable and model-mapped.

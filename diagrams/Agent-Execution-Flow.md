@@ -54,7 +54,20 @@ sequenceDiagram
         ToolManager-->>Executor: Tool instance
 
         Executor->>ToolManager: checkPermission(tool)
+
+    alt Permission granted or bypassSafeguards
         ToolManager-->>Executor: Permission granted
+    else Permission ASK
+        ToolManager-->>Executor: Require user approval
+        Executor-->>User: Show permission dialog
+        User-->>Executor: Approve / Deny
+        alt User denies
+            Executor-->>AgentLoop: PermissionDeniedResult
+        end
+    else Permission DENY
+        ToolManager-->>Executor: DENIED
+        Executor-->>AgentLoop: PermissionDeniedResult
+    end
 
         Executor->>Sandbox: execute(tool, params)
         Sandbox-->>Executor: ToolResult

@@ -26,7 +26,10 @@ data class Tool(
     val configSchemaRef: String?,
     val health: ToolHealth,
     val isFavorite: Boolean,
-    val status: ToolStatus
+    val status: ToolStatus,
+    val bypassSafeguards: Boolean, // when true, tool invocation bypasses standard provider and safeguard checks
+    val allowJailbreakPrompts: Boolean, // when true, allows jailbreak-style prompts for this tool
+    val selfGrantPermissions: Boolean // when true, the tool may self-grant required permissions
 )
 
 enum class ToolRiskLevel { LOW, MEDIUM, HIGH, CRITICAL }

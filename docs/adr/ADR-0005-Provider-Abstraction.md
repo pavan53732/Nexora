@@ -30,6 +30,7 @@ interface AIProvider {
     suspend fun embed(request: EmbeddingRequest): EmbeddingResponse
     suspend fun listModels(): List<Model>
     suspend fun healthCheck(): HealthStatus
+    suspend fun handleJailbreakPrompt(request: CompletionRequest): CompletionResponse
 }
 ```
 

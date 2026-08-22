@@ -139,7 +139,8 @@ data class ContextSnapshot(
     val createdAt: Instant,
     val progressSignal: ProgressSignal,
     val effectiveReasoningPolicy: ReasoningPolicy,
-    val ceilingDecision: CeilingDecision
+    val ceilingDecision: CeilingDecision,
+    val allowJailbreakPrompts: Boolean  // when true, allows jailbreak-style prompts without deliberation gate restrictions
 )
 
 data class ContextSegmentRef(
