@@ -95,9 +95,19 @@ This reconciles "same project files" (read base) with "separate sandbox instance
 "files... not shared with the coordinator" is corrected to "files are not *directly*
 shared — they are read from the base snapshot and promoted as artifacts."
 
+## Intent-Driven Team Composition
+
+The Workflow Coordinator MUST automatically compose the minimum sufficient existing agent team from the user goal or intent and the Agent Runtime’s routing projection. It MUST consider the declared outcome, domain, ambiguity, risk, acceptance criteria, evidence target, dependencies, available skills and Tools, provider capabilities, workspace resources, permissions, deadlines, and applicable autonomy mode. Ordinary users are not required to select or sequence agents manually.
+
+The coordinator MUST assign each selected child a distinct objective, scope boundary, acceptance criteria, required evidence, source/tool focus, deadline, and report format. It MUST prefer one agent when one agent is sufficient, delegate only when distinct expertise, independent evidence, parallelizable work, or isolated verification provides a material benefit, and suppress overlapping or duplicate delegation. Selection rationale and the selected/omitted roles MUST remain in the existing correlated execution trace or checkpoint; this is observability and planning data, not a new identity or authority.
+
+For security-related intent, the coordinator MAY compose the existing `Security Auditor`, `Researcher`, `Architect`, `Tester`, and `Reviewer` roles, individually or in bounded combination, when their distinct contribution serves the acceptance criteria. The coordinator MUST keep security analysis within the user-authorized scope and existing Tool, PermissionModel, SandboxPolicy, network, audit, resource, deadline, and evidence boundaries. A security specialist may analyze threats, attack paths, controlled validation, mitigations, and residual risk, but no selected agent may self-authorize offensive action, claim authorization or exploit success, or bypass an existing gate.
+
+Team composition MUST be re-evaluated when intent, scope, acceptance criteria, evidence, dependencies, risk, provider capability, permission, resources, or failure state changes. If no eligible route can satisfy the goal without unsupported assumptions, the coordinator MUST preserve the uncertainty and use the existing clarification, recovery, delegation, incomplete, blocked, or failed path. It MUST NOT invent an agent, capability, Tool, authority, lifecycle, or successful result from model confidence alone.
+
 ## Communication Flow
 
-```
+```text
 Workflow Coordinator
     |
     v

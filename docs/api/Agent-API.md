@@ -26,6 +26,12 @@ The Agent API defines the boundary for agent lifecycle, execution startup, assig
 
 Every response and emitted event MUST include `correlationId`. Long-running or streaming operations MUST expose `resumeToken` when resumable. Durable commit MUST precede lifecycle event publication. Events MUST be deduplicated by `(entityId, version, transition)`.
 
+### Intent-Driven Routing Projection
+
+`startTask` and task-status projections MAY expose the existing runtime’s automatic routing result: the selected existing agent IDs, skill IDs, Tool IDs, provider capability descriptors, bounded selection rationale, evidence target, and any omitted or unavailable capability relevant to the task. These are derived planning and observability fields over the existing task and execution lineage; they do not create a routing identity, lifecycle, permission, capability grant, or completion authority. The projection MUST NOT imply that selection authorized execution or that a selected agent produced a successful result.
+
+When the caller does not target a specialist, the existing Workflow Coordinator entry agent (`AGT-015`) is the default coordination entry for automatic routing. The coordinator may delegate to existing specialist agents; the entry identity and delegated child identities remain explicit in the existing task and execution projections. This does not create a second coordinator, dynamic agent type, or user-facing requirement to choose a specialist.
+
 ## Contract Shapes
 
 ### Start Request
@@ -64,6 +70,12 @@ data class TaskProjection(
     val latestError: CanonicalErrorEnvelope?,
     val childTaskIds: List<String> = emptyList(),
     val delegatedAgentIds: List<String> = emptyList(),
+    val selectedAgentIds: List<String> = emptyList(),
+    val selectedSkillIds: List<String> = emptyList(),
+    val selectedToolIds: List<String> = emptyList(),
+    val selectedProviderCapabilities: List<String> = emptyList(),
+    val selectionRationale: String? = null,
+    val evidenceTarget: String? = null,
     val resumeToken: String? = null
 )
 ```
@@ -108,6 +120,7 @@ data class AgentInferenceEvent(
 - `version` is the durable state version used for optimistic reads and event deduplication.
 - `resumeToken` MUST be opaque and only present when resumable progress or event streaming is supported.
 - Child tasks and delegated work MUST be represented explicitly through `childTaskIds` and `delegatedAgentIds`; hidden fan-out is not allowed at the contract boundary.
+- When automatic routing applies, the task projection SHOULD expose the selected existing agents, skills, Tools, provider capabilities, bounded rationale, and evidence target; absent values remain unknown or unavailable rather than inferred.
 - A terminal inference event carrying a user-facing factual response MUST carry or reference `ClaimRecord` entries with the evidence, authority, freshness, contradiction, verifier, confidence, and disposition metadata required by `specs/CONTEXT_MANAGEMENT.md` §7. Generic payload encoding does not remove this semantic requirement.
 
 ## Overview

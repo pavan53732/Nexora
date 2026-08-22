@@ -56,6 +56,7 @@ A planned case or evidence path is `TEST DEFINED`; it is not `TESTED` and does n
 The common evidence envelope SHOULD capture, at minimum:
 
 - suite and case ID, canonical owner, source revision, and fixture/control revision;
+- selected agent, skill, Tool, provider route, and bounded selection rationale when automatic intent-driven orchestration is applicable;
 - execution date/time, executor or system owner, environment, Android device/emulator and OS where applicable;
 - deterministic controls in force, including clock/deadline, seed/jitter, provider/stream, resource, process/device, permission, storage/lock, and scheduler inputs where applicable;
 - existing `workspaceId`, `taskId`, `executionId`, `workflowId`, `agentId`, `toolId`, `streamId`, `correlationId`, checkpoint/version, and artifact references where applicable;

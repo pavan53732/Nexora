@@ -16,11 +16,19 @@
 
 1. Runtime creates a `StartTaskRequest` with `requestId`, `correlationId`, workspace identity, caller identity, and task goal.
 2. Runtime calls the Agent API to start work; the agent runtime materializes or reuses a stable `taskId`.
-3. Agent enters the agent loop (reflect, plan, execute, repeat) and emits lifecycle-safe progress events.
-4. Runtime publishes events only after durable state transitions are committed.
-5. Agent returns a terminal `TaskProjection` or canonical error outcome.
+3. The existing runtime classifies the user goal or intent and automatically selects the minimum sufficient existing agent, skill, Tool, provider capability, execution mode, and evidence target. The selection rationale is derived planning/observability data and does not authorize execution.
+4. When the intent is security-related, the coordinator MAY compose existing Security Auditor, Researcher, Architect, Tester, and Reviewer roles within the declared authorized scope and existing permission, sandbox, network, audit, deadline, resource, and evidence gates. No unrestricted offensive mode or new agent type is implied.
+5. Agent enters the agent loop (reflect, plan, execute, repeat) and emits lifecycle-safe progress events.
+6. Runtime publishes events only after durable state transitions are committed.
+7. Agent returns a terminal `TaskProjection` or canonical error outcome.
 
 When a Tool approval transaction is denied or expires, the protocol preserves one correlated outcome: Tool `NXR-2003` denial with its subreason and no side effect; Task `Failed`; and, when the participating Agent remains available, Agent `Paused`. The Agent pause does not resume or alter the failed Task. Any later operation requires a new approval transaction and is not an automatic retry.
+
+## Intent-Driven Routing Events
+
+When automatic routing applies, the existing task and agent trace SHOULD expose selected agent IDs, skill IDs, Tool IDs, provider capabilities, bounded selection rationale, evidence target, and omitted or unavailable capability. These fields are derived planning and observability projections over the existing task/execution lineage. Missing values MUST remain unknown or unavailable; generated confidence MUST NOT substitute for evidence.
+
+Routing and delegation results MUST preserve the existing `workspaceId`, `taskId`, `executionId` when assigned, `agentId`, `correlationId`, acceptance criteria, provenance, verification state, and final disposition. A selected role or capability MUST NOT self-authorize a Tool, permission, lifecycle transition, capability escalation, external side effect, or claim of successful execution.
 
 ## Message Rules
 

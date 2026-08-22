@@ -101,6 +101,16 @@ The effective deadline and remaining budget are immutable inputs to each nested 
 | **Token budgeting** | Tracks token usage per request and per session. | 2 |
 | **Execution history** | Full history of every action, persisted across sessions. | 6 |
 
+### Intent-Driven Agent and Capability Selection
+
+For every user goal or intent, the existing runtime MUST classify the requested outcome, domain, ambiguity, risk, required capabilities, acceptance criteria, evidence target, dependencies, and applicable workspace and autonomy constraints before selecting an execution path. The runtime MUST select the minimum sufficient existing agent type, skill set, Tool set, provider capability, and execution mode for that goal. The user is not required to select agents manually for ordinary work.
+
+Selection is a routing and planning projection over the existing `Agent`, `Task`, `Execution`, `Workflow`, `PlanStep`, Skill, Tool, ProviderRoutePlan, PermissionModel, SandboxPolicy, and evidence contracts. The selection result MUST retain its rationale, scope, acceptance criteria, authority inputs, deadline/budget, and evidence target in the existing execution trace or checkpoint. Selection MUST NOT itself authorize a Tool, permission, lifecycle transition, capability escalation, or external side effect.
+
+When the intent is security-related, the runtime MAY route the work to the existing `Security Auditor`, `Researcher`, `Architect`, `Tester`, and `Reviewer` roles when their distinct expertise or independent evidence materially serves the declared acceptance criteria. This routing does not create an unrestricted offensive mode. Security actions remain limited to the user-authorized scope and existing Tool, PermissionModel, Sandbox, network, audit, deadline, resource, and evidence gates. A security-reasoning result may describe threats, attack paths, controlled validation, defensive mitigations, and residual risk, but it MUST NOT claim authorization, exploit success, safety, originality, or completion without corresponding evidence.
+
+The runtime MUST re-evaluate selection when the goal, acceptance criteria, evidence, dependency, risk, provider capability, permission, resource, or failure state changes. It MUST avoid duplicate or overlapping delegation and MUST use the existing recovery, re-plan, delegation, verification, and non-success paths when the selected route is unavailable or insufficient. Missing intent, scope, authority, or evidence MUST remain unknown or require clarification; it MUST NOT be invented from model confidence or a generated plan.
+
 ## Agent Inference-Turn Pipeline
 
 The canonical provider path is typed streaming. Providers without native streaming are
